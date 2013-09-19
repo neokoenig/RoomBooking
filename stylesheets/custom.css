@@ -1,0 +1,35 @@
+/* Custom overrides for InOutBoard */
+ 
+
+#board {}
+	#board .row a {margin-bottom:10px;}
+
+/**********Location Classes**************/
+.lt 	{background-color: #cc0000; border-color: #cc0000;}
+.sm1 	{background-color: #2c86ff; border-color: #2c86ff; }
+.sm2 	{background-color: #a1a100; border-color: #a1a100; } 
+.gfcr 	{background-color: #FF6600; border-color: #FF6600;}
+.cafe	{background-color: #800080; border-color: #800080;}
+.avsuite	{background-color: #00008B; border-color: #00008B;}
+
+.location-filter, .fc-event{cursor:pointer; color:white;}
+
+/**** Popovers *****/
+.popover {width:300px;}
+ 
+
+/****************** Forms ****************/ 
+.datetimeselect .form-group {width:100px; float:left;}
+.datetimeselect label {width:100%; float:left;}
+
+/* Alerts */
+ .fade {
+  opacity: 0;
+  -webkit-transition: opacity 0.15s linear;
+  -moz-transition: opacity 0.15s linear;
+  -o-transition: opacity 0.15s linear;
+  transition: opacity 0.15s linear;
+}
+.fade.in {
+  opacity: 1;
+}
