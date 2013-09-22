@@ -3,21 +3,27 @@
 	'
 		<!--- view code --->
 		<head>
+			<cfoutput>
 			<!--- Includes `stylesheets/styles.css` --->
 		    ##styleSheetLinkTag("styles")##
 			<!--- Includes `stylesheets/blog.css` and `stylesheets/comments.css` --->
 			##styleSheetLinkTag("blog,comments")##
 			<!--- Includes printer style sheet --->
 			##styleSheetLinkTag(source="print", media="print")##
+			<!--- Includes external style sheet --->
+			##styleSheetLinkTag("http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.0/themes/cupertino/jquery-ui.css")##
+			</cfoutput>
 		</head>
 		
 		<body>
+			<cfoutput>
 			<!--- This will still appear in the `head` --->
 			##styleSheetLinkTag(source="tabs", head=true)##
+			</cfoutput>
 		</body>
 	'
 	categories="view-helper,assets" chapters="miscellaneous-helpers" functions="javaScriptIncludeTag,imageTag">
-	<cfargument name="sources" type="string" required="false" default="" hint="The name of one or many CSS files in the `stylesheets` folder, minus the `.css` extension. (Can also be called with the `source` argument.)">
+	<cfargument name="sources" type="string" required="false" default="" hint="The name of one or many CSS files in the `stylesheets` folder, minus the `.css` extension. (Can also be called with the `source` argument.) Pass a full URL to generate a tag for an external style sheet.">
 	<cfargument name="type" type="string" required="false" hint="The `type` attribute for the `link` tag.">
 	<cfargument name="media" type="string" required="false" hint="The `media` attribute for the `link` tag.">
 	<cfargument name="head" type="string" required="false" hint="Set to `true` to place the output in the `head` area of the HTML page instead of the default behavior, which is to place the output where the function is called from.">
@@ -25,6 +31,10 @@
 	<cfscript>
 		var loc = {};
 		$args(name="styleSheetLinkTag", args=arguments, combine="sources/source/!", reserved="href,rel");
+		if (!Len(arguments.type))
+			StructDelete(arguments, "type");
+		if (!Len(arguments.media))
+			StructDelete(arguments, "media");
 		arguments.rel = "stylesheet";
 		loc.returnValue = "";
 		arguments.sources = $listClean(list=arguments.sources, returnAs="array", delim=arguments.delim);
@@ -32,7 +42,7 @@
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 		{
 			loc.item = arguments.sources[loc.i];
-			if (ReFindNoCase("^https?:\/\/", loc.item))
+			if (ReFindNoCase("^(https?:)?\/\/", loc.item))
 			{
 				arguments.href = arguments.sources[loc.i];
 			}
@@ -59,32 +69,40 @@
 	'
 		<!--- view code --->
 		<head>
+			<cfoutput>
 			<!--- Includes `javascripts/main.js` --->
 		    ##javaScriptIncludeTag("main")##
 			<!--- Includes `javascripts/blog.js` and `javascripts/accordion.js` --->
 			##javaScriptIncludeTag("blog,accordion")##
+			<!--- Includes external JavaScript file --->
+			##javaScriptIncludeTag("https://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js")##
+			</cfoutput>
 		</head>
 		
 		<body>
+			<cfoutput>
 			<!--- Will still appear in the `head` --->
 			##javaScriptIncludeTag(source="tabs", head=true)##
+			</cfoutput>
 		</body>
 	'
 	categories="view-helper,assets" chapters="miscellaneous-helpers" functions="styleSheetLinkTag,imageTag">
-	<cfargument name="sources" type="string" required="false" default="" hint="The name of one or many JavaScript files in the `javascripts` folder, minus the `.js` extension. (Can also be called with the `source` argument.)">
+	<cfargument name="sources" type="string" required="false" default="" hint="The name of one or many JavaScript files in the `javascripts` folder, minus the `.js` extension. (Can also be called with the `source` argument.) Pass a full URL to access an external JavaScript file.">
 	<cfargument name="type" type="string" required="false" hint="The `type` attribute for the `script` tag.">
-	<cfargument name="head" type="string" required="false" hint="See documentation for @styleSheetLinkTag.">
+	<cfargument name="head" type="string" required="false" hint="@styleSheetLinkTag.">
 	<cfargument name="delim" type="string" required="false" default="," hint="the delimiter to use for the list of stylesheets">
 	<cfscript>
 		var loc = {};
 		$args(name="javaScriptIncludeTag", args=arguments, combine="sources/source/!", reserved="src");
+		if (!Len(arguments.type))
+			StructDelete(arguments, "type");
 		loc.returnValue = "";
 		arguments.sources = $listClean(list=arguments.sources, returnAs="array", delim=arguments.delim);
 		loc.iEnd = ArrayLen(arguments.sources);
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 		{
 			loc.item = arguments.sources[loc.i];
-			if (ReFindNoCase("^https?:\/\/", loc.item))
+			if (ReFindNoCase("^(https?:)?\/\/", loc.item))
 			{
 				arguments.src = arguments.sources[loc.i];
 			}
@@ -131,7 +149,7 @@
 		}
 		if (application.wheels.cacheImages)
 		{
-			loc.category = "image";
+			loc.category = "images";
 			loc.key = $hashedKey(arguments);
 			loc.lockName = loc.category & loc.key;
 			loc.conditionArgs = {};
@@ -166,15 +184,22 @@
 	<cfscript>
 		var loc = {};
 		loc.localFile = true;
+		
+		loc.sourceProtocol = ListFirst(arguments.source, ":");
+		loc.imagePathProtocol = ListFirst(application.wheels.imagePath, ":");
 
-		if(Left(arguments.source, 7) == "http://" || Left(arguments.source, 8) == "https://")
-			loc.localFile = false;
-
-		if (!loc.localFile)
+		if (ReFindNoCase("^https?:\/\/", arguments.source))
 		{
+			loc.localFile = false;
 			arguments.src = arguments.source;
 		}
-		else
+		else if (ReFindNoCase("^https?:\/\/", application.wheels.imagePath))
+		{
+			loc.localFile = false;
+			arguments.src = ListChangeDelims(ListAppend(application.wheels.imagePath, arguments.source, "/"), "/", "/");
+		}
+
+		if (loc.localFile)
 		{
 			arguments.src = application.wheels.webPath & application.wheels.imagePath & "/" & arguments.source;
 			if (application.wheels.showErrorInformation)

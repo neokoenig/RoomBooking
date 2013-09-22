@@ -1,9 +1,12 @@
 <cfcomponent output="false">
 
+	<cfinclude template="global/internal.cfm">
+	<cfinclude template="global/public.cfm">
+
 	<cfset variables.$class = {}>
 	<cfset variables.$class.plugins = {}>
 	<cfset variables.$class.mixins = {}>
-	<cfset variables.$class.mixableComponents = "application,dispatch,controller,model,cache,base,connection,microsoftsqlserver,mysql,oracle,postgresql,h2">
+	<cfset variables.$class.mixableComponents = "application,dispatch,controller,model,cache,base,connection,microsoftsqlserver,mysql,oracle,postgresql,h2,test">
 	<cfset variables.$class.incompatiblePlugins = "">
 	<cfset variables.$class.dependantPlugins = "">
 
@@ -33,7 +36,7 @@
 		<!--- incompatibility --->
 		<cfset $determineIncompatible()>
 		<!--- dependancies --->
-		<cfset $determinDependancy()>
+		<cfset $determineDependancy()>
 
 		<cfreturn this>
 	</cffunction>
@@ -48,7 +51,7 @@
 		<cfloop query="loc.folders">
 			<cfset loc.temp = {}>
 			<cfset loc.temp.name = name>
-			<cfset loc.temp.folderPath = $fullPathToPlugin(lcase(name))>
+			<cfset loc.temp.folderPath = $fullPathToPlugin(name)>
 			<cfset loc.temp.componentName = lcase(name) & "." & name>
 			<cfset loc.plugins[name] = loc.temp>
 		</cfloop>
@@ -120,12 +123,13 @@
 		<cfset var loc = {}>
 		
 		<cfset loc.plugins = $pluginFolders()>
-		<cfset loc.wheelsVersion = SpanExcluding(variables.$class.wheelsVersion, " ")>
+		<cfset loc.wheelsVersion = ListChangeDelims(variables.$class.wheelsVersion, " ", "- ")>
+		<cfset loc.wheelsVersion = SpanExcluding(loc.wheelsVersion, " ")>
 		<cfloop collection="#loc.plugins#" item="loc.iPlugins">
 			<cfset loc.plugin = createobject("component", $componentPathToPlugin(loc.iPlugins)).init()>
-			<cfif not StructKeyExists(loc.plugin, "version") OR ListFind(loc.plugin.version, loc.wheelsVersion) OR variables.$class.loadIncompatiblePlugins>
+			<cfif not StructKeyExists(loc.plugin, "version") OR semanticVersioning(loc.plugin.version, loc.wheelsVersion) OR ListFind(loc.plugin.version, loc.wheelsVersion) OR variables.$class.loadIncompatiblePlugins>
 				<cfset variables.$class.plugins[loc.iPlugins] = loc.plugin>
-				<cfif StructKeyExists(loc.plugin, "version") AND not ListFind(loc.plugin.version, loc.wheelsVersion)>
+				<cfif StructKeyExists(loc.plugin, "version") AND not ListFind(loc.plugin.version, loc.wheelsVersion) AND !semanticVersioning(loc.plugin.version, loc.wheelsVersion)>
 					<cfset variables.$class.incompatiblePlugins = ListAppend(variables.$class.incompatiblePlugins, loc.iPlugins)>
 				</cfif>
 			</cfif>
@@ -154,7 +158,7 @@
 	</cffunction>
 	
 	
-	<cffunction name="$determinDependancy">
+	<cffunction name="$determineDependancy">
 		<cfset var loc = {}>
 
 		<cfloop collection="#variables.$class.plugins#" item="loc.iPlugins">
@@ -273,7 +277,7 @@
 		
 		<cfdirectory directory="#variables.$class.pluginPathFull#" action="list" filter="*.zip" type="file" sort="name DESC" name="q">
 		<cfquery name="q" dbtype="query">
-		select * from q where name not like '.%'
+		select * from q where name not like '.%' order by name
 		</cfquery>
 		
 		<cfreturn q>

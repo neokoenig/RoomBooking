@@ -6,7 +6,7 @@
 		if (variables.wheels.class.softDeletion && arguments.softDelete)
 		{
 			ArrayAppend(arguments.sql, "UPDATE #tableName()# SET #variables.wheels.class.softDeleteColumn# = ");
-			loc.param = {value=Now(), type="cf_sql_timestamp"};
+			loc.param = {value=timestamp(), type="cf_sql_timestamp"};
 			ArrayAppend(arguments.sql, loc.param);
 		}
 		else
@@ -78,7 +78,7 @@
 		{
 			if (arguments.order == "random")
 			{
-				loc.returnValue = variables.wheels.class.adapter.$randomOrder();
+				loc.returnValue = $adapter().$randomOrder();
 			}
 			else if (arguments.order Contains "(")
 			{
@@ -111,14 +111,18 @@
 						{
 							loc.toAdd = "";
 							loc.classData = loc.classes[loc.j];
+
+							// we need the name of the table on the first go, and the alias otherwise
+							loc.tableName = loc.classData.tableName;
+							if (loc.j != 1)
+								loc.tableName = loc.classData.alias;
+
 							if (ListFindNoCase(loc.classData.propertyList, loc.property))
-								loc.toAdd = loc.classData.tableName & "." & loc.classData.properties[loc.property].column;
+								loc.toAdd = loc.tableName & "." & loc.classData.properties[loc.property].column;
 							else if (ListFindNoCase(loc.classData.calculatedPropertyList, loc.property))
 								loc.toAdd = Replace(loc.classData.calculatedProperties[loc.property].sql, ",", "[[comma]]", "all");
 							if (Len(loc.toAdd))
 							{
-								if (!ListFindNoCase(loc.classData.columnList, loc.property))
-									loc.toAdd = loc.toAdd & " AS " & loc.property;
 								loc.toAdd = loc.toAdd & " " & UCase(ListLast(loc.iItem, " "));
 								if (!ListFindNoCase(loc.returnValue, loc.toAdd))
 								{
@@ -203,15 +207,21 @@
 		}
 
 		// go through the properties and map them to the database unless the developer passed in a table name or an alias in which case we assume they know what they're doing and leave the select clause as is
-		if (arguments.list Does Not Contain "." AND arguments.list Does Not Contain " AS ")
+
+		loc.list = "";
+		loc.addedProperties = "";
+		loc.addedPropertiesByModel = {};
+		loc.iEnd = ListLen(arguments.list);
+		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 		{
-			loc.list = "";
-			loc.addedProperties = "";
-			loc.addedPropertiesByModel = {};
-			loc.iEnd = ListLen(arguments.list);
-			for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+			loc.iItem = Trim(ListGetAt(arguments.list, loc.i));
+
+			if (loc.iItem Contains "." || loc.iItem Contains " AS " || loc.iItem eq "*")
 			{
-				loc.iItem = Trim(ListGetAt(arguments.list, loc.i));
+				loc.list = ListAppend(loc.list, loc.iItem);
+			}
+			else
+			{
 
 				// look for duplicates
 				loc.duplicateCount = ListValueCountNoCase(loc.addedProperties, loc.iItem);
@@ -224,12 +234,17 @@
 					loc.toAppend = "";
 					loc.classData = loc.classes[loc.j];
 
+					// we need the name of the table on the first go, and the alias otherwise
+					loc.tableName = loc.classData.tableName;
+					if (loc.j != 1)
+						loc.tableName = loc.classData.alias;
+
 					// create a struct for this model unless it already exists
-					if (!StructKeyExists(loc.addedPropertiesByModel, loc.classData.modelName))
-						loc.addedPropertiesByModel[loc.classData.modelName] = "";
+					if (!StructKeyExists(loc.addedPropertiesByModel, loc.classData.alias))
+						loc.addedPropertiesByModel[loc.classData.alias] = "";
 
 					// if we find the property in this model and it's not already added we go ahead and add it to the select clause
-					if ((ListFindNoCase(loc.classData.propertyList, loc.iItem) || ListFindNoCase(loc.classData.calculatedPropertyList, loc.iItem)) && !ListFindNoCase(loc.addedPropertiesByModel[loc.classData.modelName], loc.iItem))
+					if ((ListFindNoCase(loc.classData.propertyList, loc.iItem) || ListFindNoCase(loc.classData.calculatedPropertyList, loc.iItem)) && !ListFindNoCase(loc.addedPropertiesByModel[loc.classData.alias], loc.iItem))
 					{
 						// if expanded column aliases is enabled then mark all columns from included classes as duplicates in order to prepend them with their class name
 						loc.flagAsDuplicate = false;
@@ -240,7 +255,7 @@
 								// always flag as a duplicate when a property with this name has already been added
 								loc.flagAsDuplicate  = true;
 							}
-							else if (loc.j > 1)
+							else if (loc.j gt 1)
 							{
 								if (arguments.useExpandedColumnAliases)
 								{
@@ -253,12 +268,12 @@
 									loc.flagAsDuplicate  = true;
 								}
 							}
-						}						
+						}
 						if (loc.flagAsDuplicate )
 							loc.toAppend = loc.toAppend & "[[duplicate]]" & loc.j;
 						if (ListFindNoCase(loc.classData.propertyList, loc.iItem))
 						{
-							loc.toAppend = loc.toAppend & loc.classData.tableName & ".";
+							loc.toAppend = loc.toAppend & loc.tableName & ".";
 							if (ListFindNoCase(loc.classData.columnList, loc.iItem))
 							{
 								loc.toAppend = loc.toAppend & loc.iItem;
@@ -274,7 +289,7 @@
 						{
 							loc.toAppend = loc.toAppend & "(" & Replace(loc.classData.calculatedProperties[loc.iItem].sql, ",", "[[comma]]", "all") & ") AS " & loc.iItem;
 						}
-						loc.addedPropertiesByModel[loc.classData.modelName] = ListAppend(loc.addedPropertiesByModel[loc.classData.modelName], loc.iItem);
+						loc.addedPropertiesByModel[loc.classData.alias] = ListAppend(loc.addedPropertiesByModel[loc.classData.alias], loc.iItem);
 						break;
 					}
 				}
@@ -283,62 +298,56 @@
 				else if (application.wheels.showErrorInformation && (not arguments.addCalculatedProperties && not ListFindNoCase(loc.classData.calculatedPropertyList, loc.iItem)))
 					$throw(type="Wheels.ColumnNotFound", message="Wheels looked for the column mapped to the `#loc.iItem#` property but couldn't find it in the database table.", extendedInfo="Verify the `select` argument and/or your property to column mappings done with the `property` method inside the model's `init` method to make sure everything is correct.");
 			}
-
-			// let's replace eventual duplicates in the clause by prepending the class name
-			if (Len(arguments.include) && arguments.renameFields)
-			{
-				loc.newSelect = "";
-				loc.addedProperties = "";
-				loc.iEnd = ListLen(loc.list);
-				for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
-				{
-					loc.iItem = ListGetAt(loc.list, loc.i);
-
-					// get the property part, done by taking everytyhing from the end of the string to a . or a space (which would be found when using " AS ")
-					loc.property = Reverse(SpanExcluding(Reverse(loc.iItem), ". "));
-
-					// check if this one has been flagged as a duplicate, we get the number of classes to skip and also remove the flagged info from the item
-					loc.duplicateCount = 0;
-					loc.matches = REFind("^\[\[duplicate\]\](\d+)(.+)$", loc.iItem, 1, true);
-					if (loc.matches.pos[1] gt 0)
-					{
-						loc.duplicateCount = Mid(loc.iItem, loc.matches.pos[2], loc.matches.len[2]);
-						loc.iItem = Mid(loc.iItem, loc.matches.pos[3], loc.matches.len[3]);
-					}
-
-					if (!loc.duplicateCount)
-					{
-						// this is not a duplicate so we can just insert it as is
-						loc.newItem = loc.iItem;
-						loc.newProperty = loc.property;
-					}
-					else
-					{
-						// this is a duplicate so we prepend the class name and then insert it unless a property with the resulting name already exist
-						loc.classData = loc.classes[loc.duplicateCount];
-
-						// prepend class name to the property
-						loc.newProperty = loc.classData.modelName & loc.property;
-
-						if (loc.iItem Contains " AS ")
-							loc.newItem = ReplaceNoCase(loc.iItem, " AS " & loc.property, " AS " & loc.newProperty);
-						else
-							loc.newItem = loc.iItem & " AS " & loc.newProperty;
-					}
-					if (!ListFindNoCase(loc.addedProperties, loc.newProperty))
-					{
-						loc.newSelect = ListAppend(loc.newSelect, loc.newItem);
-						loc.addedProperties = ListAppend(loc.addedProperties, loc.newProperty);
-					}
-				}
-				loc.list = loc.newSelect;
-			}
 		}
-		else
+
+		// let's replace eventual duplicates in the clause by prepending the class name
+		if (Len(arguments.include) && arguments.renameFields)
 		{
-			loc.list = arguments.list;
-			if (!arguments.renameFields && Find(" AS ", loc.list))
-				loc.list = REReplace(loc.list, variables.wheels.class.RESQLAs, "", "all");
+			loc.newSelect = "";
+			loc.addedProperties = "";
+			loc.iEnd = ListLen(loc.list);
+			for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+			{
+				loc.iItem = ListGetAt(loc.list, loc.i);
+
+				// get the property part, done by taking everytyhing from the end of the string to a . or a space (which would be found when using " AS ")
+				loc.property = Reverse(SpanExcluding(Reverse(loc.iItem), ". "));
+
+				// check if this one has been flagged as a duplicate, we get the number of classes to skip and also remove the flagged info from the item
+				loc.duplicateCount = 0;
+				loc.matches = REFind("^\[\[duplicate\]\](\d+)(.+)$", loc.iItem, 1, true);
+				if (loc.matches.pos[1] gt 0)
+				{
+					loc.duplicateCount = Mid(loc.iItem, loc.matches.pos[2], loc.matches.len[2]);
+					loc.iItem = Mid(loc.iItem, loc.matches.pos[3], loc.matches.len[3]);
+				}
+
+				if (!loc.duplicateCount)
+				{
+					// this is not a duplicate so we can just insert it as is
+					loc.newItem = loc.iItem;
+					loc.newProperty = loc.property;
+				}
+				else
+				{
+					// this is a duplicate so we prepend the class name and then insert it unless a property with the resulting name already exist
+					loc.classData = loc.classes[loc.duplicateCount];
+
+					// prepend class name to the property
+					loc.newProperty = loc.classData.modelName & loc.property;
+
+					if (loc.iItem Contains " AS ")
+						loc.newItem = ReplaceNoCase(loc.iItem, " AS " & loc.property, " AS " & loc.newProperty);
+					else
+						loc.newItem = loc.iItem & " AS " & loc.newProperty;
+				}
+				if (!ListFindNoCase(loc.addedProperties, loc.newProperty))
+				{
+					loc.newSelect = ListAppend(loc.newSelect, loc.newItem);
+					loc.addedProperties = ListAppend(loc.addedProperties, loc.newProperty);
+				}
+			}
+			loc.list = loc.newSelect;
 		}
 	</cfscript>
 	<cfreturn loc.list />
@@ -405,6 +414,11 @@
 						loc.param.list = false;
 
 						loc.classData = loc.classes[loc.j];
+						// we need the name of the table on the first go, and the alias otherwise
+						loc.tableName = loc.classData.tableName;
+						if (loc.j != 1)
+							loc.tableName = loc.classData.alias;
+
 						if (loc.param.property Does Not Contain "." || ListFirst(loc.param.property, ".") == loc.classData.tableName)
 						{
 							if (ListFindNoCase(loc.classData.propertyList, ListLast(loc.param.property, ".")))
@@ -412,7 +426,7 @@
 								loc.param.type = loc.classData.properties[ListLast(loc.param.property, ".")].type;
 								loc.param.dataType = loc.classData.properties[ListLast(loc.param.property, ".")].dataType;
 								loc.param.scale = loc.classData.properties[ListLast(loc.param.property, ".")].scale;
-								loc.param.column = loc.classData.tableName & "." & loc.classData.properties[ListLast(loc.param.property, ".")].column;
+								loc.param.column = loc.tableName & "." & loc.classData.properties[ListLast(loc.param.property, ".")].column;
 								break;
 							}
 							else if (ListFindNoCase(loc.classData.calculatedPropertyList, ListLast(loc.param.property, ".")))
@@ -456,7 +470,7 @@
 		{
 			loc.addToWhere = "";
 			if ($softDeletion())
-				loc.addToWhere = ListAppend(loc.addToWhere, tableName() & "." & this.$softDeleteColumn() & " IS NULL");
+				loc.addToWhere = ListAppend(loc.addToWhere, this.$aliasName() & "." & this.$softDeleteColumn() & " IS NULL");
 			loc.addToWhere = Replace(loc.addToWhere, ",", " AND ", "all");
 			if (Len(loc.addToWhere))
 			{
@@ -553,6 +567,10 @@
 	<cfscript>
 		var loc = {};
 		loc.returnValue = [];
+		
+		// will keep track of the model names used for aliasing
+		// key = modelName, value = increment counter
+		loc.modelNames = {};
 
 		// add the current class name so that the levels list start at the lowest level
 		loc.levels = variables.wheels.class.modelName;
@@ -571,100 +589,157 @@
 			loc.delimSequence = Mid(loc.include, loc.delimFind.pos[1], loc.delimFind.len[1]);
 
 			// set current association name and set new position to start search in the next loop
+			loc.previousName = "";
+			if (StructKeyExists(loc, "name"))
+			{
+				loc.previousName = loc.name;
+			}
 			loc.name = Mid(loc.include, loc.pos, loc.delimFind.pos[1]-loc.pos);
 			loc.pos = REFindNoCase("[a-z]", loc.include, loc.delimFind.pos[1]);
 
 			// create a reference to current class in include string and get its association info
-			loc.class = model(ListLast(loc.levels));
-			loc.classAssociations = loc.class.$classData().associations;
-
+			loc.className = ListLast(loc.levels);
+			loc.class = model(loc.className);
+			loc.classData = loc.class.$classData();
+			loc.classAssociations = loc.classData.associations;
+			
 			// throw an error if the association was not found
 			if (application.wheels.showErrorInformation && !StructKeyExists(loc.classAssociations, loc.name))
+			{
 				$throw(type="Wheels.AssociationNotFound", message="An association named `#loc.name#` could not be found on the `#ListLast(loc.levels)#` model.", extendedInfo="Setup an association in the `init` method of the `models/#capitalize(ListLast(loc.levels))#.cfc` file and name it `#loc.name#`. You can use the `belongsTo`, `hasOne` or `hasMany` method to set it up.");
+			}
 
 			// create a reference to the associated class
-			loc.associatedClass = model(loc.classAssociations[loc.name].modelName);
+			loc.association = loc.classAssociations[loc.name];
+			loc.associatedClass = model(loc.association.modelName);
+			loc.associatedClassData = loc.associatedClass.$classData();
+			
+			// add the associations model name to tracking
+			if (!StructKeyExists(loc.modelNames, loc.association.modelName))
+			{// if it doesn't exists create one
+				loc.modelNames[loc.association.modelName] = 0;
+			}
+			else
+			{// if it does exists, increment it's occurance counter by 1
+				loc.modelNames[loc.association.modelName]++;
+			}
 
-			if (!Len(loc.classAssociations[loc.name].foreignKey))
+			// figure out the foreignKey for this association
+			if (!Len(loc.association.foreignKey))
 			{
-				if (loc.classAssociations[loc.name].type == "belongsTo")
+				if (loc.association.type == "belongsTo")
 				{
-					loc.classAssociations[loc.name].foreignKey = loc.associatedClass.$classData().modelName & Replace(loc.associatedClass.$classData().keys, ",", ",#loc.associatedClass.$classData().modelName#", "all");
+					loc.association.foreignKey = loc.associatedClassData.modelName & Replace(loc.associatedClassData.keys, ",", ",#loc.associatedClassData.modelName#", "all");
 				}
 				else
 				{
-					loc.classAssociations[loc.name].foreignKey = loc.class.$classData().modelName & Replace(loc.class.$classData().keys, ",", ",#loc.class.$classData().modelName#", "all");
+					loc.association.foreignKey = loc.classData.modelName & Replace(loc.classData.keys, ",", ",#loc.classData.modelName#", "all");
 				}
 			}
 
-			if (!Len(loc.classAssociations[loc.name].joinKey))
+			// figure out the joinKey for this association
+			if (!Len(loc.association.joinKey))
 			{
-				if (loc.classAssociations[loc.name].type == "belongsTo")
+				if (loc.association.type == "belongsTo")
 				{
-					loc.classAssociations[loc.name].joinKey = loc.associatedClass.$classData().keys;
+					loc.association.joinKey = loc.associatedClassData.keys;
 				}
 				else
 				{
-					loc.classAssociations[loc.name].joinKey = loc.class.$classData().keys;
+					loc.association.joinKey = loc.classData.keys;
 				}
 			}
-
-			loc.classAssociations[loc.name].tableName = loc.associatedClass.$classData().tableName;
-			loc.classAssociations[loc.name].columnList = loc.associatedClass.$classData().columnList;
-			loc.classAssociations[loc.name].properties = loc.associatedClass.$classData().properties;
-			loc.classAssociations[loc.name].propertyList = loc.associatedClass.$classData().propertyList;
-			loc.classAssociations[loc.name].calculatedProperties = loc.associatedClass.$classData().calculatedProperties;
-			loc.classAssociations[loc.name].calculatedPropertyList = loc.associatedClass.$classData().calculatedPropertyList;
-
-			// create the join string if it hasn't already been done (no need to lock this code since when multiple requests process it they will end up setting the same value (no intermediate value is ever set on the join variable in the application scoped model object)
-			if (!StructKeyExists(loc.classAssociations[loc.name], "join"))
+			
+			// we should only do this if an association doesn't have an alias already
+			if (!StructKeyExists(loc.association, "alias"))
 			{
-				loc.joinType = ReplaceNoCase(loc.classAssociations[loc.name].joinType, "outer", "left outer", "one");
-				loc.join = UCase(loc.joinType) & " JOIN #loc.classAssociations[loc.name].tableName# ON ";
-				loc.toAppend = "";
-				loc.jEnd = ListLen(loc.classAssociations[loc.name].foreignKey);
+				if (loc.classData.tableName == loc.associatedClassData.tableName || loc.modelNames[loc.association.modelName] gt 0)
+				{
+					loc.associatedClass.$alias(associationName=loc.name, alias="#loc.association.modelName##loc.modelNames[loc.association.modelName]#");
+				}
+				loc.association.alias = loc.associatedClass.$aliasName(associationName=loc.name);
+			}
+
+			// set our alias to the tableName if we do not have one
+			loc.association.tableName = loc.associatedClassData.tableName;
+			loc.association.columnList = loc.associatedClassData.columnList;
+			loc.association.properties = loc.associatedClassData.properties;
+			loc.association.propertyList = loc.associatedClassData.propertyList;
+			loc.association.calculatedProperties = loc.associatedClassData.calculatedProperties;
+			loc.association.calculatedPropertyList = loc.associatedClassData.calculatedPropertyList;
+
+			// create the join string if it hasn't already been done
+			loc.join = "";
+			if (!StructKeyExists(loc.association, "join"))
+			{
+				loc.joinType = ReplaceNoCase(loc.association.joinType, "outer", "left outer", "one");
+				loc.join &= UCase(loc.joinType) & " JOIN " & $adapter().$tableAliasForJoin(loc.association.tableName, loc.association.alias) & " ON";
+				loc.jEnd = ListLen(loc.association.foreignKey);
 				for (loc.j=1; loc.j <= loc.jEnd; loc.j++)
 				{
-					loc.key1 = ListGetAt(loc.classAssociations[loc.name].foreignKey, loc.j);
-					if (loc.classAssociations[loc.name].type == "belongsTo")
+					loc.key1 = ListGetAt(loc.association.foreignKey, loc.j);
+					loc.key2 = ListFindNoCase(loc.association.joinKey, loc.key1);
+
+					if (loc.key2)
 					{
-						loc.key2 = ListFindNoCase(loc.classAssociations[loc.name].joinKey, loc.key1);
-						if (loc.key2)
-							loc.key2 = ListGetAt(loc.classAssociations[loc.name].joinKey, loc.key2);
-						else
-							loc.key2 = ListGetAt(loc.classAssociations[loc.name].joinKey, loc.j);
+						loc.key2 = ListGetAt(loc.association.joinKey, loc.key2);
+					}
+					else
+					{
+						loc.key2 = ListGetAt(loc.association.joinKey, loc.j);
+					}
+					
+					if (loc.association.type == "belongsTo")
+					{
 						loc.first = loc.key1;
 						loc.second = loc.key2;
 					}
 					else
 					{
-						loc.key2 = ListFindNoCase(loc.classAssociations[loc.name].joinKey, loc.key1);
-						if (loc.key2)
-							loc.key2 = ListGetAt(loc.classAssociations[loc.name].joinKey, loc.key2);
-						else
-							loc.key2 = ListGetAt(loc.classAssociations[loc.name].joinKey, loc.j);
 						loc.first = loc.key2;
 						loc.second = loc.key1;
 					}
-					loc.toAppend = ListAppend(loc.toAppend, "#loc.class.$classData().tableName#.#loc.class.$classData().properties[loc.first].column# = #loc.classAssociations[loc.name].tableName#.#loc.associatedClass.$classData().properties[loc.second].column#");
-					if (!arguments.includeSoftDeletes and loc.associatedClass.$softDeletion())
-						loc.toAppend = ListAppend(loc.toAppend, "#loc.associatedClass.tableName()#.#loc.associatedClass.$softDeleteColumn()# IS NULL");
+					
+					loc.join &= " #loc.class.$aliasName(associationname=loc.previousName)#.#loc.classData.properties[loc.first].column# = #loc.association.alias#.#loc.associatedClassData.properties[loc.second].column#";
 				}
-				loc.classAssociations[loc.name].join = loc.join & Replace(loc.toAppend, ",", " AND ", "all");
 			}
+			else
+			{
+				loc.join = loc.association.join;
+			}
+			
+			// have to always check if wee need to including softdeletes
+			// otherwise the developer would have to do this in their join statement
+			// and that wouldn't be very DRY
+			if (!arguments.includeSoftDeletes and loc.associatedClass.$softDeletion() and !FindNoCase(loc.associatedClass.$softDeleteColumn(), loc.join))
+			{
+				loc.appendAnd = "";
+				if (len(loc.join))
+				{
+					loc.appendAnd = " AND ";
+				}
+				loc.join &= loc.appendAnd & loc.associatedClass.$aliasName(associationname=loc.previousName) & "." & loc.associatedClass.$softDeleteColumn() & " IS NULL";
+			}
+			
+			loc.association.join = loc.join;
+			
 
 			// loop over each character in the delimiter sequence and move up/down the levels as appropriate
 			for (loc.x=1; loc.x lte Len(loc.delimSequence); loc.x++)
 			{
 				loc.delimChar = Mid(loc.delimSequence, loc.x, 1);
 				if (loc.delimChar == "(")
-					loc.levels = ListAppend(loc.levels, loc.classAssociations[loc.name].modelName);
+				{
+					loc.levels = ListAppend(loc.levels, loc.association.modelName);
+				}
 				else if (loc.delimChar == ")")
+				{
 					loc.levels = ListDeleteAt(loc.levels, ListLen(loc.levels));
+				}
 			}
 
 			// add info to the array that we will return
-			ArrayAppend(loc.returnValue, loc.classAssociations[loc.name]);
+			ArrayAppend(loc.returnValue, loc.association);
 		}
 		</cfscript>
 		<cfreturn loc.returnValue>
@@ -685,9 +760,9 @@
 				loc.value = Trim(ListGetAt(arguments.values, loc.i));
 			else if (Len(arguments.keys))
 				loc.value = this[ListGetAt(arguments.keys, loc.i)];
-			else 
+			else
 				loc.value = "";
-			loc.toAppend = loc.key & "=" & variables.wheels.class.adapter.$quoteValue(str=loc.value, type=validationTypeForProperty(loc.key));
+			loc.toAppend = loc.key & "=" & $adapter().$quoteValue(str=loc.value, type=validationTypeForProperty(loc.key));
 			loc.returnValue = ListAppend(loc.returnValue, loc.toAppend, " ");
 			if (loc.i < loc.iEnd)
 				loc.returnValue = ListAppend(loc.returnValue, "AND", " ");

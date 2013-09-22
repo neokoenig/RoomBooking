@@ -26,14 +26,14 @@
 
 		if (StructKeyExists(application, "wheels") && StructKeyExists(application.wheels, "initialized"))
 		{
-			if (application.wheels.sendEmailOnError && Len(application.wheels.errorEmailAddress))
+			if (application.wheels.sendEmailOnError && Len(application.wheels.errorEmailToAddress) && Len(application.wheels.errorEmailFromAddress))
 			{
 				loc.mailArgs = {};
 				$args(name="sendEmail", args=loc.mailArgs);
 				if (StructKeyExists(application.wheels, "errorEmailServer") && Len(application.wheels.errorEmailServer))
 					loc.mailArgs.server = application.wheels.errorEmailServer;
-				loc.mailArgs.from = application.wheels.errorEmailAddress;
-				loc.mailArgs.to = application.wheels.errorEmailAddress;
+				loc.mailArgs.from = application.wheels.errorEmailFromAddress;
+				loc.mailArgs.to = application.wheels.errorEmailToAddress;
 				loc.mailArgs.subject = application.wheels.errorEmailSubject;
 				loc.mailArgs.type = "html";
 				loc.mailArgs.tagContent = $includeAndReturnOutput($template="wheels/events/onerror/cfmlerror.cfm", exception=arguments.exception);

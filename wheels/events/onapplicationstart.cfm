@@ -7,13 +7,18 @@
 
 		// setup the wheels storage struct for the current request
 		$initializeRequestScope();
-
-		// set or reset all settings but make sure to pass along the reload password between forced reloads with "reload=x"
-		if (StructKeyExists(application, "wheels") && StructKeyExists(application.wheels, "reloadPassword"))
-			loc.oldReloadPassword = application.wheels.reloadPassword;
+		
+		// preserve the following setting between reloads
+		loc.savedSettings = {};
+		if (StructKeyExists(application, "wheels"))
+		{
+			loc.savedSettings = $saveScopeSettings(application.wheels, "reloadPassword,allowedEnvironmentSwitchThroughURL");
+		}
+			
 		application.wheels = {};
-		if (StructKeyExists(loc, "oldReloadPassword"))
-			application.wheels.reloadPassword = loc.oldReloadPassword;
+		
+		// include the version
+		$include(template="wheels/version.cfm");
 
 		// check and store server engine name, throw error if using a version that we don't support
 		// really need to refactor this into a method
@@ -21,7 +26,13 @@
 		{
 			application.wheels.serverName = "Railo";
 			application.wheels.serverVersion = server.railo.version;
-			loc.minimumServerVersion = "3.1.2.020";
+			loc.minimumServerVersion = "3.3.1.000";
+			
+			// Distinguish against Railo4 since it has changed a bunch of things
+			if(ListFirst(application.wheels.serverVersion, '.') eq 4)
+			{
+				application.wheels.serverName = "Railo4";
+			}
 		}
 		else
 		{
@@ -34,12 +45,20 @@
 		{
 			$throw(type="Wheels.EngineNotSupported", message="#application.wheels.serverName# #application.wheels.serverVersion# is not supported by Wheels.", extendedInfo="Please upgrade to version #loc.minimumServerVersion# or higher.");
 		}
+		
+		// load any saved settings from the previous reload
+		StructAppend(application.wheels, loc.savedSettings, true);
 
 		// copy over the cgi variables we need to the request scope (since we use some of these to determine URL rewrite capabilities we need to be able to access them directly on application start for example)
 		request.cgi = $cgiScope();
+		
+		// load locales
+		application.wheels.locales = $loadLocales();
+		// default locale
+		application.wheels.locale = "en-US";
+		application.wheels.utcTimestamps = false;
 
 		// set up containers for routes, caches, settings etc
-		application.wheels.version = "1.1.8";
 		application.wheels.controllers = {};
 		application.wheels.models = {};
 		application.wheels.existingHelperFiles = "";
@@ -51,15 +70,7 @@
 		application.wheels.routes = [];
 		application.wheels.namedRoutePositions = {};
 		application.wheels.mixins = {};
-		application.wheels.cache = {};
-		application.wheels.cache.sql = {};
-		application.wheels.cache.image = {};
-		application.wheels.cache.main = {};
-		application.wheels.cache.action = {};
-		application.wheels.cache.page = {};
-		application.wheels.cache.partial = {};
-		application.wheels.cache.query = {};
-		application.wheels.cacheLastCulledAt = Now();
+		application.wheels.vendor = {};
 
 		// set up paths to various folders in the framework
 		application.wheels.webPath = Replace(request.cgi.script_name, Reverse(spanExcluding(Reverse(request.cgi.script_name), "/")), "");
@@ -77,12 +88,19 @@
 		application.wheels.pluginComponentPath = "plugins";
 		application.wheels.stylesheetPath = "stylesheets";
 		application.wheels.viewPath = "views";
+		
+		// see if they are switching environments
+		loc.environment = $switchEnivronmentSecurity(application.wheels, url);
 
-		// set environment either from the url or the developer's environment.cfm file
-		if (StructKeyExists(URL, "reload") && !IsBoolean(URL.reload) && Len(url.reload) && StructKeyExists(application.wheels, "reloadPassword") && (!Len(application.wheels.reloadPassword) || (StructKeyExists(URL, "password") && URL.password == application.wheels.reloadPassword)))
-			application.wheels.environment = URL.reload;
+		if (Len(loc.environment))
+		{
+			application.wheels.environment = loc.environment;	
+		}
 		else
-			$include(template="#application.wheels.configPath#/environment.cfm");
+		{
+			// load the environment
+			$include(template="#application.wheels.configPath#/environment.cfm");	
+		}
 
 		// load wheels settings
 		$include(template="wheels/events/onapplicationstart/settings.cfm");
@@ -108,7 +126,7 @@
 				application.wheels.protectedControllerMethods = ListAppend(application.wheels.protectedControllerMethods, loc.method);
 		}
 
-		// reload the plugins each time we reload the application
+		// load plugins
 		$loadPlugins();
 		
 		// allow developers to inject plugins into the application variables scope
@@ -121,6 +139,12 @@
 		// create the dispatcher that will handle all incoming requests
 		application.wheels.dispatch = $createObjectFromRoot(path="wheels", fileName="Dispatch", method="$init");
 
+		// create the cache objects for each category
+		application.wheels.caches = {};
+		
+		for (loc.item in application.wheels.cacheSettings)
+			application.wheels.caches[loc.item] = $createObjectFromRoot(path="wheels", fileName="Cache", method="init", argumentCollection=application.wheels.cacheSettings[loc.item]);
+		
 		// run the developer's on application start code
 		$include(template="#application.wheels.eventPath#/onapplicationstart.cfm");
 	</cfscript>

@@ -15,7 +15,7 @@
 			switch(arguments.type)
 			{
 				case "bigint": {loc.returnValue = "cf_sql_bigint"; break;}
-				case "binary": case "timestamp": {loc.returnValue = "cf_sql_binary"; break;}
+				case "binary": case "geography": case "geometry": case "timestamp": {loc.returnValue = "cf_sql_binary"; break;}
 				case "bit": {loc.returnValue = "cf_sql_bit"; break;}
 				case "char": case "nchar": case "uniqueidentifier": {loc.returnValue = "cf_sql_char"; break;}
 				case "date": {loc.returnValue = "cf_sql_date"; break;}
@@ -165,6 +165,12 @@
 				<cfreturn loc.returnValue>
 			</cfif>
 		</cfif>
+	</cffunction>
+
+	<cffunction name="insert_with_no_properties" returntype="string" access="public" output="false"
+		hint="some databases allow you to do an insert without specifying any columns, thus inserting the default values. Overload this method if your database adapter supports this.">
+		<cfargument name="tablename" type="string" required="true" hint="table to insert into">
+		<cfreturn "INSERT INTO #arguments.tablename# default VALUES">
 	</cffunction>
 
 	<cfinclude template="../../plugins/injection.cfm">

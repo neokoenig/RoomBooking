@@ -88,9 +88,11 @@
 
 					for (loc.i = 1; loc.i lte ArrayLen(loc.array); loc.i++)
 					{
+						loc.saveResult = true;
 						if (ListFindNoCase("hasMany,hasOne", loc.associations[loc.association].type))
 							$setForeignKeyValues(missingMethodArguments=loc.array[loc.i], keys=loc.info.foreignKey);
-						loc.saveResult = $invoke(componentReference=loc.array[loc.i], method="save", invokeArgs=arguments);
+						if (IsObject(loc.array[loc.i]))
+							loc.saveResult = $invoke(componentReference=loc.array[loc.i], method="save", invokeArgs=arguments);
 						if (loc.returnValue) // don't change the return value if we have already received a false
 							loc.returnValue = loc.saveResult;
 					}
@@ -125,12 +127,13 @@
 	<cfargument name="value" type="struct" required="true" />
 	<cfargument name="association" type="struct" required="true" />
 	<cfargument name="delete" type="boolean" required="false" default="false" />
+	<cfargument name="callbacks" type="boolean" required="false" default="true" />
 	<cfscript>
 		if (!StructKeyExists(this, arguments.property) || !IsObject(this[arguments.property]) || StructKeyExists(this[arguments.property], "_delete"))
 			this[arguments.property] = $getAssociationObject(argumentCollection=arguments);
 
 		if (IsObject(this[arguments.property]))
-			this[arguments.property].setProperties(properties=arguments.value);
+			this[arguments.property].setProperties(properties=arguments.value, callbacks=arguments.callbacks);
 		else
 			StructDelete(this, arguments.property, false);
 	</cfscript>
@@ -142,6 +145,7 @@
 	<cfargument name="value" type="any" required="true" />
 	<cfargument name="association" type="struct" required="true" />
 	<cfargument name="delete" type="boolean" required="false" default="false" />
+	<cfargument name="callbacks" type="boolean" required="false" default="true" />
 	<cfscript>
 		var loc = {};
 		loc.model = model(arguments.association.modelName);
@@ -156,7 +160,7 @@
 				// check to see if the id is a tickcount, if so the object is new
 				if (IsNumeric(loc.item) && Ceiling(GetTickCount() / 900000000) == Ceiling(loc.item / 900000000))
 				{
-					ArrayAppend(this[arguments.property], $getAssociationObject(property=arguments.property, value=arguments.value[loc.item], association=arguments.association, delete=arguments.delete));
+					ArrayAppend(this[arguments.property], $getAssociationObject(property=arguments.property, value=arguments.value[loc.item], association=arguments.association, delete=arguments.delete, callbacks=arguments.callbacks));
 					$updateCollectionObject(property=arguments.property, value=arguments.value[loc.item]);
 				}
 				else
@@ -167,7 +171,7 @@
 					loc.iEnd = ListLen(loc.keys);
 					for (loc.i = 1; loc.i lte loc.iEnd; loc.i++)
 						arguments.value[loc.item][ListGetAt(loc.keys, loc.i)] = loc.itemArray[loc.i];
-					ArrayAppend(this[arguments.property], $getAssociationObject(property=arguments.property, value=arguments.value[loc.item], association=arguments.association, delete=arguments.delete));
+					ArrayAppend(this[arguments.property], $getAssociationObject(property=arguments.property, value=arguments.value[loc.item], association=arguments.association, delete=arguments.delete, callbacks=arguments.callbacks));
 					$updateCollectionObject(property=arguments.property, value=arguments.value[loc.item]);
 				}
 			}
@@ -178,7 +182,7 @@
 			{
 				if (IsObject(arguments.value[loc.i]) && ArrayLen(this[arguments.property]) gte loc.i && IsObject(this[arguments.property][loc.i]) && this[arguments.property][loc.i].compareTo(arguments.value[loc.i]))
 				{
-					this[arguments.property][loc.i] = $getAssociationObject(property=arguments.property, value=arguments.value[loc.i], association=arguments.association, delete=arguments.delete);
+					this[arguments.property][loc.i] = $getAssociationObject(property=arguments.property, value=arguments.value[loc.i], association=arguments.association, delete=arguments.delete, callbacks=arguments.callbacks);
 					if (!IsStruct(this[arguments.property][loc.i]) && !this[arguments.property][loc.i])
 					{
 						ArrayDeleteAt(this[arguments.property], loc.i);
@@ -191,7 +195,7 @@
 				}
 				else if (IsStruct(arguments.value[loc.i]) && ArrayLen(this[arguments.property]) gte loc.i && IsObject(this[arguments.property][loc.i]))
 				{
-					this[arguments.property][loc.i] = $getAssociationObject(property=arguments.property, value=arguments.value[loc.i], association=arguments.association, delete=arguments.delete);
+					this[arguments.property][loc.i] = $getAssociationObject(property=arguments.property, value=arguments.value[loc.i], association=arguments.association, delete=arguments.delete, callbacks=arguments.callbacks);
 					if (!IsStruct(this[arguments.property][loc.i]) && !this[arguments.property][loc.i])
 					{
 						ArrayDeleteAt(this[arguments.property], loc.i);
@@ -204,7 +208,7 @@
 				}
 				else
 				{
-					ArrayAppend(this[arguments.property], $getAssociationObject(property=arguments.property, value=arguments.value[loc.i], association=arguments.association, delete=arguments.delete));
+					ArrayAppend(this[arguments.property], $getAssociationObject(property=arguments.property, value=arguments.value[loc.i], association=arguments.association, delete=arguments.delete, callbacks=arguments.callbacks));
 					$updateCollectionObject(property=arguments.property, value=arguments.value[loc.i]);
 				}
 			}
@@ -248,12 +252,13 @@
 	<cfargument name="value" type="struct" required="true" />
 	<cfargument name="association" type="struct" required="true" />
 	<cfargument name="delete" type="boolean" required="true" />
+	<cfargument name="callbacks" type="boolean" required="false" default="true" />
 	<cfscript>
 		var loc = {};
 		loc.method = "";
 		loc.object = false;
 		loc.delete = false;
-		loc.arguments = {};
+		loc.arguments = { callbacks = arguments.callbacks };
 		loc.model = model(arguments.association.modelName);
 
 		// check to see if the struct has all of the keys we need from rejectIfBlank

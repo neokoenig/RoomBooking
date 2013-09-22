@@ -17,6 +17,7 @@
 <cfset loc.baseReloadURL = loc.baseReloadURL & "reload=">
 <cfset loc.hasFrameworkTests = StructKeyExists(this, "mappings") && StructKeyExists(this.mappings, "/wheelsMapping") && DirectoryExists(expandPath("/wheelsMapping/tests"))>
 <cfset loc.hasAppTests = DirectoryExists(expandPath("#get('webPath')#/tests"))>
+<cfset loc.hasBuilders = DirectoryExists(expandPath("#get('webPath')#/builders"))>
 
 <cfoutput>
 
@@ -80,7 +81,13 @@
 		</tr>
 		<tr>
 			<td valign="top"><strong>Framework:</strong></td>
-			<td>Wheels #get("version")#<cfif loc.hasFrameworkTests> [<a href="#get('webPath')##ListLast(request.cgi.script_name, '/')#?controller=wheels&action=wheels&view=tests&type=core&reload=true">Run Tests</a>]</cfif></td>
+			<td>Wheels #get("version")#
+				<cfif loc.hasFrameworkTests> [<a href="#get('webPath')##ListLast(request.cgi.script_name, '/')#?controller=wheels&action=wheels&view=core_test_packages&type=core&reload=true">Run Tests</a>]</cfif>
+				<cfif loc.hasBuilders>
+					[<a href="#get('webPath')##ListLast(request.cgi.script_name, '/')#?controller=wheels&action=wheels&view=documentation_generator&type=core&reload=true">Generate Documentation</a>]
+					[<a href="#get('webPath')##ListLast(request.cgi.script_name, '/')#?controller=wheels&action=wheels&view=release_generator&type=core&reload=true">Generate Release</a>]
+				</cfif>
+			</td>
 		</tr>
 		<tr>
 			<td valign="top"><strong>CFML Engine:</strong></td>
@@ -104,7 +111,7 @@
 		</tr>
 		<tr>
 			<td valign="top"><strong>Plugins:</strong></td>
-			<td><cfif StructCount(get("plugins")) IS NOT 0><cfset loc.count = 0><cfloop collection="#get('plugins')#" item="loc.i"><cfset loc.count = loc.count + 1><a href="#get('webPath')##ListLast(request.cgi.script_name, '/')#?controller=wheels&action=wheels&view=plugins&name=#LCase(loc.i)#">#loc.i#</a><cfif DirectoryExists(expandPath("#get('webPath')#/plugins/#LCase(loc.i)#/tests"))> [<a href="#get('webPath')##ListLast(request.cgi.script_name, '/')#?controller=wheels&action=wheels&view=tests&type=#LCase(loc.i)#&reload=true">Run Tests</a>]</cfif><cfif StructCount(get("plugins")) GT loc.count><br/></cfif></cfloop><cfelse>None</cfif></td>
+			<td><cfif StructCount(get("plugins")) IS NOT 0><cfset loc.count = 0><cfloop collection="#get('plugins')#" item="loc.i"><cfset loc.count = loc.count + 1><a href="#get('webPath')##ListLast(request.cgi.script_name, '/')#?controller=wheels&action=wheels&view=plugins&name=#loc.i#">#loc.i#</a><cfif DirectoryExists(expandPath("#get('webPath')#/plugins/#loc.i#/tests"))> [<a href="#get('webPath')##ListLast(request.cgi.script_name, '/')#?controller=wheels&action=wheels&view=tests&type=#LCase(loc.i)#&reload=true">Run Tests</a>]</cfif><cfif StructCount(get("plugins")) GT loc.count><br/></cfif></cfloop><cfelse>None</cfif></td>
 		</tr>
 		<cfif StructKeyExists(request.wheels.params, "route")>
 			<tr>

@@ -1,8 +1,25 @@
+<cffunction name="$htmlFormat" returntype="string" access="public" output="false">
+	<cfargument name="string" type="string" required="true" />
+	<cfscript>
+		var loc = {};
+		if (!StructKeyExists(application.wheels.vendor, "stringEscapeUtils"))
+		{
+			loc.filePaths = [];
+			loc.filePaths[1] = ExpandPath("wheels/vendor/commons-lang/commons-lang-2.5.jar");
+			loc.javaLoader = CreateObject("component", "#application.wheels.wheelsComponentPath#.vendor.javaloader.JavaLoader").init(loc.filePaths);
+			application.wheels.vendor.stringEscapeUtils = loc.javaLoader.create("org.apache.commons.lang.StringEscapeUtils");
+		}
+	</cfscript>
+	<cfreturn application.wheels.vendor.stringEscapeUtils.escapeHtml(ToString(arguments.string)) />
+</cffunction>
+
 <cffunction name="$initializeRequestScope" returntype="void" access="public" output="false">
 	<cfscript>
 		if (!StructKeyExists(request, "wheels"))
 		{
 			request.wheels = {};
+			request.wheels.vendor = {};
+			request.wheels.routes = {};
 			request.wheels.params = {};
 			request.wheels.cache = {};
 			
@@ -22,15 +39,16 @@
 	<cfargument name="data" type="any" required="true">
 	<cfscript>
 		// only instantiate the toXml object once per request
-		if (!StructKeyExists(request.wheels, "toXml"))
-			request.wheels.toXml = $createObjectFromRoot(path="#application.wheels.wheelsComponentPath#.vendor.toXml", fileName="toXML", method="init");
+		if (!StructKeyExists(request.wheels.vendor, "toXml"))
+			request.wheels.vendor.toXml = $createObjectFromRoot(path="#application.wheels.wheelsComponentPath#.vendor.toXml", fileName="toXML", method="init");
 	</cfscript>
-	<cfreturn request.wheels.toXml.toXml(arguments.data) />
+	<cfreturn request.wheels.vendor.toXml.toXml(arguments.data) />
 </cffunction>
 
 <cffunction name="$convertToString" returntype="string" access="public" output="false">
 	<cfargument name="value" type="Any" required="true">
 	<cfargument name="type" type="string" required="false" default="">
+	<cfargument name="delim" type="string" required="false" default=",">
 	<cfscript>
 		var loc = {};
 		
@@ -70,7 +88,7 @@
 				for (loc.i = 1; loc.i <= loc.iEnd; loc.i++)
 				{
 					loc.key = ListGetAt(loc.keyList, loc.i);
-					loc.str = ListAppend(loc.str, loc.key & "=" & arguments.value[loc.key]);
+					loc.str = ListAppend(loc.str, loc.key & "=" & $convertToString(value=arguments.value[loc.key], delim=arguments.delim), arguments.delim);
 				}
 				arguments.value = loc.str;
 				break;
@@ -78,7 +96,9 @@
 				arguments.value = ToString(arguments.value);
 				break;
 			case "float": case "integer":
-				arguments.value = Val(arguments.value);
+				if(len(arguments.value)){
+					arguments.value = Val(arguments.value);
+				}
 				break;
 			case "boolean":
 				arguments.value = ( arguments.value IS true );
@@ -99,15 +119,52 @@
 	<cfargument name="list" type="string" required="true">
 	<cfargument name="delim" type="string" required="false" default=",">
 	<cfargument name="returnAs" type="string" required="false" default="string">
+	<cfargument name="defaultValue" type="any" required="false" default="">
 	<cfscript>
 		var loc = {};
 		loc.list = ListToArray(arguments.list, arguments.delim);
-		for (loc.i = 1; loc.i lte ArrayLen(loc.list); loc.i++)
+		loc.iEnd = ArrayLen(loc.list);
+		for (loc.i = 1; loc.i lte loc.iEnd; loc.i++)
+		{
 			loc.list[loc.i] = Trim(loc.list[loc.i]);
-		if (arguments.returnAs == "array")
-			return loc.list;
+		}
+
+		switch (arguments.returnAs)
+		{
+			case "array":
+			{// already an array so just break out
+				break;
+			}
+			case "struct":
+			{
+				loc.s = {};
+				for (loc.i = 1; loc.i lte loc.iEnd; loc.i++)
+				{
+					loc.s[loc.list[loc.i]] = arguments.defaultValue;
+				}
+				loc.list = loc.s;
+				break;
+			}
+			default:
+			{// create a list using the supplied delimeter
+				loc.list = ArrayToList(loc.list, arguments.delim);
+				break;
+			}
+		}
 	</cfscript>
-	<cfreturn ArrayToList(loc.list, arguments.delim)>
+	<cfreturn loc.list>
+</cffunction>
+
+<cffunction name="$simpleHashedKey" returntype="string" access="public" output="false" hint="Same as $hashedKey but cannot handle binary data in queries.">
+	<cfargument name="value" type="any" required="true">
+	<cfscript>
+		var returnValue = "";
+		returnValue = SerializeJSON(arguments.value);
+		// remove the characters that indicate array or struct so that we can sort it as a list below
+		returnValue = ReplaceList(returnValue, "{,},[,]", ",,,");
+		returnValue = ListSort(returnValue, "text");
+		return returnValue;
+	</cfscript>
 </cffunction>
 
 <cffunction name="$hashedKey" returntype="string" access="public" output="false" hint="Creates a unique string based on any arguments passed in (used as a key for caching mostly).">
@@ -127,10 +184,7 @@
 			// this might fail if a query contains binary data so in those rare cases we fall back on using cfwddx (which is a little bit slower which is why we don't use it all the time)
 			try
 			{
-				loc.returnValue = SerializeJSON(loc.values);
-				// remove the characters that indicate array or struct so that we can sort it as a list below
-				loc.returnValue = ReplaceList(loc.returnValue, "{,},[,]", ",,,");
-				loc.returnValue = ListSort(loc.returnValue, "text");
+				loc.returnValue = $simpleHashedKey(loc.values);
 			}
 			catch (Any e)
 			{
@@ -143,20 +197,42 @@
 
 <cffunction name="$timeSpanForCache" returntype="any" access="public" output="false">
 	<cfargument name="cache" type="any" required="true">
-	<cfargument name="defaultCacheTime" type="numeric" required="false" default="#application.wheels.defaultCacheTime#">
-	<cfargument name="cacheDatePart" type="string" required="false" default="#application.wheels.cacheDatePart#">
+	<cfargument name="timeout" type="numeric" required="false">
+	<cfargument name="category" type="string" required="false">
 	<cfscript>
 		var loc = {};
-		loc.cache = arguments.defaultCacheTime;
-		if (IsNumeric(arguments.cache))
-			loc.cache = arguments.cache;
-		loc.list = "0,0,0,0";
-		loc.dateParts = "d,h,n,s";
-		loc.iEnd = ListLen(loc.dateParts);
-		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
-			if (arguments.cacheDatePart == ListGetAt(loc.dateParts, loc.i))
-				loc.list = ListSetAt(loc.list, loc.i, loc.cache);
-		return CreateTimeSpan(ListGetAt(loc.list, 1),ListGetAt(loc.list, 2),ListGetAt(loc.list, 3),ListGetAt(loc.list, 4));
+		// if cache isn't a numeric value
+		if (IsBoolean(arguments.cache))
+		{
+			// if cache is true, then assign a timeout
+			if (arguments.cache)
+			{
+				// is a timeout supplied?
+				if (StructKeyExists(arguments, "timeout"))
+				{
+					arguments.cache = arguments.timeout;
+				}
+				else
+				{
+					// is a category supplied?
+					if (StructKeyExists(arguments, "category") && StructKeyExists(application.wheels.cacheSettings[arguments.category], "timeout"))
+					{
+						arguments.cache = application.wheels.cacheSettings[arguments.category].timeout;
+					}
+					else
+					{
+						// default the timeout to 1 hour / 3600 seconds
+						arguments.cache = 3600;
+					}
+				}
+			}
+			else
+			{
+				// cache is false, don't cache
+				arguments.cache = 0;
+			}
+		}
+		return CreateTimeSpan(0,0,0,val(arguments.cache));
 	</cfscript>
 </cffunction>
 
@@ -226,13 +302,52 @@
 </cffunction>
 
 <cffunction name="$cgiScope" returntype="struct" access="public" output="false" hint="This copies all the variables Wheels needs from the CGI scope to the request scope.">
-	<cfargument name="keys" type="string" required="false" default="request_method,http_x_requested_with,http_referer,server_name,path_info,script_name,query_string,remote_addr,server_port,server_port_secure,server_protocol,http_host,http_accept,content_type">
+	<cfargument name="keys" type="string" required="false" default="request_method,http_x_requested_with,http_referer,server_name,path_info,script_name,query_string,remote_addr,server_port,server_port_secure,server_protocol,http_host,http_accept,content_type,http_x_rewrite_url,http_x_original_url,request_uri,redirect_url">
+	<cfargument name="scope" type="struct" required="false" default="#cgi#">
 	<cfscript>
 		var loc = {};
 		loc.returnValue = {};
 		loc.iEnd = ListLen(arguments.keys);
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
-			loc.returnValue[ListGetAt(arguments.keys, loc.i)] = cgi[ListGetAt(arguments.keys, loc.i)];
+		{
+			loc.returnValue[ListGetAt(arguments.keys, loc.i)] = arguments.scope[ListGetAt(arguments.keys, loc.i)];
+		}
+		
+
+		/* Fixes IIS issue that returns a blank cgi.path_info 
+		   Fix: http://www.giancarlogomez.com/2012/06/you-are-not-going-crazy-cgipathinfo-is.html
+		   Bug: https://bugbase.adobe.com/index.cfm?event=bug&id=3209090 
+		*/
+		if (!Len(loc.returnValue.path_info))
+		{
+			if (Len(loc.returnValue.http_x_rewrite_url))
+			{// iis6 1/ IIRF (Ionics Isapi Rewrite Filter)
+				loc.returnValue.path_info = ListFirst(loc.returnValue.http_x_rewrite_url,'?');
+			}
+			else if (Len(loc.returnValue.http_x_original_url))
+			{// iis7 rewrite default
+				loc.returnValue.path_info = ListFirst(loc.returnValue.http_x_original_url,"?");
+			}
+			else if (Len(loc.returnValue.request_uri))
+			{// apache default
+				loc.returnValue.path_info = ListFirst(loc.returnValue.request_uri,'?');
+			}
+			else if (Len(loc.returnValue.redirect_url))
+			{// apache fallback
+				loc.returnValue.path_info = ListFirst(loc.returnValue.redirect_url,'?');
+			}
+		}
+			
+		// finally lets remove the index.cfm because some of the custom cgi variables don't bring it back
+		// like this it means at the root we are working with / instead of /index.cfm
+		if (Len(loc.returnValue.path_info) gte 10 && Right(loc.returnValue.path_info, 10)  eq "/index.cfm")
+		{// this will remove the index.cfm and the trailing slash
+			loc.returnValue.path_info = Replace(loc.returnValue.path_info,'/index.cfm','');
+			if (!Len(loc.returnValue.path_info))
+			{// add back the forward slash if path_info was "/index.cfm"
+				loc.returnValue.path_info = "/";
+			}
+		}
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>
@@ -295,28 +410,52 @@
 			$throw(type="Wheels.RouteNotFound", message="Could not find the `#arguments.route#` route.", extendedInfo="Create a new route in `config/routes.cfm` with the name `#arguments.route#`.");
 
 		loc.routePos = application.wheels.namedRoutePositions[arguments.route];
-		if (loc.routePos Contains ",")
+		
+		if (ArrayLen(loc.routePos) gt 1)
 		{
-			// there are several routes with this name so we need to figure out which one to use by checking the passed in arguments
-			loc.iEnd = ListLen(loc.routePos);
-			for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+			// get our routes - we cache them in the request.wheels.routes scope to save time on subsequent calls to $findRoute
+			if (StructKeyExists(request.wheels.routes, arguments.route))
 			{
-				loc.returnValue = application.wheels.routes[ListGetAt(loc.routePos, loc.i)];
+				loc.routeArray = request.wheels.routes[arguments.route];
+			}
+			else
+			{
+				loc.routeArray = [];
+				for (loc.i = 1; loc.i lte ArrayLen(loc.routePos); loc.i++)
+					loc.routeArray[loc.i] = application.wheels.routes[loc.routePos[loc.i]];
+				request.wheels.routes[arguments.route] = loc.routeArray;
+			}
+			
+			loc.foundRoute = false;
+			while (!loc.foundRoute) // need to use a while loop here so we don't loop through all of the routes
+			{
+				if (application.wheels.showErrorInformation && !ArrayLen(loc.routeArray))
+					$throw(type="Wheels.RouteMatchNotFound", message="Could not find a match for the `#arguments.route#` route.");
+
+				// we always try to find the route on the first position because we are cleaning the array everytime we don't find a match
+				loc.returnValue = loc.routeArray[1];
 				loc.foundRoute = true;
-				loc.jEnd = ListLen(loc.returnValue.variables);
-				for (loc.j=1; loc.j <= loc.jEnd; loc.j++)
+				
+				for (loc.i = 1; loc.i lte ListLen(loc.returnValue.variables); loc.i++)
 				{
-					loc.variable = ListGetAt(loc.returnValue.variables, loc.j);
+					loc.variable = ListGetAt(loc.returnValue.variables, loc.i);
 					if (!StructKeyExists(arguments, loc.variable) || !Len(arguments[loc.variable]))
+					{
 						loc.foundRoute = false;
+						break;
+					}
 				}
-				if (loc.foundRoute)
-					break;
+				
+				// clean the array of all routes that contain the variable that failed
+				if (!loc.foundRoute)
+					for (loc.i = ArrayLen(loc.routeArray); loc.i gte 1; loc.i--)
+						if (ListFindNoCase(loc.routeArray[loc.i].variables, loc.variable))
+							ArrayDeleteAt(loc.routeArray, loc.i);
 			}
 		}
 		else
 		{
-			loc.returnValue = application.wheels.routes[loc.routePos];
+			loc.returnValue = application.wheels.routes[loc.routePos[1]];
 		}
 	</cfscript>
 	<cfreturn loc.returnValue>
@@ -362,7 +501,7 @@
 	<cfreturn loc.returnValue>
 </cffunction>
 
-<cffunction name="$args" returntype="void" access="public" output="false">
+<cffunction name="$args" returntype="any" access="public" output="false">
 	<cfargument name="args" type="struct" required="true">
 	<cfargument name="name" type="string" required="true">
 	<cfargument name="reserved" type="string" required="false" default="">
@@ -370,6 +509,7 @@
 	<cfargument name="required" type="string" required="false" default="">
 	<cfscript>
 		var loc = {};
+		
 		if (Len(arguments.combine))
 		{
 			loc.iEnd = ListLen(arguments.combine);
@@ -418,22 +558,6 @@
 	</cfscript>
 </cffunction>
 
-<cffunction name="$createObjectFromRoot" returntype="any" access="public" output="false">
-	<cfargument name="path" type="string" required="true">
-	<cfargument name="fileName" type="string" required="true">
-	<cfargument name="method" type="string" required="true">
-	<cfscript>
-		var returnValue = "";
-		arguments.returnVariable = "returnValue";
-		arguments.component = ListChangeDelims(arguments.path, ".", "/") & "." & ListChangeDelims(arguments.fileName, ".", "/");
-		arguments.argumentCollection = Duplicate(arguments);
-		StructDelete(arguments, "path");
-		StructDelete(arguments, "fileName");
-	</cfscript>
-	<cfinclude template="../../root.cfm">
-	<cfreturn returnValue>
-</cffunction>
-
 <cffunction name="$debugPoint" returntype="void" access="public" output="false">
 	<cfargument name="name" type="string" required="true">
 	<cfscript>
@@ -462,7 +586,7 @@
 	<cfreturn returnValue>
 </cffunction>
 
-<cffunction name="$fileExistsNoCase" returntype="boolean" access="public" output="false">
+<cffunction name="$fileExistsNoCase" returntype="any" access="public" output="false">
 	<cfargument name="absolutePath" type="string" required="true">
 	<cfscript>
 		var loc = {};
@@ -478,8 +602,11 @@
 		// loop through the file list and return true if the file exists regardless of case (the == operator is case insensitive)
 		loc.iEnd = ListLen(loc.fileList);
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
-			if (ListGetAt(loc.fileList, loc.i) == loc.file)
-				return true;
+		{
+			loc.foundFile = ListGetAt(loc.fileList, loc.i);
+			if (loc.foundFile == loc.file)
+				return loc.foundFile;
+		}
 
 		// the file wasn't found in the directory so we return false
 		return false;
@@ -492,35 +619,42 @@
 	<cfargument name="type" type="string" required="true" hint="Can be either `controller` or `model`." />
 	<cfscript>
 		var loc = {};
-		loc.objectFileExists = false;
 
-		// if the name contains the delimiter let's capitalize the last element and append it back to the list
-		if (ListLen(arguments.name, "/") gt 1)
-			arguments.name = ListInsertAt(arguments.name, ListLen(arguments.name, "/"), capitalize(ListLast(arguments.name, "/")), "/");
-		else
-			arguments.name = capitalize(arguments.name);
-
-		// we are going to store the full controller path in the existing / non-existing lists so we can have controllers in multiple places
-		loc.fullObjectPath = arguments.objectPath & "/" & arguments.name;
-
+		// we are going to store the full controller/model path in the existing / non-existing lists so we can have controllers/models in multiple places
+		loc.fullObjectPath = arguments.objectPath & "/" & ListChangeDelims(arguments.name, "/", ".");
+		
 		if (!ListFindNoCase(application.wheels.existingObjectFiles, loc.fullObjectPath) && !ListFindNoCase(application.wheels.nonExistingObjectFiles, loc.fullObjectPath))
 		{
-			if (FileExists(ExpandPath("#loc.fullObjectPath#.cfc")))
-				loc.objectFileExists = true;
-			if (application.wheels.cacheFileChecking)
+			// we have not yet checked if this file exists or not so let's do that here
+			// $fileExistsNoCase will return the file name with correct case if it exists, false if not
+			loc.file = $fileExistsNoCase(ExpandPath("#loc.fullObjectPath#.cfc"));
+			if (IsBoolean(loc.file) && !loc.file)
 			{
-				if (loc.objectFileExists)
-					application.wheels.existingObjectFiles = ListAppend(application.wheels.existingObjectFiles, loc.fullObjectPath);
-				else
+				// no file exists, let's store that if caching is on so we don't have to check it again
+				if (application.wheels.cacheFileChecking)
 					application.wheels.nonExistingObjectFiles = ListAppend(application.wheels.nonExistingObjectFiles, loc.fullObjectPath);
 			}
+			else
+			{				
+				// the file exists, let's store the proper case of the file if caching is turned on
+				loc.file = SpanExcluding(loc.file, ".");
+				loc.fullObjectPath = ListSetAt(loc.fullObjectPath, ListLen(loc.fullObjectPath, "/"), loc.file, "/");
+				if (application.wheels.cacheFileChecking)
+					application.wheels.existingObjectFiles = ListAppend(application.wheels.existingObjectFiles, loc.fullObjectPath);
+				return loc.file;
+			}
 		}
-		if (ListFindNoCase(application.wheels.existingObjectFiles, loc.fullObjectPath) || loc.objectFileExists)
-			loc.returnValue = arguments.name;
 		else
-			loc.returnValue = capitalize(arguments.type);
+		{
+			// if the file exists we return the file name in its proper case
+			loc.pos = ListFindNoCase(application.wheels.existingObjectFiles, loc.fullObjectPath);
+			if (loc.pos)
+				return ListLast(ListGetAt(application.wheels.existingObjectFiles, loc.pos), "/");
+		}
+
+		// by default we return "Model" or "Controller" so that the base component gets loaded
+		return capitalize(arguments.type);
 	</cfscript>
-	<cfreturn loc.returnValue>
 </cffunction>
 
 <cffunction name="$createControllerClass" returntype="any" access="public" output="false">
@@ -549,112 +683,75 @@
 </cffunction>
 
 <cffunction name="$addToCache" returntype="void" access="public" output="false">
-	<cfargument name="key" type="string" required="true">
-	<cfargument name="value" type="any" required="true">
-	<cfargument name="time" type="numeric" required="false" default="#application.wheels.defaultCacheTime#">
-	<cfargument name="category" type="string" required="false" default="main">
-	<cfscript>
-		var loc = {};
-		if (application.wheels.cacheCullPercentage > 0 && application.wheels.cacheLastCulledAt < DateAdd("n", -application.wheels.cacheCullInterval, Now()) && $cacheCount() >= application.wheels.maximumItemsToCache)
-		{
-			// cache is full so flush out expired items from this cache to make more room if possible
-			loc.deletedItems = 0;
-			loc.cacheCount = $cacheCount();
-			for (loc.key in application.wheels.cache[arguments.category])
-			{
-				if (Now() > application.wheels.cache[arguments.category][loc.key].expiresAt)
-				{
-					$removeFromCache(key=loc.key, category=arguments.category);
-					if (application.wheels.cacheCullPercentage < 100)
-					{
-						loc.deletedItems++;
-						loc.percentageDeleted = (loc.deletedItems / loc.cacheCount) * 100;
-						if (loc.percentageDeleted >= application.wheels.cacheCullPercentage)
-							break;
-					}
-				}
-			}
-			application.wheels.cacheLastCulledAt = Now();
-		}
-		if ($cacheCount() < application.wheels.maximumItemsToCache)
-		{
-			application.wheels.cache[arguments.category][arguments.key] = {};
-			application.wheels.cache[arguments.category][arguments.key].expiresAt = DateAdd(application.wheels.cacheDatePart, arguments.time, Now());
-			if (IsSimpleValue(arguments.value))
-				application.wheels.cache[arguments.category][arguments.key].value = arguments.value;
-			else
-				application.wheels.cache[arguments.category][arguments.key].value = duplicate(arguments.value);
-		}
-	</cfscript>
+	<cfargument name="category" type="string" required="false" default="main" />
+	<cfset application.wheels.caches[arguments.category].add(argumentCollection=arguments)>
 </cffunction>
 
 <cffunction name="$getFromCache" returntype="any" access="public" output="false">
-	<cfargument name="key" type="string" required="true">
-	<cfargument name="category" type="string" required="false" default="main">
+	<cfargument name="category" type="string" required="false" default="main" />
 	<cfscript>
-		var loc = {};
-		loc.returnValue = false;
-		if (StructKeyExists(application.wheels.cache[arguments.category], arguments.key))
+		var cacheItem = application.wheels.caches[arguments.category].get(argumentCollection=arguments);
+		
+		if (application.wheels.showDebugInformation)
 		{
-			if (Now() > application.wheels.cache[arguments.category][arguments.key].expiresAt)
+			if (IsSimpleValue(cacheItem) && IsBoolean(cacheItem) && !cacheItem)
 			{
-				if (application.wheels.showDebugInformation)
-					request.wheels.cacheCounts.culls = request.wheels.cacheCounts.culls + 1;
-				$removeFromCache(key=arguments.key, category=arguments.category);
+				request.wheels.cacheCounts.misses = request.wheels.cacheCounts.misses + 1;
 			}
 			else
 			{
-				if (application.wheels.showDebugInformation)
-					request.wheels.cacheCounts.hits = request.wheels.cacheCounts.hits + 1;
-				if (IsSimpleValue(application.wheels.cache[arguments.category][arguments.key].value))
-					loc.returnValue = application.wheels.cache[arguments.category][arguments.key].value;
-				else
-					loc.returnValue = Duplicate(application.wheels.cache[arguments.category][arguments.key].value);
+				request.wheels.cacheCounts.hits = request.wheels.cacheCounts.hits + 1;
 			}
 		}
-
-		if (application.wheels.showDebugInformation && IsBoolean(loc.returnValue) && !loc.returnValue)
-			request.wheels.cacheCounts.misses = request.wheels.cacheCounts.misses + 1;
 	</cfscript>
-	<cfreturn loc.returnValue>
+	<cfreturn cacheItem>
 </cffunction>
 
 <cffunction name="$removeFromCache" returntype="void" access="public" output="false">
-	<cfargument name="key" type="string" required="true">
-	<cfargument name="category" type="string" required="false" default="main">
-	<cfset StructDelete(application.wheels.cache[arguments.category], arguments.key)>
+	<cfargument name="category" type="string" required="true" />
+	<cfset application.wheels.caches[arguments.category].remove(argumentCollection=arguments)>
 </cffunction>
 
 <cffunction name="$cacheCount" returntype="numeric" access="public" output="false">
-	<cfargument name="category" type="string" required="false" default="">
+	<cfargument name="category" type="string" required="false" default="" />
 	<cfscript>
 		var loc = {};
+		loc.count = 0;
+		
 		if (Len(arguments.category))
-		{
-			loc.returnValue = StructCount(application.wheels.cache[arguments.category]);
-		}
-		else
-		{
-			loc.returnValue = 0;
-			for (loc.key in application.wheels.cache)
-				loc.returnValue = loc.returnValue + StructCount(application.wheels.cache[loc.key]);
-		}
+			return application.wheels.caches[arguments.category].count();
+			
+		for (loc.item in application.wheels.caches)
+			loc.count = loc.count + application.wheels.caches[loc.item].count();
 	</cfscript>
-	<cfreturn loc.returnValue>
+	<cfreturn loc.count />
+</cffunction>
+
+<cffunction name="$cacheCapacity" returntype="numeric" access="public" output="false">
+	<cfargument name="category" type="string" required="false" default="" />
+	<cfscript>
+		var loc = {};
+		loc.capacity = 0;
+		
+		if (Len(arguments.category))
+			return application.wheels.caches[arguments.category].capacity();
+			
+		for (loc.item in application.wheels.caches)
+			loc.capacity = loc.capacity + application.wheels.caches[loc.item].capacity();
+	</cfscript>
+	<cfreturn loc.capacity />
 </cffunction>
 
 <cffunction name="$clearCache" returntype="void" access="public" output="false">
-	<cfargument name="category" type="string" required="false" default="">
+	<cfargument name="category" type="string" required="false" default="" />
 	<cfscript>
 		var loc = {};
+		
 		if (Len(arguments.category))
-		{
-			StructClear(application.wheels.cache[arguments.category]);
-		}
-		else
-		{
-			StructClear(application.wheels.cache);
-		}
+			return application.wheels.caches[arguments.category].clear();
+			
+		for (loc.item in application.wheels.caches)
+			loc.count = loc.count + application.wheels.caches[loc.item].clear();
 	</cfscript>
 </cffunction>
 
@@ -669,6 +766,10 @@
 		for (loc.i = 1; loc.i lte ListLen(arguments.modelPaths); loc.i++)
 		{
 			loc.modelPath = ListGetAt(arguments.modelPaths, loc.i);
+			arguments.name = ListChangeDelims(arguments.name, "/", ".\");
+			loc.extendedPath = Reverse(ListRest(Reverse(arguments.name), "/"));
+			loc.modelPath = ListAppend(loc.modelPath, loc.extendedPath, "/");
+			arguments.name = ListLast(arguments.name, "/");
 			loc.fileName = $objectFileName(name=arguments.name, objectPath=loc.modelPath, type=arguments.type);
 
 			if (loc.fileName != arguments.type || loc.i == ListLen(arguments.modelPaths))
@@ -814,8 +915,8 @@ Should now call bar() instead and marking foo() as deprecated
 			if (StructKeyExists(loc.route, "name") && len(loc.route.name))
 			{
 				if (!StructKeyExists(application.wheels.namedRoutePositions, loc.route.name))
-					application.wheels.namedRoutePositions[loc.route.name] = "";
-				application.wheels.namedRoutePositions[loc.route.name] = ListAppend(application.wheels.namedRoutePositions[loc.route.name], loc.i);
+					application.wheels.namedRoutePositions[loc.route.name] = ArrayNew(1);
+				ArrayAppend(application.wheels.namedRoutePositions[loc.route.name], loc.i);
 			}
 		}
 		</cfscript>
@@ -832,49 +933,7 @@ Should now call bar() instead and marking foo() as deprecated
 <cffunction name="$checkMinimumVersion" access="public" returntype="boolean" output="false">
 	<cfargument name="version" type="string" required="true">
 	<cfargument name="minversion" type="string" required="true">
-	<cfscript>
-	var loc = {};
-
-	arguments.version = ListChangeDelims(arguments.version, ".", ".,");
-	arguments.minversion = ListChangeDelims(arguments.minversion, ".", ".,");
-
-	arguments.version = ListToArray(arguments.version, ".");
-	arguments.minversion = ListToArray(arguments.minversion, ".");
-
-	// make version and minversion the same length pad zeros to the end
-	loc.minSize = max(ArrayLen(arguments.version), ArrayLen(arguments.minversion));
-
-	ArrayResize(arguments.version, loc.minSize);
-	ArrayResize(arguments.minversion, loc.minSize);
-
-	for(loc.i=1; loc.i LTE loc.minSize; loc.i++)
-	{
-		loc.version = 0;
-		if(ArrayIsDefined(arguments.version, loc.i))
-		{
-			loc.version = val(arguments.version[loc.i]);
-		}
-		
-		loc.minversion = 0;
-		if(ArrayIsDefined(arguments.minversion, loc.i))
-		{
-			loc.minversion = val(arguments.minversion[loc.i]);
-		}
-		
-		if(loc.version gt loc.minversion)
-		{
-			return true;
-		}
-		
-		if(loc.version lt loc.minversion)
-		{
-			return false;
-		}
-	}
-
-	return true;
-	</cfscript>
-	<cfreturn >
+	<cfreturn semanticVersioning(">= #arguments.minversion#", arguments.version)>
 </cffunction>
 
 <cffunction name="$loadPlugins" returntype="void" access="public" output="false">
@@ -892,3 +951,107 @@ Should now call bar() instead and marking foo() as deprecated
 	application.wheels.mixins = application.wheels.PluginObj.getMixins();
 	</cfscript>
 </cffunction>
+
+<cffunction name="$loadLocales" returntype="struct" access="public" output="false">
+	<cfargument name="path" type="string" required="false" default="#expandPath('/wheelsMapping/locales')#">
+	<cfscript>
+	var loc = {};
+	loc.locales = {};
+	// scan the locales directory
+	loc.files = $directory(directory="#arguments.path#", action="list");
+	// loop through all locales and put into application variable
+	loc.count = loc.files.recordcount;
+	for(loc.i = 1; loc.i lte loc.count; loc.i++)
+	{
+		// make paths system agnostic
+		loc.path = ListChangeDelims(loc.files["directory"][loc.i], "/", "\");
+		// name of the locale file
+		loc.name = loc.files["name"][loc.i];
+		// name of the locale
+		loc.locale = ListFirst(loc.name, ".");
+		// read the locale file
+		loc.content = FileRead("#loc.path#/#loc.name#", "utf-8");
+		// deserialize the json
+		loc.content = DeserializeJSON(loc.content);
+		// add to application variable
+		loc.locales[loc.locale] = loc.content;
+	}
+	</cfscript>
+	<cfreturn loc.locales>
+</cffunction>
+
+<cffunction name="$paramsToString" access="public" returntype="string" output="false">
+	<cfargument name="params" type="any" required="true">
+	<cfreturn $convertToString(value=arguments.params, delim="&")>
+</cffunction>
+
+<cffunction name="$switchEnivronmentSecurity" access="public" returntype="string" output="false"
+	hint="if allowed to switch the environment through a reload, will return the environment name, otherwise returns a blank string">
+	<cfargument name="settings" type="struct" required="true" hint="a struct containing the settings for the wheels application">
+	<cfargument name="scope" type="struct" required="true" hint="a scope in which to find the scopeEnvironmentNamingKey parameter to use to switch the environment">
+	<cfargument name="settingAllowedToSwitchEnvironmentKey" type="string" required="false" default="allowedEnvironmentSwitchThroughURL" hint="the setting which tell us that we are allowed to switch environments. value of the setting must be a boolean">
+	<cfargument name="settingPasswordToSwitchEnvironmentKey" type="string" required="false" default="reloadPassword" hint="the setting that tell us the password for switching environments">
+	<cfargument name="scopeEnvironmentNamingKey" type="string" required="false" default="reload" hint="the key in the scope that gives us the environment name to switch to">
+	<cfargument name="scopeEnvironmentPasswordKey" type="string" required="false" default="password" hint="the key in the scope that gives us the password for switching environment">
+	<cfscript>
+	var loc = {};
+
+	// the new environment to switch to
+	loc.environment = "";
+	// setting: can they switch environments
+	loc.setting_allowed = false;
+	// setting: the password for switching environments
+	loc.setting_password = "";
+	// scope: the environment to switch to
+	loc.scope_environment = "";
+	// scope: the password
+	loc.scope_password = "";
+
+	if (StructKeyExists(arguments.settings, arguments.settingAllowedToSwitchEnvironmentKey) AND IsBoolean(arguments.settings[arguments.settingAllowedToSwitchEnvironmentKey]))
+	{
+		loc.setting_allowed = arguments.settings[arguments.settingAllowedToSwitchEnvironmentKey];
+	}
+	
+	if (StructKeyExists(arguments.settings, arguments.settingPasswordToSwitchEnvironmentKey) && Len(Trim(arguments.settings[arguments.settingPasswordToSwitchEnvironmentKey])))
+	{
+		loc.setting_password = arguments.settings[arguments.settingPasswordToSwitchEnvironmentKey];
+	}
+	
+	if (StructKeyExists(arguments.scope, arguments.scopeEnvironmentNamingKey))
+	{
+		loc.scope_environment = arguments.scope[arguments.scopeEnvironmentNamingKey];
+	}
+	
+	if (StructKeyExists(arguments.scope, arguments.scopeEnvironmentPasswordKey))
+	{
+		loc.scope_password = arguments.scope[arguments.scopeEnvironmentPasswordKey];
+	}
+	
+	if (loc.setting_allowed && Len(loc.scope_environment) && Len(loc.setting_password) && loc.setting_password eq loc.scope_password)
+	{
+		loc.environment = loc.scope_environment;
+	}
+	</cfscript>
+	
+	<cfreturn loc.environment>
+</cffunction>
+
+<cffunction name="$saveScopeSettings" access="public" returntype="struct" output="false"
+	hint="saves the requested key from scope into a new struct">
+	<cfargument name="scope" type="struct" required="true" hint="scope that you want to save the setting from">
+	<cfargument name="keys" type="any" required="true" hint="a list or array of keys to save">
+	<cfset var loc = {}>
+	<cfset loc.saved = {}>
+		
+	<cfif !IsArray(arguments.keys)>
+		<cfset arguments.keys = $listClean(list=arguments.keys, returnAs="array")>
+	</cfif>
+	
+	<cfloop array="#arguments.keys#" index="loc.key">
+		<cfif StructKeyExists(arguments.scope, loc.key)>
+			<cfset loc.saved[loc.key] = duplicate(arguments.scope[loc.key])>
+		</cfif>
+	</cfloop>
+	
+	<cfreturn loc.saved>
+</cffunction> 

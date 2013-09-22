@@ -32,11 +32,11 @@
 				loc.finderProperties = ListToArray(ReplaceNoCase(ReplaceNoCase(Replace(arguments.missingMethodName, "And", "|", "all"), "findAllBy", "", "all"), "findOneBy", "", "all"), "|");
 			}
 
-			// sometimes values will have commas in them, allow the developer to change the delimiter
-			loc.delimiter = ",";
-			if (StructKeyExists(arguments.missingMethodArguments, "delimiter"))
+			// sometimes values will have commas in them, allow the developer to change the delimeter
+			loc.delimeter = ",";
+			if (StructKeyExists(arguments.missingMethodArguments, "delimeter"))
 			{
-				loc.delimiter = arguments.missingMethodArguments["delimiter"];
+				loc.delimeter = arguments.missingMethodArguments["delimeter"];
 			}
 
 			// split the values into an array for easier processing
@@ -65,7 +65,7 @@
 				}
 				else
 				{
-					loc.values = $listClean(list=loc.values, delim=loc.delimiter, returnAs="array");
+					loc.values = $listClean(list=loc.values, delim=loc.delimeter, returnAs="array");
 				}
 			}
 
@@ -76,21 +76,25 @@
 			loc.iEnd = ArrayLen(loc.finderProperties);
 			for (loc.i = 1; loc.i LTE loc.iEnd; loc.i++)
 			{
-				ArrayAppend(loc.addToWhere, "#loc.finderProperties[loc.i]# #$dynamicFinderOperator(loc.finderProperties[loc.i])# #variables.wheels.class.adapter.$quoteValue(str=loc.values[loc.i], type=validationTypeForProperty(loc.finderProperties[loc.i]))#");
+				ArrayAppend(loc.addToWhere, "#loc.finderProperties[loc.i]# #$dynamicFinderOperator(loc.finderProperties[loc.i])# #$adapter().$quoteValue(str=loc.values[loc.i], type=validationTypeForProperty(loc.finderProperties[loc.i]))#");
 			}
 			
 			// construct where clause
 			loc.addToWhere = ArrayToList(loc.addToWhere, " AND ");
-			arguments.missingMethodArguments.where = IIf(StructKeyExists(arguments.missingMethodArguments, "where"), "'(' & arguments.missingMethodArguments.where & ') AND (' & loc.addToWhere & ')'", "loc.addToWhere");
+			arguments.missingMethodArguments.where = IIf(StructKeyExists(arguments.missingMethodArguments, "where") and Len(arguments.missingMethodArguments.where), "'(' & arguments.missingMethodArguments.where & ') AND (' & loc.addToWhere & ')'", "loc.addToWhere");
 
 			// remove uneeded arguments
-			StructDelete(arguments.missingMethodArguments, "delimiter");
+			StructDelete(arguments.missingMethodArguments, "delimeter");
 			StructDelete(arguments.missingMethodArguments, "1");
 			StructDelete(arguments.missingMethodArguments, "value");
 			StructDelete(arguments.missingMethodArguments, "values");
 
 			// call finder method
 			loc.returnValue = IIf(Left(arguments.missingMethodName, 9) == "findOneBy", "findOne(argumentCollection=arguments.missingMethodArguments)", "findAll(argumentCollection=arguments.missingMethodArguments)");
+		}
+		else if (Left(arguments.missingMethodName, 17) == "findOneOrCreateBy" || Left(arguments.missingMethodName, 14) == "findOrCreateBy")
+		{
+			loc.returnValue = $findOneOrCreateBy(argumentCollection=arguments);
 		}
 		else
 		{
@@ -146,7 +150,7 @@
 				if (loc.info.type == "hasOne")
 				{
 					loc.where = $keyWhereString(properties=loc.info.foreignKey, keys=primaryKeys());
-					if (StructKeyExists(arguments.missingMethodArguments, "where"))
+					if (StructKeyExists(arguments.missingMethodArguments, "where") and Len(arguments.missingMethodArguments.where))
 						loc.where = "(#loc.where#) AND (#arguments.missingMethodArguments.where#)";
 					loc.name = ReplaceNoCase(arguments.missingMethodName, loc.key, "object"); // create a generic method name (example: "hasProfile" becomes "hasObject")
 					if (loc.name == "object")
@@ -217,7 +221,7 @@
 				else if (loc.info.type == "hasMany")
 				{
 					loc.where = $keyWhereString(properties=loc.info.foreignKey, keys=primaryKeys());
-					if (StructKeyExists(arguments.missingMethodArguments, "where"))
+					if (StructKeyExists(arguments.missingMethodArguments, "where") and Len(arguments.missingMethodArguments.where))
 						loc.where = "(#loc.where#) AND (#arguments.missingMethodArguments.where#)";
 					loc.singularKey = singularize(loc.key);
 					loc.name = ReplaceNoCase(ReplaceNoCase(arguments.missingMethodName, loc.key, "objects"), loc.singularKey, "object"); // create a generic method name (example: "hasComments" becomes "hasObjects")
@@ -365,7 +369,7 @@
 				else if (loc.info.type == "belongsTo")
 				{
 					loc.where = $keyWhereString(keys=loc.info.foreignKey, properties=loc.componentReference.primaryKeys());
-					if (StructKeyExists(arguments.missingMethodArguments, "where"))
+					if (StructKeyExists(arguments.missingMethodArguments, "where") and Len(arguments.missingMethodArguments.where))
 						loc.where = "(#loc.where#) AND (#arguments.missingMethodArguments.where#)";
 					loc.name = ReplaceNoCase(arguments.missingMethodName, loc.key, "object"); // create a generic method name (example: "hasAuthor" becomes "hasObject")
 					if (loc.name == "object")

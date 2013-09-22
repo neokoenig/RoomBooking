@@ -58,6 +58,7 @@
 				application.wheels.ipExceptions = URL.except;
 			if (!Len(application.wheels.ipExceptions) || !ListFind(application.wheels.ipExceptions, request.cgi.remote_addr))
 			{
+				$header(statusCode="503", statusText="Service Unavailable");
 				$includeAndOutput(template="#application.wheels.eventPath#/onmaintenance.cfm");
 				$abort();
 			}
@@ -75,8 +76,6 @@
 			$simpleLock(name="controllerLock", execute="$clearControllerInitializationCache", type="exclusive");
 		if (!application.wheels.cacheRoutes)
 			$loadRoutes();
-		if (!application.wheels.cacheDatabaseSchema)
-			$clearCache("sql");
 		$include(template="#application.wheels.eventPath#/onrequeststart.cfm");
 		if (application.wheels.showDebugInformation)
 			$debugPoint("requestStart");
