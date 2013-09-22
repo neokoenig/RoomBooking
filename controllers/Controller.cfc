@@ -5,9 +5,18 @@
 --->
 <cfcomponent extends="Wheels">
  
+	<cffunction name="init">
+		<cfscript> 
+		</cfscript>
+	</cffunction>
 
 	<cffunction name="_getLocations" hint="Return all room locations">
 		<cfset locations=model("location").findAll(order="name")>
 	</cffunction>
+
+	<cffunction name="_getSettings" hint="Return all settings">
+		<cfset settings=model("setting").findAll()>
+	</cffunction>
+	
 	
 </cfcomponent>

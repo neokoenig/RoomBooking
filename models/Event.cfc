@@ -4,6 +4,7 @@
 		<cfscript>
 			belongsTo("location");
 			validate("checkDates");
+			afterFind("formatDates")
 		</cfscript>
 	</cffunction>
 
@@ -18,6 +19,13 @@
     	if((DateCompare("#this.end#", "#this.start#")) EQ -1 ){
 			 addError(property="end", message="End Date can not be before Start Date.");
 		}	
+		</cfscript>
+	</cffunction>
+
+	<cffunction name="formatDates" hint="Formats Date for DateTime Picker">
+		<cfscript>
+			//09/22/2013 14:57 +0100
+			//this.start=dateFormat(this.start, "dd/mm/yyyy") & ' ' & timeFormat(this.start, "full");
 		</cfscript>
 	</cffunction>
 </cfcomponent>

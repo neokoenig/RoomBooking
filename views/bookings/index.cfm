@@ -1,4 +1,6 @@
 <cfoutput>
+<cfparam name="locations">
+
 <!--- Main Index ---> 
 #includePartial(partial="locations", locations=locations)#  
     #panel(title="Calendar")#
@@ -12,23 +14,31 @@
  
     var mainDataURL="#urlFor(controller='eventdata', action='getEvents')#/"; 
     var eventDataURL="#urlFor(controller='eventdata', action='getEvent')#/";
-    var addBookingURL = "#urlFor(controller='bookings', action='add')#";
+    var addBookingURL = "#urlFor(controller='bookings', action='add')#/";
 
     $('##calendar').fullCalendar({
     //----------------Config--------------
                 header: {
-                    left: 'prev,next today',
-                    center: 'title',
-                    right: 'month,agendaWeek,agendaDay' 
+                    left: '#application.roombooking.calendarHeaderleft#',
+                    center: '#application.roombooking.calendarHeadercenter#',
+                    right: '#application.roombooking.calendarHeaderright#' 
                 },
-                firstDay: 1,
-                slotMinutes: 15,
-                minTime: "7:00am", 
-                timeFormat: 'H:mm',
+                weekends: #returnStringFromBoolean(application.roombooking.calendarWeekends)#,
+                firstDay: #application.roombooking.calendarFirstday#,
+                slotMinutes: #application.roombooking.calendarSlotMinutes#,
+                minTime: "#application.roombooking.calendarMintime#", 
+                timeFormat: '#application.roombooking.calendarTimeformat#',
+                hiddenDays: #application.roombooking.calendarHiddenDays#,
+                weekNumbers: #returnStringFromBoolean(application.roombooking.calendarWeekNumbers)#,
+                allDaySlot: #returnStringFromBoolean(application.roombooking.calendarAllDaySlot)#,
+                allDayText: '#application.roombooking.calendarAllDayText#',
+                defaultView: '#application.roombooking.calendarDefaultView#',
+                axisFormat: '#application.roombooking.calendarAxisFormat#',
+                slotEventOverlap: #returnStringFromBoolean(application.roombooking.calendarSlotEventOverlap)#,
                 columnFormat: {
-                        month: 'ddd',    // Mon
-                        week: 'ddd d/M', // Mon 9/7
-                        day: 'dddd d/M'  // Monday 9/7
+                        month: '#application.roombooking.calendarColumnFormatMonth#',    // Mon
+                        week: '#application.roombooking.calendarColumnFormatWeek#', // Mon 9/7
+                        day: '#application.roombooking.calendarColumnFormatDay#'  // Monday 9/7
                     } ,
      
     //----------------Event Sources----------

@@ -14,8 +14,7 @@
 --->
 <cfscript>
  set(dataSourceName="roombooking");
- set(URLRewriting="On");
-
+ set(URLRewriting="On"); 
 
 // Environment-agnostic settings
 set(assetQueryString=true);

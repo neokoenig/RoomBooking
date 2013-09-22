@@ -11,3 +11,11 @@
 	</cfscript>
 </cffunction>
  
+ <cffunction name="returnStringFromBoolean" output="false">
+ 	<cfargument  name="boo">
+ 	<cfif arguments.boo>
+ 		<cfreturn "true">
+ 	<cfelse>
+ 		<cfreturn "false">
+ 	</cfif>
+ </cffunction>

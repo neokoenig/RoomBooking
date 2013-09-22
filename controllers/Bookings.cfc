@@ -5,8 +5,7 @@
 		</cfscript>
 	</cffunction>
 
-	<cffunction name="index" hint="Displays what's on today - main dashboard">
-
+	<cffunction name="index" hint="Displays what's on today - main dashboard"> 
 	</cffunction>
 
 	<cffunction name="add">
