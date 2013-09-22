@@ -1,15 +1,14 @@
-<!--- Gets injected into modal--->
+<!--- Room Booking Confirmation--->
 <cfparam name="event">
 <cfoutput>
-<div class="btn-group">
-	#linkTo(action="edit", key=event.eventid, text="Edit", controller="bookings", class="btn btn-info")#
-	#linkTo(action="delete", key=event.eventid, text="Delete", controller="bookings", class="btn btn-danger", confirm="Are you sure?")#
-</div>
+#includePartial("/email/header")#
+<p>Dear #event.contactName#,</p>
+<p>This is to confirm your room booking:</p>
 <h4>#h(event.title)#</h4>
 <p>#formatDate(event.start)# - #formatDate(event.end)#</p>
-<p>Location: #h(event.name)#<br />#h(event.description)#</p>
-<cfif len(event.description)><p>#h(event.eventdescription)#</p></cfif>
-<p>(#event.layoutstyle# Style)</p>
+<p>Location: #event.locationid#</p>
+<cfif len(event.description)><p>#h(event.description)#</p></cfif>
+ 
 <h4>Contact Details:</h4>
 <cfif len(event.contactname) OR len(event.contactemail) OR len(event.contactno)>
 	<p>
@@ -25,6 +24,7 @@
 </p>
 	<cfelse>
 		<p>None provided</p>
-</cfif>
+</cfif>	
 
+#includePartial("/email/footer")#
 </cfoutput>

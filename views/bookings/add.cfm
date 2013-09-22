@@ -6,6 +6,7 @@
 <div class="row">
 	<div class="col-lg-8">
 		#includePartial("form")#
+		#checkbox(objectName="event", property="emailContact", label="Send Confirmation Email to Contact")# 
 	</div>
 	<div class="col-lg-4">
 		#includePartial("repeat")#

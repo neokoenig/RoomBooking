@@ -1,29 +1,10 @@
 <cfoutput>
 <!--- Main Index ---> 
-			#includePartial(partial="locations", locations=locations)#
-		  
-	 
-		#panel(title="Calendar")#
-			<div id="calendar"></div>
-		#panelend()#
-	 
-<div id="eventmodal" class="modal fade">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h4 class="modal-title">Event Detail:</h4>
-      </div>
-      <div class="modal-body">
-        <p>...Loading</p>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
- 
-      </div>
-    </div><!-- /.modal-content -->
-  </div><!-- /.modal-dialog -->
- </div>
+#includePartial(partial="locations", locations=locations)#  
+    #panel(title="Calendar")#
+        <div id="calendar"></div>
+    #panelend()#
+#includePartial("eventmodal")# 
 
 <cfsavecontent variable="request.js.footer">
 <script>
@@ -68,9 +49,9 @@
 
     //----------------Day Click--------------
             dayClick: function(date, allDay, jsEvent, view) {
-
-            if (allDay) {
-                    alert('Clicked on the entire day: ' + date);
+            if(moment(date).isSame() || moment(date).isAfter()){
+                if (allDay) {  
+                    window.location.href = "/bookings/add/#params.key#?d=" + moment(date).format("YYYY-MM-DD");
                 }else{
                     alert('Clicked on the slot: ' + date);
                 }
@@ -79,6 +60,8 @@
                 //alert('Current view: ' + view.name); 
                 // change the day's background color just for fun
                 //$(this).css('background-color', 'red');
+            }
+            
 
             },
     //----------------Event Click --------------

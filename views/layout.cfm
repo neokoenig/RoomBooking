@@ -14,6 +14,7 @@
 		    <meta name="apple-mobile-web-app-capable" content="yes"><!-- try to forces full-screen for apple devices -->
         <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
  		     #stylesheetLinkTag("theme,http://cdnjs.cloudflare.com/ajax/libs/fullcalendar/1.6.4/fullcalendar.css,custom,jquery.growl.css")#
+           
         #javascriptIncludeTag("modernizr-2.6.2.min")# 
 
 <!---//cdnjs.cloudflare.com/ajax/libs/fullcalendar/1.6.4/fullcalendar.print.css--->
@@ -33,8 +34,9 @@
         </div>
         <nav class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
-            <li>#linkTo(route="home", text="Calendar")#</li> 
-            <li>#linkTo(controller="bookings", action="add", text="Book a Room")#</li>
+            <li>#linkTo(route="home", text="<span class='glyphicon glyphicon-calendar'></span> Calendar")#</li> 
+            <li>#linkTo(controller="bookings", action="add", text="<span class='glyphicon glyphicon-plus-sign'></span> Book a Room")#</li>
+            <li>#linkTo(controller="locations",  text="<span class='glyphicon glyphicon-plus-sign'></span> Locations")#</li>
           </ul>  
 
         </nav><!--/.nav-collapse --> 
@@ -50,12 +52,13 @@
         <![endif]-->
         <section id="main" class="container">	 
         <div id="growls" class="default"></div>
+          #flashMessages()#
        	#includeContent()#
        	</section>
  <!----------------------------/CONTENT--------------------------->
 
 <!-----------------------------Scripts--------------------------->
-       	#javascriptIncludeTag("http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js,bootstrap.min,http://cdnjs.cloudflare.com/ajax/libs/fullcalendar/1.6.4/fullcalendar.min.js,jquery.growl")# 
+       	#javascriptIncludeTag("http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js,bootstrap.min,http://cdnjs.cloudflare.com/ajax/libs/fullcalendar/1.6.4/fullcalendar.min.js,jquery.growl,moment")# 
         <script>window.jQuery || document.write('<script src="javascripts/jquery-1.10.2.min.js"><\/script>')</script>
 <!--- Dynamic Javascript Set in Page --->
 <cfif structkeyexists(request, "js")><cfloop list="#structKeyList(request.js)#" index="key"><cfoutput>#request.js[key]#</cfoutput></cfloop></cfif>

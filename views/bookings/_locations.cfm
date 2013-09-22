@@ -1,14 +1,17 @@
 <cfoutput>
 <cfparam name="params.key" default="">
-<div class="btn-group"> 
-#linkTo(action="index",  class="btn btn-primary btn-md location-filter", text="All")#
+<style>
+<cfloop query="locations"><cfif len(colour)>.#class# {background: #colour#; border-color: #colour#;}</cfif>
+</cfloop>
+</style>
+<div class="btn-group append"> 
+#linkTo(action="index",  class="btn btn-primary btn-sm location-filter", text="All<br /><small>Show All</small>")#
 <cfloop query="locations">
 <cfif id EQ params.key>  
-#linkTo(action="index", key=id, class="active btn btn-md location-filter #class#", text=name)#
+	#linkTo(action="index", key=id, class="active btn btn-sm location-filter   #class# location#id#", text="#name#<br /><small>#description#</small>")#
 <Cfelse>  
-#linkTo(action="index", key=id, class="btn btn-md location-filter #class#", text=name)#
+	#linkTo(action="index", key=id, class="btn btn-sm location-filter btn-default #class# location#id#", text="#name#<br /><small>#description#</small>")#
 </cfif>
 </cfloop>
-</div>
-<hr />
+</div> 
 </cfoutput>
