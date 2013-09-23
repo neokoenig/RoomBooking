@@ -66,8 +66,8 @@
 			// Send Confirmation email if appropriate
 			if(structKeyExists(params.event, "emailContact") AND isValid("email", event.contactemail)){
 				sendEmail(
-					    to=event.contactemail,
-					    from="Room Booking System <no-reply@domain.com>",
+					    to="#event.contactname# <#event.contactemail#>",
+					    from="#application.rbs.sitetitle# <#application.rbs.siteEmailAddress#>",
 					    template="/email/bookingNotify",
 					    subject="Room Booking Confirmation", 
 					    event=event

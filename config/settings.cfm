@@ -14,8 +14,7 @@
 --->
 <cfscript>
  set(dataSourceName="roombooking");
- set(URLRewriting="On"); 
-
+ set(URLRewriting="on");  
 // Environment-agnostic settings
 set(assetQueryString=true);
 set(deletePluginDirectories=false); // set to false for plugin development
@@ -23,7 +22,7 @@ set(excludeFromErrorEmail="password,hashedpassword,passwordsalt,ssn");
 set(flashStorage="session"); // valid values are "session" or "cookie"
 set(obfuscateURLs=false);
 set(overwritePlugins=true); // set to false for plugin development
-addFormat(extension="js", mimeType="text/javascript"); 
+  
 
 // BS3 form settings
 set(functionName="startFormTag");

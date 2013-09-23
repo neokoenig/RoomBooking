@@ -1,7 +1,8 @@
 <cfcomponent extends="controller">
 	<cffunction name="init">
 		<cfscript>
-			filters(through="_getSettings");	 
+			filters(through="_getSettings");
+			filters(through="_checkSettingsAdmin");	 
 		</cfscript>
 	</cffunction>
 	<cffunction name="index">
@@ -11,6 +12,9 @@
 	<cffunction name="edit">
 		<cfscript>
 			setting=model("setting").findOne(where="id = '#params.key#'");
+			if(!isObject(setting) OR !setting.Editable){
+			redirectTo(back=true, error="Sorry, that setting can't be found or isn't editable");
+		}
 		</cfscript>		
 	</cffunction>
 
@@ -27,5 +31,11 @@
 			} 
 		} 
 		</cfscript>		
+	</cffunction>
+
+	<cffunction name="_checkSettingsAdmin">
+		<cfif !application.rbs.allowSettings>
+			<cfset redirectTo(route="home", error="Facility to edit settings has been disabled")>
+		</cfif>
 	</cffunction>
 </cfcomponent>

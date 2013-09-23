@@ -1,12 +1,12 @@
 <cfoutput><cfparam name="params.key" default="">
 
-<cfif application.roombooking.showlocationcolours> 
+<cfif application.rbs.showlocationcolours> 
 <style>
 <cfloop query="locations"><cfif len(colour)>.#class# {background: #colour#; border-color: #colour#;}</cfif>
 </cfloop>
 </style>
 </cfif>
-<cfif application.roombooking.showlocationfilter> 
+<cfif application.rbs.showlocationfilter> 
 <div class="btn-group append"> 
 #linkTo(action="index",  class="btn btn-primary btn-sm location-filter", text="All<br /><small>Show All</small>")#
 <cfloop query="locations">

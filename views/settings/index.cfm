@@ -4,6 +4,7 @@
 	
 
 #panel(title="All settings")# 
+ 
 <cfif settings.recordcount>
 	
 <table class="table table-condensed">
@@ -18,11 +19,13 @@
 	<cfloop query="settings">
 		<cfoutput>
 		<tr>
-			<td><strong>#id#</strong><br />#notes#</td>
+			<td><strong>#id#</strong><br />#autolink(notes)#</td>
 			<td>#value#</td> 
 			<td>
 				<div class="btn-group">
-					#linkTo(text="Edit", class="btn btn-sm btn-info", action="edit", key=id)# 
+					<cfif editable>
+						#linkTo(text="Edit", class="btn btn-sm btn-info", action="edit", key=id)# 
+					</cfif>
 				</div>
 			</td>
 		</tr>

@@ -148,8 +148,8 @@ body, td { font-family: 'Helvetica Neue', Arial, Helvetica, Geneva, sans-serif; 
         <tr>
             <td class="w30" width="30"></td>
             <td class="w580" width="580">
-                <div align="center" id="headline">
-                    <h1><cfoutput>#application.roombooking.sitetitle#</cfoutput></h1>
+                <div align="center" id="headline"> 
+                    <h1><cfoutput>#application.rbs.sitetitle#</cfoutput></h1>
                 </div>
             </td>
             <td class="w30" width="30"></td>

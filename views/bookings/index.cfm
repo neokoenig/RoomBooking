@@ -19,26 +19,26 @@
     $('##calendar').fullCalendar({
     //----------------Config--------------
                 header: {
-                    left: '#application.roombooking.calendarHeaderleft#',
-                    center: '#application.roombooking.calendarHeadercenter#',
-                    right: '#application.roombooking.calendarHeaderright#' 
+                    left: '#application.rbs.calendarHeaderleft#',
+                    center: '#application.rbs.calendarHeadercenter#',
+                    right: '#application.rbs.calendarHeaderright#' 
                 },
-                weekends: #returnStringFromBoolean(application.roombooking.calendarWeekends)#,
-                firstDay: #application.roombooking.calendarFirstday#,
-                slotMinutes: #application.roombooking.calendarSlotMinutes#,
-                minTime: "#application.roombooking.calendarMintime#", 
-                timeFormat: '#application.roombooking.calendarTimeformat#',
-                hiddenDays: #application.roombooking.calendarHiddenDays#,
-                weekNumbers: #returnStringFromBoolean(application.roombooking.calendarWeekNumbers)#,
-                allDaySlot: #returnStringFromBoolean(application.roombooking.calendarAllDaySlot)#,
-                allDayText: '#application.roombooking.calendarAllDayText#',
-                defaultView: '#application.roombooking.calendarDefaultView#',
-                axisFormat: '#application.roombooking.calendarAxisFormat#',
-                slotEventOverlap: #returnStringFromBoolean(application.roombooking.calendarSlotEventOverlap)#,
+                weekends: #returnStringFromBoolean(application.rbs.calendarWeekends)#,
+                firstDay: #application.rbs.calendarFirstday#,
+                slotMinutes: #application.rbs.calendarSlotMinutes#,
+                minTime: "#application.rbs.calendarMintime#", 
+                timeFormat: '#application.rbs.calendarTimeformat#',
+                hiddenDays: #application.rbs.calendarHiddenDays#,
+                weekNumbers: #returnStringFromBoolean(application.rbs.calendarWeekNumbers)#,
+                allDaySlot: #returnStringFromBoolean(application.rbs.calendarAllDaySlot)#,
+                allDayText: '#application.rbs.calendarAllDayText#',
+                defaultView: '#application.rbs.calendarDefaultView#',
+                axisFormat: '#application.rbs.calendarAxisFormat#',
+                slotEventOverlap: #returnStringFromBoolean(application.rbs.calendarSlotEventOverlap)#,
                 columnFormat: {
-                        month: '#application.roombooking.calendarColumnFormatMonth#',    // Mon
-                        week: '#application.roombooking.calendarColumnFormatWeek#', // Mon 9/7
-                        day: '#application.roombooking.calendarColumnFormatDay#'  // Monday 9/7
+                        month: '#application.rbs.calendarColumnFormatMonth#',    // Mon
+                        week: '#application.rbs.calendarColumnFormatWeek#', // Mon 9/7
+                        day: '#application.rbs.calendarColumnFormatDay#'  // Monday 9/7
                     } ,
      
     //----------------Event Sources----------

@@ -16,7 +16,7 @@
             <td class="w30" width="30"></td>
             <td class="w580" width="360" valign="top">
             <span class="hide"><p id="permission-reminder" align="left" class="footer-content-left"><span> </span></p></span>
-            <p align="left" class="footer-content-left">This email was sent by Room Booking System</p>
+            <p align="left" class="footer-content-left"><cfoutput>This email was sent by #application.rbs.sitetitle#</cfoutput></p>
             </td>
             <td class="hide w0" width="60"></td>
             <td class="hide w0" width="160" valign="top">

@@ -1,9 +1,12 @@
 <cfscript>
 	// Room Booking Application Specific settings 
- 	application.roombooking={}
+	if(structKeyExists(application, "rbs")){
+		structDelete(application, "rbs");
+	}
+ 	application.rbs={}
 	// Get all settings from database
-	application.roombooking.query=model("setting").findAll();
+	application.rbs.query=model("setting").findAll();
 </cfscript>
-<cfloop query="application.roombooking.query"> 
-		<cfset application.roombooking["#id#"]=application.roombooking.query["value"]> 
+<cfloop query="application.rbs.query"> 
+		<cfset application.rbs["#id#"]=application.rbs.query["value"]> 
 </cfloop>
