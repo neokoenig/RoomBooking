@@ -6,6 +6,7 @@
 		</cfscript>
 	</cffunction>
 
+<!---================================ Views ======================================--->
 	<cffunction name="add">
 		<cfscript>
 			location=model("location").new();
@@ -61,6 +62,7 @@
 		</cfscript>		
 	</cffunction>
 
+<!---================================ Filters ======================================--->
 		<cffunction name="_checkLocationsAdmin">
 		<cfif !application.rbs.allowLocations>
 			<cfset redirectTo(route="home", error="Facility to edit locations has been disabled")>

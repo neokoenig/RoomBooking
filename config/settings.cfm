@@ -15,6 +15,8 @@
 <cfscript>
  set(dataSourceName="roombooking");
  set(URLRewriting="on");  
+ set(allowedEnvironmentSwitchThroughURL=true);
+set(reloadPassword="roombooking");
 // Environment-agnostic settings
 set(assetQueryString=true);
 set(deletePluginDirectories=false); // set to false for plugin development

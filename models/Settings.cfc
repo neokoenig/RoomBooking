@@ -4,6 +4,5 @@
 		<cfscript>
 		 
 		</cfscript>
-	</cffunction>
- 
+	</cffunction> 
 </cfcomponent>

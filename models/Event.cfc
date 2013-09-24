@@ -1,10 +1,10 @@
-<!--- Events --->
+	<!--- Events --->
 <cfcomponent extends="model">
 	<cffunction name="init">
 		<cfscript>
 			belongsTo("location");
 			validate("checkDates");
-			afterFind("formatDates")
+			afterFind("formatDates");
 		</cfscript>
 	</cffunction>
 
@@ -25,7 +25,7 @@
 	<cffunction name="formatDates" hint="Formats Date for DateTime Picker">
 		<cfscript>
 			//09/22/2013 14:57 +0100
-			//this.start=dateFormat(this.start, "dd/mm/yyyy") & ' ' & timeFormat(this.start, "full");
+			this.start=dateFormat(this.start, "yyyy-mm-dd") & ' ' & timeFormat(this.start, "HH:MM");
 		</cfscript>
 	</cffunction>
 </cfcomponent>

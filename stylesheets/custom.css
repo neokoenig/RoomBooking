@@ -1,19 +1,15 @@
 /* Custom overrides for InOutBoard */  
  .navbar .logo {margin-right:10px;}
 .location-filter, .fc-event { color:white;}
-.location-filter, .fc-event, .fc-future {cursor:pointer;}
+.location-filter, .fc-event, .fc-future, .fc-today:hover {cursor:pointer;}
  
-.fc-future:hover {background:#f8f8f8;}
+.fc-future:hover  {background:#E8E8E8; }
+.fc-today:hover {background:#D6CED1;}
 .fc-past {background:#D1D1D1; opacity: 0.8;} 
-
-.panel-title {color:white;}
+ 
 .append {margin-bottom:10px;}
-
-/****************** Forms ****************/ 
-.datetimeselect .form-group {width:100px; float:left;}
-.datetimeselect label {width:100%; float:left;}
+ 
 /* css for timepicker */
-.ui-widget {font-family: "Open Sans", arial;}
 .ui-timepicker-div .ui-widget-header { margin-bottom: 8px; }
 .ui-timepicker-div dl { text-align: left; }
 .ui-timepicker-div dl dt { float: left; clear:left; padding: 0 0 0 5px; }

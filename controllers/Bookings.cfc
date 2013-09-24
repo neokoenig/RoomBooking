@@ -4,10 +4,9 @@
 			filters(through="_getLocations", only="index,add,edit,create,update");
 		</cfscript>
 	</cffunction>
+ 
 
-	<cffunction name="index" hint="Displays what's on today - main dashboard"> 
-	</cffunction>
-
+<!---================================ Views ======================================--->
 	<cffunction name="add">
         <cfscript>
         	 event=model("event").new();

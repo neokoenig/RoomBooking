@@ -10,6 +10,7 @@
 		</cfscript>
 	</cffunction>
 
+<!---================================ Global Filters ======================================--->
 	<cffunction name="_getLocations" hint="Return all room locations">
 		<cfset locations=model("location").findAll(order="name")>
 	</cffunction>

@@ -7,6 +7,7 @@
 		</cfscript>
 	</cffunction>
 
+<!---================================ Views via Ajax ======================================--->
 	<cffunction name="getEvents" hint="Get Events For the provided range"> 
 	    <cfscript> 
 	    if(isAjax() AND structkeyexists(params, "start") AND structkeyexists(params, "end")){ 
@@ -33,7 +34,8 @@
 		</cfscript>
 	</cffunction>
 
-	<cffunction name="prepEventData">
+<!---================================ Private ======================================--->
+	<cffunction name="prepEventData" access="private">
 		<cfargument name="data">
 		<cfset var events=[]> 
 		<cfloop query="arguments.data">

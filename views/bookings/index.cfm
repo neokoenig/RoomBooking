@@ -54,14 +54,15 @@
                 ], 
     //----------------Day Click--------------
                 dayClick: function(date, allDay, jsEvent, view) {
-                    if(moment(date).isSame() || moment(date).isAfter()){
+                    var thepast=moment().subtract("days", 1);
+                    if(moment(date).isAfter(thepast)){
                         if (allDay) {  
-                            window.location.href = addBookingURL + "/#params.key#?d=" + moment(date).format("YYYY-MM-DD");
+                            window.location.href = addBookingURL + "#params.key#?d=" + moment(date).format("YYYY-MM-DD");
                         } else {
                             //alert('Clicked on the slot: ' + date);
-                            window.location.href = addBookingURL + "/#params.key#?d=" + moment(date).format("YYYY-MM-DD");
+                            window.location.href = addBookingURL + "#params.key#?d=" + moment(date).format("YYYY-MM-DD");
                         } 
-                    } 
+                     } 
                 },
     //----------------Event Click --------------
                 eventClick: function(calEvent, jsEvent, view) { 

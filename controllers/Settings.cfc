@@ -2,14 +2,12 @@
 	<cffunction name="init">
 		<cfscript>
 			filters(through="_getSettings");
-			filters(through="_checkSettingsAdmin");	 
+			filters(through="_checkSettingsAdmin", except="cron");	 
 		</cfscript>
-	</cffunction>
-	<cffunction name="index">
-		
-	</cffunction>
+	</cffunction> 
 
-	<cffunction name="edit">
+<!---================================ Views ======================================--->
+	<cffunction name="edit" hint="Edit a setting">
 		<cfscript>
 			setting=model("setting").findOne(where="id = '#params.key#'");
 			if(!isObject(setting) OR !setting.Editable){
@@ -18,7 +16,7 @@
 		</cfscript>		
 	</cffunction>
 
-	<cffunction name="update">
+	<cffunction name="update" hint="Update a setting">
 		<cfscript>
 		if(structkeyexists(params, "setting")){
 	    	setting = model("setting").findOne(where="id = '#params.key#'");
@@ -32,10 +30,15 @@
 		} 
 		</cfscript>		
 	</cffunction>
-
-	<cffunction name="_checkSettingsAdmin">
+<!---================================ Filters ======================================--->
+	<cffunction name="_checkSettingsAdmin" hint="Checks to see if settings are editable via web interface">
 		<cfif !application.rbs.allowSettings>
 			<cfset redirectTo(route="home", error="Facility to edit settings has been disabled")>
 		</cfif>
+	</cffunction>
+
+<!---================================ System ======================================--->
+	<cffunction name="cron" hint="Used in demo mode to reset the database every 30 mins">
+		
 	</cffunction>
 </cfcomponent>
