@@ -54,43 +54,7 @@
   </cffunction>
   <cffunction name="down">
     <cfscript> 
-      removeRecord(table="settings");
-    /*removeRecord(table="settings", where="id = 'allowLocations'");
-    removeRecord(table="settings", where="id = 'allowSettings");
-    removeRecord(table="settings", where="id = 'allowThemes'");
-    removeRecord(table="settings", where="id = 'bootstraptheme'");
-    removeRecord(table="settings", where="id = 'bootstrapthemeoptions'");
-    removeRecord(table="settings", where="id = 'calendarAllDaySlot'");
-    removeRecord(table="settings", where="id = 'calendarAllDayText'");
-    removeRecord(table="settings", where="id = 'calendarAxisFormat'");
-    removeRecord(table="settings", where="id = 'calendarColumnFormatDay'");
-    removeRecord(table="settings", where="id = 'calendarColumnFormatMonth'");
-    removeRecord(table="settings", where="id = 'calendarColumnFormatWeek'");
-    removeRecord(table="settings", where="id = 'calendarDefaultView'");
-    removeRecord(table="settings", where="id = 'calendarFirstday'");
-    removeRecord(table="settings", where="id = 'calendarHeadercenter'");
-    removeRecord(table="settings", where="id = 'calendarHeaderleft'");
-    removeRecord(table="settings", where="id = 'calendarHeaderright'");
-    removeRecord(table="settings", where="id = 'calendarHiddenDays'");
-    removeRecord(table="settings", where="id = 'calendarMintime'");
-    removeRecord(table="settings", where="id = 'calendarSlotEventOverlap'");
-    removeRecord(table="settings", where="id = 'calendarSlotMinutes'");
-    removeRecord(table="settings", where="id = 'calendarTimeformat'");
-    removeRecord(table="settings", where="id = 'calendarWeekends'");
-    removeRecord(table="settings", where="id = 'calendarWeekNumbers'");
-    removeRecord(table="settings", where="id = 'googleanalytics'");
-    removeRecord(table="settings", where="id = 'roomlayouttypes'");
-    removeRecord(table="settings", where="id = 'showlocationcolours'");
-    removeRecord(table="settings", where="id = 'showlocationfilter'");
-    removeRecord(table="settings", where="id = 'sitedescription'");
-    removeRecord(table="settings", where="id = 'siteEmailAddress'");
-    removeRecord(table="settings", where="id = 'sitelogo'");
-    removeRecord(table="settings", where="id = 'sitetitle'");
-    removeRecord(table="settings", where="id = 'usejavascriptfromCDN'");
-    removeRecord(table="settings", where="id = 'version'");
-    removeRecord(table="settings", where="id = 'wheelsErrorEmailFromAddress'");
-    removeRecord(table="settings", where="id = 'wheelsErrorEmailSubject'");
-    removeRecord(table="settings", where="id = 'wheelsErrorEmailToAddress'"); */
+      removeRecord(table="settings"); 
     </cfscript>
   </cffunction>
 </cfcomponent>

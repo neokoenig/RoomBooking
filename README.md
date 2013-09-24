@@ -2,6 +2,8 @@
 
 This is an open source application for booking rooms via a web based calendar, using cfWheels, Bootstrap3, jQuery, FullCalendar.js, and other bits.
 
+Author: Tom King - http://www.oxalto.co.uk / https://github.com/Neokoenig / @neokoenig
+
 ## Requirements
 
  1. A server capable of running a cfWheels application -  Adobe Coldfusion (8.x upwards) or Railo (4.x upwards), preferably with URL rewriting
@@ -15,6 +17,39 @@ This is an open source application for booking rooms via a web based calendar, u
  4. Visit the following URL: http://yourdomain.com/rewrite.cfm?controller=wheels&action=wheels&view=plugins&name=dbmigrate 
  5. Select "All non-migrated" from the migrate dropdown and click "Get Migrating!" - this will populate your database with the default tables and default configuration
  6. Now reload your application by visiting http://yourdomain.com/?reload=design&password=roombooking
- 7. Lastly, you probably want to change the reloadpassword in config/settings.cfm
+ 7. Lastly, you probably want to change the reloadpassword in config/settings.cfm, and when you're happy with how it's running, change the environment from design to production in config/environment.cfm
+
+## Notes
+ 
+ This application uses the following plugins and 3rd party code:
+
+ 1. [ColdFusion on Wheels][1]
+ 2. [jQuery][2]
+ 3. [jQueryUI][3]
+ 4. [Bootstrap3] [4]
+ 5. [Bootswatch Themes][5]
+ 6. [FullCalendar][6]
+ 7. [TimePicker][7]
+ 8. [MomentJS][8]
+ 9. [Colorpicker for Twitter Bootstrap][9]
+ 10: [cfWheels DBMigrate Plugin][10]
+ 11: [cfWheels FlashWrapper Plugin][11]
+
+[1]: http://cfwheels.org/
+[2]: http://jquery.com/
+[3]: http://jqueryui.com/
+[4]: http://getbootstrap.com/
+[5]: http://bootswatch.com/
+[6]: http://arshaw.com/fullcalendar/
+[7]: http://trentrichardson.com/examples/timepicker/
+[8]: http://momentjs.com/
+[9]: http://mjaalnir.github.io/bootstrap-colorpicker/
+[10]: http://cfwheels.org/plugins/listing/28
+[11]: https://github.com/gregstallings/cfwheels-flash-wrapper
+
+## License
+
+Room Booking System is released under the Apache License Version 2.0.
+
 
  

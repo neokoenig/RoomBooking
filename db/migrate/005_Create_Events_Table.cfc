@@ -17,22 +17,6 @@
       t.integer(columnNames='age', default='', null=true, limit='1');
       t.decimal(columnNames='hourlyWage', default='', null=true, precision='1', scale='2');
       t.date(columnNames='dateOfBirth', default='', null=true);
-
-
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `title` varchar(500) COLLATE utf8_unicode_ci NOT NULL,
-  `start` datetime NOT NULL,
-  `end` datetime DEFAULT NULL,
-  `allday` tinyint(1) NOT NULL DEFAULT '0',
-  `url` varchar(500) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `className` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `description` longtext COLLATE utf8_unicode_ci,
-  
-  `locationid` int(11) NOT NULL DEFAULT '0',
-  `contactname` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `contactno` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `contactemail` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `layoutstyle` varchar(255) COLLATE utf8_unicode_ci DEFAULT 'Standard',
 --->
 <cfcomponent extends="plugins.dbmigrate.Migration" hint="Create Events Table">
   <cffunction name="up">
