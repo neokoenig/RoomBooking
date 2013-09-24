@@ -41,7 +41,7 @@
   </cffunction>
   <cffunction name="down">
     <cfscript>
-      dropTable('tableName');
+      dropTable('events');
     </cfscript>
   </cffunction>
 </cfcomponent>

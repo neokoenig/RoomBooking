@@ -41,9 +41,5 @@
 			<cfset redirectTo(route="home", error="Facility to edit settings has been disabled")>
 		</cfif>
 	</cffunction>
-
-<!---================================ System ======================================--->
-	<cffunction name="cron" hint="Used in demo mode to reset the database every 30 mins">
-		
-	</cffunction>
+ 
 </cfcomponent>
