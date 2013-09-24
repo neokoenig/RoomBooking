@@ -4,6 +4,10 @@ This is an open source application for booking rooms via a web based calendar, u
 
 Author: Tom King - http://www.oxalto.co.uk / https://github.com/Neokoenig / @neokoenig
 
+## Demo
+
+You can find a demo at [roombooking.oxalto.co.uk][12]
+
 ## Requirements
 
  1. A server capable of running a cfWheels application -  Adobe Coldfusion (8.x upwards) or Railo (4.x upwards), preferably with URL rewriting
@@ -48,6 +52,7 @@ Author: Tom King - http://www.oxalto.co.uk / https://github.com/Neokoenig / @neo
 [9]: http://mjaalnir.github.io/bootstrap-colorpicker/
 [10]: http://cfwheels.org/plugins/listing/28
 [11]: https://github.com/gregstallings/cfwheels-flash-wrapper
+[12]: http://roombooking.oxalto.co.uk
 
 ## License
 
