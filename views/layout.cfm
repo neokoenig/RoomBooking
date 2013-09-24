@@ -93,6 +93,9 @@
         <cfif structKeyExists(params, "theme")>
           <div class="alert alert-info">This is a theme preview. Save this theme by altering bootstraptheme in settings > configuration</div>
         </cfif>
+        <cfif application.rbs.isDemoMode>
+          <div class="alert alert-info">Board is in Demo Mode</div>
+        </cfif> 
          #flashMessages()#
        	#includeContent()#
        	</section>

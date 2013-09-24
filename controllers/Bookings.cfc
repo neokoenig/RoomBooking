@@ -64,7 +64,7 @@
 				}
 			}
 			// Send Confirmation email if appropriate
-			if(structKeyExists(params.event, "emailContact") AND isValid("email", event.contactemail)){
+			if(structKeyExists(params.event, "emailContact") AND isValid("email", event.contactemail) AND !application.rbs.isDemoMode){
 				sendEmail(
 					    to="#event.contactname# <#event.contactemail#>",
 					    from="#application.rbs.sitetitle# <#application.rbs.siteEmailAddress#>",

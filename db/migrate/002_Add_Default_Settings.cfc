@@ -49,7 +49,8 @@
       addRecord(table='settings',id='wheelsErrorEmailFromAddress', value='error@domain.com', notes='Production mode error email address (from)', fieldtype='string', editable=1);
       addRecord(table='settings',id='wheelsErrorEmailSubject', value='[Error - Room Booking]', notes='Production mode error email subject', fieldtype='string', editable=1);
       addRecord(table='settings',id='wheelsErrorEmailToAddress', value='error@domain.com', notes='Production mode error email address (to)', fieldtype='string', editable=1);
-
+      addRecord(table='settings',id='isDemoMode', value='0', notes='Put the board into demo mode', fieldtype='boolean', editable=0);
+      
     </cfscript>
   </cffunction>
   <cffunction name="down">
