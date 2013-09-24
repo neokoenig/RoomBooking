@@ -34,8 +34,8 @@ Author: Tom King - http://www.oxalto.co.uk / https://github.com/Neokoenig / @neo
  7. [TimePicker][7]
  8. [MomentJS][8]
  9. [Colorpicker for Twitter Bootstrap][9]
- 10: [cfWheels DBMigrate Plugin][10]
- 11: [cfWheels FlashWrapper Plugin][11]
+ 10: [cfWheels DBMigrate Plugin][10] 
+ 11: [cfWheels FlashWrapper Plugin][11] 
 
 [1]: http://cfwheels.org/
 [2]: http://jquery.com/
