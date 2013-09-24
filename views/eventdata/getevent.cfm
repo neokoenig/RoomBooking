@@ -1,3 +1,4 @@
+<!---================= Room Booking System / https://github.com/neokoenig =======================--->
 <!--- Gets injected into modal--->
 <cfparam name="event">
 <cfoutput>

@@ -1,4 +1,4 @@
-/* Custom overrides for InOutBoard */  
+/* ================= Room Booking System / https://github.com/neokoenig */
  .navbar .logo {margin-right:10px;}
 .location-filter, .fc-event { color:white;}
 .location-filter, .fc-event, .fc-future, .fc-today:hover {cursor:pointer;}

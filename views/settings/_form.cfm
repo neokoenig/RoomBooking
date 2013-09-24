@@ -1,3 +1,4 @@
+<!---================= Room Booking System / https://github.com/neokoenig =======================--->
 <cfoutput>
 #errormessagesFor("setting")#
 <cfswitch expression="#setting.fieldtype#">

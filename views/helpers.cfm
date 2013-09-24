@@ -1,5 +1,5 @@
+<!---================= Room Booking System / https://github.com/neokoenig =======================--->
 <!--- Place helper functions here that should be available for use in all view pages of your application --->
-
 <cffunction name="panel" hint="Renders a bootstrap Panel">
 	<cfargument name="title" required="true">
 	<cfargument name="class" default="panel-primary"> 

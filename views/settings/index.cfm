@@ -1,3 +1,4 @@
+<!---================= Room Booking System / https://github.com/neokoenig =======================--->
  <!--- settings --->
 <cfparam name="settings">
 <Cfoutput>

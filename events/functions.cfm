@@ -1,4 +1,4 @@
-<!--- Place functions here that should be globally available in your application. --->
+<!---================= Room Booking System / https://github.com/neokoenig =======================--->
 
 <cffunction name="getIPAddress" hint="Gets IP address even from Railo" returntype="String">
 	<cfscript>
@@ -11,7 +11,7 @@
 	</cfscript>
 </cffunction>
  
- <cffunction name="returnStringFromBoolean" output="false">
+ <cffunction name="returnStringFromBoolean" output="false" hint="I know this is stupid, but it's a hack with the way I'm doing the settings in the db">
  	<cfargument  name="boo">
  	<cfif arguments.boo>
  		<cfreturn "true">

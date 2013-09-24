@@ -1,3 +1,4 @@
+<!---================= Room Booking System / https://github.com/neokoenig =======================--->
 <cfsilent> 
   <cfset currentTheme=application.rbs.bootstraptheme>
 <cfif structKeyExists(params, "theme")>

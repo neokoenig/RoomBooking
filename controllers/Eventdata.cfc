@@ -1,3 +1,4 @@
+<!---================= Room Booking System / https://github.com/neokoenig =======================--->
 <cfcomponent extends="controller">
 <!--- All things events related, mostly called via ajax --->
 	<cffunction name="init">

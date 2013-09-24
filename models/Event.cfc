@@ -1,4 +1,5 @@
-	<!--- Events --->
+<!---================= Room Booking System / https://github.com/neokoenig =======================--->
+<!--- Events --->
 <cfcomponent extends="model">
 	<cffunction name="init">
 		<cfscript>
