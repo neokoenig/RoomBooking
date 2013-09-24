@@ -11,7 +11,7 @@
 		#select(objectname="event", property="locationid", options=locations, label="Location")#	
 	</div>
 	<div class="col-lg-4 col-md-4"> 
-		#select(objectname="event", property="layoutstyle", options="#application.roombooking.roomlayouttypes#", label="Layout")#	
+		#select(objectname="event", property="layoutstyle", options="#application.rbs.roomlayouttypes#", label="Layout")#	
 	</div>
 </div>
 <div class="row">
@@ -87,25 +87,7 @@ $(document).ready(function(){
 		}
 	});
 
-});
- /* $(function() {
-    $( "##datepickerstart" ).datetimepicker({ 
-		stepMinute: 5,
-		altField: "##event-start",
-		altFieldTimeOnly: false,
-		hourMin: 7,
-		hourMax: 23,
-		minDate: new Date(),
-	});
-	$( "##datepickerend" ).datetimepicker({ 
-		stepMinute: 5,
-		altField: "##event-end",
-		altFieldTimeOnly: false,
-		hourMin: 7,
-		hourMax: 23,
-		minDate: new Date(),
-	});
-  });*/
+}); 
 </script>
 </cfsavecontent>
 </cfoutput>
