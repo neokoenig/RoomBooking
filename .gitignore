@@ -216,3 +216,4 @@ pip-log.txt
 
 WEB-INF
 plugins/**/*
+db/sql
