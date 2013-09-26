@@ -25,9 +25,7 @@
          <cfelse>
           #stylesheetLinkTag("theme,fullcalendar,smoothness/jquery-ui-1.10.3.custom.min,bootstrap-colorpicker,custom")#
          </cfif>
-        #javascriptIncludeTag("modernizr-2.6.2.min")# 
-
-<!---//cdnjs.cloudflare.com/ajax/libs/fullcalendar/1.6.4/fullcalendar.print.css--->
+        #javascriptIncludeTag("modernizr-2.6.2.min")#  
     </head>
     <body> 
 <!-----------------------------HEADER---------------------------> 
