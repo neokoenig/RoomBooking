@@ -22,7 +22,7 @@
 				redirectTo(action="index", success="location successfully created");
 			}
 	        else { 
-				renderPage(action="add", error="There were problems creating that location");
+				renderView(action="add", error="There were problems creating that location");
 			} 
 		}
 		</cfscript>		
@@ -43,7 +43,7 @@
 				redirectTo(action="index", success="location successfully updated");
 			}
 	        else {  
-				renderPage(action="edit", error="There were problems updating that location");
+				renderView(action="edit", error="There were problems updating that location");
 			} 
 		} 
 		</cfscript>		

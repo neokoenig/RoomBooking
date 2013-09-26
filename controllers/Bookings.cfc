@@ -76,7 +76,7 @@
 			redirectTo(action="index", success="Event successfully created");
 		}
         else { 
-			renderPage(action="add", error="There were problems creating that event");
+			renderView(action="add", error="There were problems creating that event");
 		} 
 	}
 	</cfscript>
@@ -92,7 +92,7 @@
 			redirectTo(action="index", success="event successfully updated");
 		}
         else {  
-			renderPage(action="edit", error="There were problems updating that event");
+			renderView(action="edit", error="There were problems updating that event");
 		} 
 	}
 	</cfscript>
