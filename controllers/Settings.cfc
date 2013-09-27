@@ -3,11 +3,12 @@
 	<cffunction name="init">
 		<cfscript>
 			filters(through="_getSettings");
-			filters(through="_checkSettingsAdmin", except="cron");	 
+			filters(through="_checkSettingsAdmin"); 
 		</cfscript>
 	</cffunction> 
 
 <!---================================ Views ======================================--->
+ 
 	<cffunction name="edit" hint="Edit a setting">
 		<cfscript>
 		setting=model("setting").findOne(where="id = '#params.key#'");
@@ -40,6 +41,6 @@
 		<cfif !application.rbs.allowSettings>
 			<cfset redirectTo(route="home", error="Facility to edit settings has been disabled")>
 		</cfif>
-	</cffunction>
+	</cffunction> 
  
 </cfcomponent>

@@ -7,37 +7,60 @@
 #panel(title="All settings")# 
  
 <cfif settings.recordcount>
-	
-<table class="table table-condensed">
-	<thead>
-		<tr>
-			<th>ID</th>
-			<th>Current Value</th> 
-			<th>Actions</th>
-		</tr>
-	</thead>
-	<tbody>
-	<cfloop query="settings">
-		<cfoutput>
-		<tr>
-			<td><strong>#id#</strong><br />#autolink(notes)#</td>
-			<td>#value#</td> 
-			<td>
-				<div class="btn-group">
-					<cfif editable>
-						#linkTo(text="Edit", class="btn btn-sm btn-info", action="edit", key=id)# 
-					</cfif>
-				</div>
-			</td>
-		</tr>
-		</cfoutput>
+
+	<!--- Tabs--->
+	<ul class="nav nav-tabs" id="settingstab">
+	<cfloop query="settings" group="Category">
+			<li class="#iif(currentrow EQ 1, '"active"', '""')#"><a href="###lcase(settings.category)#" data-toggle="tab">#settings.category#</a></li> 
 	</cfloop>
-		
-	</tbody>
-</table>
-	<cfelse>
-		<p>No settings available yet</p>
+	</ul>
+	
+	<!--- Per Tab Output--->
+	<div class="tab-content">
+	<cfloop query="settings" group="Category">
+	  <!--- Start Tab --->
+	  <div class="tab-pane #iif(currentrow EQ 1, '"active"', '""')#" id="#lcase(settings.category)#">
+		<h3>#settings.category#</h3>
+		<table class="table table-condensed">
+			<thead>
+				<tr>
+					<th>ID</th>
+					<th>Current Value</th> 
+					<th>Actions</th>
+				</tr>
+			</thead>
+			<tbody> 
+			<cfloop>  
+				<tr>
+					<td><strong>#id#</strong><br />#autolink(notes)#</td>
+					<td>#value#</td> 
+					<td>
+						<div class="btn-group">
+							<cfif editable>
+								#linkTo(text="Edit", class="btn btn-sm btn-info", action="edit", key=id)# 
+							</cfif>
+						</div>
+					</td>
+				</tr> 
+			</cfloop>  
+			</tbody>
+		</table>
+		</div> 
+		<!--- End Tab--->
+	</cfloop>
+	</div><!--- End Tab Content--->
+
+<cfelse>
+	<p>No settings available yet</p>
 </cfif>
 #panelEnd()#
-
 </Cfoutput>
+<!--- 
+<cfsavecontent variable="request.js.tabs">
+	<script>
+	$('#settingstab a').click(function (e) {
+		e.preventDefault()
+		$(this).tab('show')
+	})
+	</script>	
+</cfsavecontent> --->

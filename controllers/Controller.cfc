@@ -12,7 +12,7 @@
 	</cffunction>
 
 	<cffunction name="_getSettings" hint="Return all settings">
-		<cfset settings=model("setting").findAll()>
+		<cfset settings=model("setting").findAll(order="category,id")>
 	</cffunction>
 	
 	
