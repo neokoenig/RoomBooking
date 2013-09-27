@@ -27,7 +27,7 @@
 			<td>
 				<div class="btn-group">
 					#linkTo(text="Edit", class="btn btn-sm btn-info", action="edit", key=id)#
-					#linkTo(text="Delete", class="btn btn-sm btn-danger", action="delete", key=id, confirm="Are you Sure?")#
+					#linkTo(text="Delete", class="btn btn-sm btn-danger", action="delete", key=id, confirm='Are you Sure?')#
 				</div>
 			</td>
 		</tr>
