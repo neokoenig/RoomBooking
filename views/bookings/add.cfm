@@ -7,7 +7,7 @@
  
 		#includePartial("form")#
 		#checkbox(objectName="event", property="emailContact", label="Send Confirmation Email to Contact")# 
-		<cfif application.rbs.isDemoMode>
+		<cfif application.rbs.setting.isDemoMode>
 			<p class="help-block">No emails will be sent in demo mode</p>
 		</cfif> 
 		#includePartial("repeat")#

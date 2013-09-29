@@ -5,6 +5,8 @@
 		<cfscript>
 			provides("html,json");
 			usesLayout(template="modal", only="getevent");
+			filters(through="checkPermissionAndRedirect", permission="accessapplication");
+			filters(through="checkPermissionAndRedirect", permission="accesscalendar");
 		</cfscript>
 	</cffunction>
 

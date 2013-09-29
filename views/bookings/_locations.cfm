@@ -1,13 +1,13 @@
 <!---================= Room Booking System / https://github.com/neokoenig =======================--->
 <cfoutput><cfparam name="params.key" default="">
 
-<cfif application.rbs.showlocationcolours> 
+<cfif application.rbs.setting.showlocationcolours> 
 <style>
 <cfloop query="locations"><cfif len(colour)>.#class# {background: #colour#; border-color: #colour#;}</cfif>
 </cfloop>
 </style>
 </cfif>
-<cfif application.rbs.showlocationfilter> 
+<cfif application.rbs.setting.showlocationfilter> 
 <div class="btn-group append"> 
 #linkTo(action="index",  class="btn btn-primary btn-sm location-filter", text="All<br /><small>Show All</small>")#
 <cfloop query="locations">

@@ -20,26 +20,26 @@
     $('##calendar').fullCalendar({
     //----------------Config--------------
                 header: {
-                    left: '#application.rbs.calendarHeaderleft#',
-                    center: '#application.rbs.calendarHeadercenter#',
-                    right: '#application.rbs.calendarHeaderright#' 
+                    left: '#application.rbs.setting.calendarHeaderleft#',
+                    center: '#application.rbs.setting.calendarHeadercenter#',
+                    right: '#application.rbs.setting.calendarHeaderright#' 
                 },
-                weekends: #returnStringFromBoolean(application.rbs.calendarWeekends)#,
-                firstDay: #application.rbs.calendarFirstday#,
-                slotMinutes: #application.rbs.calendarSlotMinutes#,
-                minTime: "#application.rbs.calendarMintime#", 
-                timeFormat: '#application.rbs.calendarTimeformat#',
-                hiddenDays: #application.rbs.calendarHiddenDays#,
-                weekNumbers: #returnStringFromBoolean(application.rbs.calendarWeekNumbers)#,
-                allDaySlot: #returnStringFromBoolean(application.rbs.calendarAllDaySlot)#,
-                allDayText: '#application.rbs.calendarAllDayText#',
-                defaultView: '#application.rbs.calendarDefaultView#',
-                axisFormat: '#application.rbs.calendarAxisFormat#',
-                slotEventOverlap: #returnStringFromBoolean(application.rbs.calendarSlotEventOverlap)#,
+                weekends: #returnStringFromBoolean(application.rbs.setting.calendarWeekends)#,
+                firstDay: #application.rbs.setting.calendarFirstday#,
+                slotMinutes: #application.rbs.setting.calendarSlotMinutes#,
+                minTime: "#application.rbs.setting.calendarMintime#", 
+                timeFormat: '#application.rbs.setting.calendarTimeformat#',
+                hiddenDays: #application.rbs.setting.calendarHiddenDays#,
+                weekNumbers: #returnStringFromBoolean(application.rbs.setting.calendarWeekNumbers)#,
+                allDaySlot: #returnStringFromBoolean(application.rbs.setting.calendarAllDaySlot)#,
+                allDayText: '#application.rbs.setting.calendarAllDayText#',
+                defaultView: '#application.rbs.setting.calendarDefaultView#',
+                axisFormat: '#application.rbs.setting.calendarAxisFormat#',
+                slotEventOverlap: #returnStringFromBoolean(application.rbs.setting.calendarSlotEventOverlap)#,
                 columnFormat: {
-                        month: '#application.rbs.calendarColumnFormatMonth#',    // Mon
-                        week: '#application.rbs.calendarColumnFormatWeek#', // Mon 9/7
-                        day: '#application.rbs.calendarColumnFormatDay#'  // Monday 9/7
+                        month: '#application.rbs.setting.calendarColumnFormatMonth#',    // Mon
+                        week: '#application.rbs.setting.calendarColumnFormatWeek#', // Mon 9/7
+                        day: '#application.rbs.setting.calendarColumnFormatDay#'  // Monday 9/7
                     } ,
      
     //----------------Event Sources----------

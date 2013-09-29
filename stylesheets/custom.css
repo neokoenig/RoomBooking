@@ -7,7 +7,16 @@
 .fc-today:hover {background:#D6CED1;}
 .fc-past {background:#D1D1D1; opacity: 0.8;} 
  
+/* Various Helper Classes */
 .append {margin-bottom:10px;}
+
+.label-login {background:green;}
+.label-cookie {background:purple;} 
+.label-error {background:red;}
+.label- {background:black;}
+/* Dropdown Signin Form */
+#dropdown-signin form {padding:10px;}
+#dropdown-signin form input.form-control {width:250px;}
  
 /* css for timepicker */
 .ui-timepicker-div .ui-widget-header { margin-bottom: 8px; }

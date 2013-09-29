@@ -3,7 +3,8 @@
 	<cffunction name="init">
 		<cfscript>
 			filters(through="_getLocations", only="index"); 
-			filters(through="_checkLocationsAdmin");	 
+			filters(through="_checkLocationsAdmin");	  
+			filters(through="checkPermissionAndRedirect", permission="accessLocations");  
 		</cfscript>
 	</cffunction>
 
@@ -65,7 +66,7 @@
 
 <!---================================ Filters ======================================--->
 		<cffunction name="_checkLocationsAdmin">
-		<cfif !application.rbs.allowLocations>
+		<cfif !application.rbs.setting.allowLocations>
 			<cfset redirectTo(route="home", error="Facility to edit locations has been disabled")>
 		</cfif>
 	</cffunction>

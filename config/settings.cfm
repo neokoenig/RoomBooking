@@ -13,10 +13,11 @@
 	<cfset set(URLRewriting="Partial")>
 --->
 <cfscript>
- set(dataSourceName="roombooking");
- set(URLRewriting="on");  
- set(allowedEnvironmentSwitchThroughURL=true);
+set(dataSourceName="roombooking");
+set(URLRewriting="on");  
+set(allowedEnvironmentSwitchThroughURL=true);
 set(reloadPassword="roombooking");
+
 // Environment-agnostic settings
 set(assetQueryString=true);
 set(deletePluginDirectories=false); // set to false for plugin development
@@ -41,9 +42,9 @@ set(functionName="textField,textFieldTag,select,selectTag,passwordField,password
 
 set(functionName="dateTimeSelect,dateSelect", prepend="<div class=""form-group"">", append="</div>", timeSeparator="", minuteStep="5", secondStep="30", dateOrder="day,month,year", dateSeparator="", separator="");
 
-set(functionName="errorMessagesFor", class="alert alert-error"" style=""margin-left:0;padding-left:26px;");
-set(functionName="errorMessageOn", wrapperElement="div", class="alert alert-error");
+set(functionName="errorMessagesFor", class="alert alert-danger"" style=""margin-left:0;padding-left:26px;");
+set(functionName="errorMessageOn", wrapperElement="div", class="alert alert-danger");
 set(functionName="flash", prepend="<div class=""alert""><a class=""close"" data-dismiss=""alert"">&times;</a>", append="</div>");
-set(functionName="flashMessages", prependToValue="<div class=""alert""><a class=""close"" data-dismiss=""alert"">&times;</a>", appendToValue="</div>");
+set(functionName="flashMessages", prependToValue="<div class=""alert alert-info""><a class=""close"" data-dismiss=""alert"">&times;</a>", appendToValue="</div>");
 set(functionName="paginationLinks", prepend="<ul class=""pagination"">", append="</ul>", prependToPage="<li>", appendToPage="</li>", linkToCurrentPage=true, classForCurrent="active", anchorDivider="<li class=""disabled""><a href=""##"">...</a></li>");
 </cfscript>  

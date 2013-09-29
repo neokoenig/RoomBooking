@@ -11,7 +11,7 @@
 		#select(objectname="event", property="locationid", options=locations, label="Location")#	
 	</div>
 	<div class="col-lg-4 col-md-4"> 
-		#select(objectname="event", property="layoutstyle", options="#application.rbs.roomlayouttypes#", label="Layout")#	
+		#select(objectname="event", property="layoutstyle", options="#application.rbs.setting.roomlayouttypes#", label="Layout")#	
 	</div>
 </div>
 <div class="row">

@@ -3,6 +3,9 @@
 	<cffunction name="init">
 		<cfscript>
 			filters(through="_getLocations", only="index,add,edit,create,update");
+			filters(through="checkPermissionAndRedirect", permission="accessapplication");
+			filters(through="checkPermissionAndRedirect", permission="accesscalendar"); 
+			filters(through="checkPermissionAndRedirect", permission="allowRoomBooking", except="index"); 
 		</cfscript>
 	</cffunction>
  
@@ -64,10 +67,10 @@
 				}
 			}
 			// Send Confirmation email if appropriate
-			if(structKeyExists(params.event, "emailContact") AND isValid("email", event.contactemail) AND !application.rbs.isDemoMode){
+			if(structKeyExists(params.event, "emailContact") AND isValid("email", event.contactemail) AND !application.rbs.setting.isDemoMode){
 				sendEmail(
 					    to="#event.contactname# <#event.contactemail#>",
-					    from="#application.rbs.sitetitle# <#application.rbs.siteEmailAddress#>",
+					    from="#application.rbs.setting.sitetitle# <#application.rbs.setting.siteEmailAddress#>",
 					    template="/email/bookingNotify",
 					    subject="Room Booking Confirmation", 
 					    event=event
@@ -102,8 +105,7 @@
 	 <cffunction name="delete">
 	 <cfscript>
 	 if(structkeyexists(params, "key")){
-    	event = model("event").findOne(where="id = #params.key#");
-		 
+    	event = model("event").findOne(where="id = #params.key#"); 
 		if ( event.delete() )  {  
 			redirectTo(action="index", success="event successfully deleted");
 		}

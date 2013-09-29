@@ -3,7 +3,9 @@
 	<cffunction name="init">
 		<cfscript>
 			filters(through="_getSettings");
-			filters(through="_checkSettingsAdmin"); 
+			filters(through="_checkSettingsAdmin");  
+
+			filters(through="checkPermissionAndRedirect", permission="accessSettings");   
 		</cfscript>
 	</cffunction> 
 
@@ -12,7 +14,7 @@
 	<cffunction name="edit" hint="Edit a setting">
 		<cfscript>
 		setting=model("setting").findOne(where="id = '#params.key#'");
-		if(!isObject(setting) OR !setting.Editable OR application.rbs.isDemoMode){
+		if(!isObject(setting) OR !setting.Editable OR application.rbs.setting.isDemoMode){
 			redirectTo(back=true, error="Sorry, that setting can't be found, isn't editable or the board is in demo mode");
 		}
 		</cfscript>		
@@ -22,7 +24,7 @@
 		<cfscript>
 		if(structkeyexists(params, "setting")){
 	    	setting = model("setting").findOne(where="id = '#params.key#'");
-	    	if(!isObject(setting) OR !setting.Editable OR application.rbs.isDemoMode){
+	    	if(!isObject(setting) OR !setting.Editable OR application.rbs.setting.isDemoMode){
 	    		redirectTo(back=true, error="Sorry, that setting can't be found, isn't editable or the board is in demo mode");
 	    	} else {
 				setting.update(params.setting);
@@ -38,7 +40,7 @@
 	</cffunction>
 <!---================================ Filters ======================================--->
 	<cffunction name="_checkSettingsAdmin" hint="Checks to see if settings are editable via web interface">
-		<cfif !application.rbs.allowSettings>
+		<cfif !application.rbs.setting.allowSettings>
 			<cfset redirectTo(route="home", error="Facility to edit settings has been disabled")>
 		</cfif>
 	</cffunction> 

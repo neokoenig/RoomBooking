@@ -2,10 +2,13 @@
 <!--- Gets injected into modal--->
 <cfparam name="event">
 <cfoutput>
+<cfif checkPermission("allowRoomBooking")> 
 <div class="btn-group">
 	#linkTo(action="edit", key=event.eventid, text="Edit", controller="bookings", class="btn btn-info")#
 	#linkTo(action="delete", key=event.eventid, text="Delete", controller="bookings", class="btn btn-danger", confirm="Are you sure?")#
 </div>
+</cfif>
+<cfif checkPermission("viewRoomBooking")> 
 <h4>#h(event.title)#</h4>
 <p>#formatDate(event.start)# - #formatDate(event.end)#</p>
 <p>Location: #h(event.name)#<br />#h(event.description)#</p>
@@ -27,5 +30,7 @@
 	<cfelse>
 		<p>None provided</p>
 </cfif>
-
+<cfelse>
+	<p>You're not allowed to view the booking details</p>
+</cfif>
 </cfoutput>
