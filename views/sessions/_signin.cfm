@@ -4,7 +4,14 @@
 	<cfset savedemail = true>
 </cfif>
 	<!--- User Login --->
-
+	<cfif application.rbs.setting.isdemomode>
+	<p><strong>Demo Logins:</strong></p>
+<pre>
+admin@domain.com 
+editor@domain.com 
+user@domain.com</pre>
+	<p>Password: <pre>roombooking100</pre></p>
+	</cfif>
 		#startFormTag(route="attemptlogin")#
 		<cfif savedemail>
 			<p>Welcome back <strong>#params.email#</strong>. (#linkTo(text="Not You?", route="forgetme")#)</p>
