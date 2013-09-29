@@ -3,9 +3,9 @@
 	<cffunction name="init">
 		<cfscript>
 			filters(through="_getSettings");
-			filters(through="_checkSettingsAdmin");  
-
-			filters(through="checkPermissionAndRedirect", permission="accessSettings");   
+			filters(through="_checkSettingsAdmin");   
+			filters(through="checkPermissionAndRedirect", permission="accessSettings");
+			filters(through="denyInDemoMode", only="edit,update");   
 		</cfscript>
 	</cffunction> 
 

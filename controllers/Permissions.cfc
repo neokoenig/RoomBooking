@@ -4,6 +4,7 @@
 	<cffunction name="init">
 		<cfscript>   
 		filters(through="checkPermissionAndRedirect", permission="accessPermissions");   
+		filters(through="denyInDemoMode", only="edit,update");
  		</cfscript>
 	</cffunction>  
 

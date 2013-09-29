@@ -14,10 +14,7 @@ Notes
  
 <!---================================ Main RSS Feeds ======================================--->
 	<cffunction name="index">
-		<cfscript>
-		var events=model("location").findAll();
-		renderwith(data=events, layout=false);
-	 	</cfscript> 
+	 
 	</cffunction>
 
 

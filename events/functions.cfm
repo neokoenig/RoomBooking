@@ -125,3 +125,9 @@
 		}
 	</cfscript>
 </cffunction>
+
+<cffunction name="denyInDemoMode" hint="Used to redirect away in demo mode">
+	<cfif application.rbs.setting.isdemomode>
+		<cfset redirectTo(route="home", error="Disabled in Demo Mode")>
+	</cfif>
+</cffunction>

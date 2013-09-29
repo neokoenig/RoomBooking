@@ -4,6 +4,7 @@
 		<cfscript>
 		filters(through="logFlash", type="after"); 
 		filters(through="redirectIfLoggedIn"); 
+		filters(though="denyInDemoMode");
  		</cfscript>
 	</cffunction> 
 
