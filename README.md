@@ -15,15 +15,7 @@ You can find a demo at [roombooking.oxalto.co.uk][12]
 
 ## Installation
 
- 1. Download https://github.com/OxfordMartinSchool/RoomBooking/archive/master.zip
- 2. Unzip the contents of RoomBooking-master into your web root
- 3. Create a datasource in Railo/ColdFusion administrator called 'roombooking' (this is the default, and changeable in config/settings.cfm);
- 4. Visit the following URL: http://yourdomain.com/rewrite.cfm?controller=wheels&action=wheels&view=plugins&name=dbmigrate 
- 5. Select "All non-migrated" from the migrate dropdown and click "Get Migrating!" - this will populate your database with the default tables and default configuration
- 6. Now reload your application by visiting http://yourdomain.com/?reload=design&password=roombooking - you'll see some default locations have been set up.
- 7. Go to Settings > Configuration from the dropdown menu on the top right corner and configure each setting appropriately. In particular, make sure you update the error & site email addresses.
- 8. Go to Settings > Locations, and delete the locations there if they aren't appropriate. They're there to give you a starting point. In order for events to display, you'll need at least one location.
- 9. Lastly, you probably want to change the reloadpassword in config/settings.cfm, and when you're happy with how it's running, change the environment from design to production in config/environment.cfm
+Moved to [Wiki][13]
 
 ## Notes
  
@@ -53,6 +45,7 @@ You can find a demo at [roombooking.oxalto.co.uk][12]
 [10]: http://cfwheels.org/plugins/listing/28
 [11]: https://github.com/gregstallings/cfwheels-flash-wrapper
 [12]: http://roombooking.oxalto.co.uk
+[13]: https://github.com/neokoenig/RoomBooking/wiki/_pages
 
 ## License
 
