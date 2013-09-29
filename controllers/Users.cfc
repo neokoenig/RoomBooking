@@ -11,7 +11,7 @@
 
 		filters(through="checkPermissionAndRedirect", permission="accessUsers", except="myaccount,updateaccount,updatepassword");   
 		filters(through="checkPermissionAndRedirect", permission="updateOwnAccount", only="myaccount,updateaccount,updatepassword");   
-		filters(through="denyInDemoMode", only="add,create,update,updateaccount,updatepassword,assumeuser");
+		filters(through="denyInDemoMode", only="create,update,updateaccount,updatepassword,assumeuser");
  	 </cfscript>accessUsers
 </cffunction>
 
