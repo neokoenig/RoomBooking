@@ -60,9 +60,14 @@
 
 <cffunction name="assumeUser" hint="Login as targeted user">
 	<cfscript>
+	if(!application.rbs.setting.isdemomode){
 		if(structKeyExists(params, "key")){
 			user=model("user").findOne(where="id = #params.key#"); 
 			_createUserInScope(user);
+		} 
+	}
+	else {
+		redirectTo( controller="users", action="index", success="Not allowed in demo mode");
 	}
 	</cfscript>	
 </cffunction>
@@ -102,6 +107,7 @@
     
 <cffunction name="update" hint="Update an Account">
     <cfscript> 
+    if(!application.rbs.setting.isdemomode){
 	if(structkeyexists(params, "user")){
     	user = model("user").findOne(where="id = #params.key#");
 		user.update(params.user);
@@ -113,11 +119,13 @@
 			renderView( controller="users", action="edit");
 		} 
 	}
+} else {redirectTo( controller="users", action="index", success="Not updated in demo mode");}
 	</cfscript>
 </cffunction>
      
 <cffunction name="delete" hint="Soft Delete an Account">
 	 <cfscript>
+	 	 if(!application.rbs.setting.isdemomode){
 	 if(structkeyexists(params, "key")){
     	user = model("user").findOne(where="id = #params.key#"); 
 		if ( user.delete() )  {  
@@ -127,6 +135,7 @@
 			redirectTo(controller="users", action="index", error="There were problems deleting that user");
 		} 
 	}
+}else {redirectTo( controller="users", action="index", success="Not updated in demo mode");}
 	</cfscript>
 </cffunction>
 

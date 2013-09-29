@@ -30,7 +30,12 @@
 				<td>#Message#</td>
 				<td>#linkTo(params="type=#lcase(type)#&userid=&rows=1000", text="#Type#")#</td>
 				<td>#dateFormat(CreatedAt, "dd mmm yyyy")# #timeFormat(createdAt, "HH:MM")#</td>
-				<td><a href="http://www.infosniper.net/index.php?ip_address=#IPaddress#&map_source=1&overview_map=1&lang=1&map_type=1&zoom_level=7" target="_blank">#IPaddress#</a></td>
+				<td>
+					<cfif !application.rbs.setting.isdemomode>
+						<a href="http://www.infosniper.net/index.php?ip_address=#IPaddress#&map_source=1&overview_map=1&lang=1&map_type=1&zoom_level=7" target="_blank">#IPaddress#</a>
+					<cfelse>
+						DemoIP
+					</cfif></td>
 				<td>
 					<cfif thisuser.recordcount>
 						#linkTo(params="index?type=&userid=#userid#&rows=1000", text="#thisuser.email#")#
