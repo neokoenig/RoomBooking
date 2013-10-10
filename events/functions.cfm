@@ -89,7 +89,13 @@
 	<cfargument name="permission" required="true" hint="The permission name to check against">
 	<cfscript> 
 		if(_permissionsSetup() AND structKeyExists(application.rbs.permission, arguments.permission)){
-			return application.rbs.permission[arguments.permission][_returnUserRole()];
+			var retValue = application.rbs.permission[arguments.permission][_returnUserRole()];
+			if(retValue == 1){
+				return true;
+			} else {
+				return false;
+			}
+			//return application.rbs.permission[arguments.permission][_returnUserRole()];
 		} 
 	</cfscript>
 </cffunction>
