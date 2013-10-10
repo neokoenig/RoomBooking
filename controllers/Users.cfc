@@ -19,12 +19,13 @@
  
 
 <cffunction name="updateaccount" hint="Main Account Update"> 
-	<cfscript> 
+	<cfscript>  
 	if(structKeyExists(params, "password")){
 		structDelete(params, "password");
 		structDelete(params, "passwordConfirmation");
 	}
 	if(structKeyExists(params, "user")){ 
+		structDelete(params.user, "role");
 		user.update(params.user);
 		if(user.save()){
 			redirectTo(route="myaccount", success="Personal account details successfully updated");
