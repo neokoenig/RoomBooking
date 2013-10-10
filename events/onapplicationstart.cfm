@@ -47,7 +47,7 @@
 		structDelete(application, "rbs");
 	}
 	// PLaceholder Structs
-	application.rbs={}
+	application.rbs={};
 	application.rbs.setting={};
 	application.rbs.permission={};
 	// Get all settings & permissions from database - this will fail if dbmigrate plugin hasn't been run, hence the cflocation uptop.
