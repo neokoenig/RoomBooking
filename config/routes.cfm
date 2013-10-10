@@ -18,5 +18,5 @@
 	addRoute(name="denied", 		pattern="/denied", 			controller="sessions", action="denied"); 
 
  	// Default
- 	addRoute(name="home", pattern="", controller="bookings", action="index")
+ 	addRoute(name="home", pattern="", controller="bookings", action="index");
 </cfscript> 
