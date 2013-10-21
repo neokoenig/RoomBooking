@@ -1,16 +1,16 @@
 <!---================= Room Booking System / https://github.com/neokoenig =======================--->
 
  <cftry>
- 	<cfset loadSettings()>
+ 	<cfset _loadSettings()>
  	<cfcatch type="any">
  		<cflocation url="/rewrite.cfm?controller=wheels&action=wheels&view=plugins&name=dbmigrate">
  	</cfcatch>
  </cftry>
  
- <cfset createInitialUser()>
+ <cfset _createInitialUser()>
   
  	 
-<cffunction name="createInitialUser">
+<cffunction name="_createInitialUser">
 	<cfscript>
 	// If user table is empty, we need to generate an admin user with some default values.
 	// As each installation has it's own authkey used to encrypt the password/salt, we can't do this in DBMigrate 
@@ -40,7 +40,7 @@
 	</cfscript>	
 </cffunction>
 
-<cffunction name="loadSettings">
+<cffunction name="_loadSettings">
  	<cfscript>
 	// Application Specific settings 
 	if(structKeyExists(application, "rbs")){
