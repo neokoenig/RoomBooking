@@ -30,7 +30,7 @@
       addRecord(table='settings',id='calendarHeaderleft', value='prev,next today', notes='Calendar Header Display, left - see http://arshaw.com/fullcalendar/docs/display/header/', fieldtype='string', editable=1);
       addRecord(table='settings',id='calendarHeaderright', value='month,agendaWeek,agendaDay', notes='Calendar Header Display, right - see http://arshaw.com/fullcalendar/docs/display/header/', fieldtype='string', editable=1);
       addRecord(table='settings',id='calendarHiddenDays', value='[]', notes='Hide certain days (Comma Delim List in array, i.e [1,3,5] )', fieldtype='string', editable=1);
-      addRecord(table='settings',id='calendarMintime', value='7am', notes='Calendar Minimum Time to display', fieldtype='string', editable=1);
+      addRecord(table='settings',id='calendarMintime', value='0700', notes='Calendar Minimum Time to display', fieldtype='string', editable=1);
       addRecord(table='settings',id='calendarSlotEventOverlap', value='1', notes='Determines if timed events in agenda view should visually overlap', fieldtype='boolean', editable=1);
       addRecord(table='settings',id='calendarSlotMinutes', value='15', notes='Calendar No of minutes to increment minutes in (integer)', fieldtype='string', editable=1);
       addRecord(table='settings',id='calendarTimeformat', value='H:mm', notes='Calendar Time Format', fieldtype='string', editable=1);
