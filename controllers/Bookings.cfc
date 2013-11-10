@@ -33,9 +33,7 @@
     </cffunction>
     
     <cffunction name="create">
-    <cfscript> 
-    	writeDump(params);
-    	abort;
+    <cfscript>  
 	if(structkeyexists(params, "event")){
     	event = model("event").new(params.event);
  
