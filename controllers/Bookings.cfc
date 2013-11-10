@@ -34,6 +34,8 @@
     
     <cffunction name="create">
     <cfscript> 
+    	writeDump(params);
+    	abort;
 	if(structkeyexists(params, "event")){
     	event = model("event").new(params.event);
  
@@ -67,7 +69,7 @@
 				}
 			}
 			// Send Confirmation email if appropriate
-			if(structKeyExists(params.event, "emailContact") AND isValid("email", event.contactemail) AND !application.rbs.setting.isDemoMode){
+			if(structKeyExists(params.event, "emailContact") AND params.event.emailContact AND isValid("email", event.contactemail) AND !application.rbs.setting.isDemoMode){
 				sendEmail(
 					    to="#event.contactname# <#event.contactemail#>",
 					    from="#application.rbs.setting.sitetitle# <#application.rbs.setting.siteEmailAddress#>",
