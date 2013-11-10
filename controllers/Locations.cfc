@@ -52,6 +52,8 @@
 
 	<cffunction name="delete">
 		<cfscript>
+		checkLocation=model("location").findAll();
+		if(checkLocation.recordcount GT 1){
 		 if(structkeyexists(params, "key")){
 		    	location = model("location").findOne(where="id = #params.key#"); 
 				if ( location.delete() )  {  
@@ -61,6 +63,10 @@
 					redirectTo(action="index", error="There were problems deleting that location");
 				} 
 			}
+		} else {
+
+					redirectTo(action="index", error="At least one location is required.");
+	}
 		</cfscript>		
 	</cffunction>
 
