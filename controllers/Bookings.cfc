@@ -25,7 +25,7 @@
         	 	event.locationid=params.key;
         	}
 
-        </cfscript>>  
+        </cfscript>
     </cffunction>
     
     <cffunction name="edit">
