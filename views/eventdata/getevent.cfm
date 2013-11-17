@@ -10,7 +10,7 @@
 </cfif>
 <cfif checkPermission("viewRoomBooking")> 
 <h4>#h(event.title)#</h4>
-<p>#formatDate(event.start)# - #formatDate(event.end)#</p>
+<p>#_formatDateRange(d1=event.start, d2=event.end)#</p>
 <p>Location: #h(event.name)#<br />#h(event.description)#</p>
 <cfif len(event.description)><p>#h(event.eventdescription)#</p></cfif>
 <p>(#event.layoutstyle# Style)</p>

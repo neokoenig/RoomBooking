@@ -2,7 +2,7 @@
 <cfcomponent extends="controller">
 	<cffunction name="init">
 		<cfscript>
-			filters(through="_getLocations", only="index,add,edit,create,update");
+			filters(through="_getLocations", only="index,add,edit,create,update,list");
 			filters(through="checkPermissionAndRedirect", permission="accessapplication");
 			filters(through="checkPermissionAndRedirect", permission="accesscalendar"); 
 			filters(through="checkPermissionAndRedirect", permission="allowRoomBooking", except="index"); 
@@ -115,4 +115,42 @@
 	}
 	</cfscript>
 	 </cffunction>
-</cfcomponent>
+
+
+<!---================================ Agenda Views ======================================--->
+	<cffunction name="list" hint="Shows Agenda style view table for a given month">
+		<cfparam name="params.m" default="#month(now())#">
+		<cfparam name="params.y" default="#year(now())#">
+		<cfset events=model("location").findAll(where="#_agendaListWC()#", include="events", order="start")>
+	</cffunction>
+
+	<cffunction name="_agendaListWC" access="private">
+	 	<cfscript>
+	 		var sd="";
+	 		var td="";
+			var wc=[];
+			// Date Filter
+			if(structKeyExists(params, "m") 
+				AND structKeyExists(params, "Y")
+				AND len(params.m) GT 0
+				AND len(params.y) EQ 4 
+				AND isNumeric(params.m)
+				AND isNumeric(params.y)){ 
+					sd=createDateTime(params.y, params.m, 1, 00,00,00);
+					td=createDateTime(params.y, params.m, DaysInMonth(sd), 23,59,59);
+					arrayAppend(wc, "start > '#sd#'");
+					arrayAppend(wc, "start < '#td#'");
+			}
+			// Location Filter
+			if(structKeyExists(params, "location") AND isNumeric(params.location)){
+				arrayAppend(wc, "locationid = #params.location#");
+			} 
+			if(arrayLen(wc)){
+				return arrayToList(wc, " AND ");
+			} else {
+				return "";
+			}
+			</cfscript>
+		<cfset events=model("location").findAll(include="events", order="start")>
+	</cffunction>
+</cfcomponent>	

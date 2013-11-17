@@ -49,9 +49,15 @@
         <nav class="collapse navbar-collapse">
           <cfif checkpermission("accessCalendar")> 
             <ul class="nav navbar-nav">
-              <cfif checkpermission("accessCalendar")>
-              <li>#linkTo(route="home", text="<span class='glyphicon glyphicon-calendar'></span> Calendar")#</li> 
-              </cfif>
+            <cfif checkpermission("accessCalendar")>
+           <li class="dropdown">
+            <a href="##" class="dropdown-toggle" data-toggle="dropdown"><span class='glyphicon glyphicon-calendar'></span> Events <b class="caret"></b></a>
+            <ul class="dropdown-menu">    
+                <li>#linkTo(route="home", text="<span class='glyphicon glyphicon-calendar'></span> Calendar")#</li> 
+                <li>#linkTo(controller="bookings", action="list", text="<span class='glyphicon glyphicon-list'></span> List")#</li> 
+            </ul>
+            </li>
+               </cfif>
               <cfif checkpermission("allowRoomBooking")>
                 <li>#linkTo(controller="bookings", action="add", text="<span class='glyphicon glyphicon-plus-sign'></span> Book a Room")#</li>
               </cfif> 
