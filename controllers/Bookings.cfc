@@ -5,7 +5,8 @@
 			filters(through="_getLocations", only="index,add,edit,create,update,list");
 			filters(through="checkPermissionAndRedirect", permission="accessapplication");
 			filters(through="checkPermissionAndRedirect", permission="accesscalendar"); 
-			filters(through="checkPermissionAndRedirect", permission="allowRoomBooking", except="index"); 
+			filters(through="checkPermissionAndRedirect", permission="allowRoomBooking", except="index,list"); 
+			filters(through="checkPermissionAndRedirect", permission="viewRoomBooking", only="list"); 
 		</cfscript>
 	</cffunction>
  
