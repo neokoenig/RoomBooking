@@ -11,6 +11,10 @@
 
 	<cffunction name="checkDates" hint="If there's no end date, add a default end date 1hour into future">
 		<cfscript> 
+		// Have a double check for a start date 
+		if(!isDate(this.start)){
+			this.start=now();
+		}
     	if(!isDate(this.end)){
     		// Bookings are for 1 hour by default, so increment if not passed in
     		this.end=dateAdd("h", 1, this.start);
