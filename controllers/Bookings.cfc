@@ -20,7 +20,7 @@
         	 if(structKeyExists(params, "d")){
         	 //2015-09-25T00:00:00+01:00
         	 	qDate=createDateTime(listFirst(params.d, '-'),ListGetAt(params.d, 2, '-'),ListGetAt(params.d, 3, '-'),00,00,00);
-        	 	event.start=qDate; 
+        	 	event.start=dateFormat(qDate, "YYYY-MM-DD") & ' ' & timeFormat(qDate, "HH:MM"); 
         	 }
         	 if(structKeyExists(params, "key") AND isNumeric(params.key)){
         	 	event.locationid=params.key;
