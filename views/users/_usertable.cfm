@@ -14,7 +14,7 @@
 					<td>#linkTo(text="#firstname# #lastname#",   controller="users",  action="edit", key=id)#</td>
 					<td>#linkTo(text="#email#",   controller="users",  action="edit", key=id)#</td>
 					<td>#role#</td>   
-					<td>#formatDate(createdAt)#</td> 
+					<td>#_formatDate(createdAt)#</td> 
                    <td>
  
                    	<!-- Split button -->
