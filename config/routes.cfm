@@ -3,7 +3,8 @@
 	The default route is the one that will be called on your application's "home" page.
 --->
 <cfscript>
-	
+  
+
 	// Customer Routes
 	addRoute(name="updateaccount", 	pattern="/my/account/u", 	controller="users", action="updateaccount"); 
 	addRoute(name="myaccount", 		pattern="/my/account", 		controller="users", action="myaccount"); 

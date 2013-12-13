@@ -21,8 +21,7 @@
 	<cfloop query="locations">
 		<cfoutput>
 		<tr>
-			<td>#id#</td>
-			<td>#name#</td>
+			<td>#id#</td>			<td>#name#</td>
 			<td>#description#</td>
 			<td>
 				<div class="btn-group">

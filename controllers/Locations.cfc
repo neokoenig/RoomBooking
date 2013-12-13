@@ -4,8 +4,8 @@
 		<cfscript>
 			filters(through="_getLocations", only="index"); 
 			filters(through="_checkLocationsAdmin");	  
-			filters(through="checkPermissionAndRedirect", permission="accessLocations");  
-		</cfscript>
+			filters(through="checkPermissionAndRedirect", permission="accessLocations");
+ 		</cfscript>
 	</cffunction>
 
 <!---================================ Views ======================================--->
