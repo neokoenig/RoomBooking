@@ -1,0 +1,1 @@
+<cfcontent type="text/calendar" reset="Yes"><cfheader name="Content-Disposition" value="inline; filename=events.ics"><cfoutput>#data#</cfoutput><cfabort>

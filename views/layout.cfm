@@ -55,6 +55,9 @@
             <ul class="dropdown-menu">    
                 <li>#linkTo(route="home", text="<span class='glyphicon glyphicon-calendar'></span> Calendar")#</li> 
                 <li>#linkTo(controller="bookings", action="list", text="<span class='glyphicon glyphicon-list'></span> List")#</li> 
+                 <cfif checkpermission("allowAPI")>
+                    <li>#linkTo(controller="api",  text="<span class='glyphicon glyphicon-cloud-download'></span> Data Feeds")#</li> 
+                 </cfif> 
             </ul>
             </li>
                </cfif>

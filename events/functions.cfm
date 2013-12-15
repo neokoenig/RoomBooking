@@ -63,6 +63,12 @@
 	</cfif>
 </cffunction>
 
+<cffunction name="_generateApiKey" hint="Generate an API Key">
+	<cfscript>
+		return hash(createUUID() & getAuthKey(), 'SHA-512');		
+	</cfscript>
+</cffunction>
+
 <cffunction name="createSalt" hint="Create Salt using authkey">
 	<cfscript>
 	 return encrypt(createUUID(), getAuthKey(), 'CFMX_COMPAT');
@@ -108,8 +114,7 @@
 			redirectTo(route="denied", error="Sorry, you have insufficient permission to access this. If you believe this to be an error, please contact an administrator.");
 		}
 	</cfscript>
-</cffunction>
-
+</cffunction> 
 
 <cffunction name="_permissionsSetup" hint="Checks for the relevant permissions structs in application scope">
 	<cfscript>
@@ -137,4 +142,4 @@
 	<cfif application.rbs.setting.isdemomode>
 		<cfset redirectTo(route="home", error="Disabled in Demo Mode")>
 	</cfif>
-</cffunction>
+</cffunction> 

@@ -25,6 +25,7 @@
             scope.lastname=user.lastname;   
             scope.email=user.email;
             scope.role=user.role;   
+            scope.apitoken=user.apitoken;
             session.currentuser=scope;  
             redirectTo(route="home");
         </cfscript>

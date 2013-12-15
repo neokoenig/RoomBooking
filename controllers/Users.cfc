@@ -155,5 +155,24 @@
 	}
 	</cfscript>
 </cffunction>   
+
+<!---================= API Keys===========================--->
+<cffunction name="generateAPIKey" hint="Generates An API Key for a user account">
+	<cfscript>
+	if(structKeyExists(params, "key") AND isnumeric(params.key)){
+		user=model("user").findOneByID(params.key);
+		if(isObject(user)){
+			user.apitoken=_generateApiKey();
+			user.save();
+			redirectTo(controller="users", action="index", success="Key generation successful");
+		} else {
+			redirectTo(controller="users", action="index", error="Key generation failed - User not found");
+		}
+	} else {
+ 		redirectTo(controller="users", action="index", error="Key generation failed - Key not specified");
+	}
+	</cfscript>
+	
+</cffunction>
  
 </cfcomponent>
