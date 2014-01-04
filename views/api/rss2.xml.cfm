@@ -10,15 +10,15 @@
 		<generator>Room Booking System</generator>
 		<docs>http://blogs.law.harvard.edu/tech/rss</docs>
 		<ttl>60</ttl>		
-		<pubDate>#dateFormat(now(), "ddd, dd mmm yyyy")# #timeFormat(now(), "HH:MM:SS")# UTC</pubDate>
-    	<lastBuildDate>#dateFormat(now(), "ddd, dd mmm yyyy")# #timeFormat(now(), "HH:MM:SS")# UTC</lastBuildDate>
+		<pubDate>#dateFormat(now(), "ddd, dd mmm yyyy")# #timeFormat(now(), "HH:MM:SS")# UT</pubDate>
+    	<lastBuildDate>#dateFormat(now(), "ddd, dd mmm yyyy")# #timeFormat(now(), "HH:MM:SS")# UT</lastBuildDate>
 		<cfloop query="data">
 			<item>
 			<title><![CDATA[#title#]]></title>
 			<link>#urlFor(controller="bookings", action="view", key=eventid,  onlyPath=false)#</link>
 			<description><![CDATA[#eventdescription#]]></description>
 			<category><![CDATA[#name#]]></category>
-			<pubDate>#dateFormat(start, "ddd, dd mmm yyyy")# #timeFormat(start, "HH:MM:SS")# UTC</pubDate>
+			<pubDate>#dateFormat(start, "ddd, dd mmm yyyy")# #timeFormat(start, "HH:MM:SS")# UT</pubDate>
 			<guid isPermaLink="true">#urlFor(controller="bookings", action="view", key=eventid,  onlyPath=false)#</guid>
 		</item> 
 		</cfloop> 
