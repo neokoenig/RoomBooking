@@ -7,7 +7,7 @@
 		<p>API useage requires a token to be created for your account. Administrators, or those with user creation privledges can create these for you on request.</p> 
 	<cfelse> 
 	<p><strong>Careful!</strong> - these URLs provide authenticated read only access to forthcoming events: only use or share them with trusted users. Administrators can revoke access to feeds by regenerating API keys</p>
- 	</cfif>
+ 
 <table class="table">
 	<thead>
 		<tr>
@@ -70,5 +70,5 @@ $(document).ready(function(){
 });
 </script>
 </cfsavecontent>
-
+	</cfif>
 </cfoutput>

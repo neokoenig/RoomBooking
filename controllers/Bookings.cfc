@@ -6,12 +6,22 @@
 			filters(through="checkPermissionAndRedirect", permission="accessapplication");
 			filters(through="checkPermissionAndRedirect", permission="accesscalendar"); 
 			filters(through="checkPermissionAndRedirect", permission="allowRoomBooking", except="index,list"); 
-			filters(through="checkPermissionAndRedirect", permission="viewRoomBooking", only="list"); 
+			filters(through="checkPermissionAndRedirect", permission="viewRoomBooking", only="list,view"); 
 		</cfscript>
 	</cffunction>
  
 
 <!---================================ Views ======================================--->
+	<cffunction name="view" hint="Static display of a single event, mainly used in RSS permalinks etc">
+		<cfscript>
+		if(structKeyExists(params, "key") AND isNumeric(params.key)){
+			event=model("location").findAll(where="events.id = #params.key#", include="events");  
+		} else {
+			redirectTo(route="home", error="No event specified");
+		}
+		</cfscript>
+	</cffunction>
+
 	<cffunction name="add">
         <cfscript>
         	 event=model("event").new();
