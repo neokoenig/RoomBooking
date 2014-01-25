@@ -7,7 +7,7 @@
 <!--- If cookie exists, get its values and update the request struct--->
 <cfif !structkeyexists(cookie, 'RBS_UN')>
 	<!--- Set initial cookie--->
-	<cfcookie name = "RBS_UN" expires="360" value="">
+	<cfcookie name = "RBS_UN" expires="360" value="" httponly="true">
 <cfelse> 
 	<cfset request.cookie.username=cookie.RBS_UN>
 </cfif>
