@@ -1,9 +1,8 @@
 <cfcomponent extends="Controller">
 
 <cffunction name="init" access="public" returntype="string">
-	 <cfscript> 
-		// Admin Only
-		//filters(through="_checkLoggedIn"); 
+	 <cfscript>  
+		filters(through="_checkLoggedIn"); 
 		//filters(through="_checkAdmin", except="mycustomers,myaccount,updateaccount,mypassword,updatepassword,myprofile,myprofileupdate");
 		filters(through="getCurrentUser", only="myaccount,updateaccount,updatepassword");
 		filters(through="logFlash", type="after");
