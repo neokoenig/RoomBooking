@@ -117,7 +117,21 @@
 	 		AND request.checks[4]["result"]>
 	 		<div class="alert alert-success">
 	 			<h2>All Good</h2>
-	 			<p>All checks passed, please delete /install/ and reload the application</p>
+	 			<p><strong>All checks passed, please delete /install/ and reload the application</strong></p>
+	 			<p>Other recommended changes:</p>
+	 			<ul>
+	 				<li>/config/settings.cfm - change the application reload password</li>
+	 				<li>Main Application Settings
+	 					<ul>
+	 						<li>Change the error handling email address</li>
+	 						<li>Change the main site email address</li>
+	 						<li>Add Google Analytics tracking code</li>
+	 						<li>Add URL path to site logo</li>
+	 					</ul>
+	 				</li>
+	 				<li>Update/Add the default locations</li>
+	 				<li>Update the default permissions to suit</li>
+	 			</ul>
 	 		</div>
  		</cfif>
 
