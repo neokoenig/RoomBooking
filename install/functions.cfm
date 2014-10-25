@@ -56,8 +56,9 @@
 		form.firstname=trim(form.firstname);
 		form.lastname=trim(form.lastname);
 		form.email=trim(form.email);
-		form.salt=createSalt();
-		form.password=hashPassword(form.password, form.salt);
+		form.t_salt=createUUID();
+		form.password=hashPassword(form.password, form.t_salt);
+		form.salt=encrypt(form.t_salt, getAuthKey(), 'CFMX_COMPAT');
 	</cfscript>
 
 	<cfquery datasource="#arguments.dsn#" name="adminU">
