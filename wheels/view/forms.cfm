@@ -9,11 +9,18 @@
 		</cfoutput>
 	'
 	categories="view-helper,forms-general" chapters="form-helpers-and-showing-errors" functions="URLFor,startFormTag,submitTag,textField,radioButton,checkBox,passwordField,hiddenField,textArea,fileField,select,dateTimeSelect,dateSelect,timeSelect">
+	<cfargument name="prepend" type="string" required="false" hint="See documentation for @textField">
+	<cfargument name="append" type="string" required="false" hint="See documentation for @textField">
 	<cfscript>
+		var loc = {};
+		$args(name="endFormTag", args=arguments);
 		if (StructKeyExists(request.wheels, "currentFormMethod"))
+		{
 			StructDelete(request.wheels, "currentFormMethod");
+		}
+		loc.returnValue = arguments.prepend & "</form>" & arguments.append;
 	</cfscript>
-	<cfreturn "</form>">
+	<cfreturn loc.returnValue>
 </cffunction>
 
 <cffunction name="startFormTag" returntype="string" access="public" output="false" hint="Builds and returns a string containing the opening form tag. The form's action will be built according to the same rules as `URLFor`. Note: Pass any additional arguments like `class`, `rel`, and `id`, and the generated tag will also include those values as HTML attributes."
@@ -30,17 +37,18 @@
 	<cfargument name="method" type="string" required="false" hint="The type of method to use in the form tag. `get` and `post` are the options.">
 	<cfargument name="multipart" type="boolean" required="false" hint="Set to `true` if the form should be able to upload files.">
 	<cfargument name="spamProtection" type="boolean" required="false" hint="Set to `true` to protect the form against spammers (done with JavaScript).">
-	<cfargument name="route" type="string" required="false" default="" hint="@URLFor.">
-	<cfargument name="controller" type="string" required="false" default="" hint="@URLFor.">
-	<cfargument name="action" type="string" required="false" default="" hint="@URLFor.">
-	<cfargument name="key" type="any" required="false" default="" hint="@URLFor.">
-	<cfargument name="params" type="any" required="false" default="" hint="@URLFor.">
-	<cfargument name="anchor" type="string" required="false" default="" hint="@URLFor.">
-	<cfargument name="onlyPath" type="boolean" required="false" hint="@URLFor.">
-	<cfargument name="host" type="string" required="false" hint="@URLFor.">
-	<cfargument name="protocol" type="string" required="false" hint="@URLFor.">
-	<cfargument name="port" type="numeric" required="false" hint="@URLFor.">
-	<cfargument name="remote" type="boolean" required="false" hint="@linkTo.">
+	<cfargument name="route" type="string" required="false" default="" hint="See documentation for @URLFor.">
+	<cfargument name="controller" type="string" required="false" default="" hint="See documentation for @URLFor.">
+	<cfargument name="action" type="string" required="false" default="" hint="See documentation for @URLFor.">
+	<cfargument name="key" type="any" required="false" default="" hint="See documentation for @URLFor.">
+	<cfargument name="params" type="string" required="false" default="" hint="See documentation for @URLFor.">
+	<cfargument name="anchor" type="string" required="false" default="" hint="See documentation for @URLFor.">
+	<cfargument name="onlyPath" type="boolean" required="false" hint="See documentation for @URLFor.">
+	<cfargument name="host" type="string" required="false" hint="See documentation for @URLFor.">
+	<cfargument name="protocol" type="string" required="false" hint="See documentation for @URLFor.">
+	<cfargument name="port" type="numeric" required="false" hint="See documentation for @URLFor.">
+	<cfargument name="prepend" type="string" required="false" hint="See documentation for @textField">
+	<cfargument name="append" type="string" required="false" hint="See documentation for @textField">
 	<cfscript>
 		var loc = {};
 		$args(name="startFormTag", args=arguments);
@@ -50,32 +58,42 @@
 
 		// set the form's action attribute to the URL that we want to send to
 		if (!ReFindNoCase("^https?:\/\/", arguments.action))
+		{
 			arguments.action = URLFor(argumentCollection=arguments);
+		}
 
 		// make sure we return XHMTL compliant code
 		arguments.action = toXHTML(arguments.action);
 
-		// deletes the action attribute and instead adds some tricky javascript spam protection
+		// deletes the action attribute and instead adds some tricky javascript spam protection to the onsubmit attribute
 		if (arguments.spamProtection)
 		{
-			arguments["data-this-action"] = Left(arguments.action, int((Len(arguments.action)/2))) & Right(arguments.action, ceiling((Len(arguments.action)/2)));
+			loc.onsubmit = "this.action='#Left(arguments.action, int((Len(arguments.action)/2)))#'+'#Right(arguments.action, ceiling((Len(arguments.action)/2)))#';";
+			arguments.onsubmit = $addToJavaScriptAttribute(name="onsubmit", content=loc.onsubmit, attributes=arguments);
 			StructDelete(arguments, "action");
 		}
 
 		// set the form to be able to handle file uploads
 		if (!StructKeyExists(arguments, "enctype") && arguments.multipart)
+		{
 			arguments.enctype = "multipart/form-data";
-		
-		if (StructKeyExists(arguments, "remote") && IsBoolean(arguments.remote))
-			arguments["data-remote"] = arguments.remote;
-		
-		loc.skip = "multipart,spamProtection,route,controller,key,params,anchor,onlyPath,host,protocol,port,remote";
-		if (Len(arguments.route))
-			loc.skip = ListAppend(loc.skip, $routeVariables(argumentCollection=arguments)); // variables passed in as route arguments should not be added to the html element
-		if (ListFind(loc.skip, "action"))
-			loc.skip = ListDeleteAt(loc.skip, ListFind(loc.skip, "action")); // need to re-add action here even if it was removed due to being a route variable above
+		}
 
-		loc.returnValue = $tag(name="form", skip=loc.skip, attributes=arguments);
+		loc.skip = "multipart,spamProtection,route,controller,key,params,anchor,onlyPath,host,protocol,port,prepend,append";
+
+		// variables passed in as route arguments should not be added to the html element
+		if (Len(arguments.route))
+		{
+			loc.skip = ListAppend(loc.skip, $routeVariables(argumentCollection=arguments));
+		}
+		
+		// need to re-add action here even if it was removed due to being a route variable above
+		if (ListFind(loc.skip, "action"))
+		{
+			loc.skip = ListDeleteAt(loc.skip, ListFind(loc.skip, "action"));
+		}
+
+		loc.returnValue = arguments.prepend & $tag(name="form", skip=loc.skip, attributes=arguments) & arguments.append;
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>
@@ -95,15 +113,23 @@
 	<cfargument name="value" type="string" required="false" hint="Message to display in the button form control.">
 	<cfargument name="image" type="string" required="false" hint="File name of the image file to use in the button form control.">
 	<cfargument name="disable" type="any" required="false" hint="Whether or not to disable the button upon clicking. (prevents double-clicking.)">
-	<cfargument name="prepend" type="string" required="false" hint="@textField">
-	<cfargument name="append" type="string" required="false" hint="@textField">
+	<cfargument name="prepend" type="string" required="false" hint="See documentation for @textField">
+	<cfargument name="append" type="string" required="false" hint="See documentation for @textField">
 	<cfscript>
 		var loc = {};
 		$args(name="submitTag", reserved="type,src", args=arguments);
 		loc.returnValue = arguments.prepend;
 		loc.append = arguments.append;
 		if (Len(arguments.disable))
-			arguments["data-disable-with"] = JSStringFormat(arguments.disable);
+		{
+			loc.onclick = "this.disabled=true;";
+			if (!Len(arguments.image) && !IsBoolean(arguments.disable))
+			{
+				loc.onclick &= "this.value='#JSStringFormat(arguments.disable)#';";
+			}
+			loc.onclick &= "this.form.submit();";
+			arguments.onclick = $addToJavaScriptAttribute(name="onclick", content=loc.onclick, attributes=arguments);
+		}
 		if (Len(arguments.image))
 		{
 			// create an img tag and then just replace "img" with "input"
@@ -143,26 +169,28 @@
 	<cfargument name="type" type="string" required="false" hint="The type for the button: `button`, `reset`, or `submit`.">
 	<cfargument name="value" type="string" required="false" hint="The value of the button when submitted.">
 	<cfargument name="image" type="string" required="false" hint="File name of the image file to use in the button form control.">
-	<cfargument name="disable" type="any" required="false" hint="Whether or not to disable the button upon clicking. (Prevents double-clicking.)">
-	<cfargument name="prepend" type="string" required="false" hint="@textField">
-	<cfargument name="append" type="string" required="false" hint="@textField">
-
+	<cfargument name="disable" type="any" required="false" hint="Whether or not to disable the button upon clicking (prevents double-clicking).">
+	<cfargument name="prepend" type="string" required="false" hint="See documentation for @textField">
+	<cfargument name="append" type="string" required="false" hint="See documentation for @textField">
 	<cfscript>
 		var loc = {};
 		$args(name="buttonTag", args=arguments);
 
+		// add onclick attribute to disable the form button
 		if (Len(arguments.disable))
 		{
 			loc.onclick = "this.disabled=true;";
 			if (!Len(arguments.image) && !IsBoolean(arguments.disable))
-				loc.onclick = loc.onclick & "this.value='#JSStringFormat(arguments.disable)#';";
-			loc.onclick = loc.onclick & "this.form.submit();";
+			{
+				loc.onclick &= "this.value='#JSStringFormat(arguments.disable)#';";
+			}
+			loc.onclick &= "this.form.submit();";
 			arguments.onclick = $addToJavaScriptAttribute(name="onclick", content=loc.onclick, attributes=arguments);
 		}
 
+		// if image is specified then use that as the content
 		if (Len(arguments.image))
 		{
-			// if image is specified then use that as the content
 			loc.args = {};
 			loc.args.type = "image";
 			loc.args.source = arguments.image;
@@ -180,7 +208,7 @@
 		StructDelete(arguments, "append");
 
 		// create the button
-		loc.returnValue = loc.prepend & $element(name="button", content="#loc.content#", attributes="#arguments#") & loc.append;
+		loc.returnValue = loc.prepend & $element(name="button", content=loc.content, attributes=arguments) & loc.append;
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>
@@ -199,14 +227,22 @@
 		{
 			loc.object = $getObject(arguments.objectName);
 			if (application.wheels.showErrorInformation && !IsObject(loc.object))
+			{
 				$throw(type="Wheels.IncorrectArguments", message="The `#arguments.objectName#` variable is not an object.");
+			}
 			if (StructKeyExists(loc.object, arguments.property))
+			{
 				loc.returnValue = loc.object[arguments.property];
+			}
 			else
+			{
 				loc.returnValue = "";
+			}
 		}
 		if (arguments.applyHtmlEditFormat)
+		{
 			loc.returnValue = HTMLEditFormat(loc.returnValue);
+		}
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>
@@ -216,40 +252,26 @@
 	<cfargument name="property" type="string" required="true">
 	<cfscript>
 		var loc = {};
-		loc.maxlength = 0;
-
-		// explicity return void so the property does not get set
-		if (IsStruct(arguments.objectName))
+		if (StructKeyExists(arguments, "maxlength"))
 		{
-			return;
+			loc.returnValue = arguments.maxlength;
 		}
-
-		loc.object = $getObject(arguments.objectName);
-
-		// if objectName does not represent an object, explicity return void so the property does not get set
-		if (not IsObject(loc.object))
+		else if (!IsStruct(arguments.objectName))
 		{
-			return;
-		}
-
-		loc.propertyInfo = loc.object.$propertyInfo(arguments.property);
-		if (StructCount(loc.propertyInfo) and ListFindNoCase("cf_sql_char,cf_sql_varchar", loc.propertyInfo.type))
-		{
-			loc.maxlength = loc.propertyInfo.size;
-		}
-			
-		// if the developer passed in a maxlength value, use it
-		if (StructKeyExists(arguments, "maxlength") && loc.maxlength GT 0 && arguments.maxlength lte loc.maxlength)
-		{
-			loc.maxlength = arguments.maxlength;
-		}
-		
-		if (loc.maxlength eq 0)
-		{
-			return;
+			loc.object = $getObject(arguments.objectName);
+			if (IsObject(loc.object))
+			{
+				loc.propertyInfo = loc.object.$propertyInfo(arguments.property);
+				if (StructCount(loc.propertyInfo) && ListFindNoCase("cf_sql_char,cf_sql_varchar", loc.propertyInfo.type))
+				{
+					loc.returnValue = loc.propertyInfo.size;
+				}
+			}
 		}
 	</cfscript>
-	<cfreturn loc.maxlength>
+	<cfif StructKeyExists(loc, "returnValue")>
+		<cfreturn loc.returnValue>
+	</cfif>
 </cffunction>
 
 <cffunction name="$formHasError" returntype="boolean" access="public" output="false">
@@ -262,9 +284,13 @@
 		{
 			loc.object = $getObject(arguments.objectName);
 			if (application.wheels.showErrorInformation && !IsObject(loc.object))
+			{
 				$throw(type="Wheels.IncorrectArguments", message="The `#arguments.objectName#` variable is not an object.");
+			}
 			if (ArrayLen(loc.object.errorsOn(arguments.property)))
+			{
 				loc.returnValue = true;
+			}
 		}
 	</cfscript>
 	<cfreturn loc.returnValue>
@@ -280,18 +306,19 @@
 		loc.returnValue = arguments.prependToLabel;
 		loc.attributes = {};
 		for (loc.key in arguments)
-			if (CompareNoCase(Left(loc.key, 5), "label") eq 0 && Len(loc.key) gt 5 && loc.key != "labelPlacement" && len(arguments[loc.key]))
+		{
+			if (CompareNoCase(Left(loc.key, 5), "label") eq 0 && Len(loc.key) gt 5 && loc.key != "labelPlacement")
+			{
 				loc.attributes[ReplaceNoCase(loc.key, "label", "")] = arguments[loc.key];
+			}
+		}
 		if (StructKeyExists(arguments, "id"))
+		{
 			loc.attributes.for = arguments.id;
-		loc.returnValue = loc.returnValue & $tag(name="label", attributes=loc.attributes);
-		
-		// allow to output labels without text when coming from "Tag" functions
-		// objectName is always a struct when coming from those functions (otherwise it's a string pointing to an object)
-		if (!IsStruct(arguments.objectName) || CompareNoCase(arguments.label, "true"))
-			loc.returnValue = loc.returnValue & arguments.label;
-
-		loc.returnValue = loc.returnValue & "</label>";
+		}
+		loc.returnValue &= $tag(name="label", attributes=loc.attributes);
+		loc.returnValue &= arguments.label;
+		loc.returnValue &= "</label>";
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>
@@ -308,35 +335,36 @@
 	<cfargument name="errorElement" type="string" required="true">
 	<cfargument name="errorClass" type="string" required="true">
 	<cfscript>
-		var returnValue = "";
+		var loc = {};
+		loc.returnValue = "";
 		arguments.label = $getFieldLabel(argumentCollection=arguments);
 		if ($formHasError(argumentCollection=arguments) && Len(arguments.errorElement))
 		{
 			// the input has an error and should be wrapped in a tag so we need to start that wrapper tag
-			returnValue &= returnValue & $tag(name=arguments.errorElement, class=arguments.errorClass);
+			loc.returnValue &= $tag(name=arguments.errorElement, class=arguments.errorClass);
 		}
 		if (Len(arguments.label) && arguments.labelPlacement != "after")
 		{
-			returnValue &= $createLabel(argumentCollection=arguments);
+			loc.returnValue &= $createLabel(argumentCollection=arguments);
 			if (arguments.labelPlacement == "aroundRight")
 			{
 				// strip out both the label text and closing label tag since it will be placed after the form input
-				returnValue = Replace(returnValue, arguments.label & "</label>", "");
+				loc.returnValue = Replace(loc.returnValue, arguments.label & "</label>", "");
 			}
 			else if (arguments.labelPlacement == "before")
 			{
 				// since the entire label is created we can append to it
-				returnValue &= arguments.appendToLabel;
+				loc.returnValue &= arguments.appendToLabel;
 			}
 			else
 			{
 				// the label argument is either "around" or "aroundLeft" so we only have to strip out the closing label tag
-				returnValue = Replace(returnValue, "</label>", "");
+				loc.returnValue = Replace(loc.returnValue, "</label>", "");
 			}
 		}
-		returnValue &= arguments.prepend;
+		loc.returnValue &= arguments.prepend;
 	</cfscript>
-	<cfreturn returnValue>
+	<cfreturn loc.returnValue>
 </cffunction>
 
 <cffunction name="$formAfterElement" returntype="string" access="public" output="false">
@@ -350,34 +378,35 @@
 	<cfargument name="appendToLabel" type="string" required="true">
 	<cfargument name="errorElement" type="string" required="true">
 	<cfscript>
-		var returnValue = arguments.append;
+		var loc = {};
+		loc.returnValue = arguments.append;
 		arguments.label = $getFieldLabel(argumentCollection=arguments);
 		if (Len(arguments.label) && arguments.labelPlacement != "before")
 		{
 			if (arguments.labelPlacement == "after")
 			{
 				// if the label should be placed after the tag we return the entire label tag
-				returnValue &= $createLabel(argumentCollection=arguments);
+				loc.returnValue &= $createLabel(argumentCollection=arguments);
 			}
 			else if (arguments.labelPlacement == "aroundRight")
 			{
 				// if the text should be placed to the right of the form input we return both the text and the closing tag
-				returnValue &= arguments.label & "</label>";
+				loc.returnValue &= arguments.label & "</label>";
 			}
 			else
 			{
 				// the label argument is either "around" or "aroundLeft" so we only have to return the closing label tag
-				returnValue &= "</label>";
+				loc.returnValue &= "</label>";
 			}
-			returnValue &= arguments.appendToLabel;
+			loc.returnValue &= arguments.appendToLabel;
 		}
 		if ($formHasError(argumentCollection=arguments) && Len(arguments.errorElement))
 		{
 			// the input has an error and is wrapped in a tag so we need to close that wrapper tag
-			returnValue &= "</" & arguments.errorElement & ">";
+			loc.returnValue &= "</" & arguments.errorElement & ">";
 		}
 	</cfscript>
-	<cfreturn returnValue>
+	<cfreturn loc.returnValue>
 </cffunction>
 
 <cffunction name="$getFieldLabel" returntype="string" access="public" output="false">
@@ -385,15 +414,27 @@
 	<cfargument name="property" type="string" required="true">
 	<cfargument name="label" type="string" required="true">
 	<cfscript>
-		var object = false;
+		var loc = {};
+		loc.object = false;
 		if (Compare("false", arguments.label) == 0)
-			return "";
-		if (arguments.label == "useDefaultLabel" && !IsStruct(arguments.objectName))
 		{
-			object = $getObject(arguments.objectName);
-			if (IsObject(object))
-				return object.$label(arguments.property);
+			loc.returnValue = "";
+		}
+		else
+		{
+			if (arguments.label == "useDefaultLabel" && !IsStruct(arguments.objectName))
+			{
+				loc.object = $getObject(arguments.objectName);
+				if (IsObject(loc.object))
+				{
+					loc.returnValue = loc.object.$label(arguments.property);
+				}
+			}
+		}
+		if (!StructKeyExists(loc, "returnValue"))
+		{
+			loc.returnValue = arguments.label;
 		}
 	</cfscript>
-	<cfreturn arguments.label />
+	<cfreturn loc.returnValue>
 </cffunction>

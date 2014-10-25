@@ -74,11 +74,11 @@
 	<cfargument name="cookieScope" type="struct" required="false" default="#cookie#">
 	<cfscript>
 		var loc = {};
-
+		
 		// only access the session scope when session management is enabled in the app
 		if (StructIsEmpty(arguments.sessionScope) && application.wheels.sessionManagement)
 			arguments.sessionScope = session;
-
+		
 		loc.verifications = verificationChain();
 		loc.$args = "only,except,post,get,ajax,cookie,session,params,cookieTypes,sessionTypes,paramsTypes,handler";
 		loc.abort = false;

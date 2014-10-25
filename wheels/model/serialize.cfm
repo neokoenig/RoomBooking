@@ -137,8 +137,8 @@
 	<cfscript>
 		var loc = {};
 		loc.returnValue = {};
-
-		loc.allProperties = arguments.properties.ColumnList;
+		
+		loc.allProperties = ListAppend(variables.wheels.class.propertyList, variables.wheels.class.calculatedPropertyList);
 		loc.iEnd = ListLen(loc.allProperties);
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 		{

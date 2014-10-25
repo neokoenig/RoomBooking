@@ -18,7 +18,7 @@ You can find a demo at [roombooking.oxalto.co.uk][12]
 Moved to [Wiki][13]
 
 ## Notes
- 
+
  This application uses the following plugins and 3rd party code:
 
  1. [ColdFusion on Wheels][1]
@@ -30,8 +30,7 @@ Moved to [Wiki][13]
  7. [TimePicker][7]
  8. [MomentJS][8]
  9. [Colorpicker for Twitter Bootstrap][9]
- 10: [cfWheels DBMigrate Plugin][10] 
- 11: [cfWheels FlashWrapper Plugin][11] 
+ 11: [cfWheels FlashWrapper Plugin][11]
 
 [1]: http://cfwheels.org/
 [2]: http://jquery.com/
@@ -42,7 +41,6 @@ Moved to [Wiki][13]
 [7]: http://trentrichardson.com/examples/timepicker/
 [8]: http://momentjs.com/
 [9]: http://mjaalnir.github.io/bootstrap-colorpicker/
-[10]: http://cfwheels.org/plugins/listing/28
 [11]: https://github.com/gregstallings/cfwheels-flash-wrapper
 [12]: http://roombooking.oxalto.co.uk
 [13]: https://github.com/neokoenig/RoomBooking/wiki/_pages
@@ -52,4 +50,4 @@ Moved to [Wiki][13]
 Room Booking System is released under the Apache License Version 2.0.
 
 
- 
+

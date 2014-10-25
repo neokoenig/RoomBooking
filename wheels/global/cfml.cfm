@@ -51,17 +51,6 @@
 	<cfreturn returnValue>
 </cffunction>
 
-<cffunction name="$stripCRLF" returntype="void" access="public" output="false">
-	<cfargument name="args" type="struct" required="true">
-	<cfargument name="only" type="string" required="false" default="">
-	<cfset var key = "">
-	<cfloop collection="#arguments.args#" item="key">
-		<cfif NOT Len(arguments.only) OR ListFindNoCase(arguments.only, key)>
-			<cfset arguments.args[key] = REReplace(arguments.args[key], "[\r\n]", "", "all")>
-		</cfif>
-	</cfloop>
-</cffunction>
-
 <cffunction name="$mail" returntype="void" access="public" output="false">
 	<cfset var loc = {}>
 	<cfif StructKeyExists(arguments, "mailparts")>
@@ -76,11 +65,9 @@
 		<cfset loc.tagContent = arguments.tagContent>
 		<cfset StructDelete(arguments, "tagContent")>
 	</cfif>
-	<cfset $stripCRLF(args=arguments)>
 	<cfmail attributeCollection="#arguments#">
 		<cfif StructKeyExists(loc, "mailparams")>
 			<cfloop array="#loc.mailparams#" index="loc.i">
-				<cfset $stripCRLF(args=loc.i)>
 				<cfmailparam attributeCollection="#loc.i#">
 			</cfloop>
 		</cfif>
@@ -88,7 +75,6 @@
 			<cfloop array="#loc.mailparts#" index="loc.i">
 				<cfset loc.innerTagContent = loc.i.tagContent>
 				<cfset StructDelete(loc.i, "tagContent")>
-				<cfset $stripCRLF(args=loc.i)>
 				<cfmailpart attributeCollection="#loc.i#">
 					#loc.innerTagContent#
 				</cfmailpart>
@@ -100,23 +86,19 @@
 	</cfmail>
 </cffunction>
 
+<cffunction name="$cache" returntype="any" access="public" output="false">
+	<!--- If cache is found only the function is aborted, not page. --->
+	<cfset variables.$instance.recache = false>
+	<cfcache attributeCollection="#arguments#">
+	<cfset variables.$instance.recache = true>
+</cffunction>
+
 <cffunction name="$content" returntype="any" access="public" output="false">
-	<cfset $stripCRLF(args=arguments, only="type")>
 	<cfcontent attributeCollection="#arguments#">
 </cffunction>
 
 <cffunction name="$header" returntype="void" access="public" output="false">
-	<cfset $stripCRLF(args=arguments)>
 	<cfheader attributeCollection="#arguments#">
-</cffunction>
-
-<cffunction name="$zip" returntype="any" access="public" output="false">
-	<cfzip attributeCollection="#arguments#">
-	</cfzip>
-</cffunction>
-
-<cffunction name="$cache" returntype="any" access="public" output="false">
-	<cfcache attributeCollection="#arguments#">
 </cffunction>
 
 <cffunction name="$abort" returntype="void" access="public" output="false">

@@ -1,5 +1,10 @@
 <cfcomponent extends="Base" output="false">
 
+	<cffunction name="$defaultValues" returntype="string" access="public" output="false">
+		<cfargument name="$primaryKey" type="string" required="true" hint="the table primaryKey">
+		<cfreturn "(#arguments.$primaryKey#) VALUES(DEFAULT)">
+	</cffunction>
+
 	<cffunction name="$generatedKey" returntype="string" access="public" output="false">
 		<cfreturn "rowid">
 	</cffunction>
@@ -227,12 +232,6 @@
 		}
 		return arguments.results;
 		</cfscript>
-	</cffunction>
-
-	<cffunction name="$tableAliasForJoin" returntype="string" access="public" output="false">
-		<cfargument name="table" type="string" required="true">
-		<cfargument name="alias" type="string" required="true">
-		<cfreturn "#arguments.table# #arguments.alias#">
 	</cffunction>
 
 	<cfinclude template="../../plugins/injection.cfm">

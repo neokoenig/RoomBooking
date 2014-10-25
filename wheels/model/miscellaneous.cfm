@@ -18,34 +18,7 @@
 	</cfscript>
 </cffunction>
 
-<cffunction name="tableless" returntype="void" access="public" output="false" hint="allows this model to be used without a database"
-	examples=
-	'
-		<!--- In models/User.cfc --->
-		<cffunction name="init">
-			<!--- Tells wheels to not to use a database for this model --->
-  			<cfset tableless()>
-		</cffunction>
-	'
-	categories="model-initialization,miscellaneous" chapters="object-relational-mapping" functions="">
-	<cfscript>
-		variables.wheels.class.connection = {};
-	</cfscript>
-</cffunction>
-
-<cffunction name="getDataSource" returntype="struct" access="public" output="false" hint="returns the connection (datasource) information for the model."
-	examples=
-	'
-		<!--- get the datasource information so we can write custom queries --->
-		<cfquery name="q" datasource="##getDataSource().datasource##">
-		select * from mytable
-		</cfquery>
-	'
-	categories="model-class,miscellaneous" chapters="object-relational-mapping" functions="">
-	<cfreturn variables.wheels.class.connection>
-</cffunction>
-
-<cffunction name="table" returntype="void" access="public" output="false" hint="Use this method to tell Wheels what database table to connect to for this model. You only need to use this method when your table naming does not follow the standard Wheels convention of a singular object name mapping to a plural table name."
+<cffunction name="table" returntype="void" access="public" output="false" hint="Use this method to tell Wheels what database table to connect to for this model. You only need to use this method when your table naming does not follow the standard Wheels convention of a singular object name mapping to a plural table name. To not use a table for your model at all, `call table(false)`."
 	examples=
 	'
 		<!--- In models/User.cfc --->
@@ -55,7 +28,7 @@
 		</cffunction>
 	'
 	categories="model-initialization,miscellaneous" chapters="object-relational-mapping" functions="columnNames,dataSource,property,propertyNames,tableName">
-	<cfargument name="name" type="string" required="true" hint="Name of the table to map this model to.">
+	<cfargument name="name" type="any" required="true" hint="Name of the table to map this model to.">
 	<cfset variables.wheels.class.tableName = arguments.name>
 </cffunction>
 
@@ -80,12 +53,18 @@
 	'
 	categories="model-initialization,miscellaneous" chapters="object-relational-mapping" functions="columnNames,dataSource,property,propertyNames,table">
 	<cfargument name="property" type="string" required="true" hint="Property (or list of properties) to set as the primary key.">
-	<cfset var loc = {}>
-	<cfloop list="#arguments.property#" index="loc.i">
-                <cfif !ListFindNoCase(variables.wheels.class.keys, loc.i)>
-		        <cfset variables.wheels.class.keys = ListAppend(variables.wheels.class.keys, loc.i)>
-                </cfif>
-	</cfloop>
+	<cfscript>
+		var loc = {};
+		loc.iEnd = ListLen(arguments.property);
+		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+		{
+			loc.element = ListGetAt(arguments.property, loc.i);
+			if (!ListFindNoCase(variables.wheels.class.keys, loc.element))
+			{
+				variables.wheels.class.keys = ListAppend(variables.wheels.class.keys, loc.element);
+			}
+		}
+	</cfscript>
 </cffunction>
 
 <cffunction name="setPrimaryKeys" returntype="void" access="public" output="false" hint="Alias for @setPrimaryKey. Use this for better readability when you're setting multiple properties as the primary key."
@@ -134,7 +113,7 @@
 	'
 	categories="model-class,miscellaneous" chapters="object-relational-mapping" functions="primaryKey"
 >
-	<cfargument name="position" type="numeric" required="false" default="0" hint="@primaryKey.">
+	<cfargument name="position" type="numeric" required="false" default="0" hint="See documentation for @primaryKey.">
 	<cfreturn primaryKey(argumentCollection=arguments)>
 </cffunction>
 
@@ -175,7 +154,7 @@
 		<!--- Load a user requested in the URL/form and restrict access if it doesn''t match the user stored in the session --->
 		<cfset user = model("user").findByKey(params.key)>
 		<cfif not user.compareTo(session.user)>
-			<cfset renderView(action="accessDenied")>
+			<cfset renderPage(action="accessDenied")>
 		</cfif>
 	'
 	categories="model-object,miscellaneous" chapters="" functions="">
@@ -183,33 +162,8 @@
 	<cfreturn Compare(this.$objectId(), arguments.object.$objectId()) eq 0 />
 </cffunction>
 
-<cffunction name="$assignObjectId" access="public" output="false" returntype="numeric">
-	<cflock type="exclusive" name="AssignObjectIdLock" timeout="5" throwontimeout="true">
-		<cfif !StructKeyExists(request.wheels, "tickCountId")>
-			<cfset request.wheels.tickCountId = GetTickCount()>
-		</cfif>
-		<cfset request.wheels.tickCountId = PrecisionEvaluate(request.wheels.tickCountId + 1)>
-	</cflock>
-	<cfreturn request.wheels.tickCountId>
-</cffunction>
-
-<cffunction name="$objectId" access="public" output="false" returntype="numeric">
-	<cfreturn variables.wheels.instance.tickCountId />
-</cffunction>
-
-<cffunction name="$alias" access="public" output="false" returntype="void">
-	<cfargument name="associationName" type="string" required="true">
-	<cfargument name="alias" type="string" required="true">
-	<cfset variables.wheels.class.aliases[arguments.associationName] = arguments.alias>
-</cffunction>
-
-<cffunction name="$aliasName" access="public" output="false" returntype="string">
-	<cfargument name="associationName" type="string" required="false" default="">
-	<cfscript>
-		if (!Len(arguments.associationName) or !StructKeyExists(variables.wheels.class.aliases, arguments.associationName))
-			return tableName();
-	</cfscript>
-	<cfreturn variables.wheels.class.aliases[arguments.associationName]>
+<cffunction name="$objectId" access="public" output="false" returntype="string">
+	<cfreturn variables.wheels.tickCountId />
 </cffunction>
 
 <cffunction name="isInstance" returntype="boolean" access="public" output="false" hint="Use this method to check whether you are currently in an instance object."

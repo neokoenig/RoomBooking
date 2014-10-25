@@ -27,9 +27,9 @@
 		arguments.$type = "month";
 		arguments.$step = 1;
 		if (arguments.monthDisplay == "abbreviations")
-			arguments.$optionNames = l('date.abbr_month_names');
+			arguments.$optionNames = "Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec";
 		else if (arguments.monthDisplay == "names")
-			arguments.$optionNames = l('date.month_names');
+			arguments.$optionNames = "January,February,March,April,May,June,July,August,September,October,November,December";
 		StructDelete(arguments, "monthDisplay");
 	</cfscript>
 	<cfreturn $yearMonthHourMinuteSecondSelectTag(argumentCollection=arguments)>
@@ -126,7 +126,7 @@
 			arguments.value = loc.value;
 			if (Isdate(loc.value))
 			{
-				if (arguments.twelveHour)
+				if (arguments.twelveHour && ListFind("hour,ampm", loc.item))
 				{
 					if (loc.item IS "hour")
 					{
@@ -183,7 +183,7 @@
 				arguments.value = Evaluate("#arguments.$type#(arguments.$now)");
 		if (StructKeyExists(arguments, "order") && ListLen(arguments.order) > 1 && ListLen(arguments.label) > 1)
 			arguments.label = ListGetAt(arguments.label, ListFindNoCase(arguments.order, arguments.$type));
-
+			
 		if (StructKeyExists(arguments, "order") && ListLen(arguments.order) > 1 && StructKeyExists(arguments, "labelClass") && ListLen(arguments.labelClass) > 1)
 		{
 			arguments.labelClass = ListGetAt(arguments.labelClass, ListFindNoCase(arguments.order, arguments.$type));

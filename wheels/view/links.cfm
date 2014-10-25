@@ -22,10 +22,6 @@
 		##linkTo(text="ColdFusion Framework", href="http://cfwheels.org/")##
 		-> <a href="http://cfwheels.org/">ColdFusion Framework</a>
 		
-		<!--- Remote link --->
-		##linkTo(text="View Settings", action="settings", params="show=all&sort=asc", remote="true")##
-		-> <a data-remote="true" href="/account/settings?show=all&amp;sort=asc">View Settings</a>
-		
 		<!--- Give the link `class` and `id` attributes --->
 		##linkTo(text="Delete Post", action="delete", key=99, class="delete", id="delete-99")##
 		-> <a class="delete" href="/blog/delete/99" id="delete-99">Delete Post</a>
@@ -33,32 +29,31 @@
 	categories="view-helper,links" chapters="linking-pages" functions="URLFor,buttonTo,mailTo">
 	<cfargument name="text" type="string" required="false" default="" hint="The text content of the link.">
 	<cfargument name="confirm" type="string" required="false" default="" hint="Pass a message here to cause a JavaScript confirmation dialog box to pop up containing the message.">
-	<cfargument name="route" type="string" required="false" default="" hint="@URLFor.">
-	<cfargument name="controller" type="string" required="false" default="" hint="@URLFor.">
-	<cfargument name="action" type="string" required="false" default="" hint="@URLFor.">
-	<cfargument name="key" type="any" required="false" default="" hint="@URLFor.">
-	<cfargument name="params" type="any" required="false" default="" hint="@URLFor.">
-	<cfargument name="anchor" type="string" required="false" default="" hint="@URLFor.">
-	<cfargument name="onlyPath" type="boolean" required="false" hint="@URLFor.">
-	<cfargument name="host" type="string" required="false" hint="@URLFor.">
-	<cfargument name="protocol" type="string" required="false" hint="@URLFor.">
-	<cfargument name="port" type="numeric" required="false" hint="@URLFor.">
+	<cfargument name="route" type="string" required="false" default="" hint="See documentation for @URLFor.">
+	<cfargument name="controller" type="string" required="false" default="" hint="See documentation for @URLFor.">
+	<cfargument name="action" type="string" required="false" default="" hint="See documentation for @URLFor.">
+	<cfargument name="key" type="any" required="false" default="" hint="See documentation for @URLFor.">
+	<cfargument name="params" type="string" required="false" default="" hint="See documentation for @URLFor.">
+	<cfargument name="anchor" type="string" required="false" default="" hint="See documentation for @URLFor.">
+	<cfargument name="onlyPath" type="boolean" required="false" hint="See documentation for @URLFor.">
+	<cfargument name="host" type="string" required="false" hint="See documentation for @URLFor.">
+	<cfargument name="protocol" type="string" required="false" hint="See documentation for @URLFor.">
+	<cfargument name="port" type="numeric" required="false" hint="See documentation for @URLFor.">
 	<cfargument name="href" type="string" required="false" hint="Pass a link to an external site here if you want to bypass the Wheels routing system altogether and link to an external URL.">
-	<cfargument name="remote" type="boolean" required="false" hint="Pass true if you wish to make this an asynchronous request">
 	<cfscript>
 		var loc = {};
-		loc.returnValue = $args(name="linkTo", args=arguments);
-			
+		$args(name="linkTo", args=arguments);
 		if (Len(arguments.confirm))
-			arguments["data-confirm"] = JSStringFormat(arguments.confirm);
-		if (StructKeyExists(arguments, "remote") && IsBoolean(arguments.remote))
-			arguments["data-remote"] = arguments.remote;
+		{
+			loc.onclick = "return confirm('#JSStringFormat(arguments.confirm)#');";
+			arguments.onclick = $addToJavaScriptAttribute(name="onclick", content=loc.onclick, attributes=arguments);
+		}
 		if (!StructKeyExists(arguments, "href"))
 			arguments.href = URLFor(argumentCollection=arguments);
 		arguments.href = toXHTML(arguments.href);
 		if (!Len(arguments.text))
 			arguments.text = arguments.href;
-		loc.skip = "text,confirm,route,controller,action,key,params,anchor,onlyPath,host,protocol,port,remote";
+		loc.skip = "text,confirm,route,controller,action,key,params,anchor,onlyPath,host,protocol,port";
 		if (Len(arguments.route))
 			loc.skip = ListAppend(loc.skip, $routeVariables(argumentCollection=arguments)); // variables passed in as route arguments should not be added to the html element
 		loc.returnValue = $element(name="a", skip=loc.skip, content=arguments.text, attributes=arguments);
@@ -73,20 +68,19 @@
 	'
 	categories="view-helper,links" functions="URLFor,linkTo,mailTo">
 	<cfargument name="text" type="string" required="false" hint="The text content of the button.">
-	<cfargument name="confirm" type="string" required="false" hint="@linkTo.">
+	<cfargument name="confirm" type="string" required="false" hint="See documentation for @linkTo.">
 	<cfargument name="image" type="string" required="false" hint="If you want to use an image for the button pass in the link to it here (relative from the `images` folder).">
 	<cfargument name="disable" type="any" required="false" hint="Pass in `true` if you want the button to be disabled when clicked (can help prevent multiple clicks), or pass in a string if you want the button disabled and the text on the button updated (to ""please wait..."", for example).">
-	<cfargument name="route" type="string" required="false" default="" hint="@URLFor.">
-	<cfargument name="controller" type="string" required="false" default="" hint="@URLFor.">
-	<cfargument name="action" type="string" required="false" default="" hint="@URLFor.">
-	<cfargument name="key" type="any" required="false" default="" hint="@URLFor.">
-	<cfargument name="params" type="any" required="false" default="" hint="@URLFor.">
-	<cfargument name="anchor" type="string" required="false" default="" hint="@URLFor.">
-	<cfargument name="onlyPath" type="boolean" required="false" hint="@URLFor.">
-	<cfargument name="host" type="string" required="false" hint="@URLFor.">
-	<cfargument name="protocol" type="string" required="false" hint="@URLFor.">
-	<cfargument name="port" type="numeric" required="false" hint="@URLFor.">
-	<cfargument name="remote" type="boolean" required="false" hint="@linkTo.">
+	<cfargument name="route" type="string" required="false" default="" hint="See documentation for @URLFor.">
+	<cfargument name="controller" type="string" required="false" default="" hint="See documentation for @URLFor.">
+	<cfargument name="action" type="string" required="false" default="" hint="See documentation for @URLFor.">
+	<cfargument name="key" type="any" required="false" default="" hint="See documentation for @URLFor.">
+	<cfargument name="params" type="string" required="false" default="" hint="See documentation for @URLFor.">
+	<cfargument name="anchor" type="string" required="false" default="" hint="See documentation for @URLFor.">
+	<cfargument name="onlyPath" type="boolean" required="false" hint="See documentation for @URLFor.">
+	<cfargument name="host" type="string" required="false" hint="See documentation for @URLFor.">
+	<cfargument name="protocol" type="string" required="false" hint="See documentation for @URLFor.">
+	<cfargument name="port" type="numeric" required="false" hint="See documentation for @URLFor.">
 	<cfscript>
 		var loc = {};
 		$args(name="buttonTo", reserved="method", args=arguments);
@@ -94,16 +88,12 @@
 		arguments.action = toXHTML(arguments.action);
 		arguments.method = "post";
 		if (Len(arguments.confirm))
-			loc.submitTagArguments["data-confirm"] = JSStringFormat(arguments.confirm);
-		if (StructKeyExists(arguments, "remote") && IsBoolean(arguments.remote))
-			arguments["data-remote"] = arguments.remote;
-		if (Len(arguments.disable))
-			loc.submitTagArguments["data-disable-with"] = JSStringFormat(arguments.disable);
-		
-		loc.submitTagArguments.value = arguments.text;
-		loc.submitTagArguments.image = arguments.image;
-		loc.content = submitTag(argumentCollection=loc.submitTagArguments);
-		loc.skip = "disable,image,text,confirm,route,controller,key,params,anchor,onlyPath,host,protocol,port,remote";
+		{
+			loc.onsubmit = "return confirm('#JSStringFormat(arguments.confirm)#');";
+			arguments.onsubmit = $addToJavaScriptAttribute(name="onsubmit", content=loc.onsubmit, attributes=arguments);
+		}
+		loc.content = submitTag(value=arguments.text, image=arguments.image, disable=arguments.disable);
+		loc.skip = "disable,image,text,confirm,route,controller,key,params,anchor,onlyPath,host,protocol,port";
 		if (Len(arguments.route))
 			loc.skip = ListAppend(loc.skip, $routeVariables(argumentCollection=arguments)); // variables passed in as route arguments should not be added to the html element
 		loc.returnValue = $element(name="form", skip=loc.skip, content=loc.content, attributes=arguments);

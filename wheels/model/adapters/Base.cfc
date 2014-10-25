@@ -9,6 +9,10 @@
 		<cfreturn this>
 	</cffunction>
 
+	<cffunction name="$defaultValues" returntype="string" access="public" output="false">
+		<cfreturn " DEFAULT VALUES">
+	</cffunction>
+
 	<cffunction name="$tableName" returntype="string" access="public" output="false">
 		<cfargument name="list" type="string" required="true">
 		<cfargument name="action" type="string" required="true">
@@ -87,8 +91,6 @@
 					loc.item = Trim(ReplaceNoCase(ReplaceNoCase(ReplaceNoCase(ListGetAt(loc.returnValue[ArrayLen(loc.returnValue)], loc.i), "ORDER BY ", ""), " ASC", ""), " DESC", ""));
 					if (!ListFindNoCase(ReplaceNoCase(loc.returnValue[ArrayLen(loc.returnValue)-1], "GROUP BY ", ""), loc.item))
 						loc.returnValue[ArrayLen(loc.returnValue)-1] = ListAppend(loc.returnValue[ArrayLen(loc.returnValue)-1], loc.item);
-					if (!ListFindNoCase(ReplaceNoCase(loc.returnValue[1], "SELECT ", ""), loc.item))
-						loc.returnValue[1] = ListAppend(loc.returnValue[1], loc.item);
 				}
 			}
 		</cfscript>
@@ -109,7 +111,7 @@
 				}
 				catch (Any e)
 				{
-					$throw(type="Wheels.ModelBaseAdapter", message="#e.message#", extendedInfo="#e.detail#");
+					$throw(type="Wheels.TableNotFound", message="The `#arguments.tableName#` table could not be found in the database.", extendedInfo="Add a table named `#arguments.tableName#` to your database or tell Wheels to use a different table for this model. For example you can tell a `user` model to use a table called `tbl_users` by creating a `User.cfc` file in the `models` folder, creating an `init` method inside it and then calling `table(""tbl_users"")` from within it.");
 				}
 			}
 			else
@@ -155,7 +157,6 @@
 		<cfscript>
 		var loc = {};
 		loc.delim = ",";
-
 		if (Find("'", arguments.statement))
 		{
 			loc.delim = "','";
@@ -175,7 +176,7 @@
 		
 		if(!StructKeyExists(arguments.settings, "value"))
 		{
-			$throw(type="Wheels.QueryParamValue", message="The value for cfqueryparam cannot be determined", extendedInfo="This is usually caused by a syntax error in the WHERE statement such as forgetting to quote strings.");
+			$throw(type="Wheels.QueryParamValue", message="The value for cfqueryparam cannot be determined", extendedInfo="This is usually caused by a syantax error in the WHERE statement such as forgetting to quote strings.");
 		}
 		
 		loc.params = {};
@@ -281,12 +282,6 @@
 		</cfscript>
 	</cffunction>
 
-	<cffunction name="$tableAliasForJoin" returntype="string" access="public" output="false">
-		<cfargument name="table" type="string" required="true">
-		<cfargument name="alias" type="string" required="true">
-		<cfreturn "#arguments.table# AS #arguments.alias#">
-	</cffunction>
-
 	<cffunction name="$convertMaxRowsToLimit" returntype="struct" access="public" output="false">
 		<cfargument name="argScope" type="struct" required="true">
 		<cfscript>
@@ -299,12 +294,6 @@
 		return arguments.argScope;
 		</cfscript>
 	</cffunction>
-	
-	<cffunction name="insert_with_no_properties" returntype="string" access="public" output="false"
-		hint="some databases allow you to do an insert without specifying any columns, thus inserting the default values. Overload this method if your database adapter supports this.">
-		<cfargument name="tablename" type="string" required="true" hint="table to insert into">
-		<cfreturn "">
-	</cffunction>
-	
+
 	<cfinclude template="../../plugins/injection.cfm">
 </cfcomponent>

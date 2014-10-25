@@ -1,101 +1,260 @@
-WHEELS VERSION 1.2.0 PREVIEW 1 11/18/2012
-
-Model Enhancements
-==================
-* Allow for self joining tables in associations - #293 [James Gibson]
-* Added "joinKey" on belongsTo(), hasOne() and hasMany() which allows you to specify a column to join to on the opposite side of the relationship from the "foreignKey" - [James Gibson]
-* Added the ability to multijoin models - [Tony Petruzzi]
-* Support for tableless models - [Tony Petruzzi]
-* Add findFirst, findLast, findAllKeys, findOneOrCreateBy, findOrCreateBy - #745 [Mike Henke, Per Djurner, Tony Petruzzi]
-* Enables use of UTC for wheels timestamps [Andy Bellenie]
-* Allow models to be created when with no properties - #84 [rshakespear, Tony Petruzzi]
-* Added global setting ("stripFromSQL") to only include safe characters in raw SQL - [Per Djurner]
-* Added geometry and geography datatypes (SQLServer) - [Simon Allard]
-* Automatic validation now valid that primary keys are the correct type when not blank - [Adam Chapman, Tony Petruzzi]
-
-View Enhancements
-=================
-* Added a better way to escape all HTML entities - [James Gibson]
-* Ability to use custom types (HTML 5) on all form helpers - [Raul Riera, Per Djurner]
-* Default to the humanized property name for labels on calculated or non-persistent properties instead of throwing an error - [Andy Bellenie]
-* Added escapeHTML argument on simpleFormat() - [Chris Peters]
-* Made it possible to set global defaults on autoLink(), excerpt(), highlight() and simpleFormat() - [Chris Peters]
-* Added support for array of structs for select() and selectTag() - #680 [William Fisk, Tony Petruzzi]
-* Added label and labelTag view helpers - [Tony Petruzzi] 
-* Made it possible to set a global default for the "twelveHour" argument on form helpers - [Per Djurner]
-* Support for implicit protocol in JavaScriptIncludeTag() and styleSheetLinkTag() - [Per Djurner]
-* New form helpers radioButtonTagGroup() and checkBoxTagGroup() - [Chris Peters, Per Djurner]
-* New "aroundRight" option on "labelPlacement" argument that places label text to the right of the form input - [Per Djurner]
-* Added "prepend" / "append" arguments on buttonTag() and submitTag() - [Per Djurner]
-* Allow to show labels without text by specifying "label=true" from "Tag" type functions - [Per Djurner]
-* Support for boolean HTML5 attributes - [Per Djurner]
-* Ability to remove "media" / "type" attributes when using styleSheetLinkTag() and JavaScriptIncludeTag() - [Per Djurner]
-* Added global Setting ("dataAttributeDelimiter") to convert, for example, "dataDomCache" or "data_dom_cache" (the default) argument names to "data-dom-cache" attribute names - [Per Djurner]
-* Add delimiter argument to the highlight() function - [Per Djurner]
-* Provided an option to use the more semantically correct HTML5 "mark" tag in the highlight() function - [Per Djurner]
-* Changed so that when passing in an array of structs to select(), selectTag() it uses the struct key as the option tag value and the struct value as the option tag text instead of vice versa - [Per Djurner]
-
-Controller Enhancements
-=======================
-* Speed improvement for finding routes when using a large amount of named routes - [James Gibson]
-* Wheels now compacts the output of the rendered content - [James Gibson]
-* Added the ability to pass through arguments from the view to the Data Function in the controller - [Per Djurner]
-* Changed so that cookies (when using them as storage for the Flash) are HTTPOnly and secure (when applicable) - [Per Djurner]
-* Stripped line break characters from internal "cfheader" and "cfmail" usage for improved security - [Per Djurner]
-* RedirectTo can now redirect to external urls via the `url` argument - [Adam Chapman, Tony Petruzzi]
-
-Other Enhancements
-==================
-* Added automatic caching in production mode of function results based on the arguments passed in - [Per Djurner]
-* Plugin functions can now be injected into base model adapter and model connection components - [Per Djurner]
-* Added support for Unobstructive Javascript - [Raul Riera]
-* Added proper HTTP status headers - #705 [cfconcepts, Andy Bellenie]
-* Added favicon to URL rewrite exclusions [Troy Murray, Cathy Shapiro]
-* Adds helper for utc timestamps [Andy Bellenie]
-* Allow custom mailparams to by passed to sendEmail() - #85 [forday, Tony Petruzzi]
-* Allow different form and to email addresses in sendEmail() - #95 [Andy Bellenie, Tony Petruzzi]
-* Allow any variable type to be passed as params to urlFor() - [Tony Petruzzi]
-* Pass along arguments to "onSessionEnd" so one can access the application and session scopes in the correct way inside "events/onsessionend.cfm" - [Per Djurner]
-* For security reasons, only allow .cfm files with normal characters to be included - [Per Djurner]
-* Improved performance by avoiding a Duplicate() call when sending error emails - [Per Djurner]
-* General performance improvement for internal locking - [Per Djurner]
+1.3.1 (08/25/2014)
 
 Bug Fixes
 =========
-* Allow blank values to be passed through to validation - #638 [Per Djurner]
-* Allow for encoding autodetection within provides - #674 [Raul Riera]
-* Transactions would not close when used with the dependent argument of hasMany() - #739 [Andy Bellenie]
-* Soft deletes now work correctly with outer joins - #762 [Andy Bellenie]
-* Pagination with compound keys - #725 [Andy Bellenie, jfeasel, Tony Petruzzi]
-* Prevent automatic validation from being set on user defined primary keys - #778 [Mike Henke, Tony Petruzzi]
-* Calculated properties were not being returned when specifying the select on findAll - #69 [kapitaine, Tony Petruzzi]
-* Duplicate object ids could occur when adding nested properties - #76 [Sam Hakimi, [James Gibson, Tony Petruzzi]
-* Incorrect pagination query with Oracle - #93 [crsedgar, Tony Petruzzi]
-* Fixed so autoLink() does not link URLs in tag attributes when quoted - [Per Djurner]
-* Removed old bug fix to make redirectTo() respect anchors - #857 [Per Djurner]
-* Added work-around for "FastHashRemoved" struct bug found in ColdFusion 8 - [Per Djurner]
-* Cached queries did not respect the "maxRows" argument - [Per Djurner, Tony Petruzzi]
-* radioButtonTag() checked attribute was ignored if value attribute is empty - [Per Djurner]
-* Fixed error when using hyphenated attributes in linkTo() - [Per Djurner]
-* Plugins with global mixin are ignored in unit tests - [Singgih Cahyono, Tony Petruzzi]
 
-Miscellaneous
-=============
-* Railo minimum version is now 3.3.1.000
-* Removed the "cacheDatabaseSchema" setting, "cacheModelInitialization" should now be used instead - [Per Djurner]
-* Added commented out settig for plugin development in design mode - #782 [Tony Petruzzi]
-* Added $inspect method to return the variables scope of objects - #820 [Tony Petruzzi]
-* Renamed `renderPage` to `renderView` - #363 [Andy Bellenie, Tony Petruzzi]
-* Case insensitive loading of controllers and models - [Per Djurner]
-* Allow placement of models in subfolder - [Tim Badolato, Tony Petruzzi]
-* External paths for imagePath - [andoradmiraal, Tony Petruzzi]
-* Removal of obfuscateParam and deobfuscateParam functionality - [Tony Petruzzi]
-* Removed the ability to switch environment through the url unless specified in config/settings.cfm - [Andy Bellenie, Tony Petruzzi]
-* Turned off URL rewriting in IIS 7 by default since otherwise it will throw an error when the URL Rewrite Module is not installed - [Per Djurner]
+* Fixed issue with calling addFormat() on application start-up - #333 [Tom King, Per Djurner]
+* Fixed so that Railo outputs ids for nested properties as integers instead of exponents - [Jordan Clark]
+* Make sure that ids for nested properties are unique - [Sam Hakimi, Tony Petruzzi]
+* Allow models to be created with no properties - [Tony Petruzzi, Singgih Cahyono]
+* Added missing "prepend" and "append" arguments on startFormTag() and endFormTag() - [Per Djurner]
+* Fix for fetching inserted primary key value from an Oracle database when using Adobe ColdFusion - [Per Djurner]
+* When using autoLink(), make sure that links beginning with "www" have a protocol - [Benjamin Melançon, Tony Petruzzi]
+* Plugin folder name should be lower case as per convention - #320 [Singgih Cahyono]
+* Clear statically cached pages on reload - [Per Djurner]
+* Do not run filters and verifications when caching actions statically - [Per Djurner]
+* Fixed a bug where trying to obfuscate a high number was throwing an error - [Per Djurner]
+* Fixed bug with static caching on Adobe ColdFusion 9 - #332 [Charley Contreras]
+* Allow for format auto-detection when HTTP ACCEPT contains multiple values - #297 [Raul Riera, Singgih Cahyono] 
+* Fixed so that sendEmail() can use the "remove" attribute to delete attachments - #339 [Simon Allard]
+* Fixed bugs with using the "twelveHour" argument on form helpers - #342, #343 [Jeremy Keczan, Per Djurner]
+* Fixed issue with using non-ascii characters in routes - #138 [Chris Ogden, Singgih Cahyono, Per Djurner]
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-WHEELS VERSION 1.1.2
+1.3 (08/05/2014)
+
+Model Enhancements
+==================
+
+* Support for tableless models - [Tony Petruzzi]
+* Alias table names using the association name in the "FROM" clause of a query when needed - [James Gibson, Per Djurner]
+* New global "modelRequireInit" setting that you can set to "true" to require an init function specified in all models - [Jonathan Smith]
+* Place surrounding parentheses on calculated properties in "where" and "order by" clauses - [Andy Bellenie, Per Djurner]
+* Check to see if a given primary key already exists before adding it through setPrimaryKey() - [Mark Moran]
+
+View Enhancements
+=================
+
+* Made it possible to set global defaults on autoLink(), excerpt(), wordTruncate() and simpleFormat() - [Chris Peters]
+* Added server host name to debug info and error email - [Colin MacAllister]
+* Made it possible to set a global default for the "twelveHour" argument on date / time helpers - [Per Djurner]
+* Added "prepend / "append" arguments on buttonTag() - [Per Djurner]
+* New "aroundRight" option on the "labelPlacement" argument that places the label text to the right of the form input - [Adam Chapman, Per Djurner]
+* Support for HTML5 "type" argument in form field helpers - [Per Djurner]
+* Support for HTML5 boolean attributes - [Per Djurner]
+* Ability to remove media / type attributes when using styleSheetLinkTag and JavaScriptIncludeTag - [Per Djurner]
+* Support for implicit protocol in JavaScriptIncludeTag and styleSheetLinkTag - [Per Djurner]
+* Setting to convert, for example, dataDomCache or data_dom_cache (default) view helper argument names to data-dom-cache attribute names - [Per Djurner]
+* Allow the class attribute for paginationLinks helper anchor tags - [Adam Chapman]
+
+Controller Enhancements
+=======================
+
+* Added the ability to pass through arguments from the view to the data Function in the controller - [Per Djurner]
+* Made setPagination() available from the controller layer - [Per Djurner]
+
+Other Enhancements
+==================
+
+* Fixed issue with double camel-casing of already singular strings [Don Humphreys]
+* Fixes issue with running Wheels with strict scope cascading enabled in Railo - [Jason Weible]
+* Made application start-up thread safe - [Per Djurner]
+* Performance improvement for locking - [Per Djurner]
+* Case insensitive loading of controllers and models - [Per Djurner]
+* Browse test packages for core, app and plugins - [Adam Chapman, Tony Petruzzi]
+* Refactored to avoid a Duplicate() call when sending error email - [Per Djurner]
+
+Bug Fixes
+=========
+
+* Prevent stack overflow error with named arguments on dynamic update - [Tony Petruzzi]
+* Fixes pagination bug when using association methods with a blank "where" clause - [Andy Bellenie]
+* Added missing "validate" argument to create() - [Andy Bellenie]
+* Fixed issue with deleting plugins on case sensitive systems - [Mark Moran]
+* Make sure the latest version of a plugin is unpacked if multiple versions exists - [Tony Petruzzi]
+* Fixed so the "onApplicationEnd" and "onSessionEnd" events pass through the arguments scope [Per Djurner]
+* Fixed so the "onSessionEnd" event fires correctly - #172 [Per Djurner]
+* Fixed race condition issue with caching - [Per Djurner]
+* Added geometry and geography datatypes (SQLServer) - [Simon Allard]
+* Allow blank values to be passed through when validating uniqueness - [Per Djurner]
+* Added work-around for "FastHashRemoved" struct bug found in ColdFusion 8 - [Per Djurner]
+* Removed old bug fix to make redirectTo() respect anchors - [Per Djurner]
+* Correct controller action caching - #153 [Tobias Reiter, Per Djurner]
+* Fix for creating objects from the root folder on Railo 4 - [Jordan Clark, Adam Chapman]
+* Fix for detecting that Microsoft SQL Server is used - [Tony Petruzzi, Adam Chapman]
+* Don't assume null is false for boolean properties - [Adam Chapman]
+* Allow to pass in encoded versions of "&"" and "=" (%26 and %3D) to the params argument - #173 [Mark Gaulin, Per Djurner]
+* Avoid error when the first request to the app is an invalid one - #222 [Maxime de Visscher, Per Djurner]
+* Get the error location from the correct exception struct - #223 [Adam Chapman, Per Djurner]
+* Do not trim primary key values - #213 [Jeremy Keczan, Per Djurner]
+* Incorrect pagination query with Oracle - #93 [crsedgar, Tony Petruzzi, Singgih Cahyono]
+* Repair Oracle test failures #187 (Tony Petruzzi, Singgih Cahyono)
+* Plugins with global mixin are ignored in unit tests - [Singgih Cahyono, Tony Petruzzi]
+* Automatic validation should validate primary key - #143 [Adam Chapman, Tony Petruzzi]
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+1.1.8 (05/21/2012)
+
+Model Enhancements
+==================
+
+* Add boolean type to validatesFormatOf() - [Andy Bellenie]
+
+View Enhancements
+=================
+
+* Add delimiter parameter to the highlight() function - #826 [Per Djurner, Tony Petruzzi]
+* Use mark tag in highlight - #836 [Per Djurner, Tony Petruzzi]
+* Add parameters append and prepend to the submitTag() - #593 [Per Djurner, Tony Petruzzi]
+
+Bug Fixes
+=========
+
+* Turned off URL rewriting in IIS 7 by default - [Per Djurner, Tony Petruzzi]
+* Add CFFileServlet to the pattern list, of the rewrite rules file, to be able to display an image when using <cfimage action='writeToBrowser'> - [ellor1138]
+* radioButtonTag() checked attribute is ignored if value attribute is empty - #733 [Per Djurner, Tony Petruzzi]
+* make cached queries respect the 'maxrows' argument (findAll) - #824 [Per Djurner, Tony Petruzzi]
+
+Other Enhancements
+==================
+
+* Update web.config, htaccess to ignore favicon.ico - [Cathy Shapiro, Tony Petruzzi]
+* Route with only format specified was throwing error - [jjallen, Tony Petruzzi]
+ 
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+1.1.7 (12/11/2011)
+
+Bug Fixes
+=========
+
+* Filter controller and action params - [Pete Freitag, Andy Bellenie, Tony Petruzzi] 
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+1.1.6 (10/08/2011)
+
+Model Enhancements
+==================
+
+* validatesUniquenessOf only selects primary keys - [Jordan Clark, Don Humphreys]
+
+View Enhancements
+=================
+
+* Allow removal height and/or width attributes from imageTag when set to false - [downtroden, Tony Petruzzi]
+* Allow delimiter to be specified for stylesheets and javascripts - [Derek, Tony Petruzzi]
+
+Bug Fixes
+=========
+
+* hasChanged was incorrectly evaluating boolean values - [Jordan Clark, Don Humphreys]
+* Do not perform update when no changes have been made to the properties of a model - #786 [Mohamad El-Husseini, Tony Petruzzi]
+* OnlyPath argument of urlFor does not correctly recognise HTTPS urls - [Andy Bellenie, Tony Petruzzi]
+* Pagination clause wasn't enclosed - [Karl Deterville, Tony Petruzzi]
+* Pagination endrow was incorrectly calculated - [Karl Deterville, Tony Petruzzi]
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+1.1.5 (08/01/2011)
+
+View Enhancements
+=================
+
+* Escape html entities in text and value of select options - #767 [Richard Herbert, Tony Petruzzi]
+
+Bug Fixes
+=========
+
+* Fix plugins not loading when application is in a subdirectory - [Mike Craig, Tony Petruzzi]
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+1.1.4 (07/20/2011)
+
+View Enhancements
+=================
+
+* Allow an array of structs to used for options in selectTag() - [Adam Chapman, Tony Petruzzi]
+* Added secondStep parameter to date/time select tags - [Tom King, Tony Petruzzi]
+
+Controller Enhancements
+=======================
+
+Model Enhancements
+==================
+
+* Update to belongsTo(), hasOne() and hasMany() for the new argument joinKey. - [James Gibson, Tony Petruzzi]
+* You can pass an unlimited number properties when using dynamic finders - [Tony Petruzzi]
+* Dynamic finders now support passing in an array for values - [Tony Petruzzi]
+* Added the delimiter argument to dynamic finders, this allow you to change the delimiter - [Tony Petruzzi]
+* Added validationTypeForProperty() method - [Tony Petruzzi]
+
+Other Enhancements
+==================
+
+* Added proper HTTP status headers - #705 [Randy Johnson , Andy Bellenie]
+* Plugin development no longer requires a zip file. - [Tony Petruzzi]
+
+Bug Fixes
+=========
+
+* Incorrect MIME type for JSON - #751 [daniel.mcq, Tony Petruzzi]
+* Route with format will cause exception when route is selected and format is not provided - #738 [Danny Beard, Tony Petruzzi]
+* Raise renderError when template is not found for format - #759 [Mike Henke, Tony Petruzzi]
+* LabelClass should split up the list of classes and attach one class for each label - #757 [Mohamad El-Husseini, Tony Petruzzi]
+* Transactions would not close when used with the dependent argument of hasMany() - #739 [Andy Bellenie]
+* Soft deletes do not work correctly with outer joins - #762 [Andy Bellenie]
+* Better error message when supplying a query param of type string and omitting single quotes - #763 [Adam Chapman, Tony Petruzzi]
+* Allow commas in dynamic finders - #771 [Joshua, Tony Petruzzi]
+* AMPM select displaying twice - #768 [John Bliss, Tony Petruzzi]
+* $request argumentsCollection: should be argumentCollection - #772 [William Fisk, Tony Petruzzi]
+* Pagination pull incorrect number of results with compounded keys - #725 [Jeff Greenhouse, Tony Petruzzi]
+* Update hasChanged() to properly chech floats - [Andy Bellenie, Tony Petruzzi]
+* Date tags selected date throws out of range error - [Ben Garrett, Tony Petruzzi]
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+1.1.3 (03/24/2011)
+
+View Enhancements
+=================
+* Allows for relative url linking to be turned off in autolink() - [James Gibson, Tony Petruzzi]
+
+Controller Enhancements
+=======================
+* Allow for default argument on sendmail for from, to and subject - #727 [Andy Bellenie, Tony Petruzzi]
+
+Model Enhancements
+==================
+* You can now have bracket markers for all validation arguments - #706 [Tony Petruzzi]
+* Columns marked as not null should allow for blank strings - [Tony Petruzzi]
+
+Bug Fixes
+=========
+* Fixed issue with $create supplying incorrect keys to $query - [Don Humphreys, Tony Petruzzi]
+* The original transaction mode would not be respected during during callbacks - [Andy Bellenie, Tony Petruzzi]
+* "none" transaction modes would never close - [Andy Bellenie, Tony Petruzzi]
+* Incorrect $cache argument - #671 [William Fisk, Tony Petruzzi]
+* Route formats prevented fullstops from being used in params - #666 [Tom King, Raul Riera, Tony Petruzzi]
+* Controller in params should be upper camel case - #703 [William Fisk, Tony Petruzzi]
+* Application scope would not initialize in sub - #721 [Adam Chapman, Tony Petruzzi]
+* ValidatesUniquenessOf doesn't read soft-deletes - #719 [Andy Bellenie, Tony Petruzzi]
+* PaginationLinks(): routes with page number marker variable would produce the wrong links - [Kenneth Barrett, Tony Petruzzi]
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+1.1.2 (01/29/2011)
+
+View Enhancements
+=================
+* Select, SelectTag allow an array of structs to be passed to options - #680 [William Fisk, Tony Petruzzi]
+
+Controller Enhancements
+=======================
+* Changed "default" argument on includeContent() to "defaultValue" - #663 [Tony Petruzzi]
 
 Model Enhancements
 ==================
@@ -105,11 +264,13 @@ Bug Fixes
 =========
 * Added the varchar_ignorecase type to the H2 adapter - #664 [Per Djurner]
 * Fix so that the full tablename is always retuned - #667 [Tony Petruzzi]
+* Pagaination with parameterize set to false for numeric keys - #656 [levi730, Tony Petruzzi]
 * Blank should be the selected value when includeBlank is set - #633 [Tony Petruzzi]
+* validatesLengthOf failed when both maximum and minimum were specified - [Tony Petruzzi]
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-WHEELS VERSION 1.1.1
+1.1.1 (11/21/2010)
 
 Bug Fixes
 =========
@@ -125,7 +286,7 @@ Bug Fixes
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-WHEELS VERSION 1.1 FINAL
+1.1 (11/9/2010)
 
 Bug Fixes
 =========
@@ -139,7 +300,7 @@ Bug Fixes
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-WHEELS VERSION 1.1 RC 1
+1.1 RC 1 (10/27/2010)
 
 Bug Fixes
 =========
@@ -166,7 +327,7 @@ Miscellaneous
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-WHEELS VERSION 1.1 BETA 2
+1.1 Beta 2 (10/5/2010)
 
 Bug Fixes
 =========
@@ -197,7 +358,7 @@ Miscellaneous
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-WHEELS VERSION 1.1 BETA 1
+1.1 Beta 1 (9/10/2010)
 
 Model Enhancements
 ==================
@@ -277,7 +438,7 @@ Other Enhancements
 * New setting, "errorEmailSubject", that allows you to customize the subject line of error emails - #392 [Per Djurner]
 * New setting, "deletePluginDirectories" that tells Wheels whether to delete plugin directories if no corresponding ZIP file exists - #385 [Per Djurner]
 * Added a "cachePlugins" setting to allow developers to not cache plugins during the development of them - #304 [Andy Bellenie]
-* Allow setting multiple argument defaults at once, e.g. set(functionName="textField,textArea,select", labelPlacement="before"  - #426 [Raul Riera, Per Djurner]
+* Allow setting multiple argument defaults at once, e.g. set(functionName="textField,textArea,select", labelPlacement="before" - #426 [Raul Riera, Per Djurner]
 * A full testing framework is now included in Wheels, unit tests can be created in the "tests" folder - [Tony Petruzzi]
 
 Bug Fixes
@@ -299,7 +460,7 @@ Miscellaneous
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-WHEELS VERSION 1.0.5
+1.0.5 (6/18/2010)
 
 Bug Fixes
 =========
@@ -329,7 +490,7 @@ Bug Fixes
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-WHEELS VERSION 1.0.4
+1.0.4 (4/21/2010)
 
 Bug Fixes
 =========
@@ -346,7 +507,7 @@ Bug Fixes
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-WHEELS VERSION 1.0.3
+1.0.3 (3/26/2010)
 
 Bug Fixes
 =========
@@ -366,7 +527,7 @@ Bug Fixes
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-WHEELS VERSION 1.0.2
+1.0.2 (2/19/2010)
 
 Bug Fixes
 =========
@@ -375,7 +536,7 @@ Bug Fixes
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-WHEELS VERSION 1.0.1
+1.0.1 (2/16/2010)
 
 Bug Fixes
 =========
@@ -408,7 +569,7 @@ Bug Fixes
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-WHEELS VERSION 1.0 FINAL
+1.0 (11/24/2009)
 
 Model Enhancements
 ==================

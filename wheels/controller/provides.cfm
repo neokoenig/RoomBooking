@@ -6,7 +6,7 @@
 		</cffunction>
 	'
 	categories="controller-initialization,provides" chapters="responding-with-multiple-formats" functions="onlyProvides,renderWith">
-	<cfargument name="formats" required="false" default="" type="string" hint="Formats to instruct the controller to provide. Valid values are `html` (the default), `xml`, `wddx`, `json`, `csv`, `pdf`, and `xls`." />
+	<cfargument name="formats" required="false" default="" type="string" hint="Formats to instruct the controller to provide. Valid values are `html` (the default), `xml`, `json`, `csv`, `pdf`, and `xls`." />
 	<cfscript>
 		var loc = {};
 		$combineArguments(args=arguments, combine="formats,format", required=true);
@@ -82,13 +82,13 @@
 	'
 	categories="controller-request,provides" chapters="responding-with-multiple-formats" functions="provides,onlyProvides">
 	<cfargument name="data" required="true" type="any" hint="Data to format and render." />
-	<cfargument name="controller" type="string" required="false" default="#variables.params.controller#" hint="@renderView.">
-	<cfargument name="action" type="string" required="false" default="#variables.params.action#" hint="@renderView.">
-	<cfargument name="template" type="string" required="false" default="" hint="@renderView.">
-	<cfargument name="layout" type="any" required="false" hint="@renderView.">
-	<cfargument name="cache" type="any" required="false" default="" hint="@renderView.">
-	<cfargument name="returnAs" type="string" required="false" default="" hint="@renderView.">
-	<cfargument name="hideDebugInformation" type="boolean" required="false" default="false" hint="@renderView.">
+	<cfargument name="controller" type="string" required="false" default="#variables.params.controller#" hint="See documentation for @renderPage.">
+	<cfargument name="action" type="string" required="false" default="#variables.params.action#" hint="See documentation for @renderPage.">
+	<cfargument name="template" type="string" required="false" default="" hint="See documentation for @renderPage.">
+	<cfargument name="layout" type="any" required="false" hint="See documentation for @renderPage.">
+	<cfargument name="cache" type="any" required="false" default="" hint="See documentation for @renderPage.">
+	<cfargument name="returnAs" type="string" required="false" default="" hint="See documentation for @renderPage.">
+	<cfargument name="hideDebugInformation" type="boolean" required="false" default="false" hint="See documentation for @renderPage.">
 	<cfscript>
 		var loc = {};
 		$args(name="renderWith", args=arguments);
@@ -103,14 +103,14 @@
 		if (loc.contentType == "html")
 		{
 			StructDelete(arguments, "data", false); 
-			return renderView(argumentCollection=arguments);
+			return renderPage(argumentCollection=arguments);
 		}
 		
 		loc.templateName = $generateRenderWithTemplatePath(argumentCollection=arguments, contentType=loc.contentType);
 		loc.templatePathExists = $formatTemplatePathExists($name=loc.templateName);	
 		
 		if (loc.templatePathExists)
-			loc.content = renderView(argumentCollection=arguments, template=loc.templateName, returnAs="string", layout=false, hideDebugInformation=true);
+			loc.content = renderPage(argumentCollection=arguments, template=loc.templateName, returnAs="string", layout=false, hideDebugInformation=true);
 		
 		// throw an error if we rendered a pdf template and we got here, the cfdocument call should have stopped processing
 		if (loc.contentType == "pdf" && application.wheels.showErrorInformation && loc.templatePathExists)
@@ -118,14 +118,14 @@
 				, message="When rendering the a PDF file, don't specify the filename attribute. This will stream the PDF straight to the browser.");
 
 		// throw an error if we do not have a template to render the content type that we do not have defaults for
-		if (!ListFindNoCase("json,xml,wddx", loc.contentType) && !StructKeyExists(loc, "content") && application.wheels.showErrorInformation)
+		if (!ListFindNoCase("json,xml", loc.contentType) && !StructKeyExists(loc, "content") && application.wheels.showErrorInformation)
 		{
 			$throw(type="Wheels.renderingError"
 				, message="To render the #loc.contentType# content type, create the template `#loc.templateName#.cfm` for the #arguments.controller# controller.");
 		}
 				
 		// set our header based on our mime type
-		$header(name="content-type", value=application.wheels.formats[loc.contentType], charset="utf-8");
+		$header(name="content-type", value=application.wheels.formats[loc.contentType] & "; charset=UTF-8", charset="utf-8");
 		
 		// if we do not have the loc.content variable and we are not rendering html then try to create it
 		if (!StructKeyExists(loc, "content"))
@@ -134,7 +134,6 @@
 			{
 				case "json": { loc.content = SerializeJSON(arguments.data); break; }
 				case "xml": { loc.content = $toXml(arguments.data); break; };
-				case "wddx": { loc.content = $wddx(arguments.data); break; };
 			}
 		}
 		
@@ -213,10 +212,9 @@
 		if (StructKeyExists(arguments.params, "format"))
 			return arguments.params.format;
 		
-		for (loc.item in application.wheels.formats) {
-			if (arguments.httpAccept CONTAINS application.wheels.formats[loc.item])
+		for (loc.item in application.wheels.formats)
+			if (arguments.httpAccept contains application.wheels.formats[loc.item])
 				return loc.item;
-		}
 	</cfscript>
 	<cfreturn loc.format />
 </cffunction>

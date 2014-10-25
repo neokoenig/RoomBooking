@@ -21,14 +21,13 @@
 	<cfargument name="layout" type="any" required="false" hint="Layout(s) to wrap the email template in. This argument is also aliased as `layouts`.">
 	<cfargument name="file" type="string" required="false" default="" hint="A list of the names of the files to attach to the email. This will reference files stored in the `files` folder (or a path relative to it). This argument is also aliased as `files`.">
 	<cfargument name="detectMultipart" type="boolean" required="false" hint="When set to `true` and multiple values are provided for the `template` argument, Wheels will detect which of the templates is text and which one is HTML (by counting the `<` characters).">
-	<cfargument name="mailparams" type="array" required="false" default="#ArrayNew(1)#" hint="any addition mail parameters you would like to pass to the email. each element of the array must be a struct with keys corresponding to the attributes of the cfmailparam tag">
 	<cfargument name="$deliver" type="boolean" required="false" default="true">
 	<cfscript>
 		var loc = {};
 		$args(args=arguments, name="sendEmail", combine="template/templates/!,layout/layouts,file/files", required="template,from,to,subject");
 
 		loc.nonPassThruArgs = "template,templates,layout,layouts,file,files,detectMultipart,$deliver";
-		loc.mailTagArgs = "from,to,bcc,cc,charset,debug,failto,group,groupcasesensitive,mailerid,maxrows,mimeattach,password,port,priority,query,replyto,server,spoolenable,startrow,subject,timeout,type,username,useSSL,useTLS,wraptext";
+		loc.mailTagArgs = "from,to,bcc,cc,charset,debug,failto,group,groupcasesensitive,mailerid,maxrows,mimeattach,password,port,priority,query,replyto,server,spoolenable,startrow,subject,timeout,type,username,useSSL,useTLS,wraptext,remove";
 		loc.deliver = arguments.$deliver;
 
 		// if two templates but only one layout was passed in we set the same layout to be used on both
@@ -51,7 +50,7 @@
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 		{
 			// include the email template and return it
-			loc.content = $renderView($template=ListGetAt(arguments.template, loc.i), $layout=ListGetAt(arguments.layout, loc.i));
+			loc.content = $renderPage($template=ListGetAt(arguments.template, loc.i), $layout=ListGetAt(arguments.layout, loc.i));
 			loc.mailpart = {};
 			loc.mailpart.tagContent = loc.content;
 			if (ArrayIsEmpty(arguments.mailparts))
@@ -89,6 +88,7 @@
 		// attach files using the cfmailparam tag
 		if (Len(arguments.file))
 		{
+			arguments.mailparams = [];
 			loc.iEnd = ListLen(arguments.file);
 			for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 			{
@@ -140,7 +140,7 @@
 		}
 
 		loc.root = ExpandPath(loc.relativeRoot);
-		loc.folder = Replace(arguments.directory, "\", "/", "all");
+		loc.folder = arguments.directory;
 		if (!Len(loc.folder))
 		{
 			loc.folder = loc.relativeRoot & application.wheels.filePath; 
@@ -150,13 +150,13 @@
 		{
 			loc.folder = RemoveChars(loc.folder, 1, Len(loc.root));
 		}
-		
-		loc.filePath = Replace(arguments.file, "\", "/", "all");
-		loc.file = ListLast(loc.filePath, "/");
-		loc.filePath = Reverse(ListRest(Reverse(loc.filePath), "/"));
-		
-		loc.directory = Replace(ExpandPath(ListAppend(loc.folder, loc.filePath, "/")), "\", "/", "all");
-		loc.fullPath = ListAppend(loc.directory, loc.file, "/");
+
+		loc.fullPath = Replace(loc.folder, "\", "/", "all");
+		loc.fullPath = ListAppend(loc.fullPath, arguments.file, "/");
+		loc.fullPath = ExpandPath(loc.fullPath);
+		loc.fullPath = Replace(loc.fullPath, "\", "/", "all");
+		loc.file = ListLast(loc.fullPath, "/");
+		loc.directory = Reverse(ListRest(Reverse(loc.fullPath), "/"));
 
 		// if the file is not found, try searching for it
 		if (!FileExists(loc.fullPath))

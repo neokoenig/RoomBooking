@@ -8,7 +8,9 @@
 		// We have to check if onErrorRequestTimeout exists since errors can be triggered before the application.wheels struct has been created.
 		loc.requestTimeout = 70;
 		if (StructKeyExists(application, "wheels") && StructKeyExists(application.wheels, "onErrorRequestTimeout"))
+		{
 			loc.requestTimeout = application.wheels.onErrorRequestTimeout;
+		}
 		$setting(requestTimeout=loc.requestTimeout);
 
 		loc.returnValue = $simpleLock(execute="$runOnError", executeArgs=arguments, name="wheelsReloadLock", type="readOnly", timeout=180);
@@ -23,36 +25,44 @@
 	<cfargument name="eventName" type="any" required="true">
 	<cfscript>
 		var loc = {};
-
 		if (StructKeyExists(application, "wheels") && StructKeyExists(application.wheels, "initialized"))
 		{
-			if (application.wheels.sendEmailOnError && Len(application.wheels.errorEmailToAddress) && Len(application.wheels.errorEmailFromAddress))
+			if (application.wheels.sendEmailOnError && Len(application.wheels.errorEmailAddress))
 			{
 				loc.mailArgs = {};
 				$args(name="sendEmail", args=loc.mailArgs);
 				if (StructKeyExists(application.wheels, "errorEmailServer") && Len(application.wheels.errorEmailServer))
+				{
 					loc.mailArgs.server = application.wheels.errorEmailServer;
-				loc.mailArgs.from = application.wheels.errorEmailFromAddress;
-				loc.mailArgs.to = application.wheels.errorEmailToAddress;
+				}
+				loc.mailArgs.from = application.wheels.errorEmailAddress;
+				loc.mailArgs.to = application.wheels.errorEmailAddress;
 				loc.mailArgs.subject = application.wheels.errorEmailSubject;
 				loc.mailArgs.type = "html";
 				loc.mailArgs.tagContent = $includeAndReturnOutput($template="wheels/events/onerror/cfmlerror.cfm", exception=arguments.exception);
 				StructDelete(loc.mailArgs, "layouts", false);
 				StructDelete(loc.mailArgs, "detectMultiPart", false);
-				$mail(argumentCollection=loc.mailArgs);
+				try
+				{
+					$mail(argumentCollection=loc.mailArgs);
+				}
+				catch (any e) {}
 			}
-	
 			if (application.wheels.showErrorInformation)
 			{
 				if (StructKeyExists(arguments.exception, "rootCause") && Left(arguments.exception.rootCause.type, 6) == "Wheels")
+				{
 					loc.wheelsError = arguments.exception.rootCause;
+				}
 				else if (StructKeyExists(arguments.exception, "cause") && StructKeyExists(arguments.exception.cause, "rootCause") && Left(arguments.exception.cause.rootCause.type, 6) == "Wheels") 
+				{
 					loc.wheelsError = arguments.exception.cause.rootCause;
+				}
 				if (StructKeyExists(loc, "wheelsError"))
 				{
 					loc.returnValue = $includeAndReturnOutput($template="wheels/styles/header.cfm");
-					loc.returnValue = loc.returnValue & $includeAndReturnOutput($template="wheels/events/onerror/wheelserror.cfm", wheelsError=loc.wheelsError);
-					loc.returnValue = loc.returnValue & $includeAndReturnOutput($template="wheels/styles/footer.cfm");
+					loc.returnValue &= $includeAndReturnOutput($template="wheels/events/onerror/wheelserror.cfm", wheelsError=loc.wheelsError);
+					loc.returnValue &= $includeAndReturnOutput($template="wheels/styles/footer.cfm");
 				}
 				else
 				{

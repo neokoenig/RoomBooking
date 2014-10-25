@@ -70,25 +70,27 @@
 	<cfargument name="path" type="string" required="true">
 	<cfscript>
 		var loc = {};
-	
 		loc.iEnd = ArrayLen(application.wheels.routes);
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 		{
 			loc.format = "";
-			if (StructKeyExists(application.wheels.routes[loc.i], "format"))
-				loc.format = application.wheels.routes[loc.i].format;
-				
-			loc.currentRoute = application.wheels.routes[loc.i].pattern;
-			if (loc.currentRoute == "*") {
-				loc.returnValue = Duplicate(application.wheels.routes[loc.i]);
+			loc.route = application.wheels.routes[loc.i];
+			if (StructKeyExists(loc.route, "format"))
+			{
+				loc.format = loc.route.format;
+			}
+			loc.currentRoute = loc.route.pattern;
+			if (loc.currentRoute == "*")
+			{
+				loc.returnValue = loc.route;
 				break;
 			} 
 			else if (arguments.path == "" && loc.currentRoute == "")
 			{
-				loc.returnValue = Duplicate(application.wheels.routes[loc.i]);
+				loc.returnValue = loc.route;
 				break;
 			}
-			else if (ListLen(arguments.path, "/") gte ListLen(loc.currentRoute, "/") && loc.currentRoute != "")
+			else if (ListLen(arguments.path, "/") >= ListLen(loc.currentRoute, "/") && loc.currentRoute != "")
 			{
 				loc.match = true;
 				loc.jEnd = ListLen(loc.currentRoute, "/");
@@ -96,15 +98,19 @@
 				{
 					loc.item = ListGetAt(loc.currentRoute, loc.j, "/");
 					loc.thisRoute = ReplaceList(loc.item, "[,]", "");
-					loc.thisURL = ListGetAt(arguments.path, loc.j, "/");
-					if (Left(loc.item, 1) != "[" && loc.thisRoute != loc.thisURL)
+					loc.thisUrl = ListFirst(ListGetAt(arguments.path, loc.j, "/"), ".");
+					if (Left(loc.item, 1) != "[" && loc.thisRoute != loc.thisUrl)
+					{
 						loc.match = false;
+					}
 				}
 				if (loc.match)
 				{
-					loc.returnValue = Duplicate(application.wheels.routes[loc.i]);
+					loc.returnValue = loc.route;
 					if (len(loc.format))
 					{
+						// we need to duplicate the route here otherwise we overwrite the one in the application scope
+						loc.returnValue = Duplicate(loc.returnValue);
 						loc.returnValue[ReplaceList(loc.format, "[,]", "")] = $getFormatFromRequest(pathInfo=arguments.path);
 					}
 					break;
@@ -112,7 +118,9 @@
 			}
 		}
 		if (!StructKeyExists(loc, "returnValue"))
+		{
 			$throw(type="Wheels.RouteNotFound", message="Wheels couldn't find a route that matched this request.", extendedInfo="Make sure there is a route setup in your `config/routes.cfm` file that matches the `#arguments.path#` request.");
+		}
 		</cfscript>
 		<cfreturn loc.returnValue>
 </cffunction>
@@ -334,7 +342,7 @@
 				{
 					loc.dates[loc.key].hour = 0;
 				}
-				else if (loc.dates[loc.key].ampm IS "PM")
+				else if (loc.dates[loc.key].ampm == "PM" && loc.dates[loc.key].hour != 12)
 				{
 					loc.dates[loc.key].hour += 12;
 				}
@@ -364,6 +372,7 @@
 	<cfargument name="params" type="struct" required="true">
 	<cfargument name="route" type="struct" required="true">
 	<cfscript>
+
 		if (!StructKeyExists(arguments.params, "controller"))
 		{
 			arguments.params.controller = arguments.route.controller;
@@ -378,8 +387,9 @@
 		arguments.params.action = ReReplace(arguments.params.action, "[^0-9A-Za-z-_\.]", "", "all");
 
 		// convert controller to upperCamelCase and action to normal camelCase
-		arguments.params.controller = ListSetAt(arguments.params.controller, ListLen(arguments.params.controller, "."), REReplace(ListLast(arguments.params.controller, "."), "(^|-)([a-z])", "\u\2", "all"), ".");
+		arguments.params.controller = REReplace(arguments.params.controller, "(^|-)([a-z])", "\u\2", "all");
 		arguments.params.action = REReplace(arguments.params.action, "-([a-z])", "\u\1", "all");
+
 	</cfscript>
 	<cfreturn arguments.params>
 </cffunction>
