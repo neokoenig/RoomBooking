@@ -1,10 +1,10 @@
-<!---================= Room Booking System / https://github.com/neokoenig =======================---> 
+<!---================= Room Booking System / https://github.com/neokoenig =======================--->
 
 
 <!---================================ Bootstrap Helpers ======================================--->
 <cffunction name="panel" hint="Renders a bootstrap Panel">
 	<cfargument name="title" required="true">
-	<cfargument name="class" default="panel-primary"> 
+	<cfargument name="class" default="panel-primary">
 	<cfset var r ="">
 	<cfsavecontent variable="r"><Cfoutput>
 	<!--- Start Panel --->
@@ -24,64 +24,64 @@
 
 <!---================================ Date Formatters ======================================--->
 <cffunction name="_formatDate" hint="General use date Formatter using user preferences" output="false">
-	<cfargument name="d" required="true" hint="A full datetime string"> 
+	<cfargument name="d" required="true" hint="A full datetime string">
 	<cfscript>
 		if(isDate(arguments.d)){
 			return dateFormat(arguments.d, "#application.rbs.setting.defaultDateFormat#");
 		} else {
 			return "";
 		}
-	</cfscript> 
+	</cfscript>
 </cffunction>
 
 <cffunction name="_formatTime" hint="General use time Formatter using user preferences"  output="false">
-	<cfargument name="d" required="true" hint="A full datetime string"> 
+	<cfargument name="d" required="true" hint="A full datetime string">
 		<cfscript>
 		if(isDate(arguments.d)){
 			return timeFormat(arguments.d, "#application.rbs.setting.defaultTimeFormat#");
 		} else {
 			return "";
 		}
-	</cfscript> 
+	</cfscript>
 </cffunction>
 
 <cffunction name="_formatDateTime" hint="General use date and Time Formatter using user preferences"  output="false">
-	<cfargument name="d" required="true" hint="A full datetime string">  
+	<cfargument name="d" required="true" hint="A full datetime string">
 	 <cfscript>
 		if(isDate(arguments.d)){
 			return dateFormat(arguments.d, "#application.rbs.setting.defaultDateFormat#") & ' - ' & timeFormat(arguments.d, "#application.rbs.setting.defaultTimeFormat#");
 		} else {
 			return "";
 		}
-	</cfscript> 
+	</cfscript>
 </cffunction>
 
 <cffunction name="_formatDateRange" hint="Format two dates as a single range: i.e, 7th March 2003, 4pm - 9th March 2003, 6pm"  output="false">
-	<cfargument name="d1" required="true" hint="A full datetime string"> 
-	<cfargument name="d2" required="true" hint="A full datetime string"> 
+	<cfargument name="d1" required="true" hint="A full datetime string">
+	<cfargument name="d2" required="true" hint="A full datetime string">
 	<cfargument name="allday" required="false" hint="0 or 1" default="0">
-	<cfscript> 
-		var d1=_formatDate(arguments.d1);
-		var t1=_formatTime(arguments.d1);
-		var d2=_formatDate(arguments.d2);	
-		var t2=_formatTime(arguments.d2);
-		var dateTime1=d1 & ', ' & t1;
-		var dateTime2=d2 & ', ' & t2;
-		if(structKeyExists(arguments, "allDay") AND arguments.allDay){ 
-			dateTime1=d1 & " (All Day)";
-			dateTime2=d2 & " (All Day)";
+	<cfscript>
+		local.d1=_formatDate(arguments.d1);
+		local.t1=_formatTime(arguments.d1);
+		local.d2=_formatDate(arguments.d2);
+		local.t2=_formatTime(arguments.d2);
+		local.dateTime1=local.d1 & ', ' & local.t1;
+		local.dateTime2=local.d2 & ', ' & local.t2;
+		if(structKeyExists(arguments, "allDay") AND arguments.allDay){
+			local.dateTime1=local.d1 & " (All Day)";
+			local.dateTime2=local.d2 & " (All Day)";
 		}
 		// conditional formatting:
-		if(dateTime1 EQ dateTime2){
-			return dateTime1;
+		if(local.dateTime1 EQ local.dateTime2){
+			return local.dateTime1;
 		} else {
-			if(d1 EQ d2){
-				return dateTime1 & " - " & t2;
+			if(local.d1 EQ local.d2){
+				return local.dateTime1 & " - " & local.t2;
 			}
 			else {
-				return dateTime1 & " - " & dateTime2;
+				return local.dateTime1 & " - " & local.dateTime2;
 			}
-			
+
 		}
 	</cfscript>
 </cffunction>
@@ -94,7 +94,7 @@
 <cffunction name="_monthList" hint="used in dropdowns filters">
 	<cfset var r=[]>
 	<Cfset var m={}>
- 	<cfloop from="1" to="12" index="i"> 
+ 	<cfloop from="1" to="12" index="i">
  		<cfset m["k"]=i>
  		<cfset m["v"]=monthAsString(i)>
  		<cfset arrayAppend(r, m)>
@@ -124,5 +124,5 @@
 		}else {
 			return "<span class='label label-danger'><span class='glyphicon glyphicon-remove'></span></span>";
 			}
-	</cfscript> 
+	</cfscript>
 </cffunction>

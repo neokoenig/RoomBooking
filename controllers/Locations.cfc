@@ -1,9 +1,9 @@
 <!---================= Room Booking System / https://github.com/neokoenig =======================--->
-<cfcomponent extends="controller">
+<cfcomponent extends="Controller">
 	<cffunction name="init">
 		<cfscript>
-			filters(through="_getLocations", only="index"); 
-			filters(through="_checkLocationsAdmin");	  
+			filters(through="_getLocations", only="index");
+			filters(through="_checkLocationsAdmin");
 			filters(through="checkPermissionAndRedirect", permission="accessLocations");
  		</cfscript>
 	</cffunction>
@@ -12,27 +12,27 @@
 	<cffunction name="add">
 		<cfscript>
 			location=model("location").new();
-		</cfscript>		
+		</cfscript>
 	</cffunction>
 
 	<cffunction name="create">
 	    <cfscript>
 		if(structkeyexists(params, "location")){
 	    	location = model("location").new(params.location);
-			if ( location.save() ) {  
+			if ( location.save() ) {
 				redirectTo(action="index", success="location successfully created");
 			}
-	        else { 
+	        else {
 				renderView(action="add", error="There were problems creating that location");
-			} 
+			}
 		}
-		</cfscript>		
+		</cfscript>
 	</cffunction>
 
 	<cffunction name="edit">
 		<cfscript>
-			location=model("location").findOne(where="id = #params.key#")
-		</cfscript>		
+			location=model("location").findOne(where="id = #params.key#");
+		</cfscript>
 	</cffunction>
 
 	<cffunction name="update">
@@ -40,14 +40,14 @@
 		if(structkeyexists(params, "location")){
 	    	location = model("location").findOne(where="id = #params.key#");
 			location.update(params.location);
-			if ( location.save() )  {  
+			if ( location.save() )  {
 				redirectTo(action="index", success="location successfully updated");
 			}
-	        else {  
+	        else {
 				renderView(action="edit", error="There were problems updating that location");
-			} 
-		} 
-		</cfscript>		
+			}
+		}
+		</cfscript>
 	</cffunction>
 
 	<cffunction name="delete">
@@ -55,19 +55,19 @@
 		checkLocation=model("location").findAll();
 		if(checkLocation.recordcount GT 1){
 		 if(structkeyexists(params, "key")){
-		    	location = model("location").findOne(where="id = #params.key#"); 
-				if ( location.delete() )  {  
+		    	location = model("location").findOne(where="id = #params.key#");
+				if ( location.delete() )  {
 					redirectTo(action="index", success="location successfully deleted");
 				}
-		        else {  
+		        else {
 					redirectTo(action="index", error="There were problems deleting that location");
-				} 
+				}
 			}
 		} else {
 
 					redirectTo(action="index", error="At least one location is required.");
 	}
-		</cfscript>		
+		</cfscript>
 	</cffunction>
 
 <!---================================ Filters ======================================--->
@@ -76,5 +76,5 @@
 			<cfset redirectTo(route="home", error="Facility to edit locations has been disabled")>
 		</cfif>
 	</cffunction>
- 
+
 </cfcomponent>

@@ -1,17 +1,17 @@
 <!---================= Room Booking System / https://github.com/neokoenig =======================--->
-<cfcomponent extends="controller">
-		 
+<cfcomponent extends="Controller">
+
 	<cffunction name="init">
-		<cfscript>   
-		filters(through="checkPermissionAndRedirect", permission="accessPermissions");   
+		<cfscript>
+		filters(through="checkPermissionAndRedirect", permission="accessPermissions");
 		filters(through="denyInDemoMode", only="edit,update");
  		</cfscript>
-	</cffunction>  
+	</cffunction>
 
 
 
 <!---================================ Views ======================================--->
- 
+
 	<cffunction name="index">
 		<cfset permissions=model("permission").findAll(order="id")>
 	</cffunction>
@@ -22,7 +22,7 @@
 		if(!isObject(permission)  OR application.rbs.setting.isDemoMode){
 			redirectTo(back=true, error="Sorry, that permission can't be found, isn't editable or the board is in demo mode");
 		}
-		</cfscript>		
+		</cfscript>
 	</cffunction>
 
 	<cffunction name="update" hint="Update a permission">
@@ -33,16 +33,15 @@
 	    		redirectTo(back=true, error="Sorry, that permission can't be found, isn't editable or the board is in demo mode");
 	    	} else {
 				permission.update(params.permission);
-				if ( permission.save() )  {  
+				if ( permission.save() )  {
 					redirectTo(action="index", success="permission successfully updated - please note you will need to reload the application for this to take effect");
 				}
-		        else {  
+		        else {
 					renderView(action="edit", error="There were problems updating that permission");
-				} 
-	    	} 
-		} 
-		</cfscript>		
+				}
+	    	}
+		}
+		</cfscript>
 	</cffunction>
 </cfcomponent>
-  
- 
+
