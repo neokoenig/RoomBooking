@@ -2,7 +2,7 @@
 <cfcomponent extends="Controller">
 	<cffunction name="init">
 		<cfscript>
-			filters(through="_getLocations", only="index,add,edit,create,update,list");
+			filters(through="_getLocations", only="index,add,edit,clone,create,update,list");
 			filters(through="checkPermissionAndRedirect", permission="accessapplication");
 			filters(through="checkPermissionAndRedirect", permission="accesscalendar");
 			filters(through="checkPermissionAndRedirect", permission="allowRoomBooking", except="index,list");
@@ -35,6 +35,16 @@
         	 if(structKeyExists(params, "key") AND isNumeric(params.key)){
         	 	event.locationid=params.key;
         	}
+
+        </cfscript>
+    </cffunction>
+
+	<cffunction name="clone">
+        <cfscript>
+        	// Event to clone from
+        	 event=model("event").findOne(where="id = #params.key#")
+
+			renderPage(action="add");
 
         </cfscript>
     </cffunction>
@@ -90,7 +100,7 @@
 			redirectTo(action="index", success="Event successfully created");
 		}
         else {
-			renderView(action="add", error="There were problems creating that event");
+			renderPage(action="add", error="There were problems creating that event");
 		}
 	}
 	</cfscript>
@@ -106,7 +116,7 @@
 			redirectTo(action="index", success="event successfully updated");
 		}
         else {
-			renderView(action="edit", error="There were problems updating that event");
+			renderPage(action="edit", error="There were problems updating that event");
 		}
 	}
 	</cfscript>

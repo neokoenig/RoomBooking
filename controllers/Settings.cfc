@@ -32,7 +32,7 @@
 					redirectTo(action="index", success="Setting successfully updated - please note you will need to reload the application for this to take effect");
 				}
 		        else {
-					renderView(action="edit", error="There were problems updating that setting");
+					renderPage(action="edit", error="There were problems updating that setting");
 				}
 	    	}
 		}

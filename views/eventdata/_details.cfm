@@ -1,12 +1,13 @@
 <!---================= Room Booking System / https://github.com/neokoenig =======================--->
 <cfoutput>
-<cfif checkPermission("allowRoomBooking")> 
+<cfif checkPermission("allowRoomBooking")>
 <div class="btn-group">
 	#linkTo(action="edit", key=event.eventid, text="Edit", controller="bookings", class="btn btn-info")#
+	#linkTo(action="clone", key=event.eventid, text="Clone", controller="bookings", class="btn btn-warning")#
 	#linkTo(action="delete", key=event.eventid, text="Delete", controller="bookings", class="btn btn-danger", confirm="Are you sure?")#
 </div>
 </cfif>
-<cfif checkPermission("viewRoomBooking")> 
+<cfif checkPermission("viewRoomBooking")>
 <h4>#h(event.title)#</h4>
 <p>#_formatDateRange(d1=event.start, d2=event.end)#</p>
 <p>Location: #h(event.name)#<br />#h(event.description)#</p>
