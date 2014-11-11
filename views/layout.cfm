@@ -81,6 +81,9 @@
             <cfif application.rbs.setting.allowLocations AND checkpermission("accessLocations")>
               <li>#linkTo(controller="locations",  text="<span class='glyphicon glyphicon-plus-sign'></span> Locations")#</li>
             </cfif>
+             <cfif application.rbs.setting.allowResources AND checkpermission("accessResources")>
+              <li>#linkTo(controller="resources",  text="<span class='glyphicon glyphicon-plus-sign'></span> Resources")#</li>
+            </cfif>
 
             <cfif application.rbs.setting.allowSettings>
             <cfif checkpermission("accessSettings")>

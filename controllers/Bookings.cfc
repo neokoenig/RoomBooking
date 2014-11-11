@@ -3,6 +3,7 @@
 	<cffunction name="init">
 		<cfscript>
 			filters(through="_getLocations", only="index,add,edit,clone,create,update,list");
+			filters(through="_getResources", only="index,add,edit,clone,create,update,list");
 			filters(through="checkPermissionAndRedirect", permission="accessapplication");
 			filters(through="checkPermissionAndRedirect", permission="accesscalendar");
 			filters(through="checkPermissionAndRedirect", permission="allowRoomBooking", except="index,list");
@@ -24,7 +25,8 @@
 
 	<cffunction name="add">
         <cfscript>
-        	 event=model("event").new();
+        	 nEventResources=model("eventresource").new();
+        	 event=model("event").new(eventresources=nEventResources);
 
         	 // Listen out for event date & location passed in URL via JS
         	 if(structKeyExists(params, "d")){
@@ -42,15 +44,12 @@
 	<cffunction name="clone">
         <cfscript>
         	// Event to clone from
-        	 event=model("event").findOne(where="id = #params.key#")
-
-			renderPage(action="add");
-
+        	 event=model("event").findOne(where="id = #params.key#", include="eventresources");
         </cfscript>
     </cffunction>
 
     <cffunction name="edit">
-    	<cfset event=model("event").findOne(where="id = #params.key#")>
+    	<cfset event=model("event").findOne(where="id = #params.key#", include="eventresources")>
     </cffunction>
 
     <cffunction name="create">
@@ -110,8 +109,9 @@
     <cffunction name="update">
     <cfscript>
 	if(structkeyexists(params, "event")){
-    	event = model("event").findOne(where="id = #params.key#");
+    	event = model("event").findOne(where="id = #params.key#", include="eventresources");
 		event.update(params.event);
+		event.save();
 		if ( event.save() )  {
 			redirectTo(action="index", success="event successfully updated");
 		}
@@ -126,7 +126,7 @@
 	 <cffunction name="delete">
 	 <cfscript>
 	 if(structkeyexists(params, "key")){
-    	event = model("event").findOne(where="id = #params.key#");
+    	event = model("event").findOne(where="id = #params.key#", include="eventresources");
 		if ( event.delete() )  {
 			redirectTo(action="index", success="event successfully deleted");
 		}

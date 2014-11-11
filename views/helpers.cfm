@@ -56,7 +56,7 @@
 	</cfscript>
 </cffunction>
 
-<cffunction name="_formatDateRange" hint="Format two dates as a single range: i.e, 7th March 2003, 4pm - 9th March 2003, 6pm"  output="false">
+<cffunction name="_formatDateRange" hint="Format two dates as a single range: e.g, 7th March 2003, 4pm - 9th March 2003, 6pm"  output="false">
 	<cfargument name="d1" required="true" hint="A full datetime string">
 	<cfargument name="d2" required="true" hint="A full datetime string">
 	<cfargument name="allday" required="false" hint="0 or 1" default="0">

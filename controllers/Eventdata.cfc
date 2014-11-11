@@ -5,6 +5,7 @@
 		<cfscript>
 			provides("html,json");
 			usesLayout(template="modal", only="getevent");
+			filters(through="_getResources", only="getevent");
 			filters(through="checkPermissionAndRedirect", permission="accessapplication");
 			filters(through="checkPermissionAndRedirect", permission="accesscalendar");
 		</cfscript>
@@ -32,7 +33,7 @@
 	<cffunction name="getEvent" hint="Get Single Clicked Event">
 		<cfscript>
 		if(isAjax() AND structKeyExists(params, "key")){
-		 	event=model("location").findAll(where="events.id = #params.key#", include="events");
+		 	event=model("location").findAll(where="events.id = #params.key#", include="events(eventresources)");
 		}
 		</cfscript>
 	</cffunction>

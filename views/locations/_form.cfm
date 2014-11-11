@@ -4,19 +4,19 @@
 #errorMessagesFor("location")#
 <div class="row">
 	<div class="col-lg-3">
-		#textField(objectname="location", property="name", placeholder="i.e Lecture Theatre")#
-	</div>
-	<div class="col-lg-3"> 
-		#textField(objectname="location", property="description", placeholder="i.e Ground Floor")#
+		#textField(objectname="location", property="name", placeholder="e.g Lecture Theatre")#
 	</div>
 	<div class="col-lg-3">
-		#textField(objectname="location", property="class", label="Additional CSS Class", placeholder="i.e theatre")#
+		#textField(objectname="location", property="description", placeholder="e.g Ground Floor")#
 	</div>
-	<div class="col-lg-3"> 
-		#textField(objectname="location", property="colour",  class="form-control bscp", label="HEX colour", placeholder="i.e ##FF6600")#
+	<div class="col-lg-3">
+		#textField(objectname="location", property="class", label="Additional CSS Class", placeholder="e.g theatre")#
+	</div>
+	<div class="col-lg-3">
+		#textField(objectname="location", property="colour",  class="form-control bscp", label="HEX colour", placeholder="e.g ##FF6600")#
 	</div>
 </div>
- 
+
 <cfsavecontent variable="request.js.colorpicker">
 	<script>
 $('.bscp').colorpicker();

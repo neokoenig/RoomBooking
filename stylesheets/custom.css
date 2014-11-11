@@ -2,22 +2,22 @@
  .navbar .logo {margin-right:10px;}
 .location-filter, .fc-event { color:white;}
 .location-filter, .fc-event, .fc-future, .fc-today:hover {cursor:pointer;}
- 
+
 .fc-future:hover  {background:#E8E8E8; }
 .fc-today:hover {background:#D6CED1;}
-.fc-past {background:#D1D1D1; opacity: 0.8;} 
- 
+.fc-past {background:#D1D1D1; opacity: 0.8;}
+
 /* Various Helper Classes */
 .append {margin-bottom:10px;}
 
 .label-login {background:green;}
-.label-cookie {background:purple;} 
+.label-cookie {background:purple;}
 .label-error {background:red;}
 .label- {background:black;}
 /* Dropdown Signin Form */
 #dropdown-signin form {padding:10px;}
 #dropdown-signin form input.form-control {width:250px;}
- 
+
 /* css for timepicker */
 .ui-timepicker-div .ui-widget-header { margin-bottom: 8px; }
 .ui-timepicker-div dl { text-align: left; }
@@ -30,4 +30,15 @@
 .ui-timepicker-rtl dl { text-align: right; padding: 0 5px 0 0; }
 .ui-timepicker-rtl dl dt{ float: right; clear: right; }
 .ui-timepicker-rtl dl dd { margin: 0 45% 10px 10px; }
- 
+
+ /* Bookable resources */
+ .table .checkbox {margin:0;}
+
+ legend  {
+    width:inherit; /* Or auto */
+    padding:0 10px; /* To give a bit of padding on the left and right */
+    border-bottom:none;
+    font-size:130%; font-weight: 700;
+
+}
+fieldset {margin-top:20px; margin-bottom:20px;}

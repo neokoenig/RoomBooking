@@ -3,9 +3,14 @@
 <cfcomponent extends="Model">
 	<cffunction name="init">
 		<cfscript>
+			// Associations
 			belongsTo("location");
+			hasMany("eventresources");
+			nestedproperties(associations="eventresources", allowDelete=true);
+			// Validation
 			validate("checkDates");
 			afterFind("formatDates");
+
 		</cfscript>
 	</cffunction>
 
@@ -30,7 +35,12 @@
 	<cffunction name="formatDates" hint="Formats Date for DateTime Picker">
 		<cfscript>
 			//09/22/2013 14:57 +0100
+		if(structKeyExists(this, "start")){
 			this.start=dateFormat(this.start, "yyyy-mm-dd") & ' ' & timeFormat(this.start, "HH:MM");
+		}
+		if(structKeyExists(this, "end")){
+			this.end=dateFormat(this.end, "yyyy-mm-dd") & ' ' & timeFormat(this.end, "HH:MM");
+		}
 		</cfscript>
 	</cffunction>
 </cfcomponent>

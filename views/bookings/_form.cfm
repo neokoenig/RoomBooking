@@ -1,58 +1,102 @@
 <!---================= Room Booking System / https://github.com/neokoenig =======================--->
 <!--- Form--->
 <cfparam name="locations">
+<cfparam name="resources">
 <cfparam name="event">
 <cfoutput>
-<div class="row">
-	<div class="col-lg-4 col-md-4"> 
-		#textField(objectname="event", property="title", label="Event Title", placeholder="i.e Committee Meeting")# 
-	</div> 
-	<div class="col-lg-4 col-md-4"> 
-		#select(objectname="event", property="locationid", options=locations, label="Location")#	
-	</div>
-	<div class="col-lg-4 col-md-4"> 
-		#select(objectname="event", property="layoutstyle", options="#application.rbs.setting.roomlayouttypes#", label="Layout")#	
-	</div>
-</div>
-<div class="row">
-	<div class="col-lg-4 col-md-4"> 
-		#textField(objectname="event", property="contactname", label="Contact Name", placeholder="i.e Joe Bloggs")# 
-	</div> 
-	<div class="col-lg-4 col-md-4"> 
-		#textField(objectname="event", property="contactno", label="Tel No.", placeholder="i.e 01865 287430")# 
-	</div> 
-	<div class="col-lg-4 col-md-4"> 
-		#textField(objectname="event", property="contactemail", label="Email", placeholder="i.e joe@bloggs.com")# 
-	</div>
-</div> 
 
-#checkbox(objectName="event", property="allDay", label="This is an all day event")#
- 
-<div class="row">
-	<div class="col-lg-4 col-md-4">  
-		#textField(objectName="event", property="start")# 
-	</div>
-	<div class="col-lg-4 col-md-4">  
-		#textField(objectName="event", property="end")#  
-	</div>
-</div>
-	
-#textArea(objectName="event", property="description", label="Description", placeholder="Optional Notes about this event")#
+
+  	#includePartial("tabs/details")#
+	#includePartial("tabs/contact")#
+	<cfif application.rbs.setting.allowResources>
+	#includePartial("tabs/resources")#
+	</cfif>
+	<cfif params.action EQ "add" OR params.action EQ "create">
+		#includePartial("tabs/repeat")#
+	</cfif>
+
+</cfoutput>
 
 <cfsavecontent variable="request.js.datepicker">
 <script>
 $(document).ready(function(){
+	// Popovers
+	$('.pop').popover({});
+	// Deselect resources if restricted
+	restrictResources(false);
 
-	var startDateTextBox = $('##event-start');
-	var endDateTextBox = $('##event-end');
+	function restrictResources(uncheck){
+		var selectedLocation=getSelectedLocation(),
+			rows=$("#resourceTable").find("td[data-restrict]");
+			rows.find("input").attr({"disabled": true});
+			if(uncheck){
+				rows.find("input").attr({"checked": false});
+			}
+			$.each(rows, function(i, val){
+				var restrict=$(val).data("restrict");
+					if(restrict.length > 1){
+						if ($.inArray(selectedLocation, restrict.replace(/,\s+/g, ',').split(',')) >= 0) {
+						 	$(val).find("input").attr({"disabled": false});
+						}
+					}
+			});
+	}
 
-	startDateTextBox.datetimepicker({ 
+	function getSelectedLocation(){
+		return $("#event-locationid").val();
+	}
+
+	$("#event-locationid").on("change", function(e){
+		restrictResources(true);
+	});
+
+	// Remote resource availability check
+	$("#resourceTable td[data-unique] input").on("click", function(e){
+		var id=$(this).closest("td").data("unique"),
+			eventid=<cfoutput><cfif params.action EQ "add">0<cfelse>#event.key()#</cfif></cfoutput>,
+			start=$("#event-start").val(),
+			end=$("#event-end").val();
+			if(start.length === 0 || end.length === 0){
+				alert("You must enter a start and end date/time before attempting to book this resource");
+				return false;
+			}
+		//console.log(id + " Unique Check");
+		$.ajax({
+			url: "<cfoutput>#urlFor(controller='resources', action='checkavailability', params='format=json')#</cfoutput>",
+			data: {
+				id: id,
+				eventid: eventid,
+				start: start,
+				end: end
+			},
+			success: function(data){
+				var resource=$("#resourceTable td[data-unique=" + id  +"] input");
+				resource.parent().find(".rCheck").remove();
+				if(data == 1){
+					resource.attr({"checked": true}).parent().append("<p class='rCheck text-success'><i class='glyphicon glyphicon-ok'></i> Available</p>");
+				} else {
+					resource.attr({"checked": false}).parent().append("<p class='rCheck text-danger'><i class='glyphicon glyphicon-warning-sign'></i> Item is already reserved for another booking!</p>");
+ 				}
+			}
+		})
+	});
+
+	// Tabs
+	$(function () {
+		$('#myTab a:first').tab('show')
+	})
+
+	// Date Pickers
+	var startDateTextBox = $('#event-start');
+	var endDateTextBox = $('#event-end');
+
+	startDateTextBox.datetimepicker({
 		timeFormat: 'HH:mm',
 		dateFormat: 'yy-mm-dd',
 		hourMin: 7,
 		stepMinute: 5,
 		hourMax: 23,
-		minDate: new Date(),  
+		minDate: new Date(),
 		onClose: function(dateText, inst) {
 			if (endDateTextBox.val() != '') {
 				var testStartDate = startDateTextBox.datetimepicker('getDate');
@@ -68,7 +112,7 @@ $(document).ready(function(){
 			endDateTextBox.datetimepicker('option', 'minDate', startDateTextBox.datetimepicker('getDate') );
 		}
 	});
-	endDateTextBox.datetimepicker({ 
+	endDateTextBox.datetimepicker({
 		timeFormat: 'HH:mm',
 		dateFormat: 'yy-mm-dd',
 		onClose: function(dateText, inst) {
@@ -87,7 +131,6 @@ $(document).ready(function(){
 		}
 	});
 
-}); 
+});
 </script>
 </cfsavecontent>
-</cfoutput>
