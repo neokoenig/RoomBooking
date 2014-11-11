@@ -86,6 +86,16 @@ $(document).ready(function(){
 		$('#myTab a:first').tab('show')
 	})
 
+	// Alter Time on All Day checkbox
+	$("#event-allDay").on("click", function(e){
+		var s=startDateTextBox.datetimepicker('getDate'),
+		 	e=endDateTextBox.datetimepicker('getDate');
+			s.setHours(0,0,0,0);
+			e.setHours(23,59,0,0);
+		$('#event-start').datetimepicker('setDate', (s));
+		$('#event-end').datetimepicker('setDate', (e));
+	});
+
 	// Date Pickers
 	var startDateTextBox = $('#event-start');
 	var endDateTextBox = $('#event-end');
