@@ -5,7 +5,7 @@
 #errorMessagesFor("event")#
 	#startFormTag(action="create")#
 		#includePartial("form")#
-		#submitTag(value="Create Booking")#
+		#submitTag(value="Create Booking", class="btn btn-block btn-primary")#
 	#endFormTag()#
 #panelend()#
 </cfoutput>

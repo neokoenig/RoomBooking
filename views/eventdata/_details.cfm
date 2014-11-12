@@ -2,10 +2,10 @@
 <cfoutput>
 <cfparam name="resources">
 <cfif checkPermission("allowRoomBooking")>
-	<div class="btn-group">
-		#linkTo(action="edit", key=event.eventid, text="Edit", controller="bookings", class="btn btn-info")#
-		#linkTo(action="clone", key=event.eventid, text="Clone", controller="bookings", class="btn btn-warning")#
-		#linkTo(action="delete", key=event.eventid, text="Delete", controller="bookings", class="btn btn-danger", confirm="Are you sure?")#
+	<div class="btn-group btn-group-justified">
+		#linkTo(action="edit", key=event.eventid, text="<span class='glyphicon glyphicon-pencil'></span> Edit", controller="bookings", class="btn btn-info btn-sm")#
+		#linkTo(action="clone", key=event.eventid, text="<span class='glyphicon glyphicon-repeat'></span> Clone", controller="bookings", class="btn btn-warning btn-sm")#
+		#linkTo(action="delete", key=event.eventid, text="<span class='glyphicon glyphicon-trash'></span> Delete", controller="bookings", class="btn btn-danger btn-sm", confirm="Are you sure?")#
 	</div>
 </cfif>
 <cfif checkPermission("viewRoomBooking")>

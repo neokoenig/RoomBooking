@@ -34,6 +34,7 @@
                 firstDay: #application.rbs.setting.calendarFirstday#,
                 slotMinutes: #application.rbs.setting.calendarSlotMinutes#,
                 minTime: "#application.rbs.setting.calendarMintime#",
+                maxTime: "#application.rbs.setting.calendarMaxtime#",
                 timeFormat: '#application.rbs.setting.calendarTimeformat#',
                 hiddenDays: #application.rbs.setting.calendarHiddenDays#,
                 weekNumbers: #returnStringFromBoolean(application.rbs.setting.calendarWeekNumbers)#,
