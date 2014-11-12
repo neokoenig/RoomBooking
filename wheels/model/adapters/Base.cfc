@@ -31,6 +31,12 @@
 		<cfreturn loc.returnValue>
 	</cffunction>
 
+	<cffunction name="$tableAlias" returntype="string" access="public" output="false">
+		<cfargument name="table" type="string" required="true">
+		<cfargument name="alias" type="string" required="true">
+		<cfreturn arguments.table & " AS " & arguments.alias>
+	</cffunction>
+
 	<cffunction name="$columnAlias" returntype="string" access="public" output="false">
 		<cfargument name="list" type="string" required="true">
 		<cfargument name="action" type="string" required="true">
@@ -78,6 +84,26 @@
 		<cfreturn loc.returnValue>
 	</cffunction>
 
+	<cffunction name="$isAggregateFunction" returntype="boolean" access="public" output="false">
+		<cfargument name="sql" type="string" required="true">
+		<cfscript>
+			var loc = {};
+
+			// find "(FUNCTION(..." pattern inside the sql
+			loc.match = REFind("^\([A-Z]+\(", arguments.sql, 0, true);
+			
+			// guard against invalid match
+			if (ArrayLen(loc.match.pos) eq 0) return false;
+			if (loc.match.len[1] lte 2) return false;
+			
+			// extract and analyze the function name
+			loc.function = Mid(sql,loc.match.pos[1]+1,loc.match.len[1]-2);
+			loc.result = ListContains("AVG,COUNT,MAX,MIN,SUM",loc.function);
+			
+			return loc.result;
+		</cfscript>
+	</cffunction>
+
 	<cffunction name="$addColumnsToSelectAndGroupBy" returntype="array" access="public" output="false">
 		<cfargument name="sql" type="array" required="true">
 		<cfscript>
@@ -89,7 +115,7 @@
 				for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 				{
 					loc.item = Trim(ReplaceNoCase(ReplaceNoCase(ReplaceNoCase(ListGetAt(loc.returnValue[ArrayLen(loc.returnValue)], loc.i), "ORDER BY ", ""), " ASC", ""), " DESC", ""));
-					if (!ListFindNoCase(ReplaceNoCase(loc.returnValue[ArrayLen(loc.returnValue)-1], "GROUP BY ", ""), loc.item))
+					if (!ListFindNoCase(ReplaceNoCase(loc.returnValue[ArrayLen(loc.returnValue)-1], "GROUP BY ", ""), loc.item) && !$isAggregateFunction(loc.item))
 						loc.returnValue[ArrayLen(loc.returnValue)-1] = ListAppend(loc.returnValue[ArrayLen(loc.returnValue)-1], loc.item);
 				}
 			}
@@ -176,7 +202,7 @@
 		
 		if(!StructKeyExists(arguments.settings, "value"))
 		{
-			$throw(type="Wheels.QueryParamValue", message="The value for cfqueryparam cannot be determined", extendedInfo="This is usually caused by a syantax error in the WHERE statement such as forgetting to quote strings.");
+			$throw(type="Wheels.QueryParamValue", message="The value for cfqueryparam cannot be determined", extendedInfo="This is usually caused by a syntax error in the WHERE statement such as forgetting to quote strings.");
 		}
 		
 		loc.params = {};
@@ -195,10 +221,6 @@
 			loc.params.list = arguments.settings.list;
 			loc.params.separator = chr(7);
 			loc.params.value = $cleanInStatmentValue(loc.params.value);
-		}
-		if (!IsBinary(loc.params.value) && loc.params.value eq "null")
-		{
-			loc.params.useNull = true;
 		}
 		</cfscript>
 		<cfreturn loc.params>
@@ -242,7 +264,7 @@
 		StructAppend(loc.args, loc.orgArgs, true);
 		</cfscript>
 
-		<cfquery attributeCollection="#loc.args#"><cfloop array="#arguments.sql#" index="loc.i"><cfif IsStruct(loc.i)><cfset loc.queryParamAttributes = $CFQueryParameters(loc.i)><cfif StructKeyExists(loc.queryParamAttributes, "useNull")>NULL<cfelseif StructKeyExists(loc.queryParamAttributes, "list")><cfif arguments.parameterize>(<cfqueryparam attributeCollection="#loc.queryParamAttributes#">)<cfelse>(#PreserveSingleQuotes(loc.i.value)#)</cfif><cfelse><cfif arguments.parameterize><cfqueryparam attributeCollection="#loc.queryParamAttributes#"><cfelse>#$quoteValue(str=loc.i.value, sqlType=loc.i.type)#</cfif></cfif><cfelse><cfset loc.i = Replace(PreserveSingleQuotes(loc.i), "[[comma]]", ",", "all")>#PreserveSingleQuotes(loc.i)#</cfif>#chr(13)##chr(10)#</cfloop><cfif arguments.limit>LIMIT #arguments.limit#<cfif arguments.offset>#chr(13)##chr(10)#OFFSET #arguments.offset#</cfif></cfif></cfquery>
+		<cfquery attributeCollection="#loc.args#"><cfset loc.pos = 0><cfloop array="#arguments.sql#" index="loc.i"><cfset loc.pos = loc.pos + 1><cfif IsStruct(loc.i)><cfset loc.queryParamAttributes = $CFQueryParameters(loc.i)><cfif NOT IsBinary(loc.i.value) AND loc.i.value IS "null" AND loc.pos GT 1 AND (Right(arguments.sql[loc.pos-1], 2) IS "IS" OR Right(arguments.sql[loc.pos-1], 6) IS "IS NOT")>NULL<cfelseif StructKeyExists(loc.queryParamAttributes, "list")><cfif arguments.parameterize>(<cfqueryparam attributeCollection="#loc.queryParamAttributes#">)<cfelse>(#PreserveSingleQuotes(loc.i.value)#)</cfif><cfelse><cfif arguments.parameterize><cfqueryparam attributeCollection="#loc.queryParamAttributes#"><cfelse>#$quoteValue(str=loc.i.value, sqlType=loc.i.type)#</cfif></cfif><cfelse><cfset loc.i = Replace(PreserveSingleQuotes(loc.i), "[[comma]]", ",", "all")>#PreserveSingleQuotes(loc.i)#</cfif>#chr(13)##chr(10)#</cfloop><cfif arguments.limit>LIMIT #arguments.limit#<cfif arguments.offset>#chr(13)##chr(10)#OFFSET #arguments.offset#</cfif></cfif></cfquery>
 
 		<cfscript>
 		if (StructKeyExists(query, "name"))

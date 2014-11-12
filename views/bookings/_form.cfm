@@ -90,10 +90,14 @@ $(document).ready(function(){
 	$("#event-allDay").on("click", function(e){
 		var s=startDateTextBox.datetimepicker('getDate'),
 		 	e=endDateTextBox.datetimepicker('getDate');
-			s.setHours(0,0,0,0);
-			e.setHours(23,59,0,0);
-		$('#event-start').datetimepicker('setDate', (s));
-		$('#event-end').datetimepicker('setDate', (e));
+		 	if(s !== null){
+				s.setHours(0,0,0,0);
+				$('#event-start').datetimepicker('setDate', (s));
+		 	}
+		 	if(e !== null){
+				e.setHours(23,59,0,0);
+				$('#event-end').datetimepicker('setDate', (e));
+		 	}
 	});
 
 	// Date Pickers

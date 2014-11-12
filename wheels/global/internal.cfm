@@ -73,6 +73,7 @@
 				arguments.value = ToString(arguments.value);
 				break;
 			case "float": case "integer":
+				if ("true" eq arguments.value) return 1;
 				arguments.value = Val(arguments.value);
 				break;
 			case "boolean":
@@ -673,24 +674,28 @@
 	<cfscript>
 		var loc = {};
 		loc.returnValue = false;
-		if (StructKeyExists(application.wheels.cache[arguments.category], arguments.key))
+		try
 		{
-			if (Now() > application.wheels.cache[arguments.category][arguments.key].expiresAt)
+			if (StructKeyExists(application.wheels.cache[arguments.category], arguments.key))
 			{
-				$removeFromCache(key=arguments.key, category=arguments.category);
-			}
-			else
-			{
-				if (IsSimpleValue(application.wheels.cache[arguments.category][arguments.key].value))
+				if (Now() > application.wheels.cache[arguments.category][arguments.key].expiresAt)
 				{
-					loc.returnValue = application.wheels.cache[arguments.category][arguments.key].value;
+					$removeFromCache(key=arguments.key, category=arguments.category);
 				}
 				else
 				{
-					loc.returnValue = Duplicate(application.wheels.cache[arguments.category][arguments.key].value);
+					if (IsSimpleValue(application.wheels.cache[arguments.category][arguments.key].value))
+					{
+						loc.returnValue = application.wheels.cache[arguments.category][arguments.key].value;
+					}
+					else
+					{
+						loc.returnValue = Duplicate(application.wheels.cache[arguments.category][arguments.key].value);
+					}
 				}
 			}
 		}
+		catch (any e) {}
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>
