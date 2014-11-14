@@ -2,7 +2,7 @@
 <cfcomponent extends="Controller">
 	<cffunction name="init">
 		<cfscript>
-			filters(through="_getLocations", only="index,add,edit,clone,create,update,list");
+			filters(through="_getLocations", only="index,add,edit,clone,create,update,list,day");
 			filters(through="_getResources", only="index,add,edit,clone,create,update,list");
 			filters(through="checkPermissionAndRedirect", permission="accessapplication");
 			filters(through="checkPermissionAndRedirect", permission="accesscalendar");
@@ -145,6 +145,46 @@
 		<cfset events=model("location").findAll(where="#_agendaListWC()#", include="events", order="start")>
 	</cffunction>
 
+
+
+	<cffunction name="day" hint="Alternative Day View">
+		<cfparam name="params.y" default="#year(now())#">
+		<cfparam name="params.m" default="#month(now())#">
+		<cfparam name="params.d" default="#day(now())#">
+		<cfscript>
+			events=model("event").findAll(where="#_dayListWC()#", order="start");
+		</cfscript>
+	</cffunction>
+
+	<cffunction name="_dayListWC" access="private">
+	 	<cfscript>
+	 		var sd="";
+	 		var td="";
+			var wc=[];
+			// Date Filter
+			if(structKeyExists(params, "m")
+				AND structKeyExists(params, "y")
+				AND structKeyExists(params, "d")
+				AND len(params.m) GT 0
+				AND len(params.y) EQ 4
+				AND len(params.d) GT 0
+				AND isNumeric(params.m)
+				AND isNumeric(params.y)
+				AND isNumeric(params.d)
+			){
+				sd=createDateTime(params.y, params.m, params.d, 00,00,00);
+				td=createDateTime(params.y, params.m, params.d, 23,59,59);
+				arrayAppend(wc, "start > '#sd#'");
+				arrayAppend(wc, "start < '#td#'");
+			}
+			if(arrayLen(wc)){
+				return arrayToList(wc, " AND ");
+			} else {
+				return "";
+			}
+			</cfscript>
+	</cffunction>
+
 	<cffunction name="_agendaListWC" access="private">
 	 	<cfscript>
 	 		var sd="";
@@ -172,6 +212,5 @@
 				return "";
 			}
 			</cfscript>
-		<cfset events=model("location").findAll(include="events", order="start")>
 	</cffunction>
 </cfcomponent>
