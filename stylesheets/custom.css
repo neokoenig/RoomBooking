@@ -9,11 +9,11 @@
 
 /* Various Helper Classes */
 .append {margin-bottom:10px;}
-
 .label-login {background:green;}
 .label-cookie {background:purple;}
 .label-error {background:red;}
 .label- {background:black;}
+
 /* Dropdown Signin Form */
 #dropdown-signin form {padding:10px;}
 #dropdown-signin form input.form-control {width:250px;}
@@ -42,3 +42,16 @@
 
 }
 fieldset {margin-top:20px; margin-bottom:20px;}
+
+/* Alt Day View */
+.table-day tbody>tr>th, .table-day tfoot>tr>th, .table-day thead>tr>td, .table-day tbody>tr>td, .table-day tfoot>tr>td {padding:0;}
+.table-day tbody tr td.booked {border-top:none; border-width:0; background: #f4f4f4; padding:5px;}
+.table-day   tr td.booked:hover {cursor: pointer; -webkit-box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.59);
+-moz-box-shadow:    0px 0px 8px 0px rgba(0, 0, 0, 0.59);
+box-shadow:         0px 0px 8px 0px rgba(0, 0, 0, 0.59);}
+.table-day tr.hour {border-top:2px solid #ccc;}
+.table-day tr.hour.current {border-top:2px solid red;}
+.table-day tr td.free {border-right:1px dotted #ddd; }
+.table-day .label {font-size:100%;}
+.table-day .allday {padding:5px;}
+.table-day .lower-op {opacity:0.5;}
