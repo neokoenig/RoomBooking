@@ -24,7 +24,7 @@
         <cfif application.rbs.setting.usejavascriptfromCDN>
  		     #stylesheetLinkTag("//netdna.bootstrapcdn.com/bootswatch/3.0.0/#currentTheme#/bootstrap.min.css,//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css,//cdnjs.cloudflare.com/ajax/libs/fullcalendar/1.6.4/fullcalendar.css,smoothness/jquery-ui-1.10.3.custom.min,bootstrap-colorpicker,custom")#
          <cfelse>
-          #stylesheetLinkTag("theme,fullcalender,smoothness/jquery-ui-1.10.3.custom.min,bootstrap-colorpicker,custom")#
+          #stylesheetLinkTag("theme,fullcalendar,smoothness/jquery-ui-1.10.3.custom.min,bootstrap-colorpicker,custom")#
          </cfif>
         #javascriptIncludeTag("modernizr-2.6.2.min")#
     </head>
@@ -54,7 +54,7 @@
             <a href="##" class="dropdown-toggle" data-toggle="dropdown"><span class='glyphicon glyphicon-calendar'></span> Events <b class="caret"></b></a>
             <ul class="dropdown-menu">
                 <li>#linkTo(route="home", text="<span class='glyphicon glyphicon-calendar'></span> Calendar")#</li>
-                <li>#linkTo(controller="bookings", action="day", text="<span class='glyphicon glyphicon-list'></span> Day")#</li>
+                <li>#linkTo(controller="bookings", action="day", text="<span class='glyphicon glyphicon-th'></span> Day")#</li>
                 <li>#linkTo(controller="bookings", action="list", text="<span class='glyphicon glyphicon-list'></span> List")#</li>
                  <cfif checkpermission("allowAPI")>
                     <li>#linkTo(controller="api",  text="<span class='glyphicon glyphicon-cloud-download'></span> Data Feeds")#</li>

@@ -8,7 +8,7 @@
 </style>
 </cfif>
 <cfif application.rbs.setting.showlocationfilter>
-<div class="btn-group append ">
+<div class="btn-group append hidden-print ">
 #linkTo(action="index",  class="btn btn-primary btn-sm location-filter", text="All<br /><small>Show All</small>")#
 <cfloop query="locations">
 <cfif id EQ params.key>

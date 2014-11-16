@@ -12,22 +12,14 @@
 	<style>
 	<cfloop query="locations"><cfoutput>
 	<cfif len(colour)>
-		.table-day th.#class# {background: #colour#; border-color: #colour#; color:white; font-weight:normal; font-size:80%;}
-		.table-day tr td.#class# a {color: #colour#;}
-		.table-day tr td.#class#.booked {border-right:1px solid #colour#; border-left:1px solid #colour#;}
-		.table-day tr td.#class#.first {border-top:4px solid #colour#; font-size: 80%; border-bottom:2px solid #colour#;}
-		 .table-day tr td.#class#.allday {font-size: 80%; border-bottom:2px solid #colour#;}
+	.table-day th.#class# {background: #colour#; border-color: #colour#; color:white; font-weight:normal; font-size:80%;}
+	.table-day tr td.#class# a {color: #colour#;}
+	.table-day tr td.#class#.booked {border-right:1px solid #colour#; border-left:1px solid #colour#;}
+	.table-day tr td.#class#.first {border-top:4px solid #colour#; font-size: 80%; border-bottom:2px solid #colour#;}
+	.table-day tr td.#class#.allday {font-size: 80%; border-bottom:2px solid #colour#;}
 	</cfif>
 	</cfoutput>
 	</cfloop>
-	.table-day tbody>tr>th, .table-day tfoot>tr>th, .table-day thead>tr>td, .table-day tbody>tr>td, .table-day tfoot>tr>td {padding:0;}
-	.table-day tbody tr td.booked {border-top:none; border-width:0; background: #f4f4f4; padding:5px;}
-	.table-day tr.hour {border-top:2px solid #ccc;}
-	.table-day tr.hour.current {border-top:2px solid red;}
-	.table-day tr td.free {border-right:1px dotted #ddd; }
-	.table-day .label {font-size:100%;}
-	.table-day .allday {padding:5px;}
-	.table-day .lower-op {opacity:0.5;}
 	</style>
 </cfif>
 <cfoutput>
@@ -47,7 +39,8 @@
 				</cfoutput>
 			</cfloop>
 		</tr>
-		<tr>
+		<cfif application.rbs.setting.calendarAllDaySlot>
+				<tr>
 			<th>All Day</th>
 			<cfloop query="locations">
 				<cfquery dbtype="query" name="locationEventsAllDay">
@@ -57,7 +50,8 @@
 				<cfif locationEventsAllDay.recordcount>
 					<td class="booked #class# allday">
 						<cfloop query="locationEventsAllDay">
-							#linkTo(controller='bookings', action='edit', key=locationEventsAllDay.id, text=h(title))#
+							#linkTo(class="remote-modal", controller='eventdata', action='getEvent', key=locationEventsAllDay.id, text=h(title))#
+							<!---#linkTo(controller='bookings', action='edit', key=locationEventsAllDay.id, text=h(title))#--->
 						</cfloop>
 					</td>
 					<cfelse>
@@ -66,6 +60,7 @@
 				</cfoutput>
 			</cfloop>
 		</tr>
+		</cfif>
 	</thead>
 	<tbody>
 		<cfset counter=1>
@@ -91,4 +86,51 @@
  		</cfloop>
 	</tbody>
 </table>
+
+#includePartial("eventmodal")#
+<cfsavecontent variable="request.js.footer">
+	<script>
+	$(document).ready(function(){
+
+		$(".remote-modal").on("click", function(e){
+			var url=$(this).attr("href");
+			e.preventDefault();
+			 $('##eventmodal').modal({
+                remote: url + "?format=json"
+             });
+		});
+
+		$(".booked").on("click", function(e){
+			var url=$(this).find(".remote-modal").attr("href");
+			e.preventDefault();
+			 $('##eventmodal').modal({
+                remote: url + "?format=json"
+             });
+		});
+
+   //-------------------------------Remove Old Modal Data------------------//
+    $('body').on('hidden.bs.modal', '.modal', function () {
+        $(this).removeData('bs.modal');
+    });
+
+    //----------------------Datepicker ---------------------//
+
+    $("##thedate").datepicker({
+		numberOfMonths: 2,
+      	showButtonPanel: true,
+      	onSelect: function (thedate){
+      		console.log(thedate);
+      		//?y=2014&m=11&d=17
+      		window.location.href = "?y="
+      		+ moment(thedate).format("YYYY")
+      		+ "&m=" + moment(thedate).format("MM")
+      		+ "&d=" + moment(thedate).format("DD");
+      	}
+    });
+
+
+	 });
+
+	</script>
+</cfsavecontent>
 </cfoutput>

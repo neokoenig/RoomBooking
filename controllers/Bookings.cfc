@@ -6,7 +6,7 @@
 			filters(through="_getResources", only="index,add,edit,clone,create,update,list");
 			filters(through="checkPermissionAndRedirect", permission="accessapplication");
 			filters(through="checkPermissionAndRedirect", permission="accesscalendar");
-			filters(through="checkPermissionAndRedirect", permission="allowRoomBooking", except="index,list");
+			filters(through="checkPermissionAndRedirect", permission="allowRoomBooking", except="index,list,day");
 			filters(through="checkPermissionAndRedirect", permission="viewRoomBooking", only="list,view");
 		</cfscript>
 	</cffunction>
@@ -45,6 +45,7 @@
         <cfscript>
         	// Event to clone from
         	 event=model("event").findOne(where="id = #params.key#", include="eventresources");
+        	 renderPage(action="add");
         </cfscript>
     </cffunction>
 
@@ -186,7 +187,7 @@
 						t.duration=DateDiff("n", locationEvents.start, locationEvents.end);
 						t.rowspan=ceiling(t.duration / 15);
 						t.content="<strong>"
-						& linkTo(controller='bookings', action='edit', key=locationEvents.id, text=h(locationEvents.title))
+						& linkTo( class="remote-modal", controller='eventdata', action='getEvent',  key=locationEvents.id, text=h(locationEvents.title))
 						& "</strong><br />"
 						& h(locationEvents.name) & "<br />"
 						& "#timeFormat(locationEvents.start, "HH:MM")# - #timeFormat(locationEvents.end, "HH:MM")# "
