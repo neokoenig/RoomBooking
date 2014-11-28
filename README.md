@@ -10,7 +10,7 @@ You can find a demo at [roombooking.oxalto.co.uk][1]
 
 ## Version
 
-Current version is 1.1 [release notes]
+Current version is 1.1 [release notes][8]
 
 ## Requirements
 
@@ -42,3 +42,4 @@ Room Booking System is released under the Apache License Version 2.0.
 [5]: http://getbootstrap.com/
 [6]: http://fullcalendar.io/
 [7]: http://momentjs.com/
+[8]: https://github.com/neokoenig/RoomBooking/wiki/Release-Notes-1.1
