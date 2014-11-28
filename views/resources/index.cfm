@@ -5,7 +5,7 @@
 
 
 #panel(title="All Resources")#
-#linkTo(Text="Create New Resource", class="btn btn-primary", action="add")#
+#linkTo(Text="<i class='glyphicon glyphicon-plus'></i> Create New Resource", class="btn btn-primary", action="add")#
 <cfif resources.recordcount>
 
 <table class="table">
@@ -25,13 +25,13 @@
 		<tr>
 			<td>#id#</td>
 			<td>#h(name)#<br /><small>#h(description)#</small></td>
-			<td>#h(type)#</td>
+			<td><code>#h(type)#</code></td>
 			<td>#tickorcross(len(restrictlocations))#</td>
 			<td>#tickorcross(isunique)#</td>
 			<td>
 				<div class="btn-group">
-					#linkTo(text="Edit", class="btn btn-sm btn-info", action="edit", key=id)#
-					#linkTo(text="Delete", class="btn btn-sm btn-danger", action="delete", key=id, confirm='Are you Sure?')#
+					#linkTo(text="<i class='glyphicon glyphicon-edit'></i> Edit", class="btn btn-xs btn-info", action="edit", key=id)#
+					#linkTo(text="<i class='glyphicon glyphicon-trash'></i> Delete", class="btn btn-xs btn-danger", action="delete", key=id, confirm='Are you Sure?')#
 				</div>
 			</td>
 		</tr>

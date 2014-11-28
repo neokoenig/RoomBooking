@@ -71,7 +71,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta name="HandheldFriendly" content="true">
 	<meta name="apple-mobile-web-app-capable" content="yes"><!-- try to forces full-screen for apple devices -->
-	<link href="/stylesheets/theme.css" media="all" rel="stylesheet" type="text/css" />
+	<link href="/stylesheets/rbs.min.css" media="all" rel="stylesheet" type="text/css" />
 </head>
     <body>
 <!-----------------------------HEADER--------------------------->
@@ -121,9 +121,9 @@
 	 			<p>Other recommended changes:</p>
 	 			<ul>
 	 				<li>/config/settings.cfm - change the application reload password</li>
+	 				<li>/config/production/settings.cfm - Add an error handling email address</li>
 	 				<li>Main Application Settings
 	 					<ul>
-	 						<li>Change the error handling email address</li>
 	 						<li>Change the main site email address</li>
 	 						<li>Add Google Analytics tracking code</li>
 	 						<li>Add URL path to site logo</li>
@@ -187,8 +187,7 @@
 <!----------------------------/CONTENT--------------------------->
 
 <!-----------------------------Scripts--------------------------->
-<script src="/javascripts/jquery-1.10.2.min.js" type="text/javascript"></script>
-<script src="/javascripts/bootstrap.min.js" type="text/javascript"></script>
+<script src="/javascripts/rbs.js" type="text/javascript"></script>
 
     </body>
 </html>

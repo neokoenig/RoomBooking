@@ -1,22 +1,33 @@
 <!---================= Room Booking System / https://github.com/neokoenig =======================--->
-<cfcomponent extends="Controller">
-	<cffunction name="init">
-		<cfscript>
-			filters(through="_getLocations", only="index");
-			filters(through="_checkLocationsAdmin");
-			filters(through="checkPermissionAndRedirect", permission="accessLocations");
- 		</cfscript>
-	</cffunction>
+component extends="Controller" hint="Locations Controller"
+{
+	/**
+	 * @hint Constructor.
+	 */
+	public void function init() {
+		// Permission filters
+		super.init();
 
-<!---================================ Views ======================================--->
-	<cffunction name="add">
-		<cfscript>
-			location=model("location").new();
-		</cfscript>
-	</cffunction>
+		// Permissions
+		filters(through="f_checkLocationsAdmin");
+		filters(through="checkPermissionAndRedirect", permission="accessLocations");
 
-	<cffunction name="create">
-	    <cfscript>
+		// Data
+		filters(through="_getLocations", only="index");
+	}
+
+/******************** Admin ***********************/
+	/**
+	*  @hint
+	*/
+	public void function add() {
+		location=model("location").new();
+	}
+
+	/**
+	*  @hint
+	*/
+	public void function create() {
 		if(structkeyexists(params, "location")){
 	    	location = model("location").new(params.location);
 			if ( location.save() ) {
@@ -26,17 +37,19 @@
 				renderPage(action="add", error="There were problems creating that location");
 			}
 		}
-		</cfscript>
-	</cffunction>
+	}
 
-	<cffunction name="edit">
-		<cfscript>
-			location=model("location").findOne(where="id = #params.key#");
-		</cfscript>
-	</cffunction>
+	/**
+	*  @hint
+	*/
+	public void function edit() {
+		location=model("location").findOne(where="id = #params.key#");
+	}
 
-	<cffunction name="update">
-		<cfscript>
+	/**
+	*  @hint
+	*/
+	public void function update() {
 		if(structkeyexists(params, "location")){
 	    	location = model("location").findOne(where="id = #params.key#");
 			location.update(params.location);
@@ -47,12 +60,12 @@
 				renderPage(action="edit", error="There were problems updating that location");
 			}
 		}
-		</cfscript>
-	</cffunction>
+	}
 
-	<cffunction name="delete">
-		<cfscript>
-		checkLocation=model("location").findAll();
+	/**
+	*  @hint
+	*/
+	public void function delete() {
 		if(checkLocation.recordcount GT 1){
 		 if(structkeyexists(params, "key")){
 		    	location = model("location").findOne(where="id = #params.key#");
@@ -64,17 +77,17 @@
 				}
 			}
 		} else {
-
-					redirectTo(action="index", error="At least one location is required.");
+ 			redirectTo(action="index", error="At least one location is required.");
+		}
 	}
-		</cfscript>
-	</cffunction>
+/******************** Private *********************/
+	/**
+	*  @hint Whether to allow access
+	*/
+	public void function f_checkLocationsAdmin() {
+		if(!application.rbs.setting.allowLocations){
+			redirectTo(route="home", error="Facility to edit locations has been disabled");
+		}
+	}
 
-<!---================================ Filters ======================================--->
-		<cffunction name="_checkLocationsAdmin">
-		<cfif !application.rbs.setting.allowLocations>
-			<cfset redirectTo(route="home", error="Facility to edit locations has been disabled")>
-		</cfif>
-	</cffunction>
-
-</cfcomponent>
+}

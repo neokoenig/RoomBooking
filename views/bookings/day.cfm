@@ -51,7 +51,6 @@
 					<td class="booked #class# allday">
 						<cfloop query="locationEventsAllDay">
 							#linkTo(class="remote-modal", controller='eventdata', action='getEvent', key=locationEventsAllDay.id, text=h(title))#
-							<!---#linkTo(controller='bookings', action='edit', key=locationEventsAllDay.id, text=h(title))#--->
 						</cfloop>
 					</td>
 					<cfelse>
@@ -64,7 +63,7 @@
 	</thead>
 	<tbody>
 		<cfset counter=1>
-		<cfloop from="#day.starttime#" to="#day.endtime#" index="i" step="#CreateTimeSpan(0,0,application.rbs.setting.calendarSlotMinutes,0)#">
+		<cfloop from="#day.starttime#" to="#day.endtime#" index="i" step="#CreateTimeSpan(0,0,timeFormat(application.rbs.setting.calendarSlotMinutes, 'M'),0)#">
   			<cfoutput>
  				<cfif timeFormat(i, "MM") EQ "00">
  					<tr class="hour #iif(isToday AND (timeFormat(i, 'HH') EQ timeformat(now(), 'HH')), '"current"', '""')#">
@@ -88,49 +87,4 @@
 </table>
 
 #includePartial("eventmodal")#
-<cfsavecontent variable="request.js.footer">
-	<script>
-	$(document).ready(function(){
-
-		$(".remote-modal").on("click", function(e){
-			var url=$(this).attr("href");
-			e.preventDefault();
-			 $('##eventmodal').modal({
-                remote: url + "?format=json"
-             });
-		});
-
-		$(".booked").on("click", function(e){
-			var url=$(this).find(".remote-modal").attr("href");
-			e.preventDefault();
-			 $('##eventmodal').modal({
-                remote: url + "?format=json"
-             });
-		});
-
-   //-------------------------------Remove Old Modal Data------------------//
-    $('body').on('hidden.bs.modal', '.modal', function () {
-        $(this).removeData('bs.modal');
-    });
-
-    //----------------------Datepicker ---------------------//
-
-    $("##thedate").datepicker({
-		numberOfMonths: 2,
-      	showButtonPanel: true,
-      	onSelect: function (thedate){
-      		console.log(thedate);
-      		//?y=2014&m=11&d=17
-      		window.location.href = "?y="
-      		+ moment(thedate).format("YYYY")
-      		+ "&m=" + moment(thedate).format("MM")
-      		+ "&d=" + moment(thedate).format("DD");
-      	}
-    });
-
-
-	 });
-
-	</script>
-</cfsavecontent>
 </cfoutput>

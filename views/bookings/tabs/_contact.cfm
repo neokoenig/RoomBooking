@@ -3,14 +3,14 @@
 	<fieldset>
 		<legend>Contact Details</legend>
 	<div class="row">
-		<div class="col-lg-4 col-md-4">
+		<div class="col-md-4">
 			#textField(objectname="event", property="contactname", label="Contact Name", placeholder="e.g Joe Bloggs")#
 		</div>
-		<div class="col-lg-4 col-md-4">
+		<div class="col-md-4">
 			#textField(objectname="event", property="contactno", label="Tel No.", placeholder="e.g 01865 287430")#
 		</div>
-		<div class="col-lg-4 col-md-4">
-			#textField(objectname="event", property="contactemail", label="Email", placeholder="e.g joe@bloggs.com")#
+		<div class="col-md-4">
+			#textField(objectname="event", property="contactemail", label="Email", type="email", placeholder="e.g joe@bloggs.com", data_bv_emailaddress="true",  data_bv_emailaddress_message="The value is not a valid email address")#
 		</div>
 	</div>
 	<cfif params.action EQ "add" OR params.action EQ "create">

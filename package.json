@@ -1,0 +1,30 @@
+{
+  "name": "RoomBookingSystem",
+  "version": "1.1.0",
+  "description": "Room Booking System",
+  "main": "index.cfm",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/neokoenig/RoomBooking.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/neokoenig/RoomBooking/issues"
+  },
+  "homepage": "https://github.com/neokoenig/RoomBooking/wiki",
+  "devDependencies": {
+    "grunt": "^0.4.5",
+    "grunt-contrib-clean": "^0.5.0",
+    "grunt-contrib-concat": "^0.4.0",
+    "grunt-contrib-cssmin": "^0.9.0",
+    "grunt-contrib-imagemin": "^0.7.1",
+    "grunt-contrib-jshint": "^0.10.0",
+    "grunt-contrib-less": "^0.11.1",
+    "grunt-contrib-uglify": "^0.4.0",
+    "grunt-contrib-watch": "^0.6.1",
+    "grunt-injector": "^0.5.2",
+    "grunt-rev": "^0.1.0",
+    "matchdep": "^0.3.0"
+  }
+}

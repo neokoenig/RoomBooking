@@ -3,9 +3,9 @@
 <cfoutput>
 #panel(title="Create New Event")#
 #errorMessagesFor("event")#
-	#startFormTag(action="create")#
+	#startFormTag(action="create", id="bookingform")#
 		#includePartial("form")#
-		#submitTag(value="Create Booking", class="btn btn-block btn-primary")#
+		#submitTag(value="Create Booking", class="btn btn-block btn-primary btn-lg")#
 	#endFormTag()#
 #panelend()#
 </cfoutput>

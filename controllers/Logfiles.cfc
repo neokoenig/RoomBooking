@@ -1,45 +1,48 @@
-<!--- Manage Logs --->
-<cfcomponent	extends="Controller"	hint="Admin Log Files etc">
+<!---================= Room Booking System / https://github.com/neokoenig =======================--->
+component extends="Controller" hint="Manage Logfiles"
+{
+	/**
+	 * @hint Constructor.
+	 */
+	public void function init() {
+		// Permission filters
+		super.init();
+		// Additional Permissions
+		filters(through="checkPermissionAndRedirect", permission="accesslogfiles");
+	}
 
-<cffunction name="init">
-	<cfscript>
-		filters(through="checkPermissionAndRedirect", permission="accesslogfiles");  
-	</cfscript>
-</cffunction>
-
-<cffunction name="index">
-<cfparam name="params.type" default="">
-<cfparam name="params.userid" default="">
-<cfparam name="params.rows" default=250>
-	<cfscript>  
-		LogFileTypes=getLogFileTypes();
-		
-/* Bug in RC1 with using CONCAT() etc; using email until that's fixed */
-		//users=model("user").findAll(select="id,CONCAT(firstname,' ', lastname) AS fullname,email", order="lastname");	 
-
-		users=model("user").findAll(select="id,email", order="lastname");	 
+/******************** Public***********************/
+	/**
+	*  @hint Log viewer
+	*/
+	public void function index() {
+		param name="params.type" type="string" default="";
+		param name="params.userid" default="";
+		param name="params.rows" type="numeric" default=250;
+		LogFileTypes=_getLogFileTypes();
+		users=model("user").findAll(select="id,email", order="lastname");
 		var wc = arrayNew(1);
 		if(structKeyExists(params, "type") AND Len(params.type)){
 			arrayAppend(wc, "type = '#params.type#'");
 		}
-		if(structKeyExists(params, "userid") AND len(params.userid) AND isNumeric(params.userid)){
+		if(structKeyExists(params, "userid") AND len(params.userid)){
 			arrayAppend(wc, "userid = #params.userid#");
 		}
 		if(arrayLen(wc)){
 			wc = arrayToList(wc, " AND ");
-			//writeDump(wc);
-			//abort;
 			logfiles=model("logfiles").findAll(where="#wc#", maxrows=params.rows,  order="createdAt DESC", includeSoftDeletes=true);
 		}
 		else {
 			logfiles=model("logfiles").findAll(maxrows=500,  maxrows=params.rows, order="createdAt DESC", includeSoftDeletes=true);
 		}
+	}
+/******************** Admin ***********************/
 
-	</cfscript>  
-</cffunction> 
-  
-<cffunction name="getLogFileTypes">
-	<cfreturn "login,success,error,ajax,cookie">
-</cffunction>
-
-</cfcomponent>
+/******************** Private *********************/
+	/**
+	*  @hint
+	*/
+	public string function _getLogFileTypes() {
+		return "login,success,error,ajax,cookie";
+	}
+}

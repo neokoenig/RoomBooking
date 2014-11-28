@@ -26,3 +26,6 @@
 		<cfset url[key] = Trim(url[key])>
 	</cfloop>
 </cfif>
+
+<!--- Other default request level vars--->
+<cfset request.showNavBar="true">

@@ -1,48 +1,75 @@
 <!---================= Room Booking System / https://github.com/neokoenig =======================--->
-<!---
+component extends="Controller" hint="RSS/ICal Etc"
+{
+	/**
+	 * @hint Constructor.
+	 */
+	public void function init() {
 
-Notes
-	This CFC should provide json, xml, rss, ical, (+ rendered html?) data dependent on url strings being passed in.
-	@format: one of
---->
-<cfcomponent extends="Controller" output="false">
-	<cffunction name="init">
-		<cfscript>
-			provides("json,xml,html");
-			filters(through="isValidAPIRequest", except="index");
-			filters(through="checkPermissionAndRedirect", permission="allowAPI", only="index");
-			filters(through="checkPermissionAndRedirect", permission="accessapplication", only="index");
-			filters(through="_getLocations", only="index");
-			usesLayout(template="false", only="ical");
-			//filters(through="checkPermissionAndRedirect", permission="allowRSS", only="rss");
-			//filters(through="checkPermissionAndRedirect", permission="allowiCAL", only="ical");
-		</cfscript>
-	</cffunction>
+		// Permissions (no super.init())
+		filters(through="f_isValidAPIRequest", except="index");
+		filters(through="checkPermissionAndRedirect", permission="allowAPI", only="index");
 
-<!---================================ Display available options ======================================--->
-	<cffunction name="index" hint="Displays all possible feeds etc">
+		// Data
+		filters(through="_getLocations", only="index");
 
-	</cffunction>
+		// Format
+		provides("json,xml,html");
+		usesLayout(template="false", only="ical");
+		usesLayout(template="displayboard", only="display");
+	}
 
-<!---================================ Feeds, authentication via token ======================================--->
-
-	<cffunction name="rss2" output="false" hint="RSS2 Feed Defaults to 25 rows, but you can add maxrows=x to override">
-		<cfparam name="params.maxrows" default="25" type="numeric">
-		<cfparam name="params.format" default="xml" type="string">
-		<cfscript>
+/******************** Public***********************/
+	/**
+	*  @hint Full Screen Display/digital signage
+	*/
+	public void function display() {
+		param name="params.maxrows" default="5" type="numeric";
+		param name="params.today" default=0 type="numeric";
+		request.bodyClass="displayBoard";
+		var sd=createDateTime(year(now()), month(now()), day(now()), 00, 00, 00);
+		var ed=createDateTime(year(now()), month(now()), day(now()), 23, 59, 00);
+		if(params.today){
+			isToday=true;
 			if(structKeyExists(params, "location") AND isnumeric(params.location)){
+				isSingleLocation=true;
+				events=model("location").findAll(where="start > '#sd#' AND end < '#ed#' AND id = #params.location#", include="events", order="start", maxrows=params.maxrows);
+			}
+			else {
+				events=model("location").findAll(where="start > '#sd#' AND end < '#ed#'", include="events", order="start", maxrows=params.maxrows);
+			}
+		} else {
+			if(structKeyExists(params, "location") AND isnumeric(params.location)){
+				isSingleLocation=true;
+				events=model("location").findAll(where="start > '#now()#' AND id = #params.location#", include="events", order="start", maxrows=params.maxrows);
+			}
+			else {
+				events=model("location").findAll(where="start > '#now()#'", include="events", order="start", maxrows=params.maxrows);
+			}
+		}
+
+	}
+
+	/**
+	*  @hint RSS2 Feed Defaults to 25 rows, but you can add maxrows=x to override
+	*/
+	public void function rss2() {
+		param name="params.maxrows" default="25" type="numeric";
+		param name="params.format" default="xml" type="string";
+		if(structKeyExists(params, "location") AND isnumeric(params.location)){
 				events=model("location").findAll(where="start > '#now()#' AND id = #params.location#", include="events", order="start", maxrows=params.maxrows);
 			}
 			else {
 				events=model("location").findAll(where="start > '#now()#'", include="events", order="start", maxrows=params.maxrows);
 			}
 			renderWith(data=events);
-		</cfscript>
-	</cffunction>
+	}
 
-	<cffunction name="ical" output="false" hint="iCal feed - Bit of an experiment! based on cflib.org USiCal()">
-		<cfparam name="params.maxrows" default="25" type="numeric">
-		<cfscript>
+	/**
+	*  @hint iCal feed - Bit of an experiment! based on cflib.org USiCal()
+	*/
+	public void function ical() {
+		param name="params.maxrows" default="25" type="numeric";
 		var vCal = "";
 		var CRLF=chr(13)&chr(10);
 		data = "";
@@ -58,9 +85,7 @@ Notes
 		vCal = vCal & "METHOD:PUBLISH" & CRLF;
 		vCal = vCal & "X-WR-TIMEZONE:UTC" & CRLF;
 		vCal = vCal & "X-WR-CALDESC:#application.rbs.setting.sitetitle# Events" & CRLF;
-		</cfscript>
-		<cfloop query="events">
-		<cfscript>
+		for(event in events){
 			vCal = vCal & "BEGIN:VEVENT" & CRLF;
 			vCal = vCal & "UID:#createUUID()#_#application.rbs.setting.siteEmailAddress#" & CRLF;  // creates a unique identifier
 			vCal = vCal & "ORGANIZER;CN=#application.rbs.setting.sitetitle#:MAILTO:#application.rbs.setting.siteEmailAddress#" & CRLF;
@@ -68,40 +93,38 @@ Notes
 					DateFormat(now(),"yyyymmdd") & "T" &
 					TimeFormat(now(), "HHmmss") & CRLF;
 			vCal = vCal & "DTSTART;TZID=Eastern Time:" &
-					DateFormat(start,"yyyymmdd") & "T" &
-					TimeFormat(start, "HHmmss") & CRLF;
+					DateFormat(event.start,"yyyymmdd") & "T" &
+					TimeFormat(event.start, "HHmmss") & CRLF;
 			vCal = vCal & "DTEND;TZID=Eastern Time:" &
-					DateFormat(end,"yyyymmdd") & "T" &
-					TimeFormat(end, "HHmmss") & CRLF;
-			vCal = vCal & "SUMMARY:#title#" & CRLF;
-			vCal = vCal & "LOCATION:#name# - #description#" & CRLF;
-			vCal = vCal & "DESCRIPTION:#striptags(eventdescription)#" & CRLF;
+					DateFormat(event.end,"yyyymmdd") & "T" &
+					TimeFormat(event.end, "HHmmss") & CRLF;
+			vCal = vCal & "SUMMARY:#event.title#" & CRLF;
+			vCal = vCal & "LOCATION:#event.name# - #event.description#" & CRLF;
+			vCal = vCal & "DESCRIPTION:#striptags(event.eventdescription)#" & CRLF;
 			vCal = vCal & "PRIORITY:1" & CRLF;
 			vCal = vCal & "TRANSP:OPAQUE" & CRLF;
 			vCal = vCal & "CLASS:PUBLIC" & CRLF;
 			vCal = vCal & "END:VEVENT" & CRLF;
-		</cfscript>
-		</cfloop>
-		<cfscript>
+		}
 		vCal = vCal & "END:VCALENDAR";
 		data  = vCal;
 		renderWith(data=data);
-		</cfscript>
-	</cffunction>
-
-<!---================================ API Token Authentication ======================================--->
-	<cffunction name="isValidAPIRequest" hint="Authenticates an API request via token">
-		<cfscript>
+	}
+/******************** Private *********************/
+	/**
+	*  @hint Whether the URL has a valid API token
+	*/
+	private void function f_isValidAPIRequest() {
 		var r=false;
 		if(structKeyExists(params, "token") AND len(params.token) GT 25){
 			if(model("user").exists(where="apitoken='#params.token#'")){
 				r=true;
 			}
 		}
-
 		if(!r){
 			redirectTo(route="denied", error="No API Authentication Token Present");
 		}
-		</cfscript>
-	</cffunction>
- </cfcomponent>
+	}
+
+}
+

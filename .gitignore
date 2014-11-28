@@ -218,3 +218,5 @@ WEB-INF
 plugins/**/*
 db/sql
 config/auth.cfm
+bower_components
+node_modules

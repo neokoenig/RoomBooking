@@ -4,24 +4,20 @@
 <cfparam name="resources">
 <cfparam name="event">
 <cfoutput>
-
-
-  	#includePartial("tabs/details")#
-	#includePartial("tabs/contact")#
-	<cfif application.rbs.setting.allowResources>
+#includePartial("tabs/details")#
+#includePartial("tabs/contact")#
+<cfif application.rbs.setting.allowResources>
 	#includePartial("tabs/resources")#
-	</cfif>
-	<cfif params.action EQ "add" OR params.action EQ "create">
-		#includePartial("tabs/repeat")#
-	</cfif>
-
+</cfif>
+<cfif params.action EQ "add" OR params.action EQ "create">
+	#includePartial("tabs/repeat")#
+</cfif>
 </cfoutput>
 
 <cfsavecontent variable="request.js.datepicker">
 <script>
 $(document).ready(function(){
-	// Popovers
-	$('.pop').popover({});
+
 	// Deselect resources if restricted
 	restrictResources(false);
 
@@ -80,71 +76,6 @@ $(document).ready(function(){
 			}
 		})
 	});
-
-	// Tabs
-	$(function () {
-		$('#myTab a:first').tab('show')
-	})
-
-	// Alter Time on All Day checkbox
-	$("#event-allDay").on("click", function(e){
-		var s=startDateTextBox.datetimepicker('getDate'),
-		 	e=endDateTextBox.datetimepicker('getDate');
-		 	if(s !== null){
-				s.setHours(0,0,0,0);
-				$('#event-start').datetimepicker('setDate', (s));
-		 	}
-		 	if(e !== null){
-				e.setHours(23,59,0,0);
-				$('#event-end').datetimepicker('setDate', (e));
-		 	}
-	});
-
-	// Date Pickers
-	var startDateTextBox = $('#event-start');
-	var endDateTextBox = $('#event-end');
-
-	startDateTextBox.datetimepicker({
-		timeFormat: 'HH:mm',
-		dateFormat: 'yy-mm-dd',
-		hourMin: 7,
-		stepMinute: 5,
-		hourMax: 23,
-		minDate: new Date(),
-		onClose: function(dateText, inst) {
-			if (endDateTextBox.val() != '') {
-				var testStartDate = startDateTextBox.datetimepicker('getDate');
-				var testEndDate = endDateTextBox.datetimepicker('getDate');
-				if (testStartDate > testEndDate)
-					endDateTextBox.datetimepicker('setDate', testStartDate);
-			}
-			else {
-				endDateTextBox.val(dateText);
-			}
-		},
-		onSelect: function (selectedDateTime){
-			endDateTextBox.datetimepicker('option', 'minDate', startDateTextBox.datetimepicker('getDate') );
-		}
-	});
-	endDateTextBox.datetimepicker({
-		timeFormat: 'HH:mm',
-		dateFormat: 'yy-mm-dd',
-		onClose: function(dateText, inst) {
-			if (startDateTextBox.val() != '') {
-				var testStartDate = startDateTextBox.datetimepicker('getDate');
-				var testEndDate = endDateTextBox.datetimepicker('getDate');
-				if (testStartDate > testEndDate)
-					startDateTextBox.datetimepicker('setDate', testEndDate);
-			}
-			else {
-				startDateTextBox.val(dateText);
-			}
-		},
-		onSelect: function (selectedDateTime){
-			startDateTextBox.datetimepicker('option', 'maxDate', endDateTextBox.datetimepicker('getDate') );
-		}
-	});
-
 });
 </script>
 </cfsavecontent>

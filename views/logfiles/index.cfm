@@ -1,9 +1,5 @@
 <!--- Log file output --->
-
-
-<cfoutput>    
- 
-
+<cfoutput>
 #includePartial("filter")#
 </cfoutput>
 <cfif logfiles.recordcount>
@@ -22,10 +18,10 @@
 				<cfloop query="logfiles">
 					<cfquery dbtype="query" name="thisuser">
 						SELECT id, email FROM users WHERE id = <cfqueryparam cfsqltype="cf_sql_integer" value="#userid#">
-					</cfquery> 
+					</cfquery>
 					<cfoutput>
 					<tr>
-					
+
 				<td><span class="label-#lcase(Type)# label">#ID#</span></td>
 				<td>#Message#</td>
 				<td>#linkTo(params="type=#lcase(type)#&userid=&rows=1000", text="#Type#")#</td>
@@ -46,7 +42,7 @@
 
 						</tr>
 						</cfoutput>
-				</cfloop> 
+				</cfloop>
 				</tbody>
 		</table>
 	<Cfelse>

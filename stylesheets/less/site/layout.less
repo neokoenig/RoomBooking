@@ -1,0 +1,49 @@
+/*************** RBS / layout *******************/
+.navbar {
+	 .logo {margin-right:10px;}
+}
+
+.location-filter, .fc-event { color:white;}
+.location-filter, .fc-event, .fc-future, .fc-today:hover {cursor:pointer;}
+
+.fc-future:hover  {background:#E8E8E8; }
+.fc-today:hover {background:#D6CED1;}
+.fc-past {background:#D1D1D1; opacity: 0.8;}
+
+/* Various Helper Classes */
+.append {margin-bottom:10px !important;}
+.label-login {background:green;}
+.label-cookie {background:purple;}
+.label-error {background:red;}
+.label- {background:black;}
+
+/* Forms */
+#dropdown-signin form {
+	padding:10px;
+	input.form-control {width:250px;}
+}
+fieldset {margin-bottom:20px;}
+
+/* Bookable resources */
+.table .checkbox {margin:0;}
+
+/* List View */
+.header-row {border-top:2px solid #222;}
+
+/* Alt Day View */
+.table-day {
+	tbody>tr>th,  tfoot>tr>th,  thead>tr>td, tbody>tr>td, tfoot>tr>td {padding:0;}
+	tbody tr td.booked {border-top:none; border-width:0; background: #f4f4f4; padding:5px;}
+	tbody tr td.booked:hover {cursor: pointer; -webkit-box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.59);
+						-moz-box-shadow:    0px 0px 8px 0px rgba(0, 0, 0, 0.59);
+						box-shadow:         0px 0px 8px 0px rgba(0, 0, 0, 0.59);}
+
+	tr.hour {border-top:2px solid #ccc;
+		.current {border-top:2px solid red;}
+	}
+	tr td.free {border-right:1px dotted #ddd; }
+	.label {font-size:100%;}
+	.allday {padding:5px;}
+	.lower-op {opacity:0.5;}
+}
+

@@ -1,24 +1,38 @@
 <!---================= Room Booking System / https://github.com/neokoenig =======================--->
-<cfcomponent extends="Controller">
-	<cffunction name="init">
-		<cfscript>
-			filters(through="_getresources", only="index");
-			filters(through="checkPermissionAndRedirect", permission="accessresources");
-			filters(through="_checkResourcesAdmin");
-			filters(through="_getLocations");
-			provides("html,json");
- 		</cfscript>
-	</cffunction>
+component extends="Controller" hint="Resources Controller"
+{
+	/**
+	 * @hint Constructor.
+	 */
+	public void function init() {
+		// Permission filters
+		super.init();
 
-<!---================================ Views ======================================--->
-	<cffunction name="add">
-		<cfscript>
-			resource=model("resource").new();
-		</cfscript>
-	</cffunction>
+		// Permissions
+		filters(through="checkPermissionAndRedirect", permission="accessresources");
+		filters(through="_checkResourcesAdmin");
+		filters(through="_isValidAjax", only="checkavailability");
 
-	<cffunction name="create">
-	    <cfscript>
+		// Data
+		filters(through="_getresources", only="index");
+		filters(through="_getLocations");
+
+		// Format
+		provides("html,json");
+	}
+
+/******************** Public***********************/
+	/**
+	*  @hint Add Resource
+	*/
+	public void function add() {
+		resource=model("resource").new();
+	}
+
+	/**
+	*  @hint Create Resource
+	*/
+	public void function create() {
 		if(structkeyexists(params, "resource")){
 	    	resource = model("resource").new(params.resource);
 			if ( resource.save() ) {
@@ -28,17 +42,19 @@
 				renderPage(action="add", error="There were problems creating that resource");
 			}
 		}
-		</cfscript>
-	</cffunction>
+	}
 
-	<cffunction name="edit">
-		<cfscript>
-			resource=model("resource").findOne(where="id = #params.key#");
-		</cfscript>
-	</cffunction>
+	/**
+	*  @hint Edit Resource
+	*/
+	public void function edit() {
+		resource=model("resource").findOne(where="id = #params.key#");
+	}
 
-	<cffunction name="update">
-		<cfscript>
+	/**
+	*  @hint Update Resource
+	*/
+	public void function update() {
 		if(structkeyexists(params, "resource")){
 	    	resource = model("resource").findOne(where="id = #params.key#");
 			resource.update(params.resource);
@@ -49,12 +65,13 @@
 				renderPage(action="edit", error="There were problems updating that resource");
 			}
 		}
-		</cfscript>
-	</cffunction>
+	}
 
-	<cffunction name="delete">
-		<cfscript>
-		 	 if(structkeyexists(params, "key")){
+	/**
+	*  @hint Delete Resource
+	*/
+	public void function delete() {
+	 	if(structkeyexists(params, "key")){
 		    	resource = model("resource").findOne(where="id = #params.key#");
 				if ( resource.delete() )  {
 					redirectTo(action="index", success="resource successfully deleted");
@@ -63,15 +80,26 @@
 					redirectTo(action="index", error="There were problems deleting that resource");
 				}
 			}
-		</cfscript>
-	</cffunction>
-<!---================================ Ajax ======================================--->
-	<cffunction name="checkavailability" hint="Check for resource concurrency">
-		<cfparam name="params.id" default="">
-		<cfparam name="params.eventid" default="">
-		<cfparam name="params.start" default="">
-		<cfparam name="params.end" default="">
-		<cfscript>
+	}
+
+/******************** Private *********************/
+	/**
+	*  @hint
+	*/
+	public void function _checkResourcesAdmin() {
+		if (!application.rbs.setting.allowResources){
+			redirectTo(route="home", error="Facility to add/edit resources has been disabled");
+		}
+	}
+/******************** Ajax/Remote/Misc*************/
+	/**
+	*  @hint Bit of a hack, but a quick lookup to see if a resource is already booked
+	*/
+	public void function checkavailability() {
+		param name="params.id" default="" type="numeric";
+		param name="params.eventid" default="" type="numeric";
+		param name="params.start" default="" type="string";
+		param name="params.end" default="" type="string";
 		if(!isDate(params.end)){
 			params.end=dateAdd("h", 1, params.start);
 		}
@@ -91,13 +119,7 @@
 		} else {
 			renderText(1);
 		}
-		</cfscript>
-	</cffunction>
-<!---================================ Filters ======================================--->
-		<cffunction name="_checkResourcesAdmin">
-		<cfif !application.rbs.setting.allowResources>
-			<cfset redirectTo(route="home", error="Facility to add/edit resources has been disabled")>
-		</cfif>
-	</cffunction>
 
-</cfcomponent>
+
+	}
+}

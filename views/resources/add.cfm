@@ -3,7 +3,7 @@
 <cfparam name="resource">
 <cfoutput>
 #panel(title="New Resource")#
-	#startFormTag(action="create")#
+	#startFormTag(action="create", id="resourceForm")#
 	#includePartial("form")#
 	#submitTag(value="Create New Resource")#
 	#endFormTag()#

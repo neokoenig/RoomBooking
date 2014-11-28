@@ -1,21 +1,23 @@
 <!---================= Room Booking System / https://github.com/neokoenig =======================--->
-<!--- Events --->
-<cfcomponent extends="Model">
-	<cffunction name="init">
-		<cfscript>
-			// Associations
-			belongsTo("location");
-			hasMany("eventresources");
-			nestedproperties(associations="eventresources", allowDelete=true);
-			// Validation
-			validate("checkDates");
-			afterFind("formatDates");
+component extends="Model" hint="Main Event Object"
+{
+	/**
+	 * @hint Constructor
+	 */
+	public void function init() {
+		// Assocations
+		belongsTo("location");
+		hasMany("eventresources");
+		nestedproperties(associations="eventresources", allowDelete=true);
+		// Validation
+		validate("checkDates");
+		afterFind("formatDates");
+	}
 
-		</cfscript>
-	</cffunction>
-
-	<cffunction name="checkDates" hint="If there's no end date, add a default end date 1hour into future">
-		<cfscript>
+	/**
+	*  @hint If there's no end date, add a default end date 1hour into future
+	*/
+	public void function checkDates() {
 		// Have a double check for a start date
 		if(!isDate(this.start)){
 			this.start=now();
@@ -29,18 +31,17 @@
     	if((DateCompare("#this.end#", "#this.start#")) EQ -1 ){
 			 addError(property="end", message="End Date can not be before Start Date.");
 		}
-		</cfscript>
-	</cffunction>
+	}
 
-	<cffunction name="formatDates" hint="Formats Date for DateTime Picker">
-		<cfscript>
-			//09/22/2013 14:57 +0100
+	/**
+	*  @hint Formats Date for DateTime Picker
+	*/
+	public void function formatDates() {
 		if(structKeyExists(this, "start")){
-			this.start=dateFormat(this.start, "yyyy-mm-dd") & ' ' & timeFormat(this.start, "HH:MM");
+			this.start=dateFormat(this.start, "DD MMM YYYY") & ' ' & timeFormat(this.start, "HH:mm");
 		}
 		if(structKeyExists(this, "end")){
-			this.end=dateFormat(this.end, "yyyy-mm-dd") & ' ' & timeFormat(this.end, "HH:MM");
+			this.end=dateFormat(this.end, "DD MMM YYYY") & ' ' & timeFormat(this.end, "HH:mm");
 		}
-		</cfscript>
-	</cffunction>
-</cfcomponent>
+	}
+}

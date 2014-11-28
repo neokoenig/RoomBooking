@@ -1,10 +1,13 @@
 <!---================= Room Booking System / https://github.com/neokoenig =======================--->
-<!--- Event Resources --->
-<cfcomponent extends="Model">
-	<cffunction name="init">
-		<cfscript>
-			belongsTo("event");
-			belongsTo("resource");
-		</cfscript>
-	</cffunction>
-</cfcomponent>
+component extends="Model" hint="Event Resource Model"
+{
+	/**
+	 * @hint Constructor
+	 */
+	public void function init() {
+		// Associations
+		belongsTo("event");
+		belongsTo("resource");
+	}
+
+}

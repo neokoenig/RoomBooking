@@ -1,19 +1,19 @@
-<cfcomponent extends="Controller">
+<!---================= Room Booking System / https://github.com/neokoenig =======================--->
+component extends="Controller" hint="Sessions Controller"
+{
+	/**
+	 * @hint Constructor.
+	 */
+	public void function init() {
+		// Permission filters - NB, doesn't go via super.init()
+		filters(through="redirectIfLoggedIn", only="new,attemptlogin");
+	}
 
-	<cffunction name="init">
-		<cfscript>
-		filters(through="logFlash", type="after");
-		filters(through="redirectIfLoggedIn", only="new");
-
- 		</cfscript>
-	</cffunction>
-
-	<cffunction name="new" hint="Create New Session">
-
-	</cffunction>
-
-	<cffunction name="attemptlogin" hint="Main Login Method">
-		<cfscript>
+/******************** Public***********************/
+	/**
+	*  @hint Login procedure
+	*/
+	public void function attemptlogin() {
 		var p={};
 		if(structkeyexists(params, "email") AND structkeyexists(params, "password")){
 			user = model("user").findOneByEmail(params.email);
@@ -32,43 +32,35 @@
 				}
 				else {
 					addLogline(type="Login", message="PW doesn't match hashed");
-					_badLogin();
+					RedirectTo(error="We could not sign you in. Please try that again.", route="login");;
 				}
 			}
 			else {
 				addLogline(type="Login", message="Bad Login [User isn't object, searched for #h(params.email)#]");
-					_badLogin();
+				RedirectTo(error="We could not sign you in. Please try that again.", route="login");
 				}
 		}
-	else {
-		addLogline(type="Login", message="Bad Login [Need Email and Password]");
-		 _badLogin();
-	}
-		</cfscript>
-	</cffunction>
-
-	<cffunction name="logout" hint="Logs out a user">
-		<cfscript>
-			StructDelete(session, "currentUser");
-			redirectTo(route="home", success="You have been successfully signed out");
-		</cfscript>
-	</cffunction>
-
-	<cffunction name="forgetme" hint="Kills Cookie">
-		<cfscript>
-			setCookieForgetUsername();
-			redirectTo(route="login");
-		</cfscript>
-	</cffunction>
-
-	<cffunction name="denied" hint="Access Denied">
-
-	</cffunction>
-
-	<cffunction name="_badLogin" access="private">
-		<cfscript>
+		else {
+			addLogline(type="Login", message="Bad Login [Need Email and Password]");
 			RedirectTo(error="We could not sign you in. Please try that again.", route="login");
-		</cfscript>
-	</cffunction>
-</cfcomponent>
+		}
+	}
 
+	/**
+	*  @hint Logout a user
+	*/
+	public void function logout() {
+		StructDelete(session, "currentUser");
+		redirectTo(route="home", success="You have been successfully signed out");
+	}
+
+	/**
+	*  @hint Forget Users cookie
+	*/
+	public void function forgetme() {
+		setCookieForgetUsername();
+		redirectTo(route="login");
+	}
+
+
+}

@@ -3,7 +3,7 @@
 <cfparam name="location">
 <cfoutput>
 #panel(title="New Location")#
-	#startFormTag(action="create")# 
+	#startFormTag(action="create", id="locationForm")#
 	#includePartial("form")#
 	#submitTag(value="Create New Location")#
 	#endFormTag()#

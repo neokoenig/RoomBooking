@@ -2,12 +2,12 @@
 <cfoutput>
 #errormessagesFor("setting")#
 <cfswitch expression="#setting.fieldtype#">
-	<cfcase value="integer,string"> 
+	<cfcase value="integer,string">
 		#textField(objectName="setting", property="value", label=setting.id)#
 	</cfcase>
-	<cfcase value="boolean"> 
+	<cfcase value="boolean">
 		#select(objectName="setting", property="value", label=setting.id, options="0,1")#
 	</cfcase>
 </cfswitch>
-<span class="help-block">#setting.notes#</span>
+<span class="help-block">#h(setting.notes)#</span>
 </cfoutput>

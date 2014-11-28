@@ -1,24 +1,43 @@
 <!---================= Room Booking System / https://github.com/neokoenig =======================--->
-<cfcomponent extends="Controller">
-<!--- All things events related, mostly called via ajax --->
-	<cffunction name="init">
-		<cfscript>
-			provides("html,json");
-			usesLayout(template="modal", only="getevent");
-			filters(through="_getResources", only="getevent");
-			filters(through="checkPermissionAndRedirect", permission="accessapplication");
-			filters(through="checkPermissionAndRedirect", permission="accesscalendar");
-		</cfscript>
-	</cffunction>
+component extends="Controller" hint="Misc Event Data"
+{
+	/**
+	 * @hint Constructor.
+	 */
+	public void function init() {
+		super.init();
 
-<!---================================ Views via Ajax ======================================--->
-	<cffunction name="getEvents" hint="Get Events For the provided range">
-	    <cfscript>
-	    if(isAjax() AND structkeyexists(params, "start") AND structkeyexists(params, "end")){
+		// Additional Permissions
+		filters(through="checkPermissionAndRedirect", permission="accesscalendar");
+		filters(through="_isValidAjax");
+
+		// Data
+		filters(through="_getResources", only="getevent");
+
+		// Formats
+		provides("html,json");
+		usesLayout(template="modal", only="getevent");
+	}
+
+/******************** Public***********************/
+	/**
+	*  @hint Get Events For the provided range via ajax
+	*/
+	public void function getEvents() {
+		if(structkeyexists(params, "start") AND structkeyexists(params, "end")){
+
+	    	var sd=createDateTime(year(params.start), month(params.start), day(params.start), 00,00,00);
+	    	var ed=createDateTime(year(params.end), month(params.end), day(params.end), 00,00,00);
+
 	    	if(structKeyExists(params, "key")){
-		    	data=model("location").findAll(where="start > '#eToLocal(params.start)#' AND id = #params.key#", include="events");
+		    	//data=model("event").findAll(where="locations.id = #params.key#", include="location");
+		    		data=model("event").findAll(select="id, title, locationid,  class, start, end, allday",
+	    			where="start >= '#sd#' AND end <= '#ed#' AND locationid = '#params.key#'", include="location",
+	    			order="start ASC");
  	    	} else {
-	    		data=model("location").findAll(where="start > '#eToLocal(params.start)#'", include="events");
+	    		data=model("event").findAll(select="id, title, locationid,  class, start, end, allday",
+	    			where="start >= '#sd#' AND end <= '#ed#'", include="location",
+	    			order="start ASC");
 	    	}
 	    	events=prepEventData(data);
 		    renderWith(events);
@@ -26,39 +45,39 @@
 		else {
 			abort;
 		}
-	    </cfscript>
-	</cffunction>
+	}
 
-
-	<cffunction name="getEvent" hint="Get Single Clicked Event">
-		<cfscript>
-		if(isAjax() AND structKeyExists(params, "key")){
+	/**
+	*  @hint get single event via ajax, i.e for modals
+	*/
+	public void function getEvent() {
+		if(structKeyExists(params, "key")){
 		 	event=model("location").findAll(where="events.id = #params.key#", include="events(eventresources)");
 		}
-		</cfscript>
-	</cffunction>
+	}
+/******************** Private *********************/
+ 	/**
+ 	*  @hint Sort out event data
+ 	*/
+ 	private array function prepEventData(data) {
+ 		var events=[];
+ 		var c=1;
+ 		for(event in arguments.data){
+			events[c]["id"]=event.id;
+			events[c]["title"]=event.title;
+			events[c]["start"]=_f_d(event.start);
+			events[c]["end"]=_f_d(event.end);
+			events[c]["allDay"]=event.allDay;
+			events[c]["className"]=event.class;
+			c++;
+ 		}
+ 		return events;
+ 	}
+ 	/**
+ 	*  @hint Experimental date format
+ 	*/
+ 	private string function _f_d(str) {
+ 	 return dateFormat(arguments.str, "YYYY-MM-DD") & "T" & timeFormat(arguments.str, "HH:MM:00")
+ 	}
 
-<!---================================ Private ======================================--->
-	<cffunction name="prepEventData" access="private">
-		<cfargument name="data">
-		<cfset var events=[]>
-		<cfloop query="arguments.data">
-			<cfscript>
-				events[currentrow]["id"]=arguments.data.eventid[currentrow];
-				events[currentrow]["title"]=arguments.data.title[currentrow];
-				events[currentrow]["start"]=arguments.data.start[currentrow];
-				events[currentrow]["end"]=arguments.data.end[currentrow];
-				events[currentrow]["allDay"]=arguments.data.allDay[currentrow];
-				events[currentrow]["location"]=arguments.data.name[currentrow];
-				events[currentrow]["ldescription"]=arguments.data.description[currentrow];
-				events[currentrow]["edescription"]=arguments.data.eventdescription[currentrow];
-				events[currentrow]["className"]=arguments.data.class[currentrow];
-				events[currentrow]["createdAt"]=arguments.data.createdAt[currentrow];
-				events[currentrow]["updatedAt"]=arguments.data.updatedAt[currentrow];
-			</cfscript>
-		</cfloop>
-		<cfreturn events />
-	</cffunction>
-
-
-</cfcomponent>
+}

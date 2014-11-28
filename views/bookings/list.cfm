@@ -6,7 +6,6 @@
  <cfif events.recordcount>
  <cfif application.rbs.setting.showlocationcolours>
 <style>
-.header-row {border-top:2px solid ##222;}
 <cfloop query="locations"><cfif len(colour)>.#class# {border-left: 6px solid #colour#; }</cfif>
 </cfloop>
 </style>

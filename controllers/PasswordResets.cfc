@@ -1,16 +1,22 @@
-﻿<cfcomponent extends="Controller">
-
-	<cffunction name="init">
-		<cfscript>
-		filters(through="logFlash", type="after");
+﻿<!---================= Room Booking System / https://github.com/neokoenig =======================--->
+component extends="Controller" hint=""
+{
+	/**
+	 * @hint Constructor.
+	 */
+	public void function init() {
+		// Permission filters
+		super.init();
 		filters(through="redirectIfLoggedIn");
 		filters(through="denyInDemoMode");
- 		</cfscript>
-	</cffunction>
+	}
 
-	<cffunction name="create">
-		<cfscript>
-		user = model("user").findOneByEmail(params.email);
+/******************** Public***********************/
+ 	/**
+ 	*  @hint Create a pw reset email
+ 	*/
+ 	public void function create() {
+	 	user = model("user").findOneByEmail(params.email);
 		if ( isObject(user) ) {
 			user.createPasswordResetToken();
 			sendEmail(to=user.email,
@@ -24,13 +30,13 @@
 			flashInsert(error="Hmm... we couldn't find an account for that address");
 			redirectTo(action="new");
 		}
+ 	}
 
-		</cfscript>
-	</cffunction>
-
-	<cffunction name="edit">
-		<cfscript>
-		user = model("user").findOneByPasswordResetToken(params.key);
+ 	/**
+ 	*  @hint Update pw form
+ 	*/
+ 	public void function edit() {
+ 		user = model("user").findOneByPasswordResetToken(params.key);
 		if ( isObject(user) ) {
 			if ( DateDiff("h", user.passwordResetAt, Now()) > 2 ) {
 				redirectTo(action="new", error="Password reset has expired. [PR2]");
@@ -39,12 +45,13 @@
 				user.passwordToBlank();
 			}
 		}
-		</cfscript>
- 	</cffunction>
+ 	}
 
- 	<cffunction name="update">
- 		<cfscript>
-		user = model("user").findOneByPasswordResetToken(params.key);
+ 	/**
+ 	*  @hint Update pw
+ 	*/
+ 	public void function update() {
+ 		user = model("user").findOneByPasswordResetToken(params.key);
 		user.salt=createSalt();
 		user.password=hashPassword(user.password, user.salt);
 		if ( isObject(user) && user.update(params.user) ) {
@@ -54,7 +61,5 @@
 		else {
 			redirectTo(route="home", error="Sorry, that request failed [PR1]");
 		}
- 		</cfscript>
- 	</cffunction>
-</cfcomponent>
-
+ 	}
+ }

@@ -2,15 +2,12 @@
 <!--- resource Form--->
 <cfoutput>
 #errorMessagesFor("resource")#
-
-
-
 <div class="row">
 	<div class="col-md-4">
-		#textField(objectname="resource", property="name", placeholder="e.g Laptop")#
+		#textField(objectname="resource", property="name", required="true", label="Name *", placeholder="e.g Laptop")#
 	</div>
 	<div class="col-md-4">
-		#textField(objectname="resource", property="description", placeholder="e.g Dell 15""")#
+		#textField(objectname="resource", property="description", label="Description", placeholder="e.g Dell 15""")#
 	</div>
 	<div class="col-md-4">
 		#select(objectname="resource", property="type", label="Grouping", options=application.rbs.setting.resourceTypes)#

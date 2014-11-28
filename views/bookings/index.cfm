@@ -30,9 +30,10 @@
                     center: '#application.rbs.setting.calendarHeadercenter#',
                     right: '#application.rbs.setting.calendarHeaderright#'
                 },
+
                 weekends: #returnStringFromBoolean(application.rbs.setting.calendarWeekends)#,
                 firstDay: #application.rbs.setting.calendarFirstday#,
-                slotMinutes: #application.rbs.setting.calendarSlotMinutes#,
+                slotDuration: '#application.rbs.setting.calendarSlotMinutes#',
                 minTime: "#application.rbs.setting.calendarMintime#",
                 maxTime: "#application.rbs.setting.calendarMaxtime#",
                 timeFormat: '#application.rbs.setting.calendarTimeformat#',
@@ -43,6 +44,7 @@
                 defaultView: '#application.rbs.setting.calendarDefaultView#',
                 axisFormat: '#application.rbs.setting.calendarAxisFormat#',
                 slotEventOverlap: #returnStringFromBoolean(application.rbs.setting.calendarSlotEventOverlap)#,
+                height: 'auto',
                 columnFormat: {
                         month: '#application.rbs.setting.calendarColumnFormatMonth#',    // Mon
                         week: '#application.rbs.setting.calendarColumnFormatWeek#', // Mon 9/7
@@ -67,7 +69,6 @@
                         if (allDay) {
                             window.location.href = addBookingURL + "#params.key#?d=" + moment(date).format("YYYY-MM-DD");
                         } else {
-                            //alert('Clicked on the slot: ' + date);
                             window.location.href = addBookingURL + "#params.key#?d=" + moment(date).format("YYYY-MM-DD");
                         }
                      }
@@ -80,11 +81,6 @@
                 },
                 editable: false
             });
-
-    //-------------------------------Remove Old Modal Data------------------//
-    $('body').on('hidden.bs.modal', '.modal', function () {
-        $(this).removeData('bs.modal');
-    });
 
 });
 </script>

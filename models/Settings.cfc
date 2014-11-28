@@ -1,9 +1,12 @@
 <!---================= Room Booking System / https://github.com/neokoenig =======================--->
-<!--- Settings --->
-<cfcomponent extends="Model">
-	<cffunction name="init">
-		<cfscript>
+component extends="Model" hint="Settings"
+{
+	/**
+	 * @hint Constructor
+	 */
+	public void function init() {
+		// Associations
 
-		</cfscript>
-	</cffunction>
-</cfcomponent>
+	}
+
+}
