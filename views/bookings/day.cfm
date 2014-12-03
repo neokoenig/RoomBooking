@@ -50,7 +50,7 @@
 				<cfif locationEventsAllDay.recordcount>
 					<td class="booked #class# allday">
 						<cfloop query="locationEventsAllDay">
-							#linkTo(class="remote-modal", controller='eventdata', action='getEvent', key=locationEventsAllDay.id, text=h(title))#
+							#linkTo(class="remote-modal", controller='eventdata', action='getEvent', key=locationEventsAllDay.id, text=h(title))#<br />
 						</cfloop>
 					</td>
 					<cfelse>
