@@ -5,11 +5,9 @@
 </cfif>
 	<!--- User Login --->
 	<cfif application.rbs.setting.isdemomode>
-	<p><strong>Demo Logins:</strong></p>
+	<p><strong>Demo Login:</strong></p>
 <pre>
-admin@domain.com
-editor@domain.com
-user@domain.com</pre>
+admin@domain.com</pre>
 	<p>Password: <pre>roombooking100</pre></p>
 	</cfif>
 		#startFormTag(route="attemptlogin", id="signinForm")#
