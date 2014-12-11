@@ -66,6 +66,7 @@ component extends="Controller" hint="Locations Controller"
 	*  @hint
 	*/
 	public void function delete() {
+		checkLocation=model("location").findAll();
 		if(checkLocation.recordcount GT 1){
 		 if(structkeyexists(params, "key")){
 		    	location = model("location").findOne(where="id = #params.key#");
