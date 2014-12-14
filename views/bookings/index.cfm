@@ -16,13 +16,7 @@
     var mainDataURL="#urlFor(controller='eventdata', action='getEvents')#/";
     var eventDataURL="#urlFor(controller='eventdata', action='getEvent')#/";
     var addBookingURL = "#urlFor(controller='bookings', action='add')#/";
-    <!--- IF YOUR SERVER HAS SECURE AJAX CALLS, uncomment this
-    $.ajaxSetup({
-        dataFilter: function(data, type){
-            return data.substring(2, data.length);
-        }
-    });
-    --->
+
     $('##calendar').fullCalendar({
     //----------------Config--------------
                 header: {

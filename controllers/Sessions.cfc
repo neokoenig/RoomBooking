@@ -1,4 +1,4 @@
-<!---================= Room Booking System / https://github.com/neokoenig =======================--->
+//================= Room Booking System / https://github.com/neokoenig =======================--->
 component extends="Controller" hint="Sessions Controller"
 {
 	/**

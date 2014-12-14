@@ -1,4 +1,4 @@
-<!---================= Room Booking System / https://github.com/neokoenig =======================--->
+//================= Room Booking System / https://github.com/neokoenig =======================--->
 component extends="Controller" hint="Main Events/Bookings Controller"
 {
 	/**
@@ -53,7 +53,7 @@ component extends="Controller" hint="Main Events/Bookings Controller"
 		events=model("event").findAll(where="#_dayListWC()#", order="start", include="location");
 		allDay=model("event").findAll(where="#_dayListWC(allday=1)#", order="start", include="location");
 
-		day={}
+		day={};
 		day.thedate=createDate(params.y, params.m, params.d);
 		day.yesterday=dateAdd("d", -1, day.thedate);
 		day.tomorrow=dateAdd("d", 1, day.thedate);
@@ -121,7 +121,7 @@ component extends="Controller" hint="Main Events/Bookings Controller"
 				}
 				else {
 					// Empty Cell
-					t.class="free"
+					t.class="free";
 					t.content="";
 					t.rowspan=1;
 				}
@@ -146,7 +146,7 @@ component extends="Controller" hint="Main Events/Bookings Controller"
     	 // Listen out for event date & location passed in URL via JS
     	 if(structKeyExists(params, "d")){
     	 	qDate=createDateTime(listFirst(params.d, '-'),ListGetAt(params.d, 2, '-'),ListGetAt(params.d, 3, '-'),hour(now()),00,00);
-    	 	event.start=dateFormat(qDate, "DD MMM YYYY") & ' ' & timeFormat(qDate, "HH:mm")
+    	 	event.start=dateFormat(qDate, "DD MMM YYYY") & ' ' & timeFormat(qDate, "HH:mm");
     	 }
     	 if(structKeyExists(params, "key") AND isNumeric(params.key)){
     	 	event.locationid=params.key;

@@ -1,4 +1,4 @@
-<!---================= Room Booking System / https://github.com/neokoenig =======================--->
+//================= Room Booking System / https://github.com/neokoenig =======================--->
 component extends="Controller" hint="Misc Event Data"
 {
 	/**
@@ -77,7 +77,7 @@ component extends="Controller" hint="Misc Event Data"
  	*  @hint Experimental date format
  	*/
  	private string function _f_d(str) {
- 	 return dateFormat(arguments.str, "YYYY-MM-DD") & "T" & timeFormat(arguments.str, "HH:MM:00")
+ 	 return dateFormat(arguments.str, "YYYY-MM-DD") & "T" & timeFormat(arguments.str, "HH:MM:00");
  	}
 
 }
