@@ -30,6 +30,8 @@
 					<td>#h(description)#</td>
 					</tr>
 					<cfset cType=type>
+					<cfset dr="">
+					<cfset du="">
 				</cfloop>
 			</tbody>
 		</table>
