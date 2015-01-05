@@ -45,7 +45,7 @@
 				<cfelse>All Day
 			</cfif></td>
 			<td width=150 class="#class#">#name#<br /><small>#description#</small></td>
-			<td>#title#</td>
+			<td>#title# <cfif checkPermission("allowRoomBooking")>#linkTo(action="edit", key=eventid, text="<span class='glyphicon glyphicon-pencil'></span>", controller="bookings", class="btn btn-info btn-sm")#</cfif></td>
 			<td>#layoutstyle#</td>
 			<td>
 			<cfif len(eventdescription)>
