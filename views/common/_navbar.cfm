@@ -65,11 +65,11 @@
                <li>#linkTo(controller="permissions",  text="<span class='glyphicon glyphicon-cog'></span> Permissions")#</li>
               </cfif>
               <cfif checkPermission("accessLogfiles")>
-                <li>#linkTo(controller="logfiles", text="<span class='glyphicon glyphicon-list'></span> Logs")#
+                <li>#linkTo(controller="logfiles", text="<span class='glyphicon glyphicon-list'></span> Logs")#</li>
               </cfif>
             </cfif>
-            </li>
             </ul>
+            </li>
           </cfif>
           <li>
             <cfif isLoggedIn()>
