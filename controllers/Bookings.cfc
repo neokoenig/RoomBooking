@@ -76,7 +76,7 @@ component extends="Controller" hint="Main Events/Bookings Controller"
 			    eventsQ.addParam(name='locationid', value=location.id, cfsqltype='cf_sql_numeric');
 			    eventsQ.addParam(name='start', value=t.timeslot, cfsqltype='cf_sql_timestamp');
 			    eventsQ.addParam(name='end', value=t.timeslot, cfsqltype='cf_sql_timestamp');
-			    eventsQ.setSQL('SELECT * FROM rs WHERE locationid =:locationid AND start <= :start AND end > :end AND allday = 0');
+			    eventsQ.setSQL('SELECT * FROM rs WHERE locationid =:locationid AND start <= :start AND [end] > :end AND allday = 0');
 			    locationEvents = eventsQ.execute().getResult();
 
  				if(locationEvents.recordcount){
