@@ -1,37 +1,37 @@
 <!---================= Room Booking System / https://github.com/neokoenig =======================--->
-
-<cftry>
-	<cfset _loadSettings()>
-	<cfcatch type="any">
-		<cfthrow message="Could not load settings - please check your datasource">
-	</cfcatch>
-</cftry>
-
-
-<cffunction name="_loadSettings">
- 	<cfscript>
-	// Application Specific settings
-	if(structKeyExists(application, "rbs")){
-		structDelete(application, "rbs");
+<cfscript>
+	try{
+		_loadSettings();
+	} catch(any){
+		throw message="Could not load settings - please check your datasource";
 	}
 
-	application.rbs={};
-	application.rbs.setting={};
-	application.rbs.permission={};
+	/**
+	*  @hint Load Application Settings
+	*/
+	public void function _loadSettings() {
+	 	// Application Specific settings
+		if(structKeyExists(application, "rbs")){
+			structDelete(application, "rbs");
+		}
 
-	application.rbs.roles="admin,editor,user,guest";
+		application.rbs={};
+		application.rbs.setting={};
+		application.rbs.permission={};
 
-	for(setting in model("setting").findAll()){
-		application.rbs.setting['#setting.id#']=setting.value;
-	}
+		application.rbs.roles="admin,editor,user,guest";
 
-	for(permission in model("permission").findAll()){
+		for(setting in model("setting").findAll()){
+			application.rbs.setting['#setting.id#']=setting.value;
+		}
 
-		application.rbs.permission["#permission.id#"]={};
-		for(role in listToArray(application.rbs.roles)){
-			application.rbs.permission["#permission.id#"]["#role#"]=permission["#role#"];
+		for(permission in model("permission").findAll()){
+
+			application.rbs.permission["#permission.id#"]={};
+			for(role in listToArray(application.rbs.roles)){
+				application.rbs.permission["#permission.id#"]["#role#"]=permission["#role#"];
+			}
 		}
 	}
-	</cfscript>
 
- </cffunction>
+</cfscript>

@@ -89,4 +89,13 @@
       </div>
     </div>
 </cfif>
+<cfif fileExists(expandPath("/install/index.cfm"))>
+    <div class="container">
+        <div class="alert alert-danger" role="alert">
+          <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+          <span class="sr-only">Error:</span>
+          Please delete or rename the <code>/install/</code> directory before continuing
+        </div>
+    </div>
+</cfif>
 </cfoutput>

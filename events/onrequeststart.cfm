@@ -1,8 +1,5 @@
 <!--- Place code here that should be executed on the "onRequestStart" event. --->
-<cfif fileExists(expandPath("/install/index.cfm"))>
-	<cfthrow message="Please delete the /install/ folder to continue">
-	<cfabort>
-</cfif>
+
  <!--- Set defaults for non cookie enabled browsers--->
 <cfset request.cookie=structnew()>
 <cfset request.cookie.username="">
