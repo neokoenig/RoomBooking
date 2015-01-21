@@ -10,7 +10,7 @@
 <footer>
     <div class="container">
         <hr />
-        <p><small>Version #application.rbs.versionNumber#</small></p>
+        <p><small>Version #application.rbs.versionNumber# | DB: #application.rbs.setting.version#</small></p>
     </div>
 </footer>
 </cfoutput>
