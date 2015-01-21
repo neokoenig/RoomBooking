@@ -53,13 +53,13 @@ component extends="Controller" hint="Main Events/Bookings Controller"
 		events=model("event").findAll(where="#_dayListWC()#", order="start", include="location");
 		allDay=model("event").findAll(where="#_dayListWC(allday=1)#", order="start", include="location");
 
-		day={};
-		day.thedate=createDate(params.y, params.m, params.d);
+		day={
+			thedate=createDate(params.y, params.m, params.d),
+			starttime=createDateTime(params.y, params.m, params.d, timeFormat(calStart, 'H'),timeFormat(calStart, 'M'),0),
+			endtime=createDateTime(params.y, params.m, params.d, timeFormat(calEnd, 'H'),timeFormat(calEnd, 'M'),0)
+		};
 		day.yesterday=dateAdd("d", -1, day.thedate);
-		day.tomorrow=dateAdd("d", 1, day.thedate);
-		day.starttime=createDateTime(params.y, params.m, params.d, timeFormat(calStart, 'H'),timeFormat(calStart, 'M'),0);
-		day.endtime=createDateTime(params.y, params.m, params.d, timeFormat(calEnd, 'H'),timeFormat(calEnd, 'M'),0);
-
+		day.tomorrow=dateAdd("d", 	1, day.thedate);
 		// Placeholder arrays
 		m=[];
 		e=[];
@@ -68,8 +68,9 @@ component extends="Controller" hint="Main Events/Bookings Controller"
 		for(location in locations){
 			day.counter=day.starttime;
 			do {
-				t={};
- 				t.timeslot=createDateTime(year(day.thedate), month(day.thedate), day(day.thedate), TimeFormat(day.counter, "H"), TimeFormat(day.counter, "m"), 0);
+				t={
+					timeslot=createDateTime(year(day.thedate), month(day.thedate), day(day.thedate), TimeFormat(day.counter, "H"), TimeFormat(day.counter, "m"), 0)
+				};
 			    eventsQ = new Query();
 			    eventsQ.setDBType('query');
 			    eventsQ.setAttributes(rs=events); // needed for QoQ

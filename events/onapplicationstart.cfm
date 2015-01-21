@@ -15,18 +15,18 @@
 			structDelete(application, "rbs");
 		}
 
-		application.rbs={};
-		application.rbs.setting={};
-		application.rbs.permission={};
-
-		application.rbs.roles="admin,editor,user,guest";
+		application.rbs={
+			versionNumber="1.2",
+			setting={},
+			permission={},
+			roles="admin,editor,user,guest"
+		};
 
 		for(setting in model("setting").findAll()){
 			application.rbs.setting['#setting.id#']=setting.value;
 		}
 
 		for(permission in model("permission").findAll()){
-
 			application.rbs.permission["#permission.id#"]={};
 			for(role in listToArray(application.rbs.roles)){
 				application.rbs.permission["#permission.id#"]["#role#"]=permission["#role#"];
