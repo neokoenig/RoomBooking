@@ -1,11 +1,4 @@
 <cfoutput>
-<!-----------------------------Footer---------------------------->
-<footer>
-    <div class="container">
-        <hr />
-        <p><small>Version #application.rbs.versionNumber#</small></p>
-    </div>
-</footer>
 <!-----------------------------Scripts--------------------------->
 <cfif application.wheels.environment EQ "production">
   #javascriptIncludeTag("rbs.min")#

@@ -6,4 +6,11 @@
   #flashMessages()#
   #includeContent()#
 </section>
+<!-----------------------------Footer---------------------------->
+<footer>
+    <div class="container">
+        <hr />
+        <p><small>Version #application.rbs.versionNumber#</small></p>
+    </div>
+</footer>
 </cfoutput>
