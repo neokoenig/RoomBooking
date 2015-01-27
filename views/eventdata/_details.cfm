@@ -10,7 +10,13 @@
 </cfif>
 <cfif checkPermission("viewRoomBooking")>
 
-<!---================= Details =================--->
+<cfif structKeyExists(application.rbs.templates, "event") AND structKeyExists(application.rbs.templates.event, "output")>
+	 #processShortCodes(application.rbs.templates.event.output)#
+<cfelse>
+	<!--- Default Template--->
+	<cfsavecontent variable="eventTemplate">
+
+	<!---================= Details =================--->
 	<h4>#h(event.title)#</h4>
 	<p>#_formatDateRange(d1=event.start, d2=event.end, allday=event.allday)#
 	<p>Location: #h(event.name)#<br />#h(event.description)#</p>
@@ -19,20 +25,7 @@
 	</cfif>
 	<p>(#event.layoutstyle# Style)</p>
 
-<!---================= Resources =================--->
-	<cfif application.rbs.setting.allowResources AND len(event.resourceid)>
-	<hr />
-	<h4>Requested Resources:</h4>
-		<cfloop query="event">
-			<cfloop query="resources">
-				<cfif event.resourceid EQ resources.id[currentrow]>
-					<p><strong>#h(name)#</strong><br /><small>#h(description)#</small></p>
-				</cfif>
-			</cfloop>
-		</cfloop>
-	</cfif>
-
-<!---================= Contact =================--->
+	<!---================= Contact =================--->
 	<cfif len(event.contactname) OR len(event.contactemail) OR len(event.contactno)>
 	<hr />
 	<h4>Contact Details:</h4>
@@ -48,6 +41,25 @@
 		</cfif>
 	</p>
 	</cfif>
+
+	</cfsavecontent>
+	#processShortCodes(eventTemplate)#
+</cfif>
+
+<!---================= Resources =================--->
+	<cfif application.rbs.setting.allowResources AND len(event.resourceid)>
+	<hr />
+	<h4>Requested Resources:</h4>
+		<cfloop query="event">
+			<cfloop query="resources">
+				<cfif event.resourceid EQ resources.id[currentrow]>
+					<p><strong>#h(name)#</strong><br /><small>#h(description)#</small></p>
+				</cfif>
+			</cfloop>
+		</cfloop>
+	</cfif>
+
+
 
 <cfelse>
 	<p>You're not allowed to view the booking details</p>

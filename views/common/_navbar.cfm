@@ -29,6 +29,7 @@
                  <cfif checkpermission("allowAPI")>
                     <li>#linkTo(controller="api",  text="<span class='glyphicon glyphicon-cloud-download'></span> Data Feeds")#</li>
                  </cfif>
+                <li>#linkTo(controller="locations", action="list", text="<span class='glyphicon glyphicon-list'></span> Locations")#</li>
             </ul>
             </li>
                </cfif>
@@ -63,6 +64,9 @@
             </cfif>
               <cfif checkpermission("accessPermissions")>
                <li>#linkTo(controller="permissions",  text="<span class='glyphicon glyphicon-cog'></span> Permissions")#</li>
+              </cfif>
+              <cfif checkPermission("accessCustomFields")>
+                <li>#linkTo(controller="Customfields", text="<span class='glyphicon glyphicon-cog'></span> Custom Fields")#</li>
               </cfif>
               <cfif checkPermission("accessLogfiles")>
                 <li>#linkTo(controller="logfiles", text="<span class='glyphicon glyphicon-list'></span> Logs")#</li>

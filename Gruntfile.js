@@ -59,6 +59,9 @@ module.exports = function(grunt) {
           'bower_components/eonasdan-bootstrap-datetimepicker/src/js/bootstrap-datetimepicker.js',
           'bower_components/bootstrapvalidator/dist/js/bootstrapValidator.js',
           'bower_components/minicolors/jquery.minicolors.js',
+          'bower_components/jquery-ui/jquery-ui.js',
+          'bower_components/gridmanager/src/gridmanager.js',
+          'bower_components/bootbox/bootbox.js',
           // Main.js is any custom JS
           'javascripts/main.js'
         ],

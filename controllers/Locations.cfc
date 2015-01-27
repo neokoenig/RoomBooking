@@ -10,22 +10,38 @@ component extends="Controller" hint="Locations Controller"
 
 		// Permissions
 		filters(through="f_checkLocationsAdmin");
-		filters(through="checkPermissionAndRedirect", permission="accessLocations");
-
+		filters(through="checkPermissionAndRedirect", permission="accessLocations", except="list,view");
+		filters(through="checkPermissionAndRedirect", permission="accessCalendar", except="list,view");
+		filters(through="_setModelType");
 		// Data
-		filters(through="_getLocations", only="index");
+		filters(through="_getLocations", only="index,list");
 	}
 
 /******************** Admin ***********************/
 	/**
-	*  @hint
+	*  @hint Public Location List
 	*/
-	public void function add() {
-		location=model("location").new();
+	public void function list() {
 	}
 
 	/**
 	*  @hint
+	*/
+	public void function view() {
+		location=model("location").findOne(where="id = #params.key#");
+		customfields=getCustomFields(objectname=request.modeltype, key=location.key());
+	}
+/******************** Admin ***********************/
+	/**
+	*  @hint Add Location
+	*/
+	public void function add() {
+		location=model("location").new();
+		customfields=getCustomFields(objectname=request.modeltype, key=location.key());
+	}
+
+	/**
+	*  @hint Create Location
 	*/
 	public void function create() {
 		if(structkeyexists(params, "location")){
@@ -40,20 +56,23 @@ component extends="Controller" hint="Locations Controller"
 	}
 
 	/**
-	*  @hint
+	*  @hint Edit  Location
 	*/
 	public void function edit() {
 		location=model("location").findOne(where="id = #params.key#");
+		request.modeltype="location";
+		customfields=getCustomFields(objectname=request.modeltype, key=params.key);
 	}
 
 	/**
-	*  @hint
+	*  @hint Update Location
 	*/
 	public void function update() {
 		if(structkeyexists(params, "location")){
 	    	location = model("location").findOne(where="id = #params.key#");
 			location.update(params.location);
 			if ( location.save() )  {
+				customfields=updateCustomFields(objectname="location", key=params.key, customfields=params.customfields);
 				redirectTo(action="index", success="location successfully updated");
 			}
 	        else {
@@ -63,7 +82,7 @@ component extends="Controller" hint="Locations Controller"
 	}
 
 	/**
-	*  @hint
+	*  @hint Delete Location
 	*/
 	public void function delete() {
 		checkLocation=model("location").findAll();
@@ -91,4 +110,10 @@ component extends="Controller" hint="Locations Controller"
 		}
 	}
 
+	/**
+	*  @hint Sets the model type to use with Custom Fields + Templates
+	*/
+	public void function _setModelType() {
+		request.modeltype="location";
+	}
 }

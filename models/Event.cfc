@@ -12,6 +12,7 @@ component extends="Model" hint="Main Event Object"
 		// Validation
 		validate("checkDates");
 		afterFind("formatDates");
+		afterInitialization("registerSystemFields");
 	}
 
 	/**
@@ -43,5 +44,113 @@ component extends="Model" hint="Main Event Object"
 		if(structKeyExists(this, "end")){
 			this.end=dateFormat(this.end, "DD MMM YYYY") & ' ' & timeFormat(this.end, "HH:mm");
 		}
+	}
+
+	/**
+	*  @hint
+	*/
+	public void function registerSystemFields() {
+		this.systemfields=[
+			{
+				name: "title",
+				label: "Event Title",
+				type: "textfield",
+				options: "",
+				class: "",
+				description: "",
+				placeholder: "e.g My Meeting",
+				required: 1
+			},
+			{
+				name: "start",
+				label: "Starts",
+				type: "datepicker",
+				options: "",
+				class: "",
+				description: "",
+				placeholder: "",
+				required: 1
+			},
+			{
+				name: "end",
+				label: "Ends",
+				type: "datepicker",
+				options: "",
+				class: "",
+				description: "",
+				placeholder: "",
+				required: 1
+			},
+			{
+				name: "allday",
+				label: "",
+				type: "checkbox",
+				options: "[{1: 'This is an all day event'}]",
+				class: "",
+				description: "",
+				placeholder: "",
+				required: 0
+			},
+			{
+				name: "description",
+				label: "Description",
+				type: "textarea",
+				options: "",
+				class: "",
+				description: "",
+				placeholder: "Optional Notes about this event",
+				required: 0
+			},
+			{
+				name: "locationid",
+				label: "Location",
+				type: "select",
+				options: "locations",
+				class: "",
+				description: "",
+				placeholder: "",
+				required: 0
+			},
+			{
+				name: "layoutstyle",
+				label: "Layout",
+				type: "select",
+				options: "application.rbs.setting.roomlayouttypes",
+				class: "",
+				description: "",
+				placeholder: "",
+				required: 0
+			},
+			{
+				name: "contactname",
+				label: "Contact Name",
+				type: "textfield",
+				options: "",
+				class: "",
+				description: "",
+				placeholder: "e.g Joe Bloggs",
+				required: 0
+			},
+			{
+				name: "contactemail",
+				label: "Email",
+				type: "textfield",
+				options: "",
+				class: "",
+				description: "",
+				placeholder: "e.g Joe@blogs.com",
+				required: 0
+			},
+			{
+				name: "contactno",
+				label: "Tel No.",
+				type: "textfield",
+				options: "",
+				class: "",
+				description: "",
+				placeholder: "e.g Joe@blogs.com",
+				required: 0
+			}
+		]
 	}
 }

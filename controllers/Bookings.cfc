@@ -15,6 +15,7 @@ component extends="Controller" hint="Main Events/Bookings Controller"
 		// Data
 		filters(through="_getLocations", only="index,add,edit,clone,create,update,list,day");
 		filters(through="_getResources", only="index,add,edit,clone,create,update,list,view");
+		filters(through="_setModelType");
 	}
 
 /******************** Views ***********************/
@@ -24,6 +25,7 @@ component extends="Controller" hint="Main Events/Bookings Controller"
 	public void function view() {
 		if(structKeyExists(params, "key") AND isNumeric(params.key)){
 			event=model("location").findAll(where="events.id = #params.key#", include="events(eventresources)");
+			customfields=getCustomFields(objectname=request.modeltype, key=location.key());
 		} else {
 			redirectTo(route="home", error="No event specified");
 		}
@@ -144,6 +146,7 @@ component extends="Controller" hint="Main Events/Bookings Controller"
 	public void function add() {
 		 nEventResources=model("eventresource").new();
     	 event=model("event").new(eventresources=nEventResources);
+    	 customfields=getCustomFields(objectname="event", key=event.key());
     	 // Listen out for event date & location passed in URL via JS
     	 if(structKeyExists(params, "d")){
     	 	qDate=createDateTime(listFirst(params.d, '-'),ListGetAt(params.d, 2, '-'),ListGetAt(params.d, 3, '-'),hour(now()),00,00);
@@ -167,6 +170,7 @@ component extends="Controller" hint="Main Events/Bookings Controller"
 	*/
 	public void function edit() {
 		event=model("event").findOne(where="id = #params.key#", include="eventresources");
+		customfields=getCustomFields(objectname=request.modeltype, key=params.key);
 	}
 
 	/**
@@ -200,7 +204,7 @@ component extends="Controller" hint="Main Events/Bookings Controller"
 						  		nevent.end = dateAdd("m", i, nevent.end);
 						  	}
 						}
-						// Save the child event
+						// Save the child event: NB, repeated events can't/don't save customfield metadata
 						nevent.save();
 					}
 				}
@@ -231,6 +235,7 @@ component extends="Controller" hint="Main Events/Bookings Controller"
 			event.update(params.event);
 			event.save();
 			if ( event.save() )  {
+				customfields=updateCustomFields(objectname=request.modeltype, key=event.key(), customfields=params.customfields);
 				redirectTo(action="index", success="event successfully updated");
 			}
 	        else {
@@ -325,6 +330,14 @@ component extends="Controller" hint="Main Events/Bookings Controller"
 				return "";
 			}
 
+	}
+
+
+	/**
+	*  @hint Sets the model type to use with Custom Fields + Templates
+	*/
+	public void function _setModelType() {
+		request.modeltype="event";
 	}
 
 }

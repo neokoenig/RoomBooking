@@ -19,7 +19,10 @@
 			versionNumber="1.2",
 			setting={},
 			permission={},
-			roles="admin,editor,user,guest"
+			roles="admin,editor,user,guest",
+			templates={},
+			modeltypes="event,location",
+			templatetypes="form,output"
 		};
 
 		for(setting in model("setting").findAll()){
@@ -32,6 +35,16 @@
 				application.rbs.permission["#permission.id#"]["#role#"]=permission["#role#"];
 			}
 		}
+
+		for(template in model("template").findAll()){
+			application.rbs.templates["#template.parentmodel#"]["#template.type#"]=template.template;
+		}
 	}
+
+
+	addShortcode("systemfield", 	systemfield_callback);
+	addShortcode("customfield", 	customfield_callback);
+	addShortcode("systemoutput", 	systemoutput_callback);
+	addShortcode("customoutput", 	customoutput_callback);
 
 </cfscript>

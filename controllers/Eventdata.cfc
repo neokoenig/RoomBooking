@@ -17,6 +17,7 @@ component extends="Controller" hint="Misc Event Data"
 		// Formats
 		provides("html,json");
 		usesLayout(template="modal", only="getevent");
+		filters(through="_setModelType");
 	}
 
 /******************** Public***********************/
@@ -79,5 +80,13 @@ component extends="Controller" hint="Misc Event Data"
  	private string function _f_d(str) {
  	 return dateFormat(arguments.str, "YYYY-MM-DD") & "T" & timeFormat(arguments.str, "HH:MM:00");
  	}
+
+ 		/**
+	*  @hint Sets the model type to use with Custom Fields + Templates
+	*/
+	public void function _setModelType() {
+		request.modeltype="event";
+	}
+
 
 }
