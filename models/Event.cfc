@@ -50,6 +50,7 @@ component extends="Model" hint="Main Event Object"
 	*  @hint
 	*/
 	public void function registerSystemFields() {
+
 		this.systemfields=[
 			{
 				name: "title",
@@ -85,7 +86,7 @@ component extends="Model" hint="Main Event Object"
 				name: "allday",
 				label: "",
 				type: "checkbox",
-				options: "[{1: 'This is an all day event'}]",
+				options: "[{'1': 'This is an all day event'}]",
 				class: "",
 				description: "",
 				placeholder: "",
@@ -148,9 +149,19 @@ component extends="Model" hint="Main Event Object"
 				options: "",
 				class: "",
 				description: "",
-				placeholder: "e.g Joe@blogs.com",
+				placeholder: "e.g 123123123",
 				required: 0
-			}
+			},
+			{
+				name: "emailcontact",
+				label: "",
+				type: "checkbox",
+				options: "[{'1': 'Send Confirmation Email to Contact'}]",
+				class: "",
+				description: "",
+				placeholder: "",
+				required: 0
+			},
 		]
 	}
 }

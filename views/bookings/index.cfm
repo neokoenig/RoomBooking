@@ -1,10 +1,8 @@
 <!---================= Room Booking System / https://github.com/neokoenig =======================--->
 <cfoutput>
-<cfparam name="locations">
-
 <!--- Main Index --->
 #includePartial(partial="locations", locations=locations)#
-    #panel(title="Calendar")#
+    #panel(title="Calendar", theclass="panel-primary no-top-rounded")#
         <div id="calendar"></div>
     #panelend()#
 #includePartial("eventmodal")#
@@ -13,7 +11,7 @@
 <script>
    $(document).ready(function() {
 
-    var mainDataURL="#urlFor(controller='eventdata', action='getEvents')#/";
+    var mainDataURL="#urlFor(route='getEvents', type=params.action, key=params.key)#/?format=json";
     var eventDataURL="#urlFor(controller='eventdata', action='getEvent')#/";
     var addBookingURL = "#urlFor(controller='bookings', action='add')#/";
 
@@ -48,7 +46,7 @@
     //----------------Event Sources----------
                 eventSources: [
                  {
-                        url: mainDataURL + "#params.key#" + "?format=json",
+                        url: mainDataURL,
                         type: 'POST',
                         cache: false,
                         error: function() {

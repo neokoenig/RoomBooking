@@ -1,10 +1,10 @@
 <!---================= Room Booking System / https://github.com/neokoenig =======================--->
 <cfoutput>
-#includePartial("/common/head")#
+#includePartial("/common/layout/head")#
 <!-----------------------------HEADER--------------------------->
-#includePartial("/common/navbar")#
+#includePartial("/common/layout/navbar")#
 <!-----------------------------CONTENT--------------------------->
-#includePartial("/common/main")#
+#includePartial("/common/layout/main")#
 <!-----------------------------FOOTER--------------------------->
-#includePartial("/common/footer")#
+#includePartial("/common/layout/footer")#
 </cfoutput>

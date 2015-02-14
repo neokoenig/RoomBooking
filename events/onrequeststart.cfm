@@ -13,16 +13,21 @@
 </cfif>
 
 <!--- trim form and url scopes --->
-<cfif StructCount(form)>
-	<cfloop collection="#form#" item="key">
-		<cfset form[key] = Trim(form[key])>
-	</cfloop>
-</cfif>
-<cfif StructCount(url)>
-	<cfloop collection="#url#" item="key">
-		<cfset url[key] = Trim(url[key])>
-	</cfloop>
-</cfif>
+<cfscript>
+
+	if(structCount(url)){
+		for(key in url){
+			url[key] = Trim(url[key]);
+		}
+	}
+	if(StructCount(form)){
+		for(key in form){
+			if(isSimpleValue(form[key])){
+				form[key] = Trim(form[key]);
+			}
+		}
+	}
+</cfscript>
 
 <!--- Other default request level vars--->
 <cfset request.showNavBar="true">

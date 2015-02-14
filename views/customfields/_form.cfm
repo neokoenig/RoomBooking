@@ -71,8 +71,8 @@
 
 			</div>
 			<div class="col-sm-4">
-				#checkbox(objectname="customfield", property="hideifempty", label="Hide If Empty")#
-				<p class="help-block">if no value is provided, hide in output templates</p>
+				#checkbox(objectname="customfield", property="required", label="Required?")#
+				<p class="help-block">Required Field</p>
 			</div>
 		</div>
 		<cfsavecontent variable="request.js.ace">

@@ -9,6 +9,8 @@
 </cfoutput>
 
 	<cfsavecontent variable="request.js.gridmanager">
+	<!---script src="//cdnjs.cloudflare.com/ajax/libs/ckeditor/4.4.5/ckeditor.js"></script>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/ckeditor/4.4.5/adapters/jquery.js"></script--->
 	<script>
 	var gm=$("#template-editor").gridmanager({
 		debug: 0,
@@ -45,7 +47,8 @@
 	      				  className: "btn-success",
 						  callback: function(e){
 							var selectedField=$("#customfielddata").find(".fielddata-selected");
- 							var sc="["+selectedField.data("type")+ " id='" + selectedField.data("id") + "']";
+							var selectedType=selectedField.data("type");
+ 							var sc="[" + selectedType + " id=" + selectedField.data("id") + "]";
  							gm.addEditableAreaClick(container, btnElem, sc);
 						  }
 					  }

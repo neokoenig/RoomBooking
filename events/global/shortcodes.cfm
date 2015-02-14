@@ -1,50 +1,24 @@
 <cfscript>
   /**
-  * @hint Render a system field
+  * @hint Render a  field
   **/
-    function systemfield_callback(attr) {
-        param name="attr.name" default="";
+    function field_callback(attr) {
         var result="";
         savecontent variable="result" {
-           include "/views/shortcodes/system.cfm";
-        }
-        return result;
-    }
-
-    /**
-  * @hint Render a custom field
-  **/
-    function customfield_callback(attr) {
-        param name="attr.id" default="";
-        var result="";
-        savecontent variable="result" {
-           include "/views/shortcodes/custom.cfm";
-        }
-        return result;
-    }
-
-
-  /**
-  * @hint Output a fields value
-  **/
-    function systemoutput_callback(attr) {
-        param name="attr.id" default="";
-        var result="";
-        savecontent variable="result" {
-           include "/views/shortcodes/systemoutput.cfm";
+           include "/views/shortcodes/field.cfm";
         }
         return result;
     }
 
   /**
-  * @hint Output a fields value
+  * @hint Render a  field
   **/
-    function customoutput_callback(attr) {
-        param name="attr.id" default="";
+    function output_callback(attr) {
         var result="";
         savecontent variable="result" {
-           include "/views/shortcodes/customoutput.cfm";
+           include "/views/shortcodes/output.cfm";
         }
         return result;
     }
+
 </cfscript>

@@ -62,6 +62,7 @@ component extends="Controller" hint="Locations Controller"
 		location=model("location").findOne(where="id = #params.key#");
 		request.modeltype="location";
 		customfields=getCustomFields(objectname=request.modeltype, key=params.key);
+
 	}
 
 	/**
@@ -72,11 +73,13 @@ component extends="Controller" hint="Locations Controller"
 	    	location = model("location").findOne(where="id = #params.key#");
 			location.update(params.location);
 			if ( location.save() )  {
-				customfields=updateCustomFields(objectname="location", key=params.key, customfields=params.customfields);
-				redirectTo(action="index", success="location successfully updated");
+				if(structkeyexists(params, "customfields")){
+					customfields=updateCustomFields(objectname="location", key=params.key, customfields=params.customfields);
+				}
+				redirectTo(action="index", success="Location successfully updated");
 			}
 	        else {
-				renderPage(action="edit", error="There were problems updating that location");
+				renderPage(action="edit", error="There were problems updating that Location");
 			}
 		}
 	}
@@ -90,14 +93,14 @@ component extends="Controller" hint="Locations Controller"
 		 if(structkeyexists(params, "key")){
 		    	location = model("location").findOne(where="id = #params.key#");
 				if ( location.delete() )  {
-					redirectTo(action="index", success="location successfully deleted");
+					redirectTo(action="index", success="Location successfully deleted");
 				}
 		        else {
-					redirectTo(action="index", error="There were problems deleting that location");
+					redirectTo(action="index", error="There were problems deleting that Location");
 				}
 			}
 		} else {
- 			redirectTo(action="index", error="At least one location is required.");
+ 			redirectTo(action="index", error="At least one Location is required.");
 		}
 	}
 /******************** Private *********************/
@@ -106,7 +109,7 @@ component extends="Controller" hint="Locations Controller"
 	*/
 	public void function f_checkLocationsAdmin() {
 		if(!application.rbs.setting.allowLocations){
-			redirectTo(route="home", error="Facility to edit locations has been disabled");
+			redirectTo(route="home", error="Facility to edit Locations has been disabled");
 		}
 	}
 

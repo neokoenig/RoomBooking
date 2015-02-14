@@ -11,16 +11,16 @@
 	<cfsavecontent variable="locationTemplate">
 	<div class="row">
 		<div class="col-md-3">
-			<p><strong>Name:</strong> [systemoutput id="name"]</p>
-			<p><strong>Description:</strong> [systemoutput id="description"]</p>
-			<p><strong>Class:</strong> [systemoutput id="class"]</p>
-			<p><strong>Colour:</strong> [systemoutput id="colour"]</p>
+			<p>[output label="Name" id="name"]</p>
+			<p>[output label="Description" id="description"]</p>
+			<p>[output label="Class" id="class"]</p>
+			<p>[output label="Colour" id="colour"]</p>
 		</div>
 		<div class="col-md-3">
 			<cfif customfields.recordcount>
 				<cfoutput>
 					<cfloop query="customfields">
-						<p><strong>#name#:</strong> [customoutput id="#id#"]</p>
+						<p>[output label="#name#" id="#id#"]</p>
 					</cfloop>
 				</cfoutput>
 			</cfif>

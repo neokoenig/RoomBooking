@@ -1,4 +1,3 @@
-SET FOREIGN_KEY_CHECKS=0;
 
 -- ----------------------------
 -- Table structure for customfieldjoins
@@ -24,7 +23,7 @@ CREATE TABLE `customfields` (
   `class` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `description` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `sortorder` smallint(5) NOT NULL DEFAULT '0',
-  `hideifempty` tinyint(1) NOT NULL DEFAULT '0',
+  `required` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
@@ -56,5 +55,10 @@ UPDATE settings SET `value` = "1.2" WHERE id = "1.1";
 -- ----------------------------
 -- update Permissions
 -- ----------------------------
-INSERT INTO permissions ("id","admin","editor","user","guest","notes") VALUES (
-"accessCustomFields",1,0,0,0,"Allow configuration of custom fields");
+INSERT INTO `permissions` (`id`, `admin`, `notes`) VALUES ('accessCustomFields', '1', 'Allow configuration of custom fields and templates');
+
+-- ----------------------------
+-- update locations
+-- ----------------------------
+ALTER TABLE `locations`
+ADD COLUMN `building`  varchar(255) NULL AFTER `colour`;

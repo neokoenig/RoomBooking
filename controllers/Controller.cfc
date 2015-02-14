@@ -30,7 +30,7 @@ component extends="Wheels" hint="Global Controller"
 		    customfields.`options`,
 		    customfields.class,
 		    customfields.description,
-		    customfields.hideifempty,
+		    customfields.required,
 		    customfieldjoins.customfieldsid,
 		    customfieldjoins.customfieldchildid,
 		    customfieldjoins.customfieldvalueid,
@@ -81,6 +81,7 @@ component extends="Wheels" hint="Global Controller"
 	*  @hint Update Custom Fields for any model
 	*/
 	public void function updateCustomFields(required string objectname, required numeric key, required struct customfields) {
+
 	 	for(field in arguments.customfields){
 	 		checkValue=model("customfieldjoin").findOne(where="customfieldsid=#field# AND customfieldchildid = #arguments.key#");
 	 		if(isObject(checkValue)){
@@ -95,12 +96,15 @@ component extends="Wheels" hint="Global Controller"
 	 		}
 	 	}
 	}
+
+
+
 /******************** Global Filters***********************/
  	/**
  	*  @hint Return all room locations
  	*/
  	public void function _getLocations() {
- 		locations=model("location").findAll(order="name");
+ 		locations=model("location").findAll(order="building,name");
  	}
 
  	/**

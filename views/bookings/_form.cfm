@@ -17,53 +17,51 @@
 					<legend>Event Details</legend>
 					<div class="row">
 						<div class="col-md-4">
-							[systemfield id='title']
+							[field id='title']
 						</div>
 						<div class="col-md-4">
-							[systemfield id='locationid']
+							[field id='locationid']
 						</div>
 						<div class="col-md-4">
-							[systemfield id='layoutstyle']
+							[field id='layoutstyle']
 						</div>
 					</div>
 					<div class="row">
 						<div class="col-md-4">
-							[systemfield id='start']
+							[field id='start']
 						</div>
 						<div class="col-md-4">
-							[systemfield id='end']
+							[field id='end']
 						</div>
 						<div class="col-md-4">
-							[systemfield id='allDay']
+							[field id='allDay']
 						</div>
 					</div>
 					</fieldset>
-					[systemfield id='description']
+						[field id='description']
 					<fieldset>
 						<legend>Contact Details</legend>
 						<div class="row">
-							<div class="col-md-4">
-								[systemfield id='contactname']
+							<div class="col-sm-4">
+								[field id='contactname']
  							</div>
-							<div class="col-md-4">
-								[systemfield id='contactno']
+							<div class="col-sm-4">
+								[field id='contactno']
  							</div>
-							<div class="col-md-4">
-								[systemfield id='contactemail']
+							<div class="col-sm-4">
+								[field id='contactemail']
 							</div>
 						</div>
-						<!--- How to do this as shortcode? --->
-						<cfif params.action EQ "add" OR params.action EQ "create">
-							#checkbox(objectName="event", property="emailContact", label="Send Confirmation Email to Contact")#
-							<cfif application.rbs.setting.isDemoMode>
-								<p class="help-block">No emails will be sent in demo mode</p>
-							</cfif>
-						</cfif>
+						<div class="row">
+							<div class="col-sm-6">
+								[field id='emailcontact']
+							</div>
+						</div>
 					</fieldset>
 				</cfsavecontent>
 			</fieldset>
 			#processShortCodes(eventTemplate)#
-			#includePartial(partial="/customfields/common")#
+			#includePartial(partial="/common/form/customfields")#
 		</cfif>
 
 		<!--- Event Resources output irrespective of template, for now--->

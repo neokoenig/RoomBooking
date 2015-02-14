@@ -17,6 +17,7 @@ component extends="Model" hint="Locations Model"
 		this.systemfields=[
 			{
 				name: "name",
+				label: "Name",
 				type: "textfield",
 				options: "",
 				class: "",
@@ -26,6 +27,7 @@ component extends="Model" hint="Locations Model"
 			},
 			{
 				name: "class",
+				label: "CSS Class",
 				type: "textfield",
 				options: "",
 				class: "",
@@ -35,6 +37,7 @@ component extends="Model" hint="Locations Model"
 			},
 			{
 				name: "colour",
+				label: "HEX Colour",
 				type: "colourpicker",
 				options: "",
 				class: "",
@@ -44,10 +47,21 @@ component extends="Model" hint="Locations Model"
 			},
 			{
 				name: "description",
+				label: "Description",
 				type: "textfield",
 				options: "",
 				class: "",
-				description: "Might be a building location or floor",
+				description: "Might be a floor or other description",
+				placeholder: "",
+				required: 0
+			},
+			{
+				name: "building",
+				label: "Building",
+				type: "textfield",
+				options: "",
+				class: "",
+				description: "Parent Building (optional)",
 				placeholder: "",
 				required: 0
 			}

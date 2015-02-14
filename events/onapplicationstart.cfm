@@ -41,10 +41,8 @@
 		}
 	}
 
+	addShortcode("field", field_callback);
+	addShortcode("output", output_callback);
 
-	addShortcode("systemfield", 	systemfield_callback);
-	addShortcode("customfield", 	customfield_callback);
-	addShortcode("systemoutput", 	systemoutput_callback);
-	addShortcode("customoutput", 	customoutput_callback);
 
 </cfscript>

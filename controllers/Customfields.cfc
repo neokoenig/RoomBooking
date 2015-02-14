@@ -160,4 +160,5 @@ component extends="Controller" hint="Custom Fields and Templating"
 		}
 
 	}
+
 }

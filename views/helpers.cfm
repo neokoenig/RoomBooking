@@ -160,4 +160,24 @@
             return "</div>";
          }
     }
+
+    /**
+    *  @hint Takes a string like Building One and converts to building-one
+    */
+    public string function toTagSafe(string) {
+    	var r =arguments.string;
+    		r=replace(r, " ", "-", "all");
+    		r=lcase(r);
+    		return r;
+    }
+
+    /**
+    *  @hint  Takes a string like building-one and converts to Building One
+    */
+    public string function fromTagSafe(string) {
+    	var r =arguments.string;
+    		r=replace(r, "-", " ", "all");
+    		r=titleize(r);
+    		return r;
+    }
 </cfscript>

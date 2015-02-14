@@ -17,6 +17,9 @@
  	addRoute(name="forgetme", 		pattern="/forgetme", 		controller="sessions", action="forgetme");
 	addRoute(name="denied", 		pattern="/denied", 			controller="sessions", action="denied");
 
+	// Remote Data
+	addRoute(name="getEvents", 		pattern="/eventdata/get-events/[type]/[key]", action="getEvents", controller="eventdata");
+
  	// Default
  	addRoute(name="home", pattern="", controller="bookings", action="index");
 </cfscript>

@@ -9,38 +9,42 @@
 	</div>
 </cfif>
 <cfif checkPermission("viewRoomBooking")>
-
 <cfif structKeyExists(application.rbs.templates, "event") AND structKeyExists(application.rbs.templates.event, "output")>
 	 #processShortCodes(application.rbs.templates.event.output)#
 <cfelse>
 	<!--- Default Template--->
 	<cfsavecontent variable="eventTemplate">
+		<h4>[output id="title"]</h4>
+		<div class="row">
+			<div class="col-sm-2">
+				<p><strong>From</strong></p>
+			</div>
+			<div class="col-sm-10">
+				[output id="start"]
+			</div>
+		</div>
 
-	<!---================= Details =================--->
-	<h4>#h(event.title)#</h4>
-	<p>#_formatDateRange(d1=event.start, d2=event.end, allday=event.allday)#
-	<p>Location: #h(event.name)#<br />#h(event.description)#</p>
-	<cfif len(event.description)>
-		<p>#h(event.eventdescription)#</p>
-	</cfif>
-	<p>(#event.layoutstyle# Style)</p>
+		<div class="row">
+			<div class="col-sm-2">
+				<p><strong>To</strong></p>
+			</div>
+			<div class="col-sm-10">
+				[output id="end"]
+			</div>
+		</div>
 
-	<!---================= Contact =================--->
-	<cfif len(event.contactname) OR len(event.contactemail) OR len(event.contactno)>
-	<hr />
-	<h4>Contact Details:</h4>
-		<p>
-		<cfif len(event.contactname)>
-			#h(event.contactname)#<br />
-		</cfif>
-		<cfif len(event.contactemail)>
-			#autolink(event.contactemail)#<br />
-		</cfif>
-		<cfif len(event.contactno)>
-			#h(event.contactno)#
-		</cfif>
-	</p>
-	</cfif>
+		<div class="row">
+			<div class="col-sm-2">
+				<p><strong>Location</strong></p>
+			</div>
+			<div class="col-sm-10">
+				[output   id="name" append=","] [output id="description"] ([output id="layoutstyle"] style)
+			</div>
+		</div>
+
+		<p>[output label="Contact" id="contactname"] [output id="contactemail" prepend="(", append=")"] [output id="contactno" prepend="(", append=")"]</p>
+
+		[output id="eventdescription", prepend="<div class='well'>", append="</div>"]
 
 	</cfsavecontent>
 	#processShortCodes(eventTemplate)#

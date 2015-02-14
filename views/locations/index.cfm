@@ -10,6 +10,7 @@
 	<thead>
 		<tr>
 			<th>ID</th>
+			<th>Building</th>
 			<th>Name</th>
 			<th>Description</th>
 			<th>Actions</th>
@@ -19,7 +20,9 @@
 	<cfloop query="locations">
 		<cfoutput>
 		<tr>
-			<td>#id#</td>			<td>#name#</td>
+			<td>#id#</td>
+			<td>#building#</td>
+			<td>#name#</td>
 			<td>#description#</td>
 			<td>
 				<div class="btn-group">

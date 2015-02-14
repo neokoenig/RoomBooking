@@ -8,21 +8,26 @@
 
 	<!--- Default Template--->
 	<cfsavecontent variable="locationTemplate">
+		<div class="row">
+			<div class="col-sm-4">
+				[field id="name"]
+			</div>
+			<div class="col-sm-4">
+				[field id="building"]
+			</div>
+			<div class="col-sm-4">
+	 			[field id="description"]
+			</div>
+		</div>
 	<div class="row">
 		<div class="col-md-3">
-			[systemfield id="name"]
-		</div>
-		<div class="col-md-3">
-			[systemfield id="description"]
+			[field id="class"]
  		</div>
 		<div class="col-md-3">
-			[systemfield id="class"]
- 		</div>
-		<div class="col-md-3">
-			[systemfield id="colour"]
+			[field id="colour"]
 		</div>
 	</div>
-	#includePartial(partial="/customfields/common")#
+	#includePartial(partial="/common/form/customfields")#
 	</cfsavecontent>
 
 	#processShortCodes(locationTemplate)#

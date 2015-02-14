@@ -25,21 +25,30 @@ component extends="Controller" hint="Misc Event Data"
 	*  @hint Get Events For the provided range via ajax
 	*/
 	public void function getEvents() {
+		param name="params.type" default="";
+
 		if(structkeyexists(params, "start") AND structkeyexists(params, "end")){
 
 	    	var sd=createDateTime(year(params.start), month(params.start), day(params.start), 00,00,00);
 	    	var ed=createDateTime(year(params.end), month(params.end), day(params.end), 00,00,00);
 
-	    	if(structKeyExists(params, "key")){
-		    	//data=model("event").findAll(where="locations.id = #params.key#", include="location");
-		    		data=model("event").findAll(select="id, title, locationid,  class, start, end, allday",
+	    		// By building
+	    		if(params.type EQ "building"){
+	    			data=model("event").findAll(select="id, title, locationid,  class, start, end, allday",
+	    			where="start >= '#sd#' AND end <= '#ed#' AND locations.building = '#fromTagSafe(params.key)#'", include="location",
+	    			order="start ASC");
+	    		// By location
+	    		} else if(params.type EQ "location"){
+					data=model("event").findAll(select="id, title, locationid,  class, start, end, allday",
 	    			where="start >= '#sd#' AND end <= '#ed#' AND locationid = '#params.key#'", include="location",
 	    			order="start ASC");
- 	    	} else {
-	    		data=model("event").findAll(select="id, title, locationid,  class, start, end, allday",
+	    		// All
+	    		} else {
+	    			data=model("event").findAll(select="id, title, locationid,  class, start, end, allday",
 	    			where="start >= '#sd#' AND end <= '#ed#'", include="location",
 	    			order="start ASC");
-	    	}
+	    		}
+
 	    	events=prepEventData(data);
 		    renderWith(events);
 		}

@@ -9,12 +9,12 @@ component extends="Controller" hint="Main Events/Bookings Controller"
 
 		// Additional Permissions
 		filters(through="checkPermissionAndRedirect", permission="accesscalendar");
-		filters(through="checkPermissionAndRedirect", permission="allowRoomBooking", except="index,list,day");
+		filters(through="checkPermissionAndRedirect", permission="allowRoomBooking", except="index,list,day,building,location");
 		filters(through="checkPermissionAndRedirect", permission="viewRoomBooking", only="list,view");
 
 		// Data
-		filters(through="_getLocations", only="index,add,edit,clone,create,update,list,day");
-		filters(through="_getResources", only="index,add,edit,clone,create,update,list,view");
+		filters(through="_getLocations", only="index,building,location,add,edit,clone,create,update,list,day");
+		filters(through="_getResources", only="index,building,location,add,edit,clone,create,update,list,view");
 		filters(through="_setModelType");
 	}
 
@@ -25,12 +25,24 @@ component extends="Controller" hint="Main Events/Bookings Controller"
 	public void function view() {
 		if(structKeyExists(params, "key") AND isNumeric(params.key)){
 			event=model("location").findAll(where="events.id = #params.key#", include="events(eventresources)");
-			customfields=getCustomFields(objectname=request.modeltype, key=location.key());
+			customfields=getCustomFields(objectname=request.modeltype, key=event.id);
 		} else {
 			redirectTo(route="home", error="No event specified");
 		}
 	}
 
+	/**
+	*  @hint By Building
+	*/
+	public void function building() {
+		renderPage(action="index");
+	}
+	/**
+	*  @hint By Location
+	*/
+	public void function location() {
+		renderPage(action="index");
+	}
 	/**
 	*  @hint Shows Agenda style view table for a given month
 	*/
@@ -162,6 +174,7 @@ component extends="Controller" hint="Main Events/Bookings Controller"
 	*/
 	public void function clone() {
 	 	event=model("event").findOne(where="id = #params.key#", include="eventresources");
+    	customfields=getCustomFields(objectname="event", key=event.key());
         renderPage(action="add");
 	}
 
@@ -210,6 +223,7 @@ component extends="Controller" hint="Main Events/Bookings Controller"
 				}
 				// Send Confirmation email if appropriate
 				if(structKeyExists(params.event, "emailContact") AND params.event.emailContact AND isValid("email", event.contactemail) AND !application.rbs.setting.isDemoMode){
+					eventlocation=model("location").findOne(where="id = #event.locationid#");
 					sendEmail(
 						    to="#event.contactname# <#event.contactemail#>",
 						    from="#application.rbs.setting.sitetitle# <#application.rbs.setting.siteEmailAddress#>",
