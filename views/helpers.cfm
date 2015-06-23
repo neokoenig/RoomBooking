@@ -1,6 +1,13 @@
 <!---================= Room Booking System / https://github.com/neokoenig =======================--->
 <cfscript>
 	/**
+	*  @hint Shortcut to XMLFormat
+	*/
+	public string function h(required string s) {
+		return xmlFormat(s);
+	}
+
+	/**
 	*  @hint Turn mins into friendly string
 	*/
 	public string function _durationString(numeric d) {

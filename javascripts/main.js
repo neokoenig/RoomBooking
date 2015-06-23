@@ -2,6 +2,86 @@
 
 $(document).ready(function(){
 
+	tryForCalendar();
+
+	function tryForCalendar(){
+		var eventsURL     =$("#calendar").data("eventsurl"),
+			eventURL      =$("#calendar").data("eventurl"),
+			addURL        =$("#calendar").data("addurl"),
+			urlrewriting  =$("#calendar").data("urlrewriting"),
+			settings      =$("#settings").data();
+
+        if(typeof settings !== "undefined"){
+        // Main Calendar
+		$('#calendar').fullCalendar({
+
+    //----------------Config--------------
+        header: {
+            left:   settings.headerleft,
+            center: settings.headercenter,
+            right:  settings.headerright
+        },
+        weekends:           settings.weekends,
+        firstDay:           settings.firstday,
+        slotDuration:       settings.slotminutes,
+        minTime:            settings.mintime,
+        maxTime:            settings.maxtime,
+        timeFormat:         settings.timeformat,
+        hiddenDays:         settings.hiddendays,
+        weekNumbers:        settings.weeknumbers,
+        allDaySlot:         settings.alldayslot,
+        allDayText:         settings.alldaytext,
+        defaultView:        settings.defaultview,
+        axisFormat:         settings.axisformat,
+        slotEventOverlap:   settings.sloteventoverlap,
+        height:             'auto',
+        columnFormat: {
+            month:  settings.columnformatmonth,
+            week:   settings.columnformatweek,
+            day:    settings.columnformatday
+        },
+
+    //----------------Event Sources----------
+        eventSources: [
+         {
+                url: eventsURL,
+                type: 'POST',
+                cache: false,
+                error: function() {
+                    alert('there was an error while fetching events!');
+                }
+          }
+        ],
+    //----------------Day Click--------------
+        dayClick: function(date, allDay, jsEvent, view) {
+            var thepast=moment().subtract("days", 1);
+            if(moment(date).isAfter(thepast)){
+            // Deal with url rewriting differing paths
+               if(urlrewriting === "off"){
+                window.location.href = addURL + "&key=" + settings.key + "&d=" + moment(date).format("YYYY-MM-DD");
+               } else {
+                window.location.href = addURL + settings.key + "?d=" + moment(date).format("YYYY-MM-DD");
+               }
+             }
+        },
+    //----------------Event Click --------------
+        eventClick: function(calEvent, jsEvent, view) {
+            var specificEvent="";
+            // Deal with url rewriting differing paths
+            if(urlrewriting === "off"){
+                specificEvent="&key=" + calEvent.id + "&format=json";
+            } else {
+                specificEvent="/" + calEvent.id + "?format=json";
+            }
+            $('#eventmodal').modal({
+               remote: eventURL + specificEvent
+             });
+        },
+        editable: false
+		});
+		}
+	}
+
 	// Handles menu drop down-------------
 	$('#dropdown-signin').find('form').click(function(e){
 		e.stopPropagation();

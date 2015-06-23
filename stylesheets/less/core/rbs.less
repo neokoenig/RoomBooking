@@ -3,10 +3,13 @@
 @lib: 		"../../../bower_components";
 @bs:		"bootstrap/less";
 @site:  	"../site";
-@fontdir:	"/stylesheets/fonts";
+@fontdir:	"/stylesheets/fonts/";
+
+@import "@{lib}/@{bs}/variables.less";
+
 
 // cfwheels specific overrides:
-@import "variables.less";
+@icon-font-path:  @fontdir;
 
 // Core mixins
 @import "@{lib}/@{bs}/mixins.less";

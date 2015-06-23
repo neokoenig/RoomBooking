@@ -14,7 +14,7 @@
 --->
 <cfscript>
 set(dataSourceName="roombooking");
-set(URLRewriting="on");
+set(URLRewriting="off");
 set(allowedEnvironmentSwitchThroughURL=true);
 set(reloadPassword="roombooking");
 

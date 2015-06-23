@@ -18,7 +18,8 @@
 	addRoute(name="denied", 		pattern="/denied", 			controller="sessions", action="denied");
 
 	// Remote Data
-	addRoute(name="getEvents", 		pattern="/eventdata/get-events/[type]/[key]", action="getEvents", controller="eventdata");
+	addRoute(name="getEvents", 		pattern="/eventdata/getevents/[type]/[key]", action="getevents", controller="eventdata");
+	addRoute(name="getEvent", 		pattern="/eventdata/getevent/[key]", action="getevent", controller="eventdata");
 
  	// Default
  	addRoute(name="home", pattern="", controller="bookings", action="index");

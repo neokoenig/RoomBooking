@@ -9,7 +9,7 @@ component extends="Controller" hint="Misc Event Data"
 
 		// Additional Permissions
 		filters(through="checkPermissionAndRedirect", permission="accesscalendar");
-		filters(through="_isValidAjax");
+		//filters(through="_isValidAjax");
 
 		// Data
 		filters(through="_getResources", only="getevent");
@@ -23,8 +23,13 @@ component extends="Controller" hint="Misc Event Data"
 /******************** Public***********************/
 	/**
 	*  @hint Get Events For the provided range via ajax
+	*
+	* 		 There are three main type of calendar view:
+	* 			index - basically everything
+	* 			building - a collection of locations
+	* 			location - a specific location
 	*/
-	public void function getEvents() {
+	public void function getevents() {
 		param name="params.type" default="";
 
 		if(structkeyexists(params, "start") AND structkeyexists(params, "end")){
@@ -49,7 +54,7 @@ component extends="Controller" hint="Misc Event Data"
 	    			order="start ASC");
 	    		}
 
-	    	events=prepEventData(data);
+	    	events=prepeventdata(data);
 		    renderWith(events);
 		}
 		else {
@@ -60,7 +65,7 @@ component extends="Controller" hint="Misc Event Data"
 	/**
 	*  @hint get single event via ajax, i.e for modals
 	*/
-	public void function getEvent() {
+	public void function getevent() {
 		if(structKeyExists(params, "key")){
 		 	event=model("location").findAll(where="events.id = #params.key#", include="events(eventresources)");
 		}
@@ -69,7 +74,7 @@ component extends="Controller" hint="Misc Event Data"
  	/**
  	*  @hint Sort out event data
  	*/
- 	private array function prepEventData(data) {
+ 	private array function prepeventdata(data) {
  		var events=[];
  		var c=1;
  		for(event in arguments.data){
