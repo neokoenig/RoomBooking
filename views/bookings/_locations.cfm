@@ -30,17 +30,4 @@
 		</cfloop>
 	</div>
 </div>
-
-<cfsavecontent variable="request.js.locationnav">
-	<script>
-		$(document).ready(function(){
-			$(".building-row a").on("mouseenter", function(e){
-				var id=$(this).data("id");
-				$(".location-row").find("a").addClass("hidden").end()
-								  .find("a" +"." + id).removeClass("hidden");
-			}).on("mouseleave", function(e){
-			});
-		});
-	</script>
-</cfsavecontent>
 </cfoutput>

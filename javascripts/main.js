@@ -12,6 +12,7 @@ $(document).ready(function(){
 			settings      =$("#settings").data();
 
         if(typeof settings !== "undefined"){
+
         // Main Calendar
 		$('#calendar').fullCalendar({
 
@@ -32,7 +33,7 @@ $(document).ready(function(){
         allDaySlot:         settings.alldayslot,
         allDayText:         settings.alldaytext,
         defaultView:        settings.defaultview,
-        axisFormat:         settings.axisformat,
+        //axisFormat:         settings.axisformat,
         slotEventOverlap:   settings.sloteventoverlap,
         height:             'auto',
         columnFormat: {
@@ -81,6 +82,15 @@ $(document).ready(function(){
 		});
 		}
 	}
+
+	// Building Rollover------------------
+	$(".building-row a").on("mouseenter", function(e){
+		var id=$(this).data("id");
+		$(".location-row").find("a").addClass("hidden").end()
+			.find("a" +"." + id).removeClass("hidden");
+		}).on("mouseleave", function(e){
+	});
+
 
 	// Handles menu drop down-------------
 	$('#dropdown-signin').find('form').click(function(e){

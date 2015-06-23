@@ -1,7 +1,7 @@
 <cfoutput>
-#includePartial("/common/head")#
+#includePartial("/common/layout/head")#
 <!-----------------------------HEADER--------------------------->
 #includeContent()#
 <!-----------------------------FOOTER--------------------------->
-#includePartial("/common/footer")#
+#includePartial("/common/layout/footer")#
 </cfoutput>
