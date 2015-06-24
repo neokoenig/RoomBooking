@@ -48,6 +48,9 @@ component extends="Controller" hint="Main Events/Bookings Controller"
 	*  @hint Shows Agenda style view table for a given month
 	*/
 	public void function list() {
+		param name="params.datefrom" default="#dateFormat(now(), 'DD/MM/YYYY')#";
+		param name="params.dateto" 	 default="#dateFormat(dateAdd('m', 1, now()), 'DD/MM/YYYY')#";
+		param name="params.location" default="";
 		events=model("location").findAll(where="#_agendaListWC()#", include="events", order="start");
 	}
 
@@ -341,8 +344,8 @@ component extends="Controller" hint="Main Events/Bookings Controller"
 			if(structKeyExists(params, "datefrom")
 				AND structKeyExists(params, "dateto")
 				){
-					sd=createDateTime(year(datefrom), month(datefrom), day(datefrom), 00,00,00);
-					td=createDateTime(year(dateto), month(dateto), day(dateto), 23,59,59);
+					sd=createDateTime(year(params.datefrom), month(params.datefrom), day(params.datefrom), 00,00,00);
+					td=createDateTime(year(params.dateto), month(params.dateto), day(params.dateto), 23,59,59);
 					arrayAppend(wc, "start > '#sd#'");
 					arrayAppend(wc, "start < '#td#'");
 			}

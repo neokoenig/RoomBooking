@@ -1,8 +1,5 @@
 <!---================= Room Booking System / https://github.com/neokoenig =======================--->
 <!--- Agenda Filter --->
-<cfparam name="params.datefrom" default="#dateFormat(now(), 'DD/MM/YYYY')#">
-<cfparam name="params.dateto" 	default="#dateFormat(dateAdd('m', 1, now()), 'DD/MM/YYYY')#">
-<cfparam name="params.location" default="">
 
 <cfoutput>
 	#panel(title="Filter", class="hidden-print panel-primary")#
