@@ -39,17 +39,17 @@ component extends="Controller" hint="Misc Event Data"
 
 	    		// By building
 	    		if(params.type EQ "building"){
-	    			data=model("event").findAll(select="id, title, locationid,  class, start, end, allday",
+	    			data=model("event").findAll(select="id, title, locationid,  class, start, end, allday, status",
 	    			where="start >= '#sd#' AND end <= '#ed#' AND locations.building = '#fromTagSafe(params.key)#'", include="location",
 	    			order="start ASC");
 	    		// By location
 	    		} else if(params.type EQ "location"){
-					data=model("event").findAll(select="id, title, locationid,  class, start, end, allday",
+					data=model("event").findAll(select="id, title, locationid,  class, start, end, allday, status",
 	    			where="start >= '#sd#' AND end <= '#ed#' AND locationid = '#params.key#'", include="location",
 	    			order="start ASC");
 	    		// All
 	    		} else {
-	    			data=model("event").findAll(select="id, title, locationid,  class, start, end, allday",
+	    			data=model("event").findAll(select="id, title, locationid,  class, start, end, allday, status",
 	    			where="start >= '#sd#' AND end <= '#ed#'", include="location",
 	    			order="start ASC");
 	    		}
@@ -77,7 +77,11 @@ component extends="Controller" hint="Misc Event Data"
  	private array function prepeventdata(data) {
  		var events=[];
  		var c=1;
+
  		for(event in arguments.data){
+			if(!event.status){
+				event.class="fc-pending " & event.class;
+			}
 			events[c]["id"]=event.id;
 			events[c]["title"]=event.title;
 			events[c]["start"]=_f_d(event.start);

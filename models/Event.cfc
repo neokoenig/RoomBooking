@@ -13,6 +13,18 @@ component extends="Model" hint="Main Event Object"
 		validate("checkDates");
 		afterFind("formatDates");
 		afterInitialization("registerSystemFields");
+		beforeCreate("checkApproval");
+	}
+
+	/**
+	*  @hint
+	*/
+	public void function checkApproval() {
+		if(application.rbs.setting.approveBooking){
+			this.status=0;
+		} else {
+			this.status=1;
+		}
 	}
 
 	/**

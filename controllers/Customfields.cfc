@@ -8,6 +8,7 @@ component extends="Controller" hint="Custom Fields and Templating"
 		// Permission filters
 		super.init();
 		filters(through="checkPermissionAndRedirect", permission="accessCustomfields");
+		filters(through="denyInDemoMode", except="index");
 		useslayout(template=false, only="fieldpicker");
 	}
 

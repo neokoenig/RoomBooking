@@ -45,7 +45,11 @@
 				<cfelse>All Day
 			</cfif></td>
 			<td width=150 class="#class#"><small>#building#</small><br /> #name#<br /><small>#description#</small></td>
-			<td>#title#</td>
+			<td><cfif !status>
+				<i class="glyphicon glyphicon-warning-sign"></i>
+			</cfif>#title#<cfif !status>
+				 <br /><small>(Pending Approval)</small>
+			</cfif></td>
 			<td><cfif checkPermission("allowRoomBooking")>#linkTo(action="edit", key=eventid, text="<span class='glyphicon glyphicon-pencil'></span>", controller="bookings", class="btn btn-info btn-xs")#</cfif></td>
 			<td>#layoutstyle#</td>
 			<td>

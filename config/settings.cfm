@@ -1,32 +1,36 @@
-<!---
-	If you leave these settings commented out, Wheels will set the data source name to the same name as the folder the application resides in.
-
-	<cfset set(dataSourceUserName="")>
-	<cfset set(dataSourcePassword="")>
---->
-
-<!---
-	If you leave this setting commented out, Wheels will try to determine the URL rewrite capabilities automatically.
-	The URLRewriting setting can bet set to "On", "Partial" or "Off".
-	To run with "Partial" rewriting, the "PATH_INFO" variable needs to be supported by the web server.
-	To run with rewriting "On", you need to apply the necessary rewrite rules on the web server first.
-	<cfset set(URLRewriting="Partial")>
---->
 <cfscript>
+// RoomBooking System settings
+
+// Default Datasource name as set in /CFIDE/administrator | Railo admin | Lucee admin.
+// If you change this before installing, ensure you update request.dsn in /install/index.cfm
 set(dataSourceName="roombooking");
+
+// Setting URL rewriting to off by default, as running wheels in a subdirectory requires more complex configuration
 set(URLRewriting="off");
+
+// Whether to allow ?reload=production etc via URL. I tend to keep this on.
 set(allowedEnvironmentSwitchThroughURL=true);
+
+// Reload Password: you'll definitely want to change this to something unique.
 set(reloadPassword="roombooking");
 
 // Environment-agnostic settings
 set(assetQueryString=true);
-set(deletePluginDirectories=false); // set to false for plugin development
-set(excludeFromErrorEmail="password,hashedpassword,passwordsalt,ssn");
-set(flashStorage="session"); // valid values are "session" or "cookie"
-set(obfuscateURLs=false);
-set(overwritePlugins=true); // set to false for plugin development
 
-// BS3 form settings
+// set to false for plugin development
+set(deletePluginDirectories=false);
+
+set(excludeFromErrorEmail="password,hashedpassword,passwordsalt,ssn");
+
+// valid values are "session" or "cookie"
+set(flashStorage="session");
+
+set(obfuscateURLs=false);
+
+// set to false for plugin development
+set(overwritePlugins=true);
+
+// Bootstrap 3 form defaults
 set(functionName="startFormTag");
 set(functionName="submitTag", class="btn btn-primary", value="Save Changes");
 set(functionName="checkBox,checkBoxTag", labelPlacement="aroundRight", prependToLabel="<div class=""checkbox"">", appendToLabel="</div>", uncheckedValue="0");

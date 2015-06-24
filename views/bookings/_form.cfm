@@ -119,7 +119,7 @@
 		}
 		//console.log(id + " Unique Check");
 		$.ajax({
-			url: "<cfoutput>#urlFor(controller='resources', action='checkavailability', params='format=json')#</cfoutput>",
+			url: "<cfoutput>#urlFor(controller='resources', action='checkavailability')#</cfoutput>",
 			data: {
 				id: id,
 				eventid: eventid,

@@ -8,7 +8,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="/">
+          <a class="navbar-brand" href="#application.wheels.rootpath#">
             <cfif len(application.rbs.setting.sitelogo) GT 1>
               <img src="#application.rbs.setting.sitelogo#" alt="Logo" class="img-responsive pull-left logo" />
             </cfif>

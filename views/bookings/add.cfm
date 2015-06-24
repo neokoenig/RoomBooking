@@ -5,7 +5,11 @@
 #errorMessagesFor("event")#
 	#startFormTag(action="create", id="bookingform")#
 		#includePartial("form")#
-		#submitTag(value="Create Booking", class="btn btn-block btn-primary btn-lg")#
+		<cfif application.rbs.setting.approveBooking>
+			#submitTag(value="Request Booking", class="btn btn-block btn-primary btn-lg")#
+		<cfelse>
+			#submitTag(value="Create Booking", class="btn btn-block btn-primary btn-lg")#
+		</cfif>
 	#endFormTag()#
 #panelend()#
 </cfoutput>

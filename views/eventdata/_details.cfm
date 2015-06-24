@@ -1,6 +1,11 @@
 <!---================= Room Booking System / https://github.com/neokoenig =======================--->
 <cfoutput>
 <cfparam name="resources">
+<cfif application.rbs.setting.approveBooking AND !event.status>
+	<div class="alert alert-warning">
+		<strong><i class="glyphicon glyphicon-warning-sign"></i> Pending Approval</strong> This booking is pending approval from an administrator.
+	</div>
+</cfif>
 <cfif checkPermission("allowRoomBooking")>
 	<div class="btn-group btn-group-justified">
 		#linkTo(action="edit", key=event.eventid, text="<span class='glyphicon glyphicon-pencil'></span> Edit", controller="bookings", class="btn btn-info btn-sm")#

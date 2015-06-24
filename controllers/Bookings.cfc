@@ -113,7 +113,7 @@ component extends="Controller" hint="Main Events/Bookings Controller"
 					 	// Set rowspan dependent on duration
 						t.rowspan=ceiling(t.duration / timeFormat(SlotMin, 'M'));
 						t.content="<strong>"
-						& linkTo( class="remote-modal", controller='eventdata', action='getEvent',  key=locationEvents.id, text=h(locationEvents.title))
+						& linkTo( class="remote-modal", route='getEvent',  key=locationEvents.id, text=h(locationEvents.title))
 						& "</strong><br />"
 						& h(locationEvents.name) & "<br />";
 						if(t.isMultiday){
@@ -247,9 +247,10 @@ component extends="Controller" hint="Main Events/Bookings Controller"
 		if(structkeyexists(params, "event")){
 	    	event = model("event").findOne(where="id = #params.key#", include="eventresources");
 			event.update(params.event);
-			event.save();
 			if ( event.save() )  {
-				customfields=updateCustomFields(objectname=request.modeltype, key=event.key(), customfields=params.customfields);
+				if(structKeyExists(params, "customfields")){
+					customfields=updateCustomFields(objectname=request.modeltype, key=event.key(), customfields=params.customfields);
+				}
 				redirectTo(action="index", success="event successfully updated");
 			}
 	        else {

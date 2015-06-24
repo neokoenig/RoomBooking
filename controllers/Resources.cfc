@@ -11,7 +11,7 @@ component extends="Controller" hint="Resources Controller"
 		// Permissions
 		filters(through="checkPermissionAndRedirect", permission="accessresources");
 		filters(through="_checkResourcesAdmin");
-		filters(through="_isValidAjax", only="checkavailability");
+		//filters(through="_isValidAjax", only="checkavailability");
 
 		// Data
 		filters(through="_getresources", only="index");

@@ -54898,7 +54898,7 @@ $(document).ready(function(){
 		var url=$(this).find(".remote-modal").attr("href");
 		e.preventDefault();
 		$('#eventmodal').modal({
-			remote: url + "?format=json"
+			remote: url
 		});
 	});
 

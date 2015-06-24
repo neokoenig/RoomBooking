@@ -11,7 +11,7 @@
 <!--- Inline CSS--->
 <cfif application.rbs.setting.showlocationcolours>
 <style>
-<cfloop query="locations"><cfif len(colour)>.#class# {background: #colour#; border-color: #colour#;}</cfif>
+<cfloop query="locations"><cfif len(colour)>.#class# {background: #colour#; border-color: #colour#;} .fc-pending.#class# {color: #colour#;}</cfif>
 </cfloop>
 </style>
 </cfif>

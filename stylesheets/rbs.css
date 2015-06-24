@@ -250,8 +250,8 @@ th {
 }
 @font-face {
   font-family: 'Glyphicons Halflings';
-  src: url('/stylesheets/fonts/glyphicons-halflings-regular.eot');
-  src: url('/stylesheets/fonts/glyphicons-halflings-regular.eot?#iefix') format('embedded-opentype'), url('/stylesheets/fonts/glyphicons-halflings-regular.woff2') format('woff2'), url('/stylesheets/fonts/glyphicons-halflings-regular.woff') format('woff'), url('/stylesheets/fonts/glyphicons-halflings-regular.ttf') format('truetype'), url('/stylesheets/fonts/glyphicons-halflings-regular.svg#glyphicons_halflingsregular') format('svg');
+  src: url('fonts/glyphicons-halflings-regular.eot');
+  src: url('fonts/glyphicons-halflings-regular.eot?#iefix') format('embedded-opentype'), url('fonts/glyphicons-halflings-regular.woff2') format('woff2'), url('fonts/glyphicons-halflings-regular.woff') format('woff'), url('fonts/glyphicons-halflings-regular.ttf') format('truetype'), url('fonts/glyphicons-halflings-regular.svg#glyphicons_halflingsregular') format('svg');
 }
 .glyphicon {
   position: relative;
@@ -8107,6 +8107,10 @@ be a descendant of the grid when it is being dragged.
 .fc-past {
   background: #D1D1D1;
   opacity: 0.8;
+}
+.fc-pending {
+  opacity: 0.8;
+  background: white !important;
 }
 /* Various Helper Classes */
 .append {
