@@ -55994,7 +55994,7 @@ $(document).ready(function(){
         },
         weekends:           settings.weekends,
         firstDay:           settings.firstday,
-        slotDuration:       settings.slotminutes,
+        //slotDuration:       settings.slotminutes,
         minTime:            settings.mintime,
         maxTime:            settings.maxtime,
         timeFormat:         settings.timeformat,
@@ -56003,7 +56003,7 @@ $(document).ready(function(){
         allDaySlot:         settings.alldayslot,
         allDayText:         settings.alldaytext,
         defaultView:        settings.defaultview,
-        //axisFormat:         settings.axisformat,
+        axisFormat:         settings.axisformat,
         slotEventOverlap:   settings.sloteventoverlap,
         height:             'auto',
         columnFormat: {
