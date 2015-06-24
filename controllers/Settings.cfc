@@ -11,6 +11,10 @@ component extends="Controller" hint="Settings Controller"
 		filters(through="_checkSettingsAdmin");
 		filters(through="denyInDemoMode", only="edit,update");
 
+		// Verification
+		verifies(only="edit,update", params="key", paramsTypes="integer", route="home", error="Sorry, that setting can't be found");
+
+
 		// Data
 		filters(through="_getSettings");
 	}

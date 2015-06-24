@@ -11,6 +11,11 @@ component extends="Controller" hint="Main Events/Bookings Controller"
 		filters(through="checkPermissionAndRedirect", permission="accesscalendar");
 		filters(through="checkPermissionAndRedirect", permission="allowRoomBooking", except="index,list,day,building,location");
 		filters(through="checkPermissionAndRedirect", permission="viewRoomBooking", only="list,view");
+		filters(through="checkPermissionAndRedirect", permission="allowApproveBooking", only="approve");
+
+		// Verification
+		verifies(only="approve,view,clone,edit,delete", params="key", paramsTypes="integer", route="home", error="Sorry, that event can't be found");
+
 
 		// Data
 		filters(through="_getLocations", only="index,building,location,add,edit,clone,create,update,list,day");
@@ -23,12 +28,8 @@ component extends="Controller" hint="Main Events/Bookings Controller"
 	*  @hint Static display of a single event, mainly used in RSS permalinks etc
 	*/
 	public void function view() {
-		if(structKeyExists(params, "key") AND isNumeric(params.key)){
-			event=model("location").findAll(where="events.id = #params.key#", include="events(eventresources)");
-			customfields=getCustomFields(objectname=request.modeltype, key=event.id);
-		} else {
-			redirectTo(route="home", error="No event specified");
-		}
+		event=model("location").findAll(where="events.id = #params.key#", include="events(eventresources)");
+		customfields=getCustomFields(objectname=request.modeltype, key=event.id);
 	}
 
 	/**
@@ -170,6 +171,24 @@ component extends="Controller" hint="Main Events/Bookings Controller"
 	}
 
 	/**
+	*  @hint Approve/deapprove a listing
+	*/
+	public void function approve() {
+		event=model("event").findOne(where="id = #params.key#");
+		if(isObject(event)){
+			if(event.status){
+				// Deny
+				event.status=0;
+			} else {
+				// Approve
+				event.status=1;
+			}
+			event.save();
+		}
+		redirectTo(back=true);
+	}
+
+	/**
 	*  @hint Shortcut to duplicating a booking
 	*/
 	public void function clone() {
@@ -263,14 +282,12 @@ component extends="Controller" hint="Main Events/Bookings Controller"
 	*  @hint Event CRUD
 	*/
 	public void function delete() {
-		if(structkeyexists(params, "key")){
-	    	event = model("event").findOne(where="id = #params.key#", include="eventresources");
-			if ( event.delete() )  {
-				redirectTo(action="index", success="event successfully deleted");
-			}
-	        else {
-				redirectTo(action="index", error="There were problems deleting that event");
-			}
+    	event = model("event").findOne(where="id = #params.key#", include="eventresources");
+		if ( event.delete() )  {
+			redirectTo(action="index", success="event successfully deleted");
+		}
+        else {
+			redirectTo(action="index", error="There were problems deleting that event");
 		}
 	}
 /******************** Private *********************/

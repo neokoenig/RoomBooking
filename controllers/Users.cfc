@@ -12,6 +12,10 @@ component extends="Controller" hint="Main User Controller"
 		filters(through="checkPermissionAndRedirect", permission="updateOwnAccount", only="myaccount,updateaccount,updatepassword");
 		filters(through="denyInDemoMode", only="create,update,updateaccount,updatepassword,assumeuser,generateAPIKey");
 
+		// Verification
+		verifies(only="edit,update,delete,assumeUser,recover,generateAPIKey", params="key", paramsTypes="integer", route="home", error="Sorry, that user can't be found");
+
+
 		// Data
 		filters(through="getCurrentUser", only="myaccount,updateaccount,updatepassword");
 		filters(through="_getRoles", only="index,add,edit,delete,update,create");
@@ -64,10 +68,8 @@ component extends="Controller" hint="Main User Controller"
 	*/
 	public void function assumeUser() {
 		if(!application.rbs.setting.isdemomode){
-			if(structKeyExists(params, "key")){
 				user=model("user").findOne(where="id = #params.key#");
 				_createUserInScope(user);
-			}
 		}
 		else {
 			redirectTo( controller="users", action="index", success="Not allowed in demo mode");
@@ -165,7 +167,6 @@ component extends="Controller" hint="Main User Controller"
 	*  @hint Generates An API Key for a user account
 	*/
 	public void function generateAPIKey() {
-		if(structKeyExists(params, "key") AND isnumeric(params.key)){
 			user=model("user").findOneByID(params.key);
 			if(isObject(user)){
 				user.apitoken=_generateApiKey();
@@ -174,8 +175,5 @@ component extends="Controller" hint="Main User Controller"
 			} else {
 				redirectTo(controller="users", action="index", error="Key generation failed - User not found");
 			}
-		} else {
-	 		redirectTo(controller="users", action="index", error="Key generation failed - Key not specified");
-		}
 	}
 }

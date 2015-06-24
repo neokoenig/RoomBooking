@@ -10,6 +10,10 @@ component extends="Controller" hint="Custom Fields and Templating"
 		filters(through="checkPermissionAndRedirect", permission="accessCustomfields");
 		filters(through="denyInDemoMode", except="index");
 		useslayout(template=false, only="fieldpicker");
+
+		// Verification
+		verifies(only="delete,deletetemplate", params="key", paramsTypes="integer", route="home", error="Sorry, that field can't be found");
+
 	}
 
 /******************** Public***********************/
@@ -73,15 +77,13 @@ component extends="Controller" hint="Custom Fields and Templating"
 	*  @hint Delete Custom Field
 	*/
 	public void function delete() {
-		  if(structkeyexists(params, "key")){
-		    	customfield = model("customfield").findOne(where="id = #params.key#");
-				if ( customfield.delete() )  {
-					redirectTo(action="index", success="customfield successfully deleted");
-				}
-		        else {
-					redirectTo(action="index", error="There were problems deleting that customfield");
-				}
-			}
+    	customfield = model("customfield").findOne(where="id = #params.key#");
+		if ( customfield.delete() )  {
+			redirectTo(action="index", success="customfield successfully deleted");
+		}
+        else {
+			redirectTo(action="index", error="There were problems deleting that customfield");
+		}
 	}
 
 /******************** Templating ***********************/
@@ -113,7 +115,6 @@ component extends="Controller" hint="Custom Fields and Templating"
 	*/
 	public void function edittemplate() {
 		template=model("template").findOne(where="parentmodel = '#params.key#' AND type='#params.type#'");
-
 	}
 
 	/**
@@ -136,15 +137,13 @@ component extends="Controller" hint="Custom Fields and Templating"
 	*  @hint Delete Template
 	*/
 	public void function deletetemplate() {
-		  if(structkeyexists(params, "key")){
-		    	template = model("template").findOne(where="parentmodel = '#params.key#' AND type='#params.type#'");
-				if ( template.delete() )  {
-					redirectTo(action="index", success="template successfully deleted");
-				}
-		        else {
-					redirectTo(action="index", error="There were problems deleting that template");
-				}
-			}
+    	template = model("template").findOne(where="parentmodel = '#params.key#' AND type='#params.type#'");
+		if ( template.delete() )  {
+			redirectTo(action="index", success="template successfully deleted");
+		}
+        else {
+			redirectTo(action="index", error="There were problems deleting that template");
+		}
 	}
 /******************** Private *********************/
 

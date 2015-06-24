@@ -33,18 +33,18 @@ component extends="Controller" hint="RSS/ICal Etc"
 			isToday=true;
 			if(structKeyExists(params, "location") AND isnumeric(params.location)){
 				isSingleLocation=true;
-				events=model("location").findAll(where="start > '#sd#' AND end < '#ed#' AND id = #params.location#", include="events", order="start", maxrows=params.maxrows);
+				events=model("location").findAll(where="status = 1 AND start > '#sd#' AND end < '#ed#' AND id = #params.location#", include="events", order="start", maxrows=params.maxrows);
 			}
 			else {
-				events=model("location").findAll(where="start > '#sd#' AND end < '#ed#'", include="events", order="start", maxrows=params.maxrows);
+				events=model("location").findAll(where="status = 1 AND start > '#sd#' AND end < '#ed#'", include="events", order="start", maxrows=params.maxrows);
 			}
 		} else {
 			if(structKeyExists(params, "location") AND isnumeric(params.location)){
 				isSingleLocation=true;
-				events=model("location").findAll(where="start > '#now()#' AND id = #params.location#", include="events", order="start", maxrows=params.maxrows);
+				events=model("location").findAll(where="status = 1 AND start > '#now()#' AND id = #params.location#", include="events", order="start", maxrows=params.maxrows);
 			}
 			else {
-				events=model("location").findAll(where="start > '#now()#'", include="events", order="start", maxrows=params.maxrows);
+				events=model("location").findAll(where="status = 1 AND start > '#now()#'", include="events", order="start", maxrows=params.maxrows);
 			}
 		}
 
@@ -57,10 +57,10 @@ component extends="Controller" hint="RSS/ICal Etc"
 		param name="params.maxrows" default="25" type="numeric";
 		param name="params.format" default="xml" type="string";
 		if(structKeyExists(params, "location") AND isnumeric(params.location)){
-				events=model("location").findAll(where="start > '#now()#' AND id = #params.location#", include="events", order="start", maxrows=params.maxrows);
+				events=model("location").findAll(where="status = 1 AND start > '#now()#' AND id = #params.location#", include="events", order="start", maxrows=params.maxrows);
 			}
 			else {
-				events=model("location").findAll(where="start > '#now()#'", include="events", order="start", maxrows=params.maxrows);
+				events=model("location").findAll(where="status = 1 AND start > '#now()#'", include="events", order="start", maxrows=params.maxrows);
 			}
 			renderWith(data=events);
 	}
@@ -74,10 +74,10 @@ component extends="Controller" hint="RSS/ICal Etc"
 		var CRLF=chr(13)&chr(10);
 		data = "";
 		if(structKeyExists(params, "location") AND isnumeric(params.location)){
-			events=model("location").findAll(where="start > '#now()#' AND id = #params.location#", include="events", order="start", maxrows=params.maxrows);
+			events=model("location").findAll(where="status = 1 AND start > '#now()#' AND id = #params.location#", include="events", order="start", maxrows=params.maxrows);
 		}
 		else {
-			events=model("location").findAll(where="start > '#now()#'", include="events", order="start", maxrows=params.maxrows);
+			events=model("location").findAll(where="status = 1 AND start > '#now()#'", include="events", order="start", maxrows=params.maxrows);
 		}
 		vCal = "BEGIN:VCALENDAR" & CRLF;
 		vCal = vCal & "PRODID: -//#application.rbs.setting.sitetitle#//Room Booking System//EN" & CRLF;

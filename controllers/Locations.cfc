@@ -15,6 +15,10 @@ component extends="Controller" hint="Locations Controller"
 		filters(through="_setModelType");
 		// Data
 		filters(through="_getLocations", only="index,list");
+
+		// Verification
+		verifies(only="view,edit,update,delete", params="key", paramsTypes="integer", route="home", error="Sorry, that event can't be found");
+
 	}
 
 /******************** Admin ***********************/

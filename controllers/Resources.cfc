@@ -17,6 +17,10 @@ component extends="Controller" hint="Resources Controller"
 		filters(through="_getresources", only="index");
 		filters(through="_getLocations");
 
+		// Verification
+		verifies(only="view,edit,update,delete", params="key", paramsTypes="integer", route="home", error="Sorry, that event can't be found");
+
+
 		// Format
 		provides("html,json");
 	}
@@ -71,15 +75,13 @@ component extends="Controller" hint="Resources Controller"
 	*  @hint Delete Resource
 	*/
 	public void function delete() {
-	 	if(structkeyexists(params, "key")){
-		    	resource = model("resource").findOne(where="id = #params.key#");
-				if ( resource.delete() )  {
-					redirectTo(action="index", success="resource successfully deleted");
-				}
-		        else {
-					redirectTo(action="index", error="There were problems deleting that resource");
-				}
-			}
+    	resource = model("resource").findOne(where="id = #params.key#");
+		if ( resource.delete() )  {
+			redirectTo(action="index", success="resource successfully deleted");
+		}
+        else {
+			redirectTo(action="index", error="There were problems deleting that resource");
+		}
 	}
 
 /******************** Private *********************/

@@ -14,6 +14,10 @@ component extends="Controller" hint="Misc Event Data"
 		// Data
 		filters(through="_getResources", only="getevent");
 
+		// Verification
+		verifies(only="getevent", params="key", paramsTypes="integer", route="home", error="Sorry, that event can't be found");
+
+
 		// Formats
 		provides("html,json");
 		usesLayout(template="modal", only="getevent");
@@ -66,9 +70,7 @@ component extends="Controller" hint="Misc Event Data"
 	*  @hint get single event via ajax, i.e for modals
 	*/
 	public void function getevent() {
-		if(structKeyExists(params, "key")){
-		 	event=model("location").findAll(where="events.id = #params.key#", include="events(eventresources)");
-		}
+	 	event=model("location").findAll(where="events.id = #params.key#", include="events(eventresources)");
 	}
 /******************** Private *********************/
  	/**
