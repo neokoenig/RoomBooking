@@ -62,7 +62,7 @@
     *  @hint Returns a list of potential roles
     */
     public void function _getRoles() {
-        roles="admin,editor,user,guest";
+        roles=application.rbs.roles;
     }
 
     /**

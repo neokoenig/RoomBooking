@@ -10,7 +10,7 @@ component extends="Controller" hint="Permissions Controller"
 		filters(through="checkPermissionAndRedirect", permission="accessPermissions");
 		filters(through="denyInDemoMode", only="edit,update");
 		// Verification
-		verifies(only="edit,update", params="key", paramsTypes="integer", route="home", error="Sorry, that event can't be found");
+		verifies(only="edit,update", params="key", paramsTypes="string", route="home", error="Sorry, that permission can't be found");
 
 	}
 

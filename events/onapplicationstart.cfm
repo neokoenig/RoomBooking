@@ -19,7 +19,7 @@
 			versionNumber="1.2",
 			setting={},
 			permission={},
-			roles="admin,editor,user,guest",
+			//roles="admin,editor,user,guest",
 			templates={},
 			modeltypes="event,location",
 			templatetypes="form,output"
@@ -28,8 +28,11 @@
 		for(setting in model("setting").findAll()){
 			application.rbs.setting['#setting.id#']=setting.value;
 		}
-
-		for(permission in model("permission").findAll()){
+		permissions=model("permission").findAll();
+		rolelist=permissions.columnlist;
+		rolelist=listDeleteAt(rolelist, 1);
+		application.rbs.roles=listDeleteAt(rolelist, listlen(rolelist));
+		for(permission in permissions){
 			application.rbs.permission["#permission.id#"]={};
 			for(role in listToArray(application.rbs.roles)){
 				application.rbs.permission["#permission.id#"]["#role#"]=permission["#role#"];

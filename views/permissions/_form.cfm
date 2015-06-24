@@ -1,10 +1,9 @@
 <!---================= Room Booking System / https://github.com/neokoenig =======================--->
 <cfoutput>
-#errormessagesFor("permission")#  
+#errormessagesFor("permission")#
 <h3>#permission.id#</h3>
-#checkbox(objectName="permission", property="admin")#
-#checkbox(objectName="permission", property="editor")#
-#checkbox(objectName="permission", property="user")#
-#checkbox(objectName="permission", property="guest")#
+<cfloop list="#application.rbs.roles#" index="i">
+#checkbox(objectName="permission", property=i, label=i)#
+</cfloop>
 <span class="help-block">#permission.notes#</span>
 </cfoutput>

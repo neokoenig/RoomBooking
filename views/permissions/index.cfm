@@ -10,20 +10,18 @@
 			<thead>
 				<tr>
 					<th>Permission</th>
-					<th>Admin</th>
-					<th>Editor</th>
-					<th>User</th>
-					<th>Guest</th>
+					<cfloop list="#application.rbs.roles#" index="i">
+						<th>#i#</th>
+					</cfloop>
 				</tr>
 			</thead>
 			<tbody>
 			<cfloop query="permissions">
 				<tr>
 					<td><strong>#h(id)#</strong><br /><small>#h(autolink(notes))#</small></td>
-					<td>#tickorcross(admin)#</td>
-					<td>#tickorcross(editor)#</td>
-					<td>#tickorcross(user)#</td>
-					<td>#tickorcross(guest)#</td>
+					<cfloop list="#application.rbs.roles#" index="i">
+						<td>#tickorcross(permissions[i])#</td>
+					</cfloop>
 					<td>
 						<div class="btn-group">
 								#linkTo(text="<i class='glyphicon glyphicon-edit'></i> Edit", class="btn btn-xs btn-info", action="edit", key=id)#
