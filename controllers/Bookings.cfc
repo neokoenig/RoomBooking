@@ -48,8 +48,6 @@ component extends="Controller" hint="Main Events/Bookings Controller"
 	*  @hint Shows Agenda style view table for a given month
 	*/
 	public void function list() {
-		param name="params.m" default="#month(now())#";
-		param name="params.y" default="#year(now())#";
 		events=model("location").findAll(where="#_agendaListWC()#", include="events", order="start");
 	}
 
@@ -340,21 +338,19 @@ component extends="Controller" hint="Main Events/Bookings Controller"
 	 		var td="";
 			var wc=[];
 			// Date Filter
-			if(structKeyExists(params, "m")
-				AND structKeyExists(params, "Y")
-				AND len(params.m) GT 0
-				AND len(params.y) EQ 4
-				AND isNumeric(params.m)
-				AND isNumeric(params.y)){
-					sd=createDateTime(params.y, params.m, 1, 00,00,00);
-					td=createDateTime(params.y, params.m, DaysInMonth(sd), 23,59,59);
+			if(structKeyExists(params, "datefrom")
+				AND structKeyExists(params, "dateto")
+				){
+					sd=createDateTime(year(datefrom), month(datefrom), day(datefrom), 00,00,00);
+					td=createDateTime(year(dateto), month(dateto), day(dateto), 23,59,59);
 					arrayAppend(wc, "start > '#sd#'");
 					arrayAppend(wc, "start < '#td#'");
 			}
 
 			// Location Filter
-			if(structKeyExists(params, "location") AND isNumeric(params.location)){
-				arrayAppend(wc, "locationid = #params.location#");
+			if(structKeyExists(params, "location") AND len(params.location)){
+
+				arrayAppend(wc, "FIND_IN_SET(locationid, '#params.location#')");
 			}
 			if(arrayLen(wc)){
 				return arrayToList(wc, " AND ");

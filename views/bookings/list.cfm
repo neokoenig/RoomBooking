@@ -2,7 +2,7 @@
 <cfparam name="events">
 <cfoutput>
 	#includePartial(partial = "list/filter")#
-	#panel(title="Events")#
+	#panel(title="Events (#events.recordcount#) records")#
  <cfif events.recordcount>
  <cfif application.rbs.setting.showlocationcolours>
 <style>
@@ -74,7 +74,7 @@
 	</tbody>
 </table>
 <cfelse>
-<div class="alert alert-danger"><strong>Sorry!</strong>, No events returned for that month</div>
+<div class="alert alert-danger"><strong>Sorry!</strong>, No events returned for that date range.</div>
  </cfif>
  #panelEnd()#
 </cfoutput>

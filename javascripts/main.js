@@ -118,42 +118,45 @@ $(document).ready(function(){
     });
 
 	// Date Pickers-----------------------
-
 	$('#event-start, #event-end').datetimepicker({
-		showToday: true,
-		minuteStepping: 5,
-		sideBySide: true,
-		useSeconds: false,
-		useCurrent: true
+			showTodayButton: true,
+			stepping: 5
 	});
 
+	// Link pickers
 	$('#event-start').on("dp.change", function(e){
-		$('#event-end').data("DateTimePicker").setMinDate(e.date);
+		$('#event-end').data("DateTimePicker").minDate(e.date);
 	});
 
 	$('#event-end').on("dp.change", function(e){
-		$('#event-start').data("DateTimePicker").setMaxDate(e.date);
+		$('#event-start').data("DateTimePicker").maxDate(e.date);
 	});
 
-	$("#event-allDay").on("click", function(e){
-		var sd=$('#event-start').data("DateTimePicker").getDate(),
-			ed=$('#event-end').data("DateTimePicker").getDate();
-		$("#event-start").data("DateTimePicker").setDate(moment(
+	// All day switches to maximum range
+	$("#event-allday").on("click", function(e){
+		var sd=$('#event-start').data("DateTimePicker").date(),
+			ed=$('#event-end').data("DateTimePicker").date();
+		$("#event-start").data("DateTimePicker").date(moment(
 			{y: sd.year(), M: sd.month(), d: sd.date(), h: 0, m: 0}
 		));
-		$("#event-end").data("DateTimePicker").setDate(moment(
+		$("#event-end").data("DateTimePicker").date(moment(
 			{y: ed.year(), M: ed.month(), d: ed.date(), h: 23, m: 59}
 		));
 	});
 
 	$("#dayview-pick").datetimepicker({
-		showToday: true,
-		pickTime: false
+		showTodayButton: true
+	});
+
+	// Generic datepicker
+	$("#datefrom, #dateto").datetimepicker({
+		showTodayButton: true,
+		format: 'DD/MM/YYYY'
 	});
 
 	$("#dayview-pick").on("dp.change", function(e){
-		var date=$(this).data("DateTimePicker").getDate(),
-			dest="?y=" + moment(date).format("YYYY") + "&m=" + moment(date).format("MM") + "&d=" + moment(date).format("DD");
+		var date=$(this).data("DateTimePicker").date(),
+			dest="&y=" + moment(date).format("YYYY") + "&m=" + moment(date).format("MM") + "&d=" + moment(date).format("DD");
 			window.location.href = dest;
 	});
 
