@@ -44,7 +44,9 @@
 			<td width=100><cfif !allDay>#_formatTime(start)# - #_formatTime(end)#
 				<cfelse>All Day
 			</cfif></td>
-			<td width=150 class="#class#"><small>#building#</small><br /> #name#<br /><small>#description#</small></td>
+			<td width=150 class="#class#"><cfif len(building)>
+				<small>#building#</small><br />
+			</cfif> #name#<br /><small>#description#</small></td>
 			<td><cfif status EQ "pending">
 				<i class="glyphicon glyphicon-warning-sign"></i>
 			</cfif>#title#<cfif status EQ "pending">
