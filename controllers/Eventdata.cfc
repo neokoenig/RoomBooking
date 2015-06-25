@@ -81,15 +81,12 @@ component extends="Controller" hint="Misc Event Data"
  		var c=1;
 
  		for(event in arguments.data){
-			if(!event.status){
-				event.class="fc-pending " & event.class;
-			}
 			events[c]["id"]=event.id;
 			events[c]["title"]=event.title;
 			events[c]["start"]=_f_d(event.start);
 			events[c]["end"]=_f_d(event.end);
 			events[c]["allDay"]=event.allDay;
-			events[c]["className"]=event.class;
+			events[c]["className"]=event.class & ' ' & event.status;
 			c++;
  		}
  		return events;

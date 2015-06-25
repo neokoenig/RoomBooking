@@ -12,7 +12,7 @@ component extends="Controller" hint="Custom Fields and Templating"
 		useslayout(template=false, only="fieldpicker");
 
 		// Verification
-		verifies(only="delete,deletetemplate", params="key", paramsTypes="integer", route="home", error="Sorry, that field can't be found");
+		verifies(only="delete,deletetemplate", params="key", paramsTypes="string", route="home", error="Sorry, that field can't be found");
 
 	}
 

@@ -17,13 +17,13 @@ component extends="Model" hint="Main Event Object"
 	}
 
 	/**
-	*  @hint
+	*  @hint Sets a default status - if approval is on, set to pending, otherwise autoapprove
 	*/
 	public void function checkApproval() {
 		if(application.rbs.setting.approveBooking){
-			this.status=0;
+			this.status="pending";
 		} else {
-			this.status=1;
+			this.status="approved";
 		}
 	}
 
@@ -83,6 +83,16 @@ component extends="Model" hint="Main Event Object"
 				description: "",
 				placeholder: "",
 				required: 1
+			},
+			{
+				name: "status",
+				label: "Status",
+				type: "select",
+				options: "{pending: 'Pending', denied: 'Denied', approved: 'Approved'}",
+				class: "",
+				description: "",
+				placeholder: "",
+				required: 0
 			},
 			{
 				name: "end",

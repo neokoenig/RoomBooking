@@ -8242,9 +8242,32 @@ be a descendant of the grid when it is being dragged.
   background: #D1D1D1;
   opacity: 0.8;
 }
-.fc-pending {
+/* Event Status */
+.pending {
   opacity: 0.8;
   background: white !important;
+}
+.pending:before {
+  content: "\e085";
+  font-family: "Glyphicons Halflings";
+  line-height: 1;
+  float: left;
+  padding: 1px 3px 1px 1px;
+}
+.denied {
+  opacity: 0.4;
+  background: white !important;
+  color: #555555;
+}
+.denied:hover {
+  color: #555555;
+}
+.denied:before {
+  content: "\e014";
+  font-family: "Glyphicons Halflings";
+  line-height: 1;
+  float: left;
+  padding: 1px 3px 1px 1px;
 }
 /* Various Helper Classes */
 .append {

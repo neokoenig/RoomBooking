@@ -9,7 +9,9 @@
 
 	<div class="row">
 		<div class="col-sm-9">
-			#startFormTag(method="GET",  action="addtemplate")#
+			#startFormTag(method="GET", controller="customfields",  action="addtemplate")#
+			#hiddenfieldTag(name="controller", value="customfields")#
+			#hiddenfieldTag(name="action", value="addtemplate")#
 			<div class="row">
 				<div class="col-sm-4">
 					#selectTag(name="key", options=application.rbs.modeltypes, label="Template")#

@@ -22,7 +22,7 @@
 						<div class="col-md-4">
 							[field id='locationid']
 						</div>
-						<div class="col-md-4">
+						<div class="col-md-2">
 							[field id='layoutstyle']
 						</div>
 					</div>

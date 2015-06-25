@@ -11,10 +11,10 @@ component extends="Controller" hint="Main Events/Bookings Controller"
 		filters(through="checkPermissionAndRedirect", permission="accesscalendar");
 		filters(through="checkPermissionAndRedirect", permission="allowRoomBooking", except="index,list,day,building,location");
 		filters(through="checkPermissionAndRedirect", permission="viewRoomBooking", only="list,view");
-		filters(through="checkPermissionAndRedirect", permission="allowApproveBooking", only="approve");
+		filters(through="checkPermissionAndRedirect", permission="allowApproveBooking", only="approve,deny");
 
 		// Verification
-		verifies(only="approve,view,clone,edit,delete", params="key", paramsTypes="integer", route="home", error="Sorry, that event can't be found");
+		verifies(only="approve,deny,view,clone,edit,delete", params="key", paramsTypes="integer", route="home", error="Sorry, that event can't be found");
 
 
 		// Data
@@ -172,21 +172,31 @@ component extends="Controller" hint="Main Events/Bookings Controller"
 	}
 
 	/**
-	*  @hint Approve/deapprove a listing
+	*  @hint Approve a listing
 	*/
 	public void function approve() {
 		event=model("event").findOne(where="id = #params.key#");
 		if(isObject(event)){
-			if(event.status){
-				// Deny
-				event.status=0;
-			} else {
-				// Approve
-				event.status=1;
-			}
+			event.status="approved";
 			event.save();
 		}
-		redirectTo(back=true);
+		redirectTo(success="#event.title# was approved", back=true);
+	}
+
+	/**
+	*  @hint Deny a listing (can also delete)
+	*/
+	public void function deny() {
+		event=model("event").findOne(where="id = #params.key#");
+		// Send an email etc here?
+		if(structKeyExists(params, "delete") AND params.delete){
+			event.delete();
+			redirectTo(success="#event.title# was denied & deleted", back=true);
+		} else {
+			event.status="denied";
+			event.save();
+			redirectTo(success="#event.title# was denied", back=true);
+		}
 	}
 
 	/**
@@ -349,10 +359,13 @@ component extends="Controller" hint="Main Events/Bookings Controller"
 					arrayAppend(wc, "start > '#sd#'");
 					arrayAppend(wc, "start < '#td#'");
 			}
+			// Status Filter
+			if(structKeyExists(params, "status") AND len(params.status)){
+				arrayAppend(wc, "status = '#params.status#'");
+			}
 
 			// Location Filter
 			if(structKeyExists(params, "location") AND len(params.location)){
-
 				arrayAppend(wc, "FIND_IN_SET(locationid, '#params.location#')");
 			}
 			if(arrayLen(wc)){
