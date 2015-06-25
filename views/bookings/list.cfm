@@ -47,11 +47,7 @@
 			<td width=150 class="#class#"><cfif len(building)>
 				<small>#building#</small><br />
 			</cfif> #name#<br /><small>#description#</small></td>
-			<td><cfif status EQ "pending">
-				<i class="glyphicon glyphicon-warning-sign"></i>
-			</cfif>#title#<cfif status EQ "pending">
-				 <br /><small>(Pending Approval)</small>
-			</cfif></td>
+			<td class="#status#">#title#</td>
 			<td><cfif checkPermission("allowRoomBooking")>#linkTo(action="edit", key=eventid, text="<span class='glyphicon glyphicon-pencil'></span>", controller="bookings", class="btn btn-info btn-xs")#</cfif></td>
 			<td>#layoutstyle#</td>
 			<td>

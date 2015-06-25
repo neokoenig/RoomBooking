@@ -95,7 +95,6 @@ component extends="Controller" hint="Main Events/Bookings Controller"
 			    eventsQ.addParam(name='end', value=t.timeslot, cfsqltype='cf_sql_timestamp');
 			    eventsQ.setSQL('SELECT * FROM rs WHERE locationid =:locationid AND start <= :start AND [end] > :end AND allday = 0');
 			    locationEvents = eventsQ.execute().getResult();
-
  				if(locationEvents.recordcount){
 					 if(tempid NEQ locationEvents.id){
 					 	// Check for multiday event
@@ -124,7 +123,7 @@ component extends="Controller" hint="Main Events/Bookings Controller"
 							t.content=t.content & "#timeFormat(locationEvents.start, "HH:MM")# - #timeFormat(locationEvents.end, "HH:MM")# "
 									& _durationString(t.duration);
 						}
-						t.class="booked first #location.class#";
+						t.class="booked first #location.class# #locationEvents.status#";
 						if(locationEvents.recordcount GT 1) {
 							t.content=t.content & "<br /><span class='label label-danger'><i class='glyphicon glyphicon-warning-sign'></i> Overlapping Event!</span>";
 						}
