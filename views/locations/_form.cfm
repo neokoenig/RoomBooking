@@ -26,6 +26,9 @@
 		<div class="col-md-3">
 			[field id="colour"]
 		</div>
+		<div class="col-md-3">
+			[field id="layouts"]
+		</div>
 	</div>
 	#includePartial(partial="/common/form/customfields")#
 	</cfsavecontent>

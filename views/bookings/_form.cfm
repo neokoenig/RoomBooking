@@ -5,6 +5,8 @@
 <cfparam name="event">
 <cfparam name="customfields">
 
+<cfdump var="#locations#" format="simple">
+
 <cfoutput>
 	<cfif structKeyExists(application.rbs.templates, "event") AND structKeyExists(application.rbs.templates.event, "form")>
 		<!--- Custom output--->
@@ -73,14 +75,53 @@
 		<cfif params.action EQ "add" OR params.action EQ "create">
 			#includePartial("tabs/repeat")#
 		</cfif>
+
+
 	</cfoutput>
 
 	<cfsavecontent variable="request.js.datepicker">
 		<script>
 		$(document).ready(function(){
+    var layouts={
+    	<cfloop query="locations">
+			<cfoutput>#id#: '#layouts#'<cfif locations.recordcount != currentrow>
+				,
+			</cfif></cfoutput>
+		</cfloop>
+    }
+
+
 
 	// Deselect resources if restricted
 	restrictResources(false);
+	// Override default Layouts if appropriate
+	checkLayouts();
+
+
+	function checkLayouts(){
+			// Get location, i.e 6
+		var location=getSelectedLocation(),
+			// PLaceholder Array
+			layoutArr = new Array(),
+			// Get possible layouts for that location
+			strlayout=layouts[location],
+			// Dropdown to replace
+			$el = $("#event-layoutstyle"),
+			// Old dropdown value
+			oldValue=$el.val();
+			// Set default if no custom layouts
+			if(!strlayout.length){
+				strlayout=<cfoutput>"#application.rbs.setting.roomlayouttypes#"</cfoutput>;
+			}
+			// Turn list to array
+			layoutArr=strlayout.split(',');
+			$el.empty(); // remove old options
+			$.each(layoutArr, function(value,key) {
+				$el.append($("<option></option>").attr("value", key).text(key));
+			});
+			// Try and match previously selected value to new list
+			$el.val(oldValue);
+	}
 
 	function restrictResources(uncheck){
 		var selectedLocation=getSelectedLocation(),
@@ -104,6 +145,7 @@
 	}
 
 	$("#event-locationid").on("change", function(e){
+		checkLayouts();
 		restrictResources(true);
 	});
 
@@ -117,7 +159,6 @@
 			alert("You must enter a start and end date/time before attempting to book this resource");
 			return false;
 		}
-		//console.log(id + " Unique Check");
 		$.ajax({
 			url: "<cfoutput>#urlFor(controller='resources', action='checkavailability')#</cfoutput>",
 			data: {

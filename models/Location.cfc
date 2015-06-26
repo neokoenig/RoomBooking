@@ -64,6 +64,17 @@ component extends="Model" hint="Locations Model"
 				description: "Parent Building (optional)",
 				placeholder: "",
 				required: 0
+			},
+
+			{
+				name: "layouts",
+				label: "Layouts",
+				type: "textfield",
+				options: "",
+				class: "",
+				description: "List of possible layouts (optional)",
+				placeholder: "i.e boardroom,lecture",
+				required: 0
 			}
 		]
 	}
