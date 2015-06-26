@@ -5,8 +5,6 @@
 <cfparam name="event">
 <cfparam name="customfields">
 
-<cfdump var="#locations#" format="simple">
-
 <cfoutput>
 	<cfif structKeyExists(application.rbs.templates, "event") AND structKeyExists(application.rbs.templates.event, "form")>
 		<!--- Custom output--->
