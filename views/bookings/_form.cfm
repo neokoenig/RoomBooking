@@ -6,6 +6,7 @@
 <cfparam name="customfields">
 
 <cfoutput>
+	<div id="concurrencyCheckResult" data-checkurl="#urlFor(controller='bookings', action='check')#"></div>
 	<cfif structKeyExists(application.rbs.templates, "event") AND structKeyExists(application.rbs.templates.event, "form")>
 		<!--- Custom output--->
 		#processShortCodes(application.rbs.templates.event.form)#
@@ -89,12 +90,40 @@
 	    }
 
 
-
+	// Concurrency Check
+	concurrencyCheck();
 	// Deselect resources if restricted
 	restrictResources(false);
 	// Override default Layouts if appropriate
 	checkLayouts();
 
+	$("#event-start").on("dp.hide", function(e){
+		concurrencyCheck();
+	});
+
+	function concurrencyCheck(){
+		var start=$("#event-start").val(),
+			end=$("#event-end").val(),
+			location=$("#event-locationid").val(),
+			display=$("#concurrencyCheckResult"),
+			checkurl=display.data("checkurl");
+		if(start.length && end.length){
+			console.log("Concurrency Check");
+			display.html("");
+			console.log(start, end, location);
+			$.ajax({
+				url: checkurl,
+				data: {
+					start: start,
+					end: end,
+					location: location
+				},
+				success: function(r){
+					display.html(r);
+				}
+			});
+		}
+	};
 
 	function checkLayouts(){
 			// Get location, i.e 6
@@ -144,6 +173,7 @@
 
 	$("#event-locationid").on("change", function(e){
 		checkLayouts();
+		concurrencyCheck();
 		restrictResources(true);
 	});
 

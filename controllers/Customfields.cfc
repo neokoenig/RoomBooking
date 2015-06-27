@@ -152,12 +152,8 @@ component extends="Controller" hint="Custom Fields and Templating"
 	*  @hint Gridmanger field picker
 	*/
 	public string function fieldpicker() {
-		if(isAjax()){
 			systemfields=model(params.key).new();
 			customfields=getBlankCustomFields(params.key);
-		} else {
-			abort;
-		}
 
 	}
 

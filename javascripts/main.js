@@ -123,12 +123,12 @@ $(document).ready(function(){
 			stepping: 5
 	});
 
-	// Link pickers
-	$('#event-start').on("dp.change", function(e){
+	// Link pickers: NB, using dp.hide not dp.change otherwise you can't select a start date without setting end date first
+	$('#event-start').on("dp.hide", function(e){
 		$('#event-end').data("DateTimePicker").minDate(e.date);
 	});
 
-	$('#event-end').on("dp.change", function(e){
+	$('#event-end').on("dp.hide", function(e){
 		$('#event-start').data("DateTimePicker").maxDate(e.date);
 	});
 

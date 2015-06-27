@@ -36,7 +36,7 @@
 	});
 
 	 function insert_customfield(container, btnElem) {
-	 	$.ajax({url: "<cfoutput>#urlFor(controller='customfields', action='fieldpicker', key=params.key, params='format=json')#</cfoutput>",
+	 	$.ajax({url: "<cfoutput>#urlFor(controller='customfields', action='fieldpicker', key=params.key)#</cfoutput>",
 			success: function(data){
 				bootbox.dialog({
 				  message: data,

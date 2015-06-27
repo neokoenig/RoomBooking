@@ -9,7 +9,7 @@ component extends="Controller" hint="Main Events/Bookings Controller"
 
 		// Additional Permissions
 		filters(through="checkPermissionAndRedirect", permission="accesscalendar");
-		filters(through="checkPermissionAndRedirect", permission="allowRoomBooking", except="index,list,day,building,location");
+		filters(through="checkPermissionAndRedirect", permission="allowRoomBooking", except="index,list,day,building,location,check");
 		filters(through="checkPermissionAndRedirect", permission="viewRoomBooking", only="list,view");
 		filters(through="checkPermissionAndRedirect", permission="allowApproveBooking", only="approve,deny");
 
@@ -20,6 +20,9 @@ component extends="Controller" hint="Main Events/Bookings Controller"
 		filters(through="_getLocations", only="index,building,location,add,edit,clone,create,update,list,day");
 		filters(through="_getResources", only="index,building,location,add,edit,clone,create,update,list,view");
 		filters(through="_setModelType");
+
+		// Ajax
+		usesLayout(template=false, only="check");
 	}
 
 /******************** Views ***********************/
@@ -260,6 +263,7 @@ component extends="Controller" hint="Main Events/Bookings Controller"
 					eventlocation=model("location").findOne(where="id = #event.locationid#");
 					sendEmail(
 						    to="#event.contactname# <#event.contactemail#>",
+						    bcc=iif(application.rbs.setting.bccAllEmail, '"#application.rbs.setting.bccAllEmailTo#"', ''),
 						    from="#application.rbs.setting.sitetitle# <#application.rbs.setting.siteEmailAddress#>",
 						    template="/email/bookingNotify",
 						    subject="Room Booking Confirmation",
@@ -386,6 +390,19 @@ component extends="Controller" hint="Main Events/Bookings Controller"
 	*/
 	public void function _setModelType() {
 		request.modeltype="event";
+	}
+
+	/**
+	*  @hint Remote concurrency Check
+	*/
+	public void function check() {
+		if(structKeyExists(params, "start")
+			AND structKeyExists(params, "end")
+			AND structKeyExists(params, "location")){
+				// We need to check for any events which overlap with the requested timerange
+				eCheck=model("event").findAll(where="start <= '#params.start#' AND end >= '#params.start#' AND locationid = #params.location#");
+
+		}
 	}
 
 }

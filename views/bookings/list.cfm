@@ -15,9 +15,9 @@
 		<tr>
 			<th colspan=2>Date</th>
 			<th>Location</th>
-			<th colspan=2>Title</th>
+			<th>Title</th>
 			<th>Layout</th>
-			<th>Description</th>
+			<th colspan=2>Description</th>
 		</tr>
 	</thead>
 	<tbody>
@@ -48,7 +48,7 @@
 				<small>#building#</small><br />
 			</cfif> #name#<br /><small>#description#</small></td>
 			<td class="#status#">#title#</td>
-			<td><cfif checkPermission("allowRoomBooking")>#linkTo(action="edit", key=eventid, text="<span class='glyphicon glyphicon-pencil'></span>", controller="bookings", class="btn btn-info btn-xs")#</cfif></td>
+
 			<td>#layoutstyle#</td>
 			<td>
 			<cfif len(eventdescription)>
@@ -64,6 +64,14 @@
 				(#contactno#)
 			</cfif>
 		</small></td>
+		<td>
+			<cfif checkPermission("allowRoomBooking")>
+				<div class="btn-group">
+				#linkTo(action="view", key=eventid, text="<span class='glyphicon glyphicon-eye-open'></span>", controller="bookings", class="btn btn-primary btn-xs")#
+				#linkTo(action="edit", key=eventid, text="<span class='glyphicon glyphicon-pencil'></span>", controller="bookings", class="btn btn-info btn-xs")#
+
+				</div>
+			</cfif></td>
 		</tr>
 		</cfif>
 		<cfset currentLoopDate=_formatDate(start)>
