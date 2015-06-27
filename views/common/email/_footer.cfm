@@ -1,36 +1,62 @@
 <!---================= Room Booking System / https://github.com/neokoenig =======================--->
 <!--- Email Footer --->
-            
-                </repeater>
-            </td>
-            <td class="w30" width="30"></td>
+
+ </td>
+                          </tr>
+                        </tbody></table>
+
+                      <div class="column-bottom" style="font-size: 8px;line-height: 8px">&nbsp;</div>
+                    </td>
+                  </tr>
+                </tbody></table>
+              </td>
+              <td class="border" style="padding: 0;vertical-align: top;font-size: 1px;line-height: 1px;background-color: #e9e9e9;width: 1px">&#8203;</td>
+            </tr>
+          </tbody></table>
+
+          <table class="border" style="border-collapse: collapse;border-spacing: 0;font-size: 1px;line-height: 1px;background-color: #e9e9e9;Margin-left: auto;Margin-right: auto" width="602">
+            <tbody><tr><td style="padding: 0;vertical-align: top">&#8203;</td></tr>
+          </tbody></table>
+
+      <div class="spacer" style="font-size: 1px;line-height: 32px;width: 100%">&nbsp;</div>
+      <table class="footer centered" style="border-collapse: collapse;border-spacing: 0;Margin-left: auto;Margin-right: auto;width: 602px">
+        <tbody><tr>
+          <td class="social" style="padding: 0;vertical-align: top;padding-top: 32px;padding-bottom: 22px" align="center">
+
+          </td>
         </tr>
-    </tbody></table>
-</td></tr>
-                <tr><td class="w640" width="640" height="15" bgcolor="#ffffff"></td></tr>
-                
-                <tr>
-                <td class="w640" width="640">
-    <table id="footer" class="w640" width="640" cellpadding="0" cellspacing="0" border="0" bgcolor="#000000">
-        <tbody><tr><td class="w30" width="30"></td><td class="w580 h0" width="360" height="30"></td><td class="w0" width="60"></td><td class="w0" width="160"></td><td class="w30" width="30"></td></tr>
+        <tr><td class="border" style="padding: 0;vertical-align: top;font-size: 1px;line-height: 1px;background-color: #e9e9e9;width: 1px">&nbsp;</td></tr>
         <tr>
-            <td class="w30" width="30"></td>
-            <td class="w580" width="360" valign="top">
-            <span class="hide"><p id="permission-reminder" align="left" class="footer-content-left"><span> </span></p></span>
-            <p align="left" class="footer-content-left"><cfoutput>This email was sent by #application.rbs.setting.sitetitle#</cfoutput></p>
-            </td>
-            <td class="hide w0" width="60"></td>
-            <td class="hide w0" width="160" valign="top">
-            <p id="street-address" align="right" class="footer-content-right"></p>
-            </td>
-            <td class="w30" width="30"></td>
-        </tr>
-        <tr><td class="w30" width="30"></td><td class="w580 h0" width="360" height="15"></td><td class="w0" width="60"></td><td class="w0" width="160"></td><td class="w30" width="30"></td></tr>
-    </tbody></table>
-</td>
-                </tr>
-                <tr><td class="w640" width="640" height="60"></td></tr>
+          <td style="padding: 0;vertical-align: top">
+            <table style="border-collapse: collapse;border-spacing: 0">
+              <tbody><tr>
+                <td class="address" style="padding: 0;vertical-align: top;width: 250px;padding-top: 32px;padding-bottom: 64px">
+                  <table class="contents" style="border-collapse: collapse;border-spacing: 0;width: 100%">
+                    <tbody><tr>
+                      <td class="padded" style="padding: 0;vertical-align: top;padding-left: 0;padding-right: 10px;text-align: left;font-size: 12px;line-height: 20px;color: #999;font-family: sans-serif">
+                      </td>
+                    </tr>
+                  </tbody></table>
+                </td>
+                <td class="subscription" style="padding: 0;vertical-align: top;width: 350px;padding-top: 32px;padding-bottom: 64px">
+                  <table class="contents" style="border-collapse: collapse;border-spacing: 0;width: 100%">
+                    <tbody><tr>
+                      <td class="padded" style="padding: 0;vertical-align: top;padding-left: 10px;padding-right: 0;font-size: 12px;line-height: 20px;color: #999;font-family: sans-serif;text-align: right">
+                        <div>This is an automated email sent on behalf of  <cfoutput>#application.rbs.setting.sitetitle#</cfoutput></div>
+                        <div>
+                          <span class="block">
+
+                          </span>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody></table>
+                </td>
+              </tr>
             </tbody></table>
-        </td>
-	</tr>
-</tbody></table></body></html>
+          </td>
+        </tr>
+      </tbody></table>
+    </center>
+
+</body></html>

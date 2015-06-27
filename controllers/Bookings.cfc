@@ -16,7 +16,6 @@ component extends="Controller" hint="Main Events/Bookings Controller"
 		// Verification
 		verifies(only="approve,deny,view,clone,edit,delete", params="key", paramsTypes="integer", route="home", error="Sorry, that event can't be found");
 
-
 		// Data
 		filters(through="_getLocations", only="index,building,location,add,edit,clone,create,update,list,day");
 		filters(through="_getResources", only="index,building,location,add,edit,clone,create,update,list,view");

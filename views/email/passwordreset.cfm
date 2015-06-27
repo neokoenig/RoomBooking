@@ -1,23 +1,10 @@
 <cfoutput>
 #includePartial("/common/email/header")#
-                    <layout label="Message">
-                        <table class="w580" width="580" cellpadding="0" cellspacing="0" border="0">
-                            <tbody><tr>
-                                <td class="w580" width="580">
-                                    <p align="left" class="article-title"><singleline label="Title">Password Reset Request</singleline></p>
-                                    <div align="left" class="article-content">
-                                        <multiline label="Description">
+ <h4 style="Margin-top: 0;color: ##565656;font-weight: 700;font-size: 24px;Margin-bottom: 18px;font-family: sans-serif;line-height: 24px">Password Reset Request:</h4>
+<p style="Margin-top: 0;color: ##565656;font-family: sans-serif;font-size: 16px;line-height: 25px;Margin-bottom: 24px">Hi #user.firstname#,</p>
+<p style="Margin-top: 0;color: ##565656;font-family: sans-serif;font-size: 16px;line-height: 25px;Margin-bottom: 24px">We've received a request to reset your password. Click the link below to reset your password:</p>
+<p style="Margin-top: 0;color: ##565656;font-family: sans-serif;font-size: 16px;line-height: 25px;Margin-bottom: 24px">#linkto(controller="passwordResets", action="edit", onlyPath=false,  key=user.passwordResetToken)#</p>
+<p style="Margin-top: 0;color: ##565656;font-family: sans-serif;font-size: 16px;line-height: 25px;Margin-bottom: 24px">If you did not request a password reset, please ignore this message. Your password will remain the same.</p>
 
-                                    	<p>Hi #user.firstname#,</p>
-                                    	<p>We've received a request to reset your password. Click the link below to reset your password:</p>
-                                    	<p>#linkto(controller="passwordResets", action="edit", onlyPath=false,  key=user.passwordResetToken)#</p>
-                                    	<p>If you did not request a password reset, please ignore this message. Your password will remain the same.</p>
-                                        </multiline>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr><td class="w580" width="580" height="10"></td></tr>
-                        </tbody></table>
-                    </layout>
 #includePartial("/common/email/footer")#
 </cfoutput>
