@@ -3,8 +3,10 @@
 
 <cfoutput>
 	#panel(title="Filter", class="hidden-print panel-primary")#
-		#startFormTag(action="list", method="post", name="listfilter")#
+		#startFormTag(action="list", method="get", name="listfilter")#
 		#hiddenFieldTag(name="filterActive", value=1)#
+		#hiddenFieldTag(name="controller", value=params.controller)#
+		#hiddenFieldTag(name="action", value=params.action)#
 		<div class="row">
 			<div class="col-md-2">
 				#textFieldTag(name="datefrom", 	  value=params.datefrom, 	label="From")#

@@ -222,6 +222,12 @@ component extends="Controller" hint="Main Events/Bookings Controller"
 		if(structkeyexists(params, "event")){
 	    	event = model("event").new(params.event);
 			if ( event.save() ) {
+				// Update approval status if allowed to bypass
+				if(application.rbs.setting.approveBooking AND checkPermission("bypassApproveBooking")){
+					event.status="approved";
+					event.save();
+				}
+
 				// Check for bulk create events
 				if(structKeyExists(params, "repeat")
 					AND params.repeat NEQ "none"

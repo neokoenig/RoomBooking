@@ -80,13 +80,13 @@
 	<cfsavecontent variable="request.js.datepicker">
 		<script>
 		$(document).ready(function(){
-    var layouts={
-    	<cfloop query="locations">
-			<cfoutput>#id#: '#layouts#'<cfif locations.recordcount != currentrow>
-				,
-			</cfif></cfoutput>
-		</cfloop>
-    }
+	    var layouts={
+	    	<cfloop query="locations">
+				<cfoutput>#id#: '#layouts#'<cfif locations.recordcount != currentrow>
+					,
+				</cfif></cfoutput>
+			</cfloop>
+	    }
 
 
 
