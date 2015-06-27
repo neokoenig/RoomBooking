@@ -402,11 +402,11 @@ component extends="Controller" hint="Main Events/Bookings Controller"
 			AND structKeyExists(params, "id")){
 			// We need to check for any events which overlap with the requested timerange
 			// If editing, check we don't bring up the actual event
+			// Don't register denied events
 			if(len(params.id)){
-				eCheck=model("event").findAll(where="id != #params.id# AND start <= '#params.start#' AND end >= '#params.start#' AND locationid = #params.location#");
+				eCheck=model("event").findAll(where="status != 'denied' AND id != #params.id# AND start <= '#params.start#' AND end >= '#params.start#' AND locationid = #params.location#");
 			} else {
-				eCheck=model("event").findAll(where="start <= '#params.start#' AND end >= '#params.start#' AND locationid = #params.location#");
-
+				eCheck=model("event").findAll(where="status != 'denied' AND start <= '#params.start#' AND end >= '#params.start#' AND locationid = #params.location#");
 			}
 
 		}
