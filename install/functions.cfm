@@ -1,6 +1,6 @@
 
 <cffunction returntype="boolean" name="checkAuthKey">
-	<cfif fileExists(expandPath("/config/auth.cfm"))>
+	<cfif fileExists(expandPath("../config/auth.cfm"))>
 		 <cfreturn true>
 	<cfelse>
 		 <cfreturn false>
@@ -9,7 +9,7 @@
 
 <cffunction returntype="boolean" name="createAuthKey" hint="Create a new authkey">
 	<cftry>
-	<cffile action="write" file="#expandPath("/config/auth.cfm")#" output="#createUUID()#">
+	<cffile action="write" file="#expandPath("../config/auth.cfm")#" output="#createUUID()#">
 	<cfcatch type="any">
 		<cfthrow message="Can't create Auth Key">
 		<cfabort>
@@ -71,7 +71,7 @@
 		<cfqueryparam cfsqltype="cf_sql_varchar" value="#form.email#">,
 		<cfqueryparam cfsqltype="cf_sql_varchar" value="#form.salt#">,
 		<cfqueryparam cfsqltype="cf_sql_varchar" value="#form.password#">,
-		<cfqueryparam cfsqltype="cf_sql_varchar" value="admin">,
+		<cfqueryparam cfsqltype="cf_sql_varchar" value="ADMIN">,
 		<cfqueryparam cfsqltype="cf_sql_timestamp" value="#now()#">
 	);
 	</cfquery>
@@ -79,7 +79,7 @@
 </cffunction>
 
 <cffunction name="getAuthKey">
-	<cffile action="read" file="#expandpath("/config/auth.cfm")#" variable="authkey">
+	<cffile action="read" file="#expandpath("../config/auth.cfm")#" variable="authkey">
 	<cfreturn authkey>
 </cffunction>
 

@@ -6,6 +6,7 @@
 <cfparam name="customfields">
 
 <cfoutput>
+	#hiddenFieldTag(name="tempkey", value=event.key())#
 	<div id="concurrencyCheckResult" data-checkurl="#urlFor(controller='bookings', action='check')#"></div>
 	<cfif structKeyExists(application.rbs.templates, "event") AND structKeyExists(application.rbs.templates.event, "form")>
 		<!--- Custom output--->
@@ -105,6 +106,7 @@
 		var start=$("#event-start").val(),
 			end=$("#event-end").val(),
 			location=$("#event-locationid").val(),
+			id=$("#tempkey").val();
 			display=$("#concurrencyCheckResult"),
 			checkurl=display.data("checkurl");
 		if(start.length && end.length){
@@ -116,7 +118,8 @@
 				data: {
 					start: start,
 					end: end,
-					location: location
+					location: location,
+					id: id
 				},
 				success: function(r){
 					display.html(r);

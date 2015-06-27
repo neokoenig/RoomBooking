@@ -187,7 +187,7 @@
 <!----------------------------/CONTENT--------------------------->
 
 <!-----------------------------Scripts--------------------------->
-<script src="/javascripts/rbs.js" type="text/javascript"></script>
+<script src="../javascripts/rbs.js" type="text/javascript"></script>
 
     </body>
 </html>

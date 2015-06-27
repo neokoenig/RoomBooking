@@ -51,14 +51,25 @@ CREATE TABLE `templates` (
 -- ----------------------------
 -- update Settings
 -- ----------------------------
-UPDATE settings SET `value` = "1.2" WHERE id = "1.1";
+UPDATE settings SET `value` = "1.2" WHERE id = "version";
+INSERT INTO `settings` VALUES ('bccAllEmail', '0', 'Whether the BCC all email to alternative address (except password resets)', 'boolean', '1', 'Email');
+INSERT INTO `settings` VALUES ('bccAllEmailTo', 'admin@domain.com', 'BCC All sent email to this address', 'string', '1', 'Email');
+INSERT INTO `settings` VALUES ('approveBooking', '1', 'Whether to force new bookings to be approved by a user with the allowApproveBooking permission', 'boolean', '1', 'General');
+
 -- ----------------------------
 -- update Permissions
 -- ----------------------------
 INSERT INTO `permissions` (`id`, `admin`, `notes`) VALUES ('accessCustomFields', '1', 'Allow configuration of custom fields and templates');
-
+-- ----------------------------
+-- update events
+-- ----------------------------
+ALTER TABLE `events`
+ADD COLUMN `status`  varchar(50) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'pending' AFTER `deletedAt`;
 -- ----------------------------
 -- update locations
 -- ----------------------------
 ALTER TABLE `locations`
 ADD COLUMN `building`  varchar(255) NULL AFTER `colour`;
+
+ALTER TABLE `locations`
+ADD COLUMN `layouts` varchar(500) COLLATE utf8_unicode_ci DEFAULT NULL AFTER `building`;

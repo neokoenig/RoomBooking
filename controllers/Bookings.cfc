@@ -398,9 +398,16 @@ component extends="Controller" hint="Main Events/Bookings Controller"
 	public void function check() {
 		if(structKeyExists(params, "start")
 			AND structKeyExists(params, "end")
-			AND structKeyExists(params, "location")){
-				// We need to check for any events which overlap with the requested timerange
+			AND structKeyExists(params, "location")
+			AND structKeyExists(params, "id")){
+			// We need to check for any events which overlap with the requested timerange
+			// If editing, check we don't bring up the actual event
+			if(len(params.id)){
+				eCheck=model("event").findAll(where="id != #params.id# AND start <= '#params.start#' AND end >= '#params.start#' AND locationid = #params.location#");
+			} else {
 				eCheck=model("event").findAll(where="start <= '#params.start#' AND end >= '#params.start#' AND locationid = #params.location#");
+
+			}
 
 		}
 	}
