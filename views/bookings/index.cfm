@@ -1,8 +1,11 @@
 <!---================= Room Booking System / https://github.com/neokoenig =======================--->
 <cfoutput>
+<cfparam name="params.key" default="">
 <cfset cal=application.rbs.setting>
 <!--- Main Index --->
-#includePartial(partial="locations", locations=locations)#
+<cfif cal.showlocationfilter>
+    #includePartial(partial="locations", locations=locations)#
+</cfif>
     #panel(title="Calendar", theclass="panel-primary no-top-rounded")#
         <div id="calendar"
             data-eventsurl="#urlFor(route="getEvents", type=params.action, key=params.key, params='format=json')#"

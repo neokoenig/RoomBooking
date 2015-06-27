@@ -1,7 +1,6 @@
 <!---================= Room Booking System / https://github.com/neokoenig =======================--->
 <cfoutput>
 <cfparam name="locations">
-<cfparam name="params.key" default="">
 
 <!--- Get Buildings --->
 <cfquery dbtype="query" name="buildings">

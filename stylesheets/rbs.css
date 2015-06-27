@@ -8245,6 +8245,7 @@ be a descendant of the grid when it is being dragged.
 /* Event Status */
 .pending {
   opacity: 0.8;
+  color: #f0ad4e;
   background: white !important;
 }
 .pending:before {
@@ -8253,6 +8254,9 @@ be a descendant of the grid when it is being dragged.
   line-height: 1;
   float: left;
   padding: 1px 3px 1px 1px;
+}
+.pending:hover {
+  color: #f0ad4e;
 }
 .denied {
   opacity: 0.4;

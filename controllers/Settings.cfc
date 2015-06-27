@@ -12,7 +12,7 @@ component extends="Controller" hint="Settings Controller"
 		filters(through="denyInDemoMode", only="edit,update");
 
 		// Verification
-		verifies(only="edit,update", params="key", paramsTypes="integer", route="home", error="Sorry, that setting can't be found");
+		verifies(only="edit,update", params="key", paramsTypes="string", route="home", error="Sorry, that setting can't be found");
 
 
 		// Data

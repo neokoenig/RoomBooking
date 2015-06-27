@@ -22,7 +22,7 @@
 .fc-past {background:#D1D1D1; opacity: 0.8;}
 
 /* Event Status */
-.pending {opacity: 0.8; background: white !important;
+.pending {opacity: 0.8; color:@brand-warning; background: white !important;
 	&:before {
 	  content:"\e085";
 	  font-family:"Glyphicons Halflings";
@@ -30,6 +30,7 @@
 	  float:left;
 	  padding: 1px 3px 1px 1px;
 	}
+	&:hover {color:@brand-warning;}
 }
 .denied {opacity: 0.4; background: white !important; color:@gray;
 	&:hover {color:@gray;}
