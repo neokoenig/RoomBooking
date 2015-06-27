@@ -4,9 +4,9 @@
 
 # UNCOMMENT ALL LINES BELOW THIS ONE TO TURN ON THE URL REWRITING RULES
 
-Options +FollowSymLinks
-RewriteEngine On
-RewriteCond %{REQUEST_URI} ^.*/index.cfm/(.*)$ [NC]
-RewriteRule ^.*/index.cfm/(.*)$ ./rewrite.cfm/$1 [NS,L]
-RewriteCond %{REQUEST_URI} !^.*/(flex2gateway|jrunscripts|cfide|cfformgateway|cffileservlet|railo-context|lucee|files|images|javascripts|install|miscellaneous|stylesheets|robots.txt|favicon.ico|sitemap.xml|rewrite.cfm)($|/.*$) [NC]
-RewriteRule ^(.*)$ ./rewrite.cfm/$1 [NS,L]
+# Options +FollowSymLinks
+# RewriteEngine On
+# RewriteCond %{REQUEST_URI} ^.*/index.cfm/(.*)$ [NC]
+# RewriteRule ^.*/index.cfm/(.*)$ ./rewrite.cfm/$1 [NS,L]
+# RewriteCond %{REQUEST_URI} !^.*/(flex2gateway|jrunscripts|cfide|cfformgateway|cffileservlet|railo-context|lucee|files|images|javascripts|install|miscellaneous|stylesheets|robots.txt|favicon.ico|sitemap.xml|rewrite.cfm)($|/.*$) [NC]
+# RewriteRule ^(.*)$ ./rewrite.cfm/$1 [NS,L]
