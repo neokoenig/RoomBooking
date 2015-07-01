@@ -1,4 +1,4 @@
-# Room Booking System
+# OxAlto Room Booking System
 
 This is an open source application for booking rooms via a web based calendar, using cfWheels, Bootstrap3, jQuery, FullCalendar.js, and other bits.
 
@@ -6,16 +6,15 @@ Author: Tom King - http://www.oxalto.co.uk / https://github.com/Neokoenig / @neo
 
 ## Demo
 
-You can find a demo at [roombooking.oxalto.co.uk][1]
+You can find a demo at [roombooking.oxalto.co.uk](http://roombooking.oxalto.co.uk)
 
 ## Version
 
-Current version is 1.1 [release notes][8]
+Current version is 1.2 [release notes](http://roombooking.readme.io/v1.2/docs/12)
 
-## Requirements
+## Documentation
 
- - A server capable of running a cfWheels application -  Adobe Coldfusion (10.x upwards) or Railo (4.x upwards), preferably with URL rewriting
- - Database - mySQL 5.x.
+All documentation now lives at [roombooking.readme.io](http://roombooking.readme.io)
 
 ## Installation & Upgrading
 
@@ -35,11 +34,8 @@ Please see the [Wiki][2] for all documentation.
 
 Room Booking System is released under the Apache License Version 2.0.
 
-[1]: http://roombooking.oxalto.co.uk
-[2]: https://github.com/neokoenig/RoomBooking/wiki/_pages
 [3]: http://cfwheels.org/
 [4]: http://jquery.com/
 [5]: http://getbootstrap.com/
 [6]: http://fullcalendar.io/
 [7]: http://momentjs.com/
-[8]: https://github.com/neokoenig/RoomBooking/wiki/Release-Notes-1.1
