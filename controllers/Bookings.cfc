@@ -181,6 +181,7 @@ component extends="Controller" hint="Main Events/Bookings Controller"
 		if(isObject(event)){
 			event.status="approved";
 			event.save();
+			notifyContact(event);
 		}
 		redirectTo(success="#event.title# was approved", back=true);
 	}
@@ -190,14 +191,17 @@ component extends="Controller" hint="Main Events/Bookings Controller"
 	*/
 	public void function deny() {
 		event=model("event").findOne(where="id = #params.key#");
-		// Send an email etc here?
-		if(structKeyExists(params, "delete") AND params.delete){
-			event.delete();
-			redirectTo(success="#event.title# was denied & deleted", back=true);
-		} else {
+		if(isObject(event)){
 			event.status="denied";
 			event.save();
-			redirectTo(success="#event.title# was denied", back=true);
+			// Notify Contact if Appropriate
+			notifyContact(event);
+			if(structKeyExists(params, "delete") AND params.delete){
+				event.delete();
+				redirectTo(success="#event.title# was denied & deleted", back=true);
+			} else {
+				redirectTo(success="#event.title# was denied", back=true);
+			}
 		}
 	}
 
@@ -260,22 +264,33 @@ component extends="Controller" hint="Main Events/Bookings Controller"
 					}
 				}
 				// Send Confirmation email if appropriate
-				if(structKeyExists(params.event, "emailContact") AND params.event.emailContact AND isValid("email", event.contactemail) AND !application.rbs.setting.isDemoMode){
-					eventlocation=model("location").findOne(where="id = #event.locationid#");
-					sendEmail(
-						    to="#event.contactname# <#event.contactemail#>",
-						    bcc=iif(application.rbs.setting.bccAllEmail, '"#application.rbs.setting.bccAllEmailTo#"', ''),
-						    from="#application.rbs.setting.sitetitle# <#application.rbs.setting.siteEmailAddress#>",
-						    template="/email/bookingNotify",
-						    subject="Room Booking Confirmation",
-						    event=event
-						);
+				if(structKeyExists(params.event, "emailContact") AND params.event.emailContact){
+					notifyContact(event);
 				}
 				redirectTo(action="index", success="Event successfully created");
 			}
 	        else {
 				renderPage(action="add", error="There were problems creating that event");
 			}
+		}
+	}
+
+	/**
+	*  @hint Email to send on approval/denial etc.
+	*/
+	public void function notifyContact(required struct event) {
+		if( isValid("email", arguments.event.contactemail)
+			AND !application.rbs.setting.isDemoMode){
+			// Get the location for reference
+			eventlocation=model("location").findOne(where="id = #arguments.event.locationid#");
+			sendEmail(
+			    to="#arguments.event.contactname# <#arguments.event.contactemail#>",
+			    bcc=iif(application.rbs.setting.bccAllEmail, '"#application.rbs.setting.bccAllEmailTo#"', ''),
+			    from="#application.rbs.setting.sitetitle# <#application.rbs.setting.siteEmailAddress#>",
+			    template="/email/bookingNotify",
+			    subject="Room Booking Notification (#event.status#)",
+			    event=arguments.event
+			);
 		}
 	}
 
