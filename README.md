@@ -18,7 +18,7 @@ All documentation now lives at [roombooking.readme.io](http://roombooking.readme
 
 ## Installation & Upgrading
 
-Please see the [Wiki][2] for all documentation.
+Please see the [roombooking.readme.io](http://roombooking.readme.io) for all documentation including installation and upgrade notes.
 
 ## Notes
 
