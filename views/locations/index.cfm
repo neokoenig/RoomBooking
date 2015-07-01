@@ -26,6 +26,7 @@
 			<td>#description#</td>
 			<td>
 				<div class="btn-group">
+					#linkTo(text="<i class='glyphicon glyphicon-eye-open'></i> View", class="btn btn-xs btn-primary", action="view", key=id)#
 					#linkTo(text="<i class='glyphicon glyphicon-edit'></i> Edit", class="btn btn-xs btn-info", action="edit", key=id)#
 					#linkTo(text="<i class='glyphicon glyphicon-trash'></i> Delete", class="btn btn-xs btn-danger", action="delete", key=id, confirm='Are you Sure?')#
 				</div>

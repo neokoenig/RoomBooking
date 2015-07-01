@@ -8289,6 +8289,11 @@ be a descendant of the grid when it is being dragged.
 .label- {
   background: black;
 }
+mark,
+.mark {
+  padding: 0;
+  background-color: #FFFF99;
+}
 /* Forms */
 #dropdown-signin form {
   padding: 10px;

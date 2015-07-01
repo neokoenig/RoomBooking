@@ -30,6 +30,8 @@ set(obfuscateURLs=false);
 // set to false for plugin development
 set(overwritePlugins=true);
 
+// Highlight defaults
+set(functionName="highlight", tag="mark");
 // Bootstrap 3 form defaults
 set(functionName="startFormTag");
 set(functionName="submitTag", class="btn btn-primary", value="Save Changes");

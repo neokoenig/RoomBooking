@@ -53,11 +53,12 @@ component extends="Controller" hint="Main Events/Bookings Controller"
 		param name="params.datefrom" default="#dateFormat(now(), 'DD/MM/YYYY')#";
 		param name="params.dateto" 	 default="#dateFormat(dateAdd('m', 1, now()), 'DD/MM/YYYY')#";
 		param name="params.location" default="";
+		param name="params.q"		 default="";
 		events=model("location").findAll(where="#_agendaListWC()#", include="events", order="start");
 	}
 
 	/**
-	*  @hint Alternative Day View
+	*  @hint Alternative Day View: deprecated in 1.2
 	*/
 	public void function day() {
 		param name="params.y" default=year(now());
@@ -311,7 +312,7 @@ component extends="Controller" hint="Main Events/Bookings Controller"
 	}
 /******************** Private *********************/
 	/**
-	*  @hint Conditional Where Clause for Day Listing
+	*  @hint Conditional Where Clause for Day Listing: deprecated in 1.2
 	*/
 	private string function _dayListWC(numeric allday="0") {
 		var sd="";
@@ -352,7 +353,7 @@ component extends="Controller" hint="Main Events/Bookings Controller"
 	}
 
 	/**
-	*  @hint
+	*  @hint Custom Q for List view
 	*/
 	private string function _agendaListWC() {
 		var sd="";
@@ -376,6 +377,14 @@ component extends="Controller" hint="Main Events/Bookings Controller"
 			if(structKeyExists(params, "location") AND len(params.location)){
 				arrayAppend(wc, "FIND_IN_SET(locationid, '#params.location#')");
 			}
+
+			// Keyword filter
+			if(structKeyExists(params, "q") AND len(params.q)){
+				params.q=striptags(params.q);
+				arrayAppend(wc, "title LIKE '%#params.q#%' OR description LIKE '%#params.q#%'");
+
+			}
+
 			if(arrayLen(wc)){
 				return arrayToList(wc, " AND ");
 			} else {

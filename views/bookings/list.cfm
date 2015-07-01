@@ -47,12 +47,22 @@
 			<td width=150 class="#class#"><cfif len(building)>
 				<small>#building#</small><br />
 			</cfif> #name#<br /><small>#description#</small></td>
-			<td class="#status#">#title#</td>
+			<td class="#status#">
+				<cfif len(params.q)>
+					#highlight(text=title, phrases=params.q)#
+				<cfelse>
+					#title#
+				</cfif>
+			</td>
 
 			<td>#layoutstyle#</td>
 			<td>
 			<cfif len(eventdescription)>
-				#eventdescription#<br />
+				<cfif len(params.q)>
+					#highlight(text=eventdescription, phrases=params.q)#
+				<cfelse>
+					#eventdescription#
+				</cfif><br />
 			</cfif>
 			<small>
 			<cfif len(contactemail) AND len(contactname)>

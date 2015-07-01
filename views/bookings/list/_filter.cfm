@@ -8,11 +8,20 @@
 		#hiddenFieldTag(name="controller", value=params.controller)#
 		#hiddenFieldTag(name="action", value=params.action)#
 		<div class="row">
-			<div class="col-md-2">
-				#textFieldTag(name="datefrom", 	  value=params.datefrom, 	label="From")#
-			</div>
-			<div class="col-md-2">
-				#textFieldTag(name="dateto",   value=params.dateto, 	label="To")#
+			<div class="col-md-4">
+				<div class="row">
+					<div class="col-md-6">
+						#textFieldTag(name="datefrom", 	  value=params.datefrom, 	label="From")#
+					</div>
+					<div class="col-md-6">
+						#textFieldTag(name="dateto",   value=params.dateto, 	label="To")#
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-12">
+						#textFieldTag(name="q",   value=params.q, 	label="Keyword")#
+					</div>
+				</div>
 			</div>
 			<div class="col-md-3">
 				#selectTag(name="location", multiple=true, options=locations, label="Locations", selected=params.location, includeBlank="[All Locations]")#

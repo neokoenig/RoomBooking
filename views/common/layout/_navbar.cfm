@@ -24,7 +24,8 @@
             <a href="##" class="dropdown-toggle" data-toggle="dropdown"><span class='glyphicon glyphicon-calendar'></span> Events <b class="caret"></b></a>
             <ul class="dropdown-menu">
                 <li>#linkTo(route="home", text="<span class='glyphicon glyphicon-calendar'></span> Calendar")#</li>
-                <li>#linkTo(controller="bookings", action="day", text="<span class='glyphicon glyphicon-th'></span> Day")#</li>
+                <!--- Day view deprecated in it's current form --->
+                <!---li>#linkTo(controller="bookings", action="day", text="<span class='glyphicon glyphicon-th'></span> Day")#</li--->
                 <li>#linkTo(controller="bookings", action="list", text="<span class='glyphicon glyphicon-list'></span> List")#</li>
                  <cfif checkpermission("allowAPI")>
                     <li>#linkTo(controller="api",  text="<span class='glyphicon glyphicon-cloud-download'></span> Data Feeds")#</li>
