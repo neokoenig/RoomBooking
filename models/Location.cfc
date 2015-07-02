@@ -76,7 +76,7 @@ component extends="Model" hint="Locations Model"
 				placeholder: "i.e boardroom,lecture",
 				required: 0
 			}
-		]
+		];
 	}
 
 }

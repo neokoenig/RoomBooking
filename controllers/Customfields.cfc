@@ -1,4 +1,4 @@
-<!--- Custom field controller--->
+//================= Room Booking System / https://github.com/neokoenig =======================--->
 component extends="Controller" hint="Custom Fields and Templating"
 {
 	/**

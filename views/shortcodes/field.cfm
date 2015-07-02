@@ -45,7 +45,7 @@ Usage: [field id=1 ] or [field id="name"]
     		description=customfield.description,
 			fieldValues={
 				name="customfields[#customfield.id#]",
-	        	options=deserializeJSON(customfield.options),
+	        	//options=deserializeJSON(customfield.options),
 	        	//add to cf definiton
 	        	placeholder="",
 	        	label=customfield.name,
@@ -54,13 +54,15 @@ Usage: [field id=1 ] or [field id="name"]
 	        	//content=customfield.value
 	        	value=customfield.value
 			}
-    	}
-
+    	};
+    	//if(isJson(customfield.options)){
+    	//	fieldValues.options=deserializeJSON(customfield.options);
+    	//}
 	} else {
 		// Merge system field data from model
 		if(structKeyExists(variables["#attr.modeltype#"], "systemfields")){
 			t=arrayFind(variables["#attr.modeltype#"]["systemfields"], attr.id);
-			for(var f in variables["#attr.modeltype#"]["systemfields"]){
+			for(f in variables["#attr.modeltype#"]["systemfields"]){
 			        attr.temp=StructFindValue(f, attr.id);
 			        if(arrayLen(attr.temp) EQ 1){
 						attr={
@@ -74,11 +76,16 @@ Usage: [field id=1 ] or [field id="name"]
 							fieldValues={
 								objectname=attr.modeltype,
 				        		property=f.name,
-					        	options=deserializeJSON(f.options),
+					        	options=f.options,
 					        	placeholder=f.placeholder,
 					        	label=f.label
 							}
-			        	}
+			        	};
+						/*if(isJson(f.options)){
+							fieldValues.options=deserializeJSON(f.options);
+						} else {
+							fieldValues.options=evaluate(f.options);
+						}*/
 		        	}
 		        structDelete(attr, "temp");
 		     }
@@ -137,7 +144,9 @@ Usage: [field id=1 ] or [field id="name"]
 				#textField(argumentCollection=attr.fieldValues)#
 			</cfcase>
 			<cfcase value="select">
-				#select(argumentCollection=attr.fieldValues)#
+				<!--- Stupid CF10
+				#select(argumentCollection=attr.fieldValues)#--->
+				 #select(objectName=attr.fieldValues.objectname, options=evaluate(attr.fieldValues.options), property=attr.fieldvalues.property, label=attr.fieldValues.label)#
 			</cfcase>
 			<cfcase value="textarea">
 				#textArea(argumentCollection=attr.fieldValues)#
@@ -153,9 +162,11 @@ Usage: [field id=1 ] or [field id="name"]
 			</cfcase>
 			<cfcase value="checkbox">
 				<label></label>
+				<cfset attr.fieldValues.options=deserializeJSON(attr.fieldValues.options)>
 				<cfset attr.fieldValues.label=attr.fieldValues.options[1][structkeylist(attr.fieldValues.options[1])]>
 				<cfset structDelete(attr.fieldValues, "options")>
-				 #checkBox(argumentCollection=attr.fieldValues)#
+
+				#checkBox(objectName=attr.fieldValues.objectname, property=attr.fieldvalues.property, label=attr.fieldValues.label)#
 			</cfcase>
 			<cfcase value="radio">
 				<!--- Need to test this one--->

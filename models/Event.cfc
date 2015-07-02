@@ -108,7 +108,7 @@ component extends="Model" hint="Main Event Object"
 				name: "allday",
 				label: "",
 				type: "checkbox",
-				options: "[{'1': 'This is an all day event'}]",
+				options: '[{"1": "This is an all day event"}]',
 				class: "",
 				description: "",
 				placeholder: "",
@@ -132,7 +132,7 @@ component extends="Model" hint="Main Event Object"
 				class: "",
 				description: "",
 				placeholder: "",
-				required: 0
+				required: 1
 			},
 			{
 				name: "layoutstyle",
@@ -178,12 +178,12 @@ component extends="Model" hint="Main Event Object"
 				name: "emailcontact",
 				label: "",
 				type: "checkbox",
-				options: "[{'1': 'Send Confirmation Email to Contact'}]",
+				options: '[{"1": "Send Confirmation Email to Contact"}]',
 				class: "",
 				description: "",
 				placeholder: "",
 				required: 0
-			},
-		]
+			}
+		];
 	}
 }

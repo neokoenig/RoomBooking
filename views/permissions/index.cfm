@@ -1,7 +1,7 @@
 <!---================= Room Booking System / https://github.com/neokoenig =======================--->
 <!--- Permissions --->
 <cfparam name="permissions">
-<Cfoutput>
+<cfoutput>
 #panel(title="Permissions")#
 
 <cfif permissions.recordcount>
@@ -37,4 +37,4 @@
 	<p>No permissions available yet</p>
 </cfif>
 #panelEnd()#
-</Cfoutput>
+</cfoutput>

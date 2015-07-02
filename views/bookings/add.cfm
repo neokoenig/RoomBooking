@@ -5,7 +5,6 @@
 #errorMessagesFor("event")#
 	#startFormTag(action="create", id="bookingform")#
 		#includePartial("form")#
-
 		<!--- If approval process is on, and user is allowed to bypass approval --->
 		<cfif application.rbs.setting.approveBooking AND checkPermission("bypassApproveBooking")>
 			#submitTag(value="Create And Auto-approve Booking", class="btn btn-block btn-primary btn-lg")#

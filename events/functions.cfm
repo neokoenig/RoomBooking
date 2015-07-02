@@ -24,7 +24,7 @@
             email=user.email,
             role=user.role,
             apitoken=user.apitoken
-        }
+        };
         session.currentuser=scope;
         redirectTo(route="home");
     }
@@ -206,8 +206,9 @@
   **/
     function field_callback(attr) {
         var result="";
+        var path="#application.wheels.webPath#/#application.wheels.viewPath#/shortcodes/field.cfm";
         savecontent variable="result" {
-           include "#application.wheels.webPath#/#application.wheels.viewPath#/shortcodes/field.cfm";
+           include path;
         }
         return result;
     }
@@ -217,8 +218,9 @@
   **/
     function output_callback(attr) {
         var result="";
+        var path="#application.wheels.webPath#/#application.wheels.viewPath#/shortcodes/output.cfm";
         savecontent variable="result" {
-           include "#application.wheels.webPath#/#application.wheels.viewPath#/shortcodes/output.cfm";
+           include path;
         }
         return result;
     }
@@ -238,7 +240,7 @@
     /**
     *  @hint I know this is stupid, but it's a hack with the way I'm doing the settings in the db
     */
-    public string function returnStringFromBoolean(required string boo) {
+    public string function returnStringFromBoolean(required boo) {
         if(arguments.boo){
             return "true";
         } else {
@@ -320,3 +322,62 @@ public array function structFindKeyWithValue(required struct struct, required st
          <cfcookie  name = "RBS_UN" expires = "NOW"  httpOnly="true">
         <cfset addlogline(message="Cookie remember email removed", type="Cookie")>
     </Cffunction>
+
+<cfif listFirst(server.coldfusion.productVersion) LTE "10">
+    <!---
+ Backport of QueryExecute in CF11 to CF9 &amp; CF10
+
+ @param sql_statement    SQL. (Required)
+ @param queryParams      Struct of query param values. (Optional)
+ @param queryOptions     Query options. (Optional)
+ @return Returns a query.
+ @author Henry Ho (henryho167@gmail.com)
+ @version 1, September 22, 2014
+--->
+<cffunction name="QueryExecute" output="false"
+            hint="
+                * result struct is returned to the caller by utilizing URL scope (no prefix needed) *
+                https://wikidocs.adobe.com/wiki/display/coldfusionen/QueryExecute">
+    <cfargument name="sql_statement" required="true">
+    <cfargument name="queryParams"  default="#structNew()#">
+    <cfargument name="queryOptions" default="#structNew()#">
+
+    <cfset var parameters = []>
+
+    <cfif isArray(queryParams)>
+        <cfloop array="#queryParams#" index="local.param">
+            <cfif isSimpleValue(param)>
+                <cfset arrayAppend(parameters, {value=param})>
+            <cfelse>
+                <cfset arrayAppend(parameters, param)>
+            </cfif>
+        </cfloop>
+    <cfelseif isStruct(queryParams)>
+        <cfloop collection="#queryParams#" item="local.key">
+            <cfif isSimpleValue(queryParams[key])>
+                <cfset arrayAppend(parameters, {name=local.key, value=queryParams[key]})>
+            <cfelse>
+                <cfset var parameter = {name=key}>
+                <cfset structAppend(parameter, queryParams[key])>
+                <cfset arrayAppend(parameters, parameter)>
+            </cfif>
+        </cfloop>
+    <cfelse>
+        <cfthrow message="unexpected type for queryParams">
+    </cfif>
+
+    <cfif structKeyExists(queryOptions, "result")>
+        <!--- strip scope, not supported --->
+        <cfset queryOptions.result = listLast(queryOptions.result, '.')>
+    </cfif>
+
+    <cfset var executeResult = new Query(sql=sql_statement, parameters=parameters, argumentCollection=queryOptions).execute()>
+
+    <cfif structKeyExists(queryOptions, "result")>
+        <!--- workaround for passing result struct value out to the caller by utilizing URL scope (no prefix needed) --->
+        <cfset URL[queryOptions.result] = executeResult.getPrefix()>
+    </cfif>
+
+    <cfreturn executeResult.getResult()>
+</cffunction>
+</cfif>

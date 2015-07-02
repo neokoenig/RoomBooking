@@ -151,7 +151,7 @@ $(document).ready(function(){
 	// Generic datepicker
 	$("#datefrom, #dateto").datetimepicker({
 		showTodayButton: true,
-		format: 'DD/MM/YYYY'
+		format: 'DD MMM YYYY'
 	});
 
 	$("#dayview-pick").on("dp.change", function(e){

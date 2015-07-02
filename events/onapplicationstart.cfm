@@ -1,15 +1,5 @@
 <!---================= Room Booking System / https://github.com/neokoenig =======================--->
 <cfscript>
-	try{
-		_loadSettings();
-	} catch(any){
-		throw message="Could not load settings - please check your datasource";
-	}
-
-	/**
-	*  @hint Load Application Settings
-	*/
-	public void function _loadSettings() {
 	 	// Application Specific settings
 		if(structKeyExists(application, "rbs")){
 			structDelete(application, "rbs");
@@ -29,9 +19,12 @@
 			application.rbs.setting['#setting.id#']=setting.value;
 		}
 		permissions=model("permission").findAll();
+
 		rolelist=permissions.columnlist;
-		rolelist=listDeleteAt(rolelist, 1);
-		application.rbs.roles=listDeleteAt(rolelist, listlen(rolelist));
+		rolelist=listDeleteAt(rolelist, ListFind(rolelist, "ID"));
+		rolelist=listDeleteAt(rolelist, ListFind(rolelist, "NOTES"));
+		application.rbs.roles=rolelist;
+
 		for(permission in permissions){
 			application.rbs.permission["#permission.id#"]={};
 			for(role in listToArray(application.rbs.roles)){
@@ -42,7 +35,6 @@
 		for(template in model("template").findAll()){
 			application.rbs.templates["#template.parentmodel#"]["#template.type#"]=template.template;
 		}
-	}
 
 	addShortcode("field", field_callback);
 	addShortcode("output", output_callback);

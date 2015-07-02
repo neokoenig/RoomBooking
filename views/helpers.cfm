@@ -131,9 +131,9 @@
         /**
     * @hint Tick or cross
     */
-    public string function tickorcross(required boolean boo){
+    public string function tickorcross(required boo){
         var result="";
-        if(structKeyexists(arguments, "boo") AND arguments.boo){
+        if(structKeyexists(arguments, "boo") AND isBoolean(arguments.boo) AND arguments.boo){
             result="<span class='glyphicon glyphicon-ok-sign text-success'></span>";
         } else {
             result="<span class='glyphicon glyphicon-remove-sign text-danger'></span>";
