@@ -2,10 +2,10 @@
 <!--- Add Location --->
 <cfparam name="resource">
 <cfoutput>
-#panel(title="New Resource")#
+#panel(title=l("New Resource"))#
 	#startFormTag(action="create", id="resourceForm")#
 	#includePartial("form")#
-	#submitTag(value="Create New Resource")#
+	#submitTag(value=l("Create New Resource"))#
 	#endFormTag()#
 #panelEnd()#
 </cfoutput>

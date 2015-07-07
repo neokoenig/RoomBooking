@@ -1,3 +1,4 @@
+<!---================= Room Booking System / https://github.com/neokoenig =======================--->
 <!-- Log Filter -->
 
 <cfparam name="logfiles">
@@ -19,8 +20,8 @@
 	#selectTag(name="rows",   	options="50,100,250,500,1000,5000",  prepend="", append="", appendToLabel="", prependToLabel="", selected=params.rows)#
 	</div>
 	<div class="btn-group">
-		#submitTag(value="Filter")#
-		#linkTo(text="Reset", class="btn btn-warning", action="index")#
+		#submitTag(value=l("Filter"))#
+		#linkTo(text=l("Reset"), class="btn btn-warning", action="index")#
 	</div>
 	</div>
 

@@ -48,7 +48,7 @@ Usage: [field id=1 ] or [field id="name"]
 	        	//options=deserializeJSON(customfield.options),
 	        	//add to cf definiton
 	        	placeholder="",
-	        	label=customfield.name,
+	        	label=l(customfield.name),
 	        	//type=customfield.type,
 	        	//selected=customfield.value,
 	        	//content=customfield.value
@@ -72,13 +72,13 @@ Usage: [field id=1 ] or [field id="name"]
 				        	modeltype=attr.modeltype,
 				        	required=f.required,
 				        	type=f.type,
-			        		description=f.description,
+			        		description=l(f.description),
 							fieldValues={
 								objectname=attr.modeltype,
 				        		property=f.name,
 					        	options=f.options,
 					        	placeholder=f.placeholder,
-					        	label=f.label
+					        	label=l(f.label)
 							}
 			        	};
 						/*if(isJson(f.options)){

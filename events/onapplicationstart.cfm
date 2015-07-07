@@ -1,5 +1,5 @@
-<!---================= Room Booking System / https://github.com/neokoenig =======================--->
 <cfscript>
+//================= Room Booking System / https://github.com/neokoenig =======================--->
 	 	// Application Specific settings
 		if(structKeyExists(application, "rbs")){
 			structDelete(application, "rbs");

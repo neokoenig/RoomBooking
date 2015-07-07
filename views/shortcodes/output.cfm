@@ -32,7 +32,7 @@ param name="attr.value"		default="";
 			<cfif len(attr.value)>
 				<!--- Show label if passed in--->
 				<cfif len(attr.label)>
-					<strong>#h(attr.label)#:</strong>
+					<strong>#l(attr.label)#:</strong>
 				</cfif>
 				<!--- Prepend --->
 				<cfif len(attr.prepend)>

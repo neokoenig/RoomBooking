@@ -1,3 +1,4 @@
+<!---================= Room Booking System / https://github.com/neokoenig =======================--->
 <!--- Log file output --->
 <cfoutput>
 #includePartial("filter")#
@@ -46,5 +47,5 @@
 				</tbody>
 		</table>
 	<Cfelse>
-		<div class="alert">No log files available</div>
+		<div class="alert">#l("No log files available")#</div>
 </cfif>

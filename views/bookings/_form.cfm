@@ -16,7 +16,7 @@
 			<!--- Default Template--->
 			<cfsavecontent variable="eventTemplate">
 				<fieldset>
-					<legend>Event Details</legend>
+					<legend>#l("Event Details")#</legend>
 					<div class="row">
 						<div class="col-md-4">
 							[field id='title']
@@ -42,7 +42,7 @@
 					</fieldset>
 						[field id='description']
 					<fieldset>
-						<legend>Contact Details</legend>
+						<legend>#l("Contact Details")#</legend>
 						<div class="row">
 							<div class="col-sm-4">
 								[field id='contactname']
@@ -187,7 +187,7 @@
 		start=$("#event-start").val(),
 		end=$("#event-end").val();
 		if(start.length === 0 || end.length === 0){
-			alert("You must enter a start and end date/time before attempting to book this resource");
+			alert("<cfoutput>#l('You must enter a start and end date/time before attempting to book this resource')#</cfoutput>");
 			return false;
 		}
 		$.ajax({
@@ -202,9 +202,9 @@
 				var resource=$("#resourceTable td[data-unique=" + id  +"] input");
 				resource.parent().find(".rCheck").remove();
 				if(data == 1){
-					resource.attr({"checked": true}).parent().append("<p class='rCheck text-success'><i class='glyphicon glyphicon-ok'></i> Available</p>");
+					resource.attr({"checked": true}).parent().append("<p class='rCheck text-success'><i class='glyphicon glyphicon-ok'></i> <cfoutput>#l('Available')#</cfoutput></p>");
 				} else {
-					resource.attr({"checked": false}).parent().append("<p class='rCheck text-danger'><i class='glyphicon glyphicon-warning-sign'></i> Item is already reserved for another booking!</p>");
+					resource.attr({"checked": false}).parent().append("<p class='rCheck text-danger'><i class='glyphicon glyphicon-warning-sign'></i> <cfoutput>#l('Item is already reserved for another booking!')#</cfoutput></p>");
 				}
 			}
 		})

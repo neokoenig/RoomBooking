@@ -1,5 +1,5 @@
 <cfscript>
-// RoomBooking System settings
+//================= Room Booking System / https://github.com/neokoenig =======================--->
 
 // Default Datasource name as set in /CFIDE/administrator | Railo admin | Lucee admin.
 // If you change this before installing, ensure you update request.dsn in /install/index.cfm
@@ -28,7 +28,13 @@ set(flashStorage="session");
 set(obfuscateURLs=false);
 
 // set to false for plugin development
-set(overwritePlugins=true);
+set(overwritePlugins=false);
+
+// Localisation
+set(localizatorGetLocalizationFromFile=true);
+set(localizatorLanguageDefault="en_GB");
+// NB, not putting this in the currentuser scope on purpose.
+set(localizatorLanguageSession="session.lang");
 
 // Highlight defaults
 set(functionName="highlight", tag="mark");

@@ -2,7 +2,7 @@
 <cfparam name="events">
 <cfoutput>
 	#includePartial(partial = "list/filter")#
-	#panel(title="Events (#events.recordcount#) records")#
+	#panel(title=l("Events ({#events.recordcount#}) records"))#
  <cfif events.recordcount>
  <cfif application.rbs.setting.showlocationcolours>
 <style>
@@ -13,11 +13,11 @@
 <table class="table table-condensed   table-striped">
 	<thead>
 		<tr>
-			<th colspan=2>Date</th>
-			<th>Location</th>
-			<th>Title</th>
-			<th>Layout</th>
-			<th colspan=2>Description</th>
+			<th colspan=2>#l("Date")#</th>
+			<th>#l("Location")#</th>
+			<th>#l("Title")#</th>
+			<th>#l("Layout")#</th>
+			<th colspan=2>#l("Description")#</th>
 		</tr>
 	</thead>
 	<tbody>
@@ -42,7 +42,7 @@
 				</cfif>
 			</td>
 			<td width=100><cfif !allDay>#_formatTime(start)# - #_formatTime(end)#
-				<cfelse>All Day
+				<cfelse>#l("All Day")#
 			</cfif></td>
 			<td width=150 class="#class#"><cfif len(building)>
 				<small>#building#</small><br />
@@ -66,9 +66,9 @@
 			</cfif>
 			<small>
 			<cfif len(contactemail) AND len(contactname)>
-				Contact: <a href="mailto:#contactemail#">#contactname#</a>
+				#l("Contact")#: <a href="mailto:#contactemail#">#contactname#</a>
 			<cfelseif len(contactname)>
-				Contact: #contactname#
+				#l("Contact")#: #contactname#
 			</cfif>
 			<cfif len(contactno)>
 				(#contactno#)
@@ -90,7 +90,7 @@
 	</tbody>
 </table>
 <cfelse>
-<div class="alert alert-danger"><strong>Sorry!</strong>, No events returned for that date range.</div>
+<div class="alert alert-danger"><strong>#l("Sorry!")#</strong>, #l("No events returned for that date range")#.</div>
  </cfif>
  #panelEnd()#
 </cfoutput>

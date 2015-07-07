@@ -1,10 +1,11 @@
+<!---================= Room Booking System / https://github.com/neokoenig =======================--->
 <!--- Event Details --->
 <cfparam name="cType" default="">
 <cfset dr="">
 <cfset du="">
 <cfoutput>
  	<fieldset>
- 		<legend>Bookable Resources</legend>
+ 		<legend>#l("Bookable Resources")#</legend>
 
 	<cfif resources.recordcount>
 		<table id="resourceTable" class="table table-condensed table-hover">
@@ -23,9 +24,9 @@
 						</td>
 					<td>
 						<cfif len(restrictlocations)>
-<button type="button" class="pop btn btn-xs btn-default" data-toggle="popover" title="Location Restricted" data-content="Selection is restricted to certain locations"><i class="glyphicon glyphicon-info-sign"></i></button>
+<button type="button" class="pop btn btn-xs btn-default" data-toggle="popover" title="Location Restricted" data-content="#l('Selection is restricted to certain locations')#"><i class="glyphicon glyphicon-info-sign"></i></button>
 					 </cfif>
-					<cfif isunique><button type="button" class="pop btn btn-xs btn-default" data-toggle="popover" title="Unique Item or Service" data-content="Will not allow concurrent booking"><i class="glyphicon glyphicon-exclamation-sign"></i></button>
+					<cfif isunique><button type="button" class="pop btn btn-xs btn-default" data-toggle="popover" title="Unique Item or Service" data-content="#l('Will not allow concurrent booking')#"><i class="glyphicon glyphicon-exclamation-sign"></i></button>
 					</cfif></td>
 					<td>#h(description)#</td>
 					</tr>
@@ -36,7 +37,7 @@
 			</tbody>
 		</table>
 	<cfelse>
-			<p>No bookable resources available</p>
+			<p>#l('No bookable resources available')#</p>
 	</cfif>
  	</fieldset>
 </cfoutput>

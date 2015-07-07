@@ -2,18 +2,18 @@
 <!--- Locations --->
 <cfparam name="locations">
 <Cfoutput>
-#panel(title="All Locations")#
-#linkTo(Text="<i class='glyphicon glyphicon-plus'></i> Create New Location", class="btn btn-primary", action="add")#
+#panel(title=l("All Locations"))#
+#linkTo(Text="<i class='glyphicon glyphicon-plus'></i> " & l("Create New Location"), class="btn btn-primary", action="add")#
 <cfif locations.recordcount>
 
 <table class="table">
 	<thead>
 		<tr>
 			<th>ID</th>
-			<th>Building</th>
-			<th>Name</th>
-			<th>Description</th>
-			<th>Actions</th>
+			<th>#l("Building")#</th>
+			<th>#l("Name")#</th>
+			<th>#l("Description")#</th>
+			<th>#l("Actions")#</th>
 		</tr>
 	</thead>
 	<tbody>
@@ -26,9 +26,9 @@
 			<td>#description#</td>
 			<td>
 				<div class="btn-group">
-					#linkTo(text="<i class='glyphicon glyphicon-eye-open'></i> View", class="btn btn-xs btn-primary", action="view", key=id)#
-					#linkTo(text="<i class='glyphicon glyphicon-edit'></i> Edit", class="btn btn-xs btn-info", action="edit", key=id)#
-					#linkTo(text="<i class='glyphicon glyphicon-trash'></i> Delete", class="btn btn-xs btn-danger", action="delete", key=id, confirm='Are you Sure?')#
+					#linkTo(text="<i class='glyphicon glyphicon-eye-open'></i> " & l("View"), class="btn btn-xs btn-primary", action="view", key=id)#
+					#linkTo(text="<i class='glyphicon glyphicon-edit'></i> " & l("Edit"), class="btn btn-xs btn-info", action="edit", key=id)#
+					#linkTo(text="<i class='glyphicon glyphicon-trash'></i> " & l("Delete"), class="btn btn-xs btn-danger", action="delete", key=id, confirm=l('Are you Sure?'))#
 				</div>
 			</td>
 		</tr>
@@ -38,7 +38,7 @@
 	</tbody>
 </table>
 	<cfelse>
-		<p>No Locations available yet</p>
+		<p>#l("No Locations available yet")#</p>
 </cfif>
 #panelEnd()#
 

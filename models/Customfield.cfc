@@ -1,4 +1,5 @@
-component extends="Model" hint=""
+//================= Room Booking System / https://github.com/neokoenig =======================--->
+component extends="Model" hint="Custom Fields"
 {
 	/**
 	 * @hint Constructor

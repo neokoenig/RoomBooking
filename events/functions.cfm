@@ -1,7 +1,5 @@
-<!---================= Room Booking System / https://github.com/neokoenig =======================--->
-
 <cfscript>
-
+//================= Room Booking System / https://github.com/neokoenig =======================--->
 //================================ Global Auth Functions ======================================
     /**
     *  @hint Get logged in user
@@ -223,6 +221,18 @@
            include path;
         }
         return result;
+    }
+
+//================================ Lang ======================================
+    /**
+    *  @hint
+    */
+    public string function getCurrentLanguage() {
+        if(structKeyExists(session, "lang") AND len(session.lang)){
+            return session.lang;
+        } else {
+            return "en_GB";
+        }
     }
 
 //================================ Utils ======================================

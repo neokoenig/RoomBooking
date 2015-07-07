@@ -11,7 +11,7 @@ component extends="Model" hint="Locations Model"
 	}
 
 	/**
-	*  @hint
+	*  @hint  NB, these can be localised, as the output has the l() wrapper
 	*/
 	public void function registerSystemFields() {
 		this.systemfields=[

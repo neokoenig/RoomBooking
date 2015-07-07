@@ -4,3 +4,6 @@
 	Example: <cfset set(dataSourceName="devDB")>
 --->
 
+<cfscript>
+	set(localizatorLanguageHarvest=true);
+</cfscript>

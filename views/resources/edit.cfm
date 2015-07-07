@@ -2,10 +2,10 @@
 <!--- Edit Location --->
 <cfparam name="resource">
 <cfoutput>
-#panel(title="Update resource")#
+#panel(title=l("Update Resource"))#
 	#startFormTag(action="update", key=resource.id, id="resourceForm")#
 	#includePartial("form")#
-	#submitTag(value="Update Resource")#
+	#submitTag(value=l("Update Resource"))#
 	#endFormTag()#
 #panelEnd()#
 </cfoutput>

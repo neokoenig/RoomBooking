@@ -27,7 +27,7 @@
 <table class="table table-day">
 	<thead>
 		<tr>
-			<th>Time</th>
+			<th>#l("Time")#</th>
 			<cfloop query="locations">
 				<cfquery dbtype="query" name="locationEventsC">
 				SELECT * FROM events WHERE locationid = <cfqueryparam cfsqltype="cf_sql_numeric" value="#id#">;
@@ -41,7 +41,7 @@
 		</tr>
 		<cfif application.rbs.setting.calendarAllDaySlot>
 				<tr>
-			<th>All Day</th>
+			<th>#l("All Day")#</th>
 			<cfloop query="locations">
 				<cfquery dbtype="query" name="locationEventsAllDay">
 				SELECT * FROM allDay WHERE locationid = <cfqueryparam cfsqltype="cf_sql_numeric" value="#id#">;

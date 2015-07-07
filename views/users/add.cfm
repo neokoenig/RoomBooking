@@ -1,6 +1,6 @@
+<!---================= Room Booking System / https://github.com/neokoenig =======================--->
 <cfparam name="user">
 <cfoutput>
-
 #startFormTag( controller="users", action="create", id="userForm")#
 #errorMessagesFor("user")#
 <div class="row">
@@ -13,6 +13,6 @@
 		#includePartial("formparts/userpw")#
 	</div>
 </div>
-#submitTag(value="Create Account", class="btn btn-primary")#
+#submitTag(value=l("Create Account"), class="btn btn-primary")#
 #endFormTag()#
 </cfoutput>

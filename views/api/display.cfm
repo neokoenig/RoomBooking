@@ -7,22 +7,22 @@
   <div class="display-bg">
     <div class="display-header">
       <cfif isToday>
-        <h1>Today</h1>
+        <h1>#l("Today")#</h1>
       <cfelse>
-        <h1>Upcoming Events:</h1>
+        <h1>#l("Upcoming Events")#:</h1>
       </cfif>
       <cfif isSingleLocation>
         <h2>#events.name#</h2>
       </cfif>
     </div>
   <cfif !events.recordcount>
-      <h1>No Events</h1>
+      <h1>#l("No Events")#</h1>
   <cfelse>
        <table class="table display-board">
          <thead>
            <tr>
-             <th>Time</th>
-             <th>Details</th>
+             <th>#l("Time")#</th>
+             <th>#l("Details")#</th>
            </tr>
          </thead>
          <tbody>
@@ -31,12 +31,12 @@
             <tr>
              <td><cfif !params.today>
                <cfif dateFormat(start, "dd mmm") EQ dateFormat(now(), "dd mmm")>
-                  Today
+                  #l("Today")#
                  <Cfelse>
                   #dateFormat(start, "dd mmm")#
                </cfif>
              </cfif>#timeFormat(start, "h:MM tt")#<br /><span class="duration"><cfif allday>
-             (All Day)
+             (#l("All Day")#)
                <cfelse>
                 #_durationString(DateDiff("n", start, end))#
              </cfif></span></td>

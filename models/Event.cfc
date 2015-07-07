@@ -59,7 +59,7 @@ component extends="Model" hint="Main Event Object"
 	}
 
 	/**
-	*  @hint
+	*  @hint NB, these can be localised, as the output has the l() wrapper
 	*/
 	public void function registerSystemFields() {
 

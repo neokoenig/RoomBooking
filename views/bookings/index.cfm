@@ -6,7 +6,7 @@
 <cfif cal.showlocationfilter>
     #includePartial(partial="locations", locations=locations)#
 </cfif>
-    #panel(title="Calendar", theclass="panel-primary no-top-rounded")#
+    #panel(title=l("Calendar"), theclass="panel-primary no-top-rounded")#
         <div id="calendar"
             data-eventsurl="#urlFor(route="getEvents", type=params.action, key=params.key, params='format=json')#"
             data-eventurl="#urlFor(controller='eventdata', action='getevent')#"

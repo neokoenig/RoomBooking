@@ -1,3 +1,4 @@
+<!---================= Room Booking System / https://github.com/neokoenig =======================--->
 <cfoutput>
 #includePartial("/common/email/header")#
  <h4 style="Margin-top: 0;color: ##565656;font-weight: 700;font-size: 24px;Margin-bottom: 18px;font-family: sans-serif;line-height: 24px">Password Reset Request:</h4>

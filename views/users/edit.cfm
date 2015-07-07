@@ -1,5 +1,5 @@
-﻿<cfoutput>
-
+﻿<!---================= Room Booking System / https://github.com/neokoenig =======================--->
+<cfoutput>
 #startFormTag( controller="users",  action="update", key=user.id, id="userForm")#
 #errorMessagesFor("user")#
 <div class="row">
@@ -10,6 +10,6 @@
 		#includePartial("formparts/userrole")#
 	</div>
 </div>
-#submitTag(value="Save", class="btn btn-primary")#
+#submitTag(value=l("Save"), class="btn btn-primary")#
 #endFormTag()#
 </cfoutput>

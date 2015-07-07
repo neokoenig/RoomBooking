@@ -11,6 +11,16 @@ component extends="Controller" hint="Sessions Controller"
 
 /******************** Public***********************/
 	/**
+	*  @hint Switch language
+	*/
+	public void function langswitch() {
+		param name="lang" default="en_GB";
+		structDelete(session, "lang");
+		session.lang=params.lang;
+		redirectTo(back=true);
+	}
+	/**
+	*
 	*  @hint Login procedure
 	*/
 	public void function attemptlogin() {
