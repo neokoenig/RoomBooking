@@ -121,15 +121,15 @@ Usage: [field id=1 ] or [field id="name"]
 			<cfcase value="radio">
 				<!--- There's probably a better/easier way to do this...--->
 				<cfset tempArray=attr.fieldValues.options>
-				<label>#attr.fieldValues.label#</label>
+				<label>#l(attr.fieldValues.label)#</label>
 				<cfloop from="1" to="#arraylen(tempArray)#" index="i">
-					#radioButtonTag(name=attr.fieldValues.name, value=structkeylist(tempArray[i]), label=tempArray[i][structkeylist(tempArray[i])], checked=iif(structkeylist(tempArray[i]) EQ attr.fieldValues.value, "true", "false"))#
+					#radioButtonTag(name=attr.fieldValues.name, value=structkeylist(tempArray[i]), label=l(tempArray[i][structkeylist(tempArray[i])]), checked=iif(structkeylist(tempArray[i]) EQ attr.fieldValues.value, "true", "false"))#
 				</cfloop>
 				<cfset tempArray="">
 			</cfcase>
 			<cfcase value="checkbox">
-				<label>#attr.fieldValues.label#</label>
-				<cfset attr.fieldValues.label=attr.fieldValues.options[1][structkeylist(attr.fieldValues.options[1])]>
+				<label>#l(attr.fieldValues.label)#</label>
+				<cfset attr.fieldValues.label=l(attr.fieldValues.options[1][structkeylist(attr.fieldValues.options[1])])>
 				<cfset attr.fieldValues.checked=iif(structkeylist(attr.fieldValues.options[1]) EQ attr.fieldValues.value, "true", "false")>
 				<cfset attr.fieldValues.uncheckedValue=0>
 				<cfset attr.fieldValues.value=structkeylist(attr.fieldValues.options[1])>
@@ -166,7 +166,7 @@ Usage: [field id=1 ] or [field id="name"]
 				<cfset attr.fieldValues.label=attr.fieldValues.options[1][structkeylist(attr.fieldValues.options[1])]>
 				<cfset structDelete(attr.fieldValues, "options")>
 
-				#checkBox(objectName=attr.fieldValues.objectname, property=attr.fieldvalues.property, label=attr.fieldValues.label)#
+				#checkBox(objectName=attr.fieldValues.objectname, property=attr.fieldvalues.property, label=l(attr.fieldValues.label))#
 			</cfcase>
 			<cfcase value="radio">
 				<!--- Need to test this one--->

@@ -2,7 +2,7 @@
 <cfparam name="user">
 <cfset countries=countryList()>
 <cfoutput>
-#panel(title="Main Account Details")#
+#panel(title=l("Main Account Details"))#
 			<div class="row">
 			<div class="col-md-6">
 				#textField(objectname="user", property="firstname", label=l("First Name") & " *", required="true", placeholder="e.g Joe")#
