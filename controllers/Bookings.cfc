@@ -302,12 +302,14 @@ component extends="Controller" hint="Main Events/Bookings Controller"
 	    	event = model("event").findOne(where="id = #params.key#", include="eventresources");
 			event.update(params.event);
 			if ( event.save() )  {
+
 				if(structKeyExists(params, "customfields")){
 					customfields=updateCustomFields(objectname=request.modeltype, key=event.key(), customfields=params.customfields);
 				}
 				redirectTo(action="index", success="event successfully updated");
 			}
 	        else {
+				customfields=getCustomFields(objectname=request.modeltype, key=params.key);
 				renderPage(action="edit", error="There were problems updating that event");
 			}
 		}
@@ -427,6 +429,7 @@ component extends="Controller" hint="Main Events/Bookings Controller"
 			// We need to check for any events which overlap with the requested timerange
 			// If editing, check we don't bring up the actual event
 			// Don't register denied events
+			// Make sure passed date from JS is in correct format and not localised
 			if(len(params.id)){
 				eCheck=model("event").findAll(where="status != 'denied' AND id != #params.id# AND start <= '#params.start#' AND end >= '#params.start#' AND locationid = #params.location#");
 			} else {

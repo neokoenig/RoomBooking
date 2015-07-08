@@ -1,14 +1,14 @@
 <!---================= Room Booking System / https://github.com/neokoenig =======================--->
 <!--- Location List ---->
 <cfoutput>
-#panel(title="Available Locations")#
+#panel(title=l("Available Locations"))#
 <cfif locations.recordcount>
 	<table class="table">
 		<thead>
 			<tr>
-				<th>Name</th>
-				<th>Description</th>
-				<th>Actions</th>
+				<th>#l("Name")#</th>
+				<th>#l("Description")#</th>
+				<th>#l("Actions")#</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -19,7 +19,7 @@
 				<td>#description#</td>
 				<td>
 					<div class="btn-group">
-						#linkTo(text="<i class='glyphicon glyphicon-eye-open'></i> More Information", class="btn btn-xs btn-primary", action="view", key=id)#
+						#linkTo(text="<i class='glyphicon glyphicon-eye-open'></i> " & l("More Information"), class="btn btn-xs btn-primary", action="view", key=id)#
 					</div>
 				</td>
 			</tr>
@@ -29,7 +29,7 @@
 		</tbody>
 	</table>
 <cfelse>
-	<p>No Locations available yet</p>
+	<p>#l("No Locations available yet")#</p>
 </cfif>
 #panelEnd()#
 </cfoutput>

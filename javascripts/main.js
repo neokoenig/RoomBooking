@@ -1,7 +1,7 @@
 /* ================= Room Booking System / https://github.com/neokoenig */
 
 $(document).ready(function(){
-
+	var currentLanguage=$("html").attr("lang");
 	tryForCalendar();
 
 	function tryForCalendar(){
@@ -15,7 +15,8 @@ $(document).ready(function(){
 
         // Main Calendar
 		$('#calendar').fullCalendar({
-
+	//----------------Language------------
+		lang: currentLanguage,
     //----------------Config--------------
         header: {
             left:   settings.headerleft,
@@ -118,7 +119,10 @@ $(document).ready(function(){
     });
 
 	// Date Pickers-----------------------
+	// NB, irrespective of locale, it's easier to keep dates in YYYY-MM-DD HH:mm!
 	$('#event-start, #event-end').datetimepicker({
+			locale: currentLanguage,
+			format: "YYYY-MM-DD HH:mm",
 			showTodayButton: true,
 			stepping: 5
 	});
@@ -145,11 +149,13 @@ $(document).ready(function(){
 	});
 
 	$("#dayview-pick").datetimepicker({
+		locale: currentLanguage,
 		showTodayButton: true
 	});
 
 	// Generic datepicker
 	$("#datefrom, #dateto").datetimepicker({
+		locale: currentLanguage,
 		showTodayButton: true,
 		format: 'DD MMM YYYY'
 	});

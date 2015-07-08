@@ -41,7 +41,7 @@
 	*/
 	public string function _formatDate(required d) {
 		if(isDate(arguments.d)){
-			return dateFormat(arguments.d, "#application.rbs.setting.defaultDateFormat#");
+			return LSdateFormat(arguments.d, "#application.rbs.setting.defaultDateFormat#");
 		} else {
 			return "";
 		}
@@ -52,7 +52,7 @@
 	*/
 	public string function _formatTime(required d) {
 		if(isDate(arguments.d)){
-			return timeFormat(arguments.d, "#application.rbs.setting.defaultTimeFormat#");
+			return LStimeFormat(arguments.d, "#application.rbs.setting.defaultTimeFormat#");
 		} else {
 			return "";
 		}
@@ -96,28 +96,28 @@
 	 /**
 	 *  @hint used in dropdowns filters
 	 */
-	 public array function _monthList() {
-	 	var r=[];
-	 	var m={};
-	 	for (i=1; i <=12; i++) {
-	 		m["k"]=i;
-	 		m["v"]=monthAsString(i);
-	 		arrayAppend(r, m);
-	 		m={};
-	 	}
-	 	return r;
-	 }
+	 //public array function _monthList() {
+	 //	var r=[];
+	 //	var m={};
+	 //	for (i=1; i <=12; i++) {
+	 //		m["k"]=i;
+	 //		m["v"]=monthAsString(i);
+	 //		arrayAppend(r, m);
+	 //		m={};
+	 //	}
+	 //	return r;
+	 //}
 
 	 /**
 	 *  @hint used in dropdowns filters, defaults to now - 5, and now + 5
 	 */
-	 public string function _yearList() {
-	 	var r="";
-	 	for (var i = (year(now()) - 5); i <= (year(now()) + 5); i++) {
-	 		r=listAppend(r, i);
-	 	}
-	 	return r;
-	 }
+	 //public string function _yearList() {
+	 //	var r="";
+	 //	for (var i = (year(now()) - 5); i <= (year(now()) + 5); i++) {
+	 //		r=listAppend(r, i);
+	 //	}
+	 //	return r;
+	 //}
 
 
   /**

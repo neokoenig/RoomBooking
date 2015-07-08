@@ -152,7 +152,7 @@ Usage: [field id=1 ] or [field id="name"]
 				#textArea(argumentCollection=attr.fieldValues)#
 			</cfcase>
 			<cfcase value="datepicker">
-				<cfset attr.fieldValues["data-date-format"]="DD MMM YYYY HH:mm">
+				<cfset attr.fieldValues["data-date-format"]="YYYY-MM-DD HH:mm">
 				#textfield(argumentCollection=attr.fieldValues)#
 			</cfcase>
 			<cfcase value="colourpicker">

@@ -62,6 +62,7 @@ module.exports = function(grunt) {
           'bower_components/jquery-ui/jquery-ui.js',
           'bower_components/gridmanager/src/gridmanager.js',
           'bower_components/bootbox/bootbox.js',
+          'bower_components/fullcalendar/dist/lang-all.js',
           // Main.js is any custom JS
           'javascripts/main.js'
         ],

@@ -110,9 +110,8 @@
 			display=$("#concurrencyCheckResult"),
 			checkurl=display.data("checkurl");
 		if(start.length && end.length){
-			console.log("Concurrency Check");
+			console.log("Concurrency Check",  start, end);
 			display.html("");
-			console.log(start, end, location);
 			$.ajax({
 				url: checkurl,
 				data: {
