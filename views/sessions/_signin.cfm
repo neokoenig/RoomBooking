@@ -25,6 +25,6 @@
 		</cfif>
 			#submitTag(value=l("Sign in"),  class="btn btn-primary btn-block append")#
 			#linkTo(text=l("Forgot your password?"),  controller="passwordResets", action="new")#
-		#endFormTag()#
  		</div></div>
+		#endFormTag()#
 </cfoutput>

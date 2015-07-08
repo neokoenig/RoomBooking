@@ -9,7 +9,7 @@ To switch languages, just visit /lang/[lang], where the key is a locale code, i.
 --->
 <cfoutput>
   <li class="dropdown">
-  	<a href="##" class="dropdown-toggle" data-toggle="dropdown"><i class="lang-sm" lang="#listfirst(request.lang.current, '_')#" ></i> <b class="caret"></b></a>
+  	<a href="##" class="dropdown-toggle" data-toggle="dropdown"><i class="lang-sm" lang="#request.lang.currentCode#" ></i> <b class="caret"></b></a>
         <ul class="dropdown-menu language-picker">
 			<cfloop list="#request.lang.languages#" key="i">
 				<cfif request.lang.current EQ i>

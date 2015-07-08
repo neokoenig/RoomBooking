@@ -20,11 +20,16 @@ if(StructCount(form)){
 	}
 }
 
-// Languages
+//-------------------------------------Languages
 request.lang={};
+// Languages with a translation file
 request.lang.availableLanguages=localizatorGetLanguages();
+// As a list for lang dropdown
 request.lang.languages=structKeyList(request.lang.availableLanguages);
+// Current lang in en_GB format
 request.lang.current=getCurrentLanguage();
+// Current lang as 2 letter code
+request.lang.currentCode=listFirst(request.lang.current, "_");
 
 //Other default request level vars
 request.showNavBar="true"
