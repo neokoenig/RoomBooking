@@ -78,7 +78,7 @@
 <cfset loc["Last Name"] = "Nachname">
 <cfset loc["Layout"] = "Layout">
 <cfset loc["Layouts"] = "Layouts">
-<cfset loc["List of possible layouts (optional)"] = "Liste möglicher Layouts (optional">
+<cfset loc["List of possible layouts (optional)"] = "Liste möglicher Layouts (optional)">
 <cfset loc["List"] = "Liste">
 <cfset loc["Location"] = "Ort">
 <cfset loc["Locations"] = "Orte">
@@ -92,7 +92,7 @@
 <cfset loc["Name"] = "Name">
 <cfset loc["New Location"] = "Neuer Ort">
 <cfset loc["New Resource"] = "Neue Resource">
-<cfset loc["Next"] = "Nächste/r">
+<cfset loc["Next"] = "Nächster">
 <cfset loc["No events returned for that date range"] = "Keine Veranstaltungen in diesem Zeitraum zurückgegeben">
 <cfset loc["No Events"] = "Keine Veranstaltungen">
 <cfset loc["Only allow the resource to be booked in these locations: ctrl+click to multiple select"] = "Erlaubt, dass diese Ressource nur in diesen Standorten gebucht werden kann: ctrl+Klick für Mehrfachauswahl">

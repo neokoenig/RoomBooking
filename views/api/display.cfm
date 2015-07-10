@@ -30,12 +30,12 @@
           <cfoutput>
             <tr>
              <td><cfif !params.today>
-               <cfif dateFormat(start, "dd mmm") EQ dateFormat(now(), "dd mmm")>
+               <cfif LSdateFormat(start, "dd mmm") EQ LSdateFormat(now(), "dd mmm")>
                   #l("Today")#
                  <Cfelse>
-                  #dateFormat(start, "dd mmm")#
+                  #LSdateFormat(start, "dd mmm")#
                </cfif>
-             </cfif>#timeFormat(start, "h:MM tt")#<br /><span class="duration"><cfif allday>
+             </cfif>#LStimeFormat(start, "h:MM tt")#<br /><span class="duration"><cfif allday>
              (#l("All Day")#)
                <cfelse>
                 #_durationString(DateDiff("n", start, end))#

@@ -8,7 +8,7 @@
 	}
 
 	/**
-	*  @hint Turn mins into friendly string
+	*  @hint Turn mins into friendly string, localised
 	*/
 	public string function _durationString(numeric d) {
 		var h=(arguments.d\60);
@@ -18,16 +18,15 @@
 			case 0:
 				r=r & "";
 			break;
-
 			case 1:
-				r=r & "#h# hour";
+				r=r & h  & " " & l("hour");
 			break;
 			default:
-				r=r & "#h# hours";
+				r=r & h  & " " & l("hours");
 			break;
 		}
 		if(m != 0){
-			r = r & " #m# mins";
+			r=r & h  & " " & l("mins");
 		}
 		if(len(r)){
 			return "(" & r & ")";

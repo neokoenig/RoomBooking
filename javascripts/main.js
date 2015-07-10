@@ -1,6 +1,8 @@
 /* ================= Room Booking System / https://github.com/neokoenig */
 
 $(document).ready(function(){
+
+	// NB, language for calendars + datepickers is actually set by the <html> lang attribute, which is dynamically set depending on session.
 	var currentLanguage=$("html").attr("lang");
 	tryForCalendar();
 
@@ -148,16 +150,17 @@ $(document).ready(function(){
 		));
 	});
 
-	$("#dayview-pick").datetimepicker({
-		locale: currentLanguage,
-		showTodayButton: true
-	});
-
-	// Generic datepicker
+	// Generic datepicker (list view)
 	$("#datefrom, #dateto").datetimepicker({
 		locale: currentLanguage,
 		showTodayButton: true,
-		format: 'DD MMM YYYY'
+		format: 'YYYY-MM-DD'
+	});
+
+	// Day view deprecated
+	$("#dayview-pick").datetimepicker({
+		locale: currentLanguage,
+		showTodayButton: true
 	});
 
 	$("#dayview-pick").on("dp.change", function(e){
@@ -175,6 +178,7 @@ $(document).ready(function(){
 		});
 	});
 
+	// Modal ical cut and paste
 	$(".ical").on("click", function(e){
 		var icallink=$(this).attr("href");
 		e.preventDefault();

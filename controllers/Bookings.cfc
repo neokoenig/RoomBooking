@@ -50,8 +50,8 @@ component extends="Controller" hint="Main Events/Bookings Controller"
 	*  @hint Shows Agenda style view table for a given month
 	*/
 	public void function list() {
-		param name="params.datefrom" default="#dateFormat(now(), 'DD MMM YYYY')#";
-		param name="params.dateto" 	 default="#dateFormat(dateAdd('m', 1, now()), 'DD MMM YYYY')#";
+		param name="params.datefrom" default="#dateFormat(now(), 'YYYY-MM-DD')#";
+		param name="params.dateto" 	 default="#dateFormat(dateAdd('m', 1, now()), 'YYYY-MM-DD')#";
 		param name="params.location" default="";
 		param name="params.q"		 default="";
 		events=model("location").findAll(where="#_agendaListWC()#", include="events", order="start");
