@@ -2,7 +2,7 @@
 <!--- Add Custom Field--->
 <cfparam name="customfield">
 <cfoutput>
-#panel(title="Create Customfield")#
+#panel(title=l("Create Customfield"))#
 	#startFormTag(action="create",  id="customfieldForm")#
 	#includePartial("form")#
 	#submitTag(id="customfieldSubmit", value="Create Customfield")#

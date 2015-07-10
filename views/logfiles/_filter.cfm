@@ -6,7 +6,8 @@
 <cfparam name="users">
 <cfoutput>
 #startFormTag(method="get")#
-
+	#hiddenFieldTag(name="controller", value=params.controller)#
+	#hiddenFieldTag(name="action", value=params.action)#
 	<div class=" well well-small">
 	<div class="col-md-2">
 	#selectTag(name="type",    placeholder="Type", 	options=logfiletypes,   	includeBlank=true,   prepend="", append="", appendToLabel="", prependToLabel="", selected=params.type)#

@@ -42,7 +42,7 @@
                   <table class="contents" style="border-collapse: collapse;border-spacing: 0;width: 100%">
                     <tbody><tr>
                       <td class="padded" style="padding: 0;vertical-align: top;padding-left: 10px;padding-right: 0;font-size: 12px;line-height: 20px;color: #999;font-family: sans-serif;text-align: right">
-                        <div>This is an automated email sent on behalf of  <cfoutput>#application.rbs.setting.sitetitle#</cfoutput></div>
+                        <div><cfoutput>#l("This is an automated email sent on behalf of")# #application.rbs.setting.sitetitle#</cfoutput></div>
                         <div>
                           <span class="block">
 

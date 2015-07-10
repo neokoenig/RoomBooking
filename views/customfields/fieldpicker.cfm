@@ -2,7 +2,7 @@
 <!--- Modal Field Picker --->
 <cfoutput>
 <div id="customfielddata">
-<h4>Custom Fields</h4>
+<h4>#l("Custom Fields")#</h4>
 <cfif customfields.recordcount>
 <cfloop query="customfields">
 	<div class="btn-group btn-group-justified">
@@ -11,10 +11,10 @@
 	</div>
  </cfloop>
 <cfelse>
-<p>None available</p>
+<p>#l("None available")#</p>
 </cfif>
 
-<h4>System Fields</h4>
+<h4>#l("System Fields")#</h4>
 <cfif arraylen(systemfields.systemfields)>
 <cfloop from="1" to="#arraylen(systemfields.systemfields)#" index="i">
 	<div class="btn-group btn-group-justified">
@@ -23,7 +23,7 @@
 	</div>
  </cfloop>
 <cfelse>
-	<p>None available</p>
+<p>#l("None available")#</p>
 </cfif>
 </div>
 </cfoutput>

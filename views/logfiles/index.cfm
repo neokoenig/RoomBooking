@@ -2,17 +2,17 @@
 <!--- Log file output --->
 <cfoutput>
 #includePartial("filter")#
-</cfoutput>
+
 <cfif logfiles.recordcount>
 	<table class="table table-condensed">
 		<thead>
 			<tr>
-				<th>ID</th>
-				<th>Message</th>
-				<th>Type</th>
-				<th>CreatedAt</th>
-				<th>IP</th>
-				<th>User</th>
+				<th>#l("ID")#</th>
+				<th>#l("Message")#</th>
+				<th>#l("Type")#</th>
+				<th>#l("Created")#</th>
+				<th>#l("IP")#</th>
+				<th>#l("User")#</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -48,4 +48,4 @@
 		</table>
 	<Cfelse>
 		<div class="alert">#l("No log files available")#</div>
-</cfif>
+</cfif></cfoutput>

@@ -901,7 +901,7 @@ a:hover,.preheader .webversion a:hover,.footer .padded a:hover{color:#737373 !im
           <td style="padding: 0;vertical-align: top">
             <table style="border-collapse: collapse;border-spacing: 0;width: 602px">
               <tbody><tr>
-                <td class="title" style="padding: 0;vertical-align: top;padding-top: 10px;padding-bottom: 12px;font-size: 12px;line-height: 21px;text-align: left;color: #999;font-family: sans-serif">An automated email from <cfoutput>#application.rbs.setting.sitetitle#</cfoutput></td>
+                <td class="title" style="padding: 0;vertical-align: top;padding-top: 10px;padding-bottom: 12px;font-size: 12px;line-height: 21px;text-align: left;color: #999;font-family: sans-serif"><cfoutput>#application.rbs.setting.sitetitle#</cfoutput></td>
 
               </tr>
             </tbody></table>

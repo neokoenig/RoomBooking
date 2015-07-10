@@ -5,7 +5,7 @@
 
 <cfoutput>
 	<!--- Custom Templates --->
-	#panel(title="All Custom Templates")#
+	#panel(title=l("All Custom Templates"))#
 
 	<div class="row">
 		<div class="col-sm-9">
@@ -14,13 +14,13 @@
 			#hiddenfieldTag(name="action", value="addtemplate")#
 			<div class="row">
 				<div class="col-sm-4">
-					#selectTag(name="key", options=application.rbs.modeltypes, label="Template")#
+					#selectTag(name="key", options=application.rbs.modeltypes, label=l("Template"))#
 				</div>
 				<div class="col-sm-4">
-					#selectTag(name="type", options=application.rbs.templatetypes, label="Type")#
+					#selectTag(name="type", options=application.rbs.templatetypes, label=l("Type"))#
 				</div>
 				<div class="col-sm-2">
-					#submitTag(class="pushdown btn btn-primary", value="Create Template")#
+					#submitTag(class="pushdown btn btn-primary", value=l("Create Template"))#
 				</div>
 			</div>
 			#endFormTag()#
@@ -30,9 +30,9 @@
 				<table class="table">
 					<thead>
 						<tr>
-							<th>Model</th>
-							<th>Type</th>
-							<th>Actions</th>
+							<th>#l("Model")#</th>
+							<th>#l("Type")#</th>
+							<th>#l("Actions")#</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -53,15 +53,15 @@
 					</tbody>
 				</table>
 				<cfelse>
-					<p>No Custom Templates have been added yet</p>
+					<p>#l("No Custom Templates have been added yet")#</p>
 				</cfif>
 			</div>
 			<div class="col-sm-3">
 				<div class="well well-small">
-					<p><strong>About Custom Templates</strong></p>
-					<p>You can override the standard templates for form inputs and modal outputs. Simply delete a template to revert back to the defaults.</p>
-					<p>You can add both 'system' fields, (i.e, model defaults), and any custom fields entered below</p>
-					<p>Remember, changes affect all instances of the model, and you will need to restart the application to see the effect</p>
+					<p><strong>#l("About Custom Templates")#</strong></p>
+					<p>#l("You can override the standard templates for form inputs and modal outputs. Simply delete a template to revert back to the defaults.")#</p>
+					<p>#l("You can add both 'system' fields, (i.e, model defaults), and any custom fields entered below")#</p>
+					<p>#l("Remember, changes affect all instances of the model, and you will need to restart the application to see the effect")#</p>
 				</div>
 			</div>
 		</div>
@@ -81,12 +81,12 @@
 					<table class="table">
 						<thead>
 							<tr>
-								<th>ID</th>
-								<th>Model</th>
-								<th>Name</th>
-								<th>Type</th>
-								<th>Description</th>
-								<th>Actions</th>
+								<th>#l("ID")#</th>
+								<th>#l("Model")#</th>
+								<th>#l("Name")#</th>
+								<th>#l("Type")#</th>
+								<th>#l("Description")#</th>
+								<th>#l("Actions")#</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -111,14 +111,14 @@
 					</table>
 					<cfelse>
 						<hr />
-						<p>No Custom Fields have been added yet</p>
+						<p>#l("No Custom Fields have been added yet")#</p>
 					</cfif>
 				</div>
 				<div class="col-sm-3">
 					<div class="well well-small">
-						<p><strong>About Custom Fields</strong></p>
-						<p>You can use custom fields to collect and display data which isn't provided by the system (default) fields. Examples might include "Room Capacity" for locations, or a radio select for Dietary requirements when creating a booking.</p>
-						<p>Remember, changes affect all instances of the model, and you will need to restart the application to see the effect</p>
+						<p><strong>#l("About Custom Fields")#</strong></p>
+						<p>#l("You can use custom fields to collect and display data which isn't provided by the system (default) fields. Examples might include 'Room Capacity' for locations, or a radio select for Dietary requirements when creating a booking.")#</p>
+						<p>#l("Remember, changes affect all instances of the model, and you will need to restart the application to see the effect")#</p>
 					</div>
 				</div>
 			</div>

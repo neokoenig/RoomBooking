@@ -2,10 +2,10 @@
 <!--- Edit Custom Field--->
 <cfparam name="customfield">
 <cfoutput>
-#panel(title="Update Customfield")#
+#panel(title=l("Update Customfield"))#
 	#startFormTag(action="update", key=customfield.key(), id="customfieldForm")#
 	#includePartial("form")#
-	#submitTag(id="customfieldSubmit", value="Update Customfield")#
+	#submitTag(id="customfieldSubmit", value=l("Update Customfield"))#
 	#endFormTag()#
 #panelEnd()#
 </cfoutput>
