@@ -1,4 +1,4 @@
-<cfset loc[""] = "">
+﻿<cfset loc[""] = "">
 <cfset loc["Account Listings"] = "Kontoeinträge">
 <cfset loc["Actions"] = "Aktionen">
 <cfset loc["Activity"] = "Aktivität">
@@ -101,7 +101,7 @@
 <cfset loc["Pending Approval"] = "Ausstehende Bestätigung">
 <cfset loc["Permissions"] = "Berechtigungen">
 <cfset loc["Phone"] = "Telefonnummer">
-<cfset loc["Please delete or rename the <code>/install/</code> directory before continuing"] = "Bitte löschen Sie oder benennen Sie das <code> / install / </ code> Verzeichnis um, bevor Sie fortfahren.">
+<cfset loc["Please delete or rename the <code>/install/</code> directory before continuing"] = "Bitte löschen Sie oder benennen Sie das <code> /install/ </code> Verzeichnis um, bevor Sie fortfahren.">
 <cfset loc["Postcode"] = "Postleitzahl">
 <cfset loc["Re-Generate API Key"] = "Regenerierung des API-Schlüssels">
 <cfset loc["Remember my email"] = "Merke meine E-Mail-Adresse">
