@@ -191,3 +191,8 @@
 <cfset loc["You can use custom fields to collect and display data which isn't provided by the system (default) fields. Examples might include 'Room Capacity' for locations, or a radio select for Dietary requirements when creating a booking."] = "">
 <cfset loc["You do not have an API token associated with your account"] = "">
 <cfset loc["You must enter a start and end date/time before attempting to book this resource"] = "">
+<cfset loc["Request Password Reset"] = "">
+<cfset loc["Email Address"] = "">
+<cfset loc["Enter your e-mail address to receive instructions for resetting your password"] = "">
+<cfset loc["Send Reset Email"] = "">
+<cfset loc["Cancel"] = "">

@@ -193,3 +193,8 @@
 <cfset loc["Main Account Details"] = "">
 <cfset loc["Save"] = "">
 <cfset loc["All Day"] = "">
+<cfset loc["Request Password Reset"] = "">
+<cfset loc["Email Address"] = "">
+<cfset loc["Enter your e-mail address to receive instructions for resetting your password"] = "">
+<cfset loc["Send Reset Email"] = "">
+<cfset loc["Cancel"] = "">
