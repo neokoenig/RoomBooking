@@ -223,6 +223,309 @@
         return result;
     }
 
+
+//================================ Date Utils ======================================
+    /**
+    *  @hint Given any start date, repeat x times with step, starting after start date
+    */
+    public array function dateCalcIterations(
+        required date eventStart,
+        required date eventEnd,
+        required numeric step=1,
+        required numeric iterations=10,
+        required string daysOfWeek="",
+        required string datePart="d"
+    ) {
+        var r=[];
+        var x=0;
+        var lDate= dateAdd("d", 0, eventStart); // doing this as sometimes this is coming through as a string
+        var eventDuration=dateDiff("n", eventStart, eventEnd);
+
+        while (x LT iterations) {
+            x++;
+            if(listlen(daysOfWeek)){
+                if(listFind(daysOfWeek, dayOfWeek(lDate))){
+                     arrayAppend(r, {
+                        start: lDate,
+                        end:  dateAdd("n", eventDuration, lDate)
+                    });
+                } else {
+                    x--; // didn't find a valid date, reset counter back by 1
+                }
+            } else {
+                 arrayAppend(r, {
+                    start: lDate,
+                    end:  dateAdd("n", eventDuration, lDate)
+                });
+            }
+            lDate=dateAdd(datePart, step, lDate);
+        }
+
+        return r;
+    }
+
+
+    /**
+    *  @hint Used for Monthly/Yearly by DOM etc.
+    */
+    public array function dateCalcIterationsWithSkip(
+        required date eventStart,
+        required date eventEnd,
+        required numeric step=0,
+        required string dow="",
+        required numeric iterations=10,
+        required string datePart="d",
+        required string rule="dom",
+        optional numeric weekskip=1
+    ) {
+        var r=[];
+        var x=0;
+        var lDate= dateAdd("d", 0, eventStart); // doing this as sometimes this is coming through as a string
+        var eventDuration=dateDiff("n", eventStart, eventEnd);
+        var dow    = dayOfWeek(lDate);
+        var week   = week(lDate);
+        var month  = month(lDate);
+        var year   = year(lDate);
+
+        while (x LT iterations) {
+            x++;
+             if(rule EQ "dow"){
+                // Work out whether the date is the 1st/2nd/3rd/4th/5th occurance in the month. If 5th, make it the 'last' appearance. otherwise use 1-4.
+                firstX =  firstXDayOfMonth(dow, month, year);
+                firstx1 = dateAdd("d", (1 * 7), firstX );
+                firstx2 = dateAdd("d", (2 * 7), firstX );
+                firstx3 = dateAdd("d", (3 * 7), firstX );
+                firstx4 = dateAdd("d", (4 * 7), firstX );
+                if(dateFormat(lDate, "dd") EQ dateFormat(firstX, "dd")){
+                    isXinMonth=1;
+                }
+                if(dateFormat(lDate, "dd") EQ dateFormat(firstX1, "dd")){
+                    isXinMonth=2;
+                }
+                if(dateFormat(lDate, "dd") EQ dateFormat(firstX2, "dd")){
+                    isXinMonth=3;
+                }
+                if(dateFormat(lDate, "dd") EQ dateFormat(firstX3, "dd")){
+                    isXinMonth=4;
+                }
+                if(dateFormat(lDate, "dd") EQ dateFormat(firstX4, "dd")){
+                    isXinMonth=5;
+                }
+               // Exception Clause: IF user has selected the '5th' thursday, always give them the LAST thursday (which may be the 4th OR the 5th)
+                if(isXinMonth NEQ 5){
+                    nDate=GetNthDayOfMonth(lDate, dow, isXinMonth);
+                } else {
+                    nDate=GetLastDayOfWeekOfMonth(lDate, dow);
+                }
+
+                nDate=dateFormat(nDate, "yyyy-mm-dd") & " " & timeFormat(eventStart, "HH:MM");
+
+                arrayAppend(r, {
+                    start: dateAdd("d", 0, nDate),
+                    end:   dateAdd("n", eventDuration, nDate)
+                });
+                lDate=dateAdd(datePart, step, lDate);
+             } else if(rule EQ "dom") {
+                // Standard simple loop
+                arrayAppend(r, {
+                    start: lDate,
+                    end:  dateAdd("n", eventDuration, lDate)
+                });
+                lDate=dateAdd(datePart, step, lDate);
+             } else if(rule EQ "weekonskip"){
+                // Custom logic for looping over certain days in a week and skipping weeks
+                if(dayOfWeek(lDate) EQ 7){
+                    lDate=dateAdd("ww", weekstep, lDate);
+                }
+                 if(listlen(dow)){
+                    if(listFind(daysOfWeek, dayOfWeek(lDate))){
+                         arrayAppend(r, {
+                            start: lDate,
+                            end:  dateAdd("n", eventDuration, lDate)
+                        });
+                    } else {
+                        x--; // didn't find a valid date, reset counter back by 1
+                    }
+                 }
+                lDate=dateAdd(datePart, step, lDate);
+             }
+        } // End while
+
+        return r;
+    }
+
+    /**
+    *  @hint Days of Week filter
+    */
+    public boolean function dowFilter(required string dow, required date lDate ) {
+        if(listlen(dow)){
+           if(listFind(dow, dayOfWeek(lDate))){
+                return true;
+           }
+        }
+        return false;
+    }
+
+    /**
+    *  @hint Given any start and end date, return an array of calculated dates starting after start date
+    *
+    *   eventStart  = The Master Event Start Date/Time
+    *   eventEnd    = The Master Event End Date/Time
+    *   rangeStart = The repeating range start date
+    *   rangeEnd   = The repeating range end date
+    *   dow  = limit results to these days of the week
+    *   step        = incremenet each loop by
+    *   datePart    = step increment date part
+    */
+    public array function dateCalcRange(
+        required date eventStart,
+        required date eventEnd,
+        required numeric step=1,
+        required string dow,
+        required string datePart="d",
+        required date rangeStart,
+        required date rangeEnd
+    ) {
+        var r=[];                   // Result Array
+        var lDate=dateAdd("d", 0, eventStart);   // Main Loop Date
+        var eventDuration=dateDiff("n", eventStart, eventEnd); // store duration to add to end date
+
+        // lDate=dateAdd("d", 0, rangeStart);
+        // Loop can't also start before rangeStart or go after rangeEnd, as that's not what we've asked for
+        while(dateCompare(lDate, dateAdd("d", 1, rangeEnd)) LTE 0){
+
+            // If lDate if after rangeStart
+            if(dateCompare(lDate, rangeStart) GTE 0){
+
+                if(listlen(dow)){
+                    if(dowFilter(dow, lDate)){
+                         arrayAppend(r, {
+                            start: lDate,
+                            end:  dateAdd("n", eventDuration, lDate)
+                        });
+                    }
+                }
+                 else {
+                    arrayAppend(r, {
+                        start: lDate,
+                        end:  dateAdd("n", eventDuration, lDate)
+                    });
+                }
+            }
+            // Increment Loop by one day
+            lDate=dateAdd(datePart, step, lDate);
+        }
+        return r;
+    }
+
+     /**
+    *  @hint Used for Monthly/Yearly by DOM etc.
+    */
+    public array function dateCalcRangeWithSkip(
+        required date eventStart,
+        required date eventEnd,
+        required date rangeStart,
+        required date rangeEnd,
+        required numeric step=0,
+        required string dow,
+        required string datePart="d",
+        required string rule="dom"
+    ){
+        var r=[];
+        var x=0;
+        var lDate= dateAdd("d", 0, eventStart); // doing this as sometimes this is coming through as a string
+        var eventDuration=dateDiff("n", eventStart, eventEnd);
+        var dow    = dayOfWeek(lDate);
+        var month  = month(lDate);
+        var year   = year(lDate);
+
+        while(dateCompare(lDate, dateAdd("d", 1, rangeEnd)) LTE 0){
+            if(dateCompare(lDate, rangeStart) GTE 0){
+                if(rule EQ "dow"){
+                // Work out whether the date is the 1st/2nd/3rd/4th/5th occurance in the month. If 5th, make it the 'last' appearance. otherwise use 1-4.
+                firstX =  firstXDayOfMonth(dow, month, year);
+                firstx1 = dateAdd("d", (1 * 7), firstX );
+                firstx2 = dateAdd("d", (2 * 7), firstX );
+                firstx3 = dateAdd("d", (3 * 7), firstX );
+                firstx4 = dateAdd("d", (4 * 7), firstX );
+                if(dateFormat(lDate, "dd") EQ dateFormat(firstX, "dd")){
+                    isXinMonth=1;
+                }
+                if(dateFormat(lDate, "dd") EQ dateFormat(firstX1, "dd")){
+                    isXinMonth=2;
+                }
+                if(dateFormat(lDate, "dd") EQ dateFormat(firstX2, "dd")){
+                    isXinMonth=3;
+                }
+                if(dateFormat(lDate, "dd") EQ dateFormat(firstX3, "dd")){
+                    isXinMonth=4;
+                }
+                if(dateFormat(lDate, "dd") EQ dateFormat(firstX4, "dd")){
+                    isXinMonth=5;
+                }
+               // Exception Clause: IF user has selected the '5th' thursday, always give them the LAST thursday (which may be the 4th OR the 5th)
+                if(isXinMonth NEQ 5){
+                    nDate=GetNthDayOfMonth(lDate, dow, isXinMonth);
+                } else {
+                    nDate=GetLastDayOfWeekOfMonth(lDate, dow);
+                }
+
+                nDate=dateFormat(nDate, "yyyy-mm-dd") & " " & timeFormat(eventStart, "HH:MM");
+
+                arrayAppend(r, {
+                    start: dateAdd("d", 0, nDate),
+                    end:   dateAdd("n", eventDuration, nDate)
+                });
+
+             } else if(rule EQ "dom") {
+                // Standard simple loop
+                arrayAppend(r, {
+                    start: lDate,
+                    end:  dateAdd("n", eventDuration, lDate)
+                });
+             } else if(rule EQ "weekonskip"){
+                // Custom logic for looping over certain days in a week and skipping weeks
+                if(dowFilter(dow, lDate)){
+                     arrayAppend(r, {
+                        start: lDate,
+                        end:  dateAdd("n", eventDuration, lDate)
+                    });
+                }
+             }
+
+            lDate=dateAdd(datePart, step, lDate);
+            }
+        }
+
+        return r;
+    }
+
+
+    /**
+     * Returns a date object of the first occurrence of a specified day in the given month and year.
+     * v1.0 by Troy Pullis
+     * v1.1 by Adam Cameron (improved/simplified logic, added error handling)
+     *
+     * @param dayOfWeek      An integer in the range 1 - 7. 1=Sun, 2=Mon, 3=Tue, 4=Wed, 5=Thu, 6=Fri, 7=Sat. (Required)
+     * @param month      Month value.  (Required)
+     * @param year   Year value. (Required)
+     * @return The date of the first [dayOfWeek] of the specified month/year
+     * @author Troy Pullis (tpullis@yahoo.com)
+     * @version 1.1, July 6, 2014
+     */
+    date function firstXDayOfMonth(required numeric dayOfWeek, required numeric month, required numeric year){
+        if (dayOfWeek < 1 || dayOfWeek > 7){
+            throw(type="InvalidDayOfWeekException", message="Invalid day of week value", detail="the dayOfWeek argument must be between 1-7 (inclusive).");
+        }
+        var firstOfMonth    = createDate(year, month,1);
+        var dowOfFirst      = dayOfWeek(firstOfMonth);
+        var daysToAdd       = (7 - (dowOfFirst - dayOfWeek)) MOD 7;
+        var dow = dateAdd("d", daysToAdd, firstOfMonth);
+        return dow;
+    }
+
+
+
 //================================ Lang ======================================
     /**
     *  @hint
@@ -314,6 +617,8 @@ public array function structFindKeyWithValue(required struct struct, required st
 }
 
 </cfscript>
+
+
 <!---================================ Cookies ======================================--->
 <!--
 
@@ -332,6 +637,176 @@ public array function structFindKeyWithValue(required struct struct, required st
          <cfcookie  name = "RBS_UN" expires = "NOW"  httpOnly="true">
         <cfset addlogline(message="Cookie remember email removed", type="Cookie")>
     </Cffunction>
+
+<cffunction
+    name="GetLastDayOfWeekOfMonth"
+    access="public"
+    returntype="date"
+    output="false"
+    hint="Returns the date of the last given weekday of the given month.">
+
+    <!--- Define arguments. --->
+    <cfargument
+        name="Date"
+        type="date"
+        required="true"
+        hint="Any date in the given month we are going to be looking at."
+        />
+
+    <cfargument
+        name="DayOfWeek"
+        type="numeric"
+        required="true"
+        hint="The day of the week of which we want to find the last monthly occurence."
+        />
+
+    <!--- Define the local scope. --->
+    <cfset var LOCAL = StructNew() />
+
+    <!--- Get the current month based on the given date. --->
+    <cfset LOCAL.ThisMonth = CreateDate(
+        Year( ARGUMENTS.Date ),
+        Month( ARGUMENTS.Date ),
+        1
+        ) />
+
+    <!---
+        Now, get the last day of the current month. We
+        can get this by subtracting 1 from the first day
+        of the next month.
+    --->
+    <cfset LOCAL.LastDay = (
+        DateAdd( "m", 1, LOCAL.ThisMonth ) -
+        1
+        ) />
+
+    <!---
+        Now, the last day of the month is part of the last
+        week of the month. However, there is no guarantee
+        that the target day of this week will be in the current
+        month. Regardless, let's get the date of the target day
+        so that at least we have something to work with.
+    --->
+    <cfset LOCAL.Day = (
+        LOCAL.LastDay -
+        DayOfWeek( LOCAL.LastDay ) +
+        ARGUMENTS.DayOfWeek
+        ) />
+
+
+    <!---
+        Now, we have the target date, but we are not exactly
+        sure if the target date is in the current month. if
+        is not, then we know it is the first of that type of
+        the next month, in which case, subracting 7 days (one
+        week) from it will give us the last occurence of it in
+        the current Month.
+    --->
+    <cfif (Month( LOCAL.Day ) NEQ Month( LOCAL.ThisMonth ))>
+
+        <!--- Subract a week. --->
+        <cfset LOCAL.Day = (LOCAL.Day - 7) />
+
+    </cfif>
+
+
+    <!--- Return the given day. --->
+    <cfreturn DateFormat( LOCAL.Day ) />
+</cffunction>
+
+<cffunction
+    name="GetNthDayOfMonth"
+    access="public"
+    returntype="any"
+    output="false"
+    hint="I return the Nth instance of the given day of the week for the given month (ex. 2nd Sunday of the month).">
+
+    <!--- Define arguments. --->
+    <cfargument
+        name="Month"
+        type="date"
+        required="true"
+        hint="I am the month for which we are gathering date information."
+        />
+
+    <cfargument
+        name="DayOfWeek"
+        type="numeric"
+        required="true"
+        hint="I am the day of the week (1-7) that we are locating."
+        />
+
+    <cfargument
+        name="Nth"
+        type="numeric"
+        required="false"
+        default="1"
+        hint="I am the Nth instance of the given day of the week for the given month."
+        />
+
+    <!--- Define the local scope. --->
+    <cfset var LOCAL = {} />
+
+    <!---
+        First, we need to make sure that the date we were given
+        was actually the first of the month.
+    --->
+    <cfset ARGUMENTS.Month = CreateDate(
+        Year( ARGUMENTS.Month ),
+        Month( ARGUMENTS.Month ),
+        1
+        ) />
+
+
+    <!---
+        Now that we have the correct start date of the month, we
+        need to find the first instance of the given day of the
+        week.
+    --->
+    <cfif (DayOfWeek( ARGUMENTS.Month ) LTE ARGUMENTS.DayOfWeek)>
+
+        <!---
+            The first of the month falls on or before the first
+            instance of our target day of the week. This means we
+            won't have to leave the current week to hit the first
+            instance.
+        --->
+        <cfset LOCAL.Date = (
+            ARGUMENTS.Month +
+            (ARGUMENTS.DayOfWeek - DayOfWeek( ARGUMENTS.Month ))
+            ) />
+
+    <cfelse>
+
+        <!---
+            The first of the month falls after the first instance
+            of our target day of the week. This means we will
+            have to move to the next week to hit the first target
+            instance.
+        --->
+        <cfset LOCAL.Date = (
+            ARGUMENTS.Month +
+            (7 - DayOfWeek( ARGUMENTS.Month )) +
+            ARGUMENTS.DayOfWeek
+            ) />
+
+    </cfif>
+
+
+    <!---
+        At this point, our Date is the first occurrence of our
+        target day of the week. Now, we have to navigate to the
+        target occurence.
+    --->
+    <cfset LOCAL.Date += (7 * (ARGUMENTS.Nth - 1)) />
+
+    <!---
+        Return the given date. There is a chance that this date
+        will be in the NEXT month of someone put in an Nth value
+        that was too large for the current month to handle.
+    --->
+    <cfreturn DateFormat( LOCAL.Date ) />
+</cffunction>
 
 <cfif listFirst(server.coldfusion.productVersion) LTE "10">
     <!---

@@ -68,13 +68,11 @@
 
 		<!--- Event Resources output irrespective of template, for now--->
 		<cfif application.rbs.setting.allowResources>
-			#includePartial("tabs/resources")#
+			#includePartial("resources")#
 		</cfif>
 
 		<!--- Ditto repeat fields --->
-		<cfif params.action EQ "add" OR params.action EQ "create">
-			#includePartial("tabs/repeat")#
-		</cfif>
+			#includePartial("repeatrule")#
 
 
 	</cfoutput>

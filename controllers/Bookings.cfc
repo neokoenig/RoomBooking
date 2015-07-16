@@ -156,22 +156,7 @@ component extends="Controller" hint="Main Events/Bookings Controller"
 	}
 
 /******************** Admin ***********************/
-	/**
-	*  @hint Add a new booking
-	*/
-	public void function add() {
-		 nEventResources=model("eventresource").new();
-    	 event=model("event").new(eventresources=nEventResources);
-    	 customfields=getCustomFields(objectname="event", key=event.key());
-    	 // Listen out for event date & location passed in URL via JS
-    	 if(structKeyExists(params, "d")){
-    	 	qDate=createDateTime(listFirst(params.d, '-'),ListGetAt(params.d, 2, '-'),ListGetAt(params.d, 3, '-'),hour(now()),00,00);
-    	 	event.start=dateFormat(qDate, "DD MMM YYYY") & ' ' & timeFormat(qDate, "HH:mm");
-    	 }
-    	 if(structKeyExists(params, "key") AND isNumeric(params.key)){
-    	 	event.locationid=params.key;
-    	}
-	}
+
 
 	/**
 	*  @hint Approve a listing
@@ -209,7 +194,7 @@ component extends="Controller" hint="Main Events/Bookings Controller"
 	*  @hint Shortcut to duplicating a booking
 	*/
 	public void function clone() {
-	 	event=model("event").findOne(where="id = #params.key#", include="eventresources");
+	 	event=model("event").findOne(where="id = #params.key#", include="eventresources,repeatrule");
     	customfields=getCustomFields(objectname="event", key=event.key());
         renderPage(action="add");
 	}
@@ -218,51 +203,53 @@ component extends="Controller" hint="Main Events/Bookings Controller"
 	*  @hint Event CRUD
 	*/
 	public void function edit() {
-		event=model("event").findOne(where="id = #params.key#", include="eventresources");
+		event=model("event").findOne(where="id = #params.key#", include="eventresources,repeatrule");
 		customfields=getCustomFields(objectname=request.modeltype, key=params.key);
+	}
+
+	/**
+	*  @hint Add a new booking
+	*/
+	public void function add() {
+		 nEventResources = model("eventresource").new();
+		 nRepeatRule     = model("repeatrule").new();
+    	 event           = model("event").new(eventresources=nEventResources, repeatrule=nRepeatRule);
+    	 customfields    = getCustomFields(objectname="event", key=event.key());
+    	 $checkForEventDefaultsinURL();
+	}
+
+	/**
+	*  @hint Fill some defaults if passed in by URL
+	*/
+	public void function $checkForEventDefaultsinURL() {
+		var qDate="";
+	 	 // Listen out for event date & location passed in URL via JS
+    	 if(structKeyExists(params, "d")){
+    	 	qDate=createDateTime(listFirst(params.d, '-'),ListGetAt(params.d, 2, '-'),ListGetAt(params.d, 3, '-'),hour(now()),00,00);
+    	 	event.start=LSdateFormat(qDate, "YYYY-MM-DD") & ' ' & LStimeFormat(qDate, "HH:mm");
+    	 	// Give it an end date of +1h
+    	 	event.end=dateAdd("h", 1, event.start);
+    	 }
+    	 if(structKeyExists(params, "key") AND isNumeric(params.key)){
+    	 	event.locationid=params.key;
+    	}
 	}
 
 	/**
 	*  @hint Event CRUD
 	*/
 	public void function create() {
+
 		if(structkeyexists(params, "event")){
-	    	event = model("event").new(params.event);
+	    	event = model("event").new(properties=params.event);
+
 			if ( event.save() ) {
 				// Update approval status if allowed to bypass
 				if(application.rbs.setting.approveBooking AND checkPermission("bypassApproveBooking")){
 					event.status="approved";
 					event.save();
 				}
-
-				// Check for bulk create events
-				if(structKeyExists(params, "repeat")
-					AND params.repeat NEQ "none"
-					AND structKeyExists(params, "repeatno")
-					AND isnumeric(params.repeatno)
-					AND params.repeatno GTE 1)
-				{
-					for (i = 1; i lte params.repeatno; i = i + 1){
-						//create placeholderevent
-						nevent = model("event").new(params.event);
-						//increment date as appropriate
-						if(params.repeat EQ "week"){
-							nevent.start = dateAdd("d", (i * 7), nevent.start);
-							if(isDate(nevent.end)){
-								nevent.end = dateAdd("d", (i * 7), nevent.end);
-							}
-
-						}
-						if(params.repeat EQ "month"){
-							nevent.start = dateAdd("m", i, nevent.start);
-							if(isDate(nevent.end)){
-						  		nevent.end = dateAdd("m", i, nevent.end);
-						  	}
-						}
-						// Save the child event: NB, repeated events can't/don't save customfield metadata
-						nevent.save();
-					}
-				}
+				//$createChildEvents();
 				// Send Confirmation email if appropriate
 				if(structKeyExists(params.event, "emailContact") AND params.event.emailContact){
 					notifyContact(event);
@@ -273,6 +260,58 @@ component extends="Controller" hint="Main Events/Bookings Controller"
 				renderPage(action="add", error="There were problems creating that event");
 			}
 		}
+	}
+
+	/**
+	*  @hint Create Child Events such as repeating events logic, and multiple locations
+	*/
+	private void function $createChildEvents() {
+		//$createRepeatingEvents();
+		//$createMultiLocationEvents();
+	}
+
+	/**
+	*  @hint Create Child Repeating Event
+	*/
+	private void function $createRepeatingEvents() {
+		if(structKeyExists(params, "repeat")
+					AND params.repeat NEQ "none"
+					AND structKeyExists(params, "repeatno")
+					AND isnumeric(params.repeatno)
+					AND params.repeatno GTE 1)
+				{
+				for (i = 1; i lte params.repeatno; i = i + 1){
+					//create placeholderevent
+					rEvent = model("event").new(params.event);
+					//increment date as appropriate
+					if(params.repeat EQ "week"){
+						rEvent.start = dateAdd("d", (i * 7), rEvent.start);
+						if(isDate(rEvent.end)){
+							rEvent.end = dateAdd("d", (i * 7), rEvent.end);
+						}
+					}
+					if(params.repeat EQ "month"){
+						rEvent.start = dateAdd("m", i, rEvent.start);
+						if(isDate(rEvent.end)){
+					  		rEvent.end = dateAdd("m", i, rEvent.end);
+					  	}
+					}
+					// Update approval status if allowed to bypass
+					if(application.rbs.setting.approveBooking AND checkPermission("bypassApproveBooking")){
+						rEvent.status="approved";
+						rEvent.save();
+					}
+					// Save the child event: NB, repeated events can't/don't save customfield metadata
+					rEvent.save();
+			}
+		}
+	}
+
+	/**
+	*  @hint Create Child Location Events
+	*/
+	private void function $createMultiLocationEvents() {
+
 	}
 
 	/**
@@ -299,7 +338,7 @@ component extends="Controller" hint="Main Events/Bookings Controller"
 	*/
 	public void function update() {
 		if(structkeyexists(params, "event")){
-	    	event = model("event").findOne(where="id = #params.key#", include="eventresources");
+	    	event = model("event").findOne(where="id = #params.key#", include="eventresources,repeatrule");
 			event.update(params.event);
 			if ( event.save() )  {
 
@@ -319,7 +358,7 @@ component extends="Controller" hint="Main Events/Bookings Controller"
 	*  @hint Event CRUD
 	*/
 	public void function delete() {
-    	event = model("event").findOne(where="id = #params.key#", include="eventresources");
+    	event = model("event").findOne(where="id = #params.key#", include="eventresources,repeatrule");
 		if ( event.delete() )  {
 			redirectTo(action="index", success="event successfully deleted");
 		}

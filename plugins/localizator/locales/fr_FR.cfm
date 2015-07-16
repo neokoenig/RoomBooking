@@ -198,3 +198,15 @@
 <cfset loc["Enter your e-mail address to receive instructions for resetting your password"] = "">
 <cfset loc["Send Reset Email"] = "">
 <cfset loc["Cancel"] = "">
+<cfset loc["Repeat Rules"] = "">
+<cfset loc["Repeats"] = "">
+<cfset loc["Starts on"] = "">
+<cfset loc["Repeat Every"] = "">
+<cfset loc["Never"] = "">
+<cfset loc["Or on a Certain Date"] = "">
+<cfset loc["Repeat Every 'x'"] = "">
+<cfset loc["Repeat On"] = "">
+<cfset loc["No Locations available yet"] = "">
+<cfset loc["No Resources available yet"] = "">
+<cfset loc["Update Location"] = "">
+<cfset loc["Update Location"] = "">

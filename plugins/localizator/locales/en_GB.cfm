@@ -199,3 +199,15 @@
 <cfset loc["Enter your e-mail address to receive instructions for resetting your password"] = "Enter your e-mail address to receive instructions for resetting your password">
 <cfset loc["Send Reset Email"] = "Send Reset Email">
 <cfset loc["Cancel"] = "Cancel">
+<cfset loc["Repeat Rules"] = "Repeat Rules">
+<cfset loc["Repeats"] = "Repeats">
+<cfset loc["Starts on"] = "Starts on">
+<cfset loc["Repeat Every"] = "Repeat Every">
+<cfset loc["Never"] = "Never">
+<cfset loc["Or on a Certain Date"] = "Or on a Certain Date">
+<cfset loc["Repeat Every 'x'"] = "Repeat Every 'x'">
+<cfset loc["Repeat On"] = "Repeat On">
+<cfset loc["No Locations available yet"] = "No Locations available yet">
+<cfset loc["No Resources available yet"] = "No Resources available yet">
+<cfset loc["Update Location"] = "Update Location">
+<cfset loc["Update Location"] = "Update Location">

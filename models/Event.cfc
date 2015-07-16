@@ -8,7 +8,9 @@ component extends="Model" hint="Main Event Object"
 		// Assocations
 		belongsTo("location");
 		hasMany("eventresources");
+		hasOne("repeatrule");
 		nestedproperties(associations="eventresources", allowDelete=true);
+		nestedproperties(associations="repeatrule", 	allowDelete=true);
 		// Validation
 		//validate("checkDates");
 		//afterFind("formatDates");
