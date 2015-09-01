@@ -382,22 +382,25 @@
 		// loop through the properties and see if they can be set based off of the accessible properties lists
 		for (loc.key in arguments.properties)
 		{
-			loc.accessible = true;
-			if (arguments.$useFilterLists && StructKeyExists(variables.wheels.class.accessibleProperties, "whiteList") && !ListFindNoCase(variables.wheels.class.accessibleProperties.whiteList, loc.key))
+			if (StructKeyExists(arguments.properties, loc.key))
 			{
-				loc.accessible = false;
-			}
-			if (arguments.$useFilterLists && StructKeyExists(variables.wheels.class.accessibleProperties, "blackList") && ListFindNoCase(variables.wheels.class.accessibleProperties.blackList, loc.key))
-			{
-				loc.accessible = false;
-			}
-			if (loc.accessible)
-			{
-				loc.rv[loc.key] = arguments.properties[loc.key];
-			}
-			if (loc.accessible && arguments.setOnModel)
-			{
-				$setProperty(property=loc.key, value=loc.rv[loc.key]);
+				loc.accessible = true;
+				if (arguments.$useFilterLists && StructKeyExists(variables.wheels.class.accessibleProperties, "whiteList") && !ListFindNoCase(variables.wheels.class.accessibleProperties.whiteList, loc.key))
+				{
+					loc.accessible = false;
+				}
+				if (arguments.$useFilterLists && StructKeyExists(variables.wheels.class.accessibleProperties, "blackList") && ListFindNoCase(variables.wheels.class.accessibleProperties.blackList, loc.key))
+				{
+					loc.accessible = false;
+				}
+				if (loc.accessible)
+				{
+					loc.rv[loc.key] = arguments.properties[loc.key];
+				}
+				if (loc.accessible && arguments.setOnModel)
+				{
+					$setProperty(property=loc.key, value=loc.rv[loc.key]);
+				}
 			}
 		}
 
@@ -461,6 +464,14 @@
 		{
 			// set the default value unless it is blank or a value already exists for that property on the object
 			this[loc.key] = variables.wheels.class.properties[loc.key].defaultValue;
+		}
+	}
+	for (loc.key in variables.wheels.class.mapping)
+	{
+		if (StructKeyExists(variables.wheels.class.mapping[loc.key], "defaultValue") && (!StructKeyExists(this, loc.key) || !Len(this[loc.key])))
+		{
+			// set the default value unless it is blank or a value already exists for that property on the object
+			this[loc.key] = variables.wheels.class.mapping[loc.key].defaultValue;
 		}
 	}
 	</cfscript>

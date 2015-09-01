@@ -181,7 +181,7 @@
 		{
 			if (isNew())
 			{
-				if ($validateAssociations() && $callback("beforeValidationOnCreate", arguments.callbacks) && $validate("onSave,onCreate") && $callback("afterValidation", arguments.callbacks) && $callback("afterValidationOnCreate", arguments.callbacks))
+				if ($callback("beforeValidationOnCreate", arguments.callbacks) && $validate("onSave,onCreate") && $callback("afterValidation", arguments.callbacks) && $callback("afterValidationOnCreate", arguments.callbacks))
 				{
 					loc.rv = true;
 				}
@@ -194,6 +194,7 @@
 				}
 			}
 		}
+		$validateAssociations(callbacks=arguments.callbacks);
 	</cfscript>
 	<cfreturn loc.rv>
 </cffunction>
@@ -280,15 +281,9 @@
 					loc.value = this.$label(loc.value);
 				}
 				loc.rv = Replace(loc.rv, "[[#loc.key#]]", "{{#Chr(7)#}}", "all");
-				loc.rv = Replace(loc.rv, "[#loc.key#]", LCase(loc.value), "all");
+				loc.rv = Replace(loc.rv, "[#loc.key#]", loc.value, "all");
 				loc.rv = Replace(loc.rv, "{{#Chr(7)#}}", "[#loc.key#]", "all");
 			}
-		}
-
-		// capitalize the first word in the property name if it comes first in the sentence
-		if (Left(arguments.message, 10) == "[property]")
-		{
-			loc.rv = capitalize(loc.rv);
 		}
 	</cfscript>
 	<cfreturn loc.rv>
@@ -354,9 +349,30 @@
 		var loc = {};
 		loc.rv = false;
 
+		// since cf8 can't handle cfscript operators (==, != etc) inside an Evaluate() call we replace them with eq, neq etc in a try / catch
+		loc.evaluate = "condition,unless";
+		loc.iEnd = ListLen(loc.evaluate);
+		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+		{
+			loc.item = ListGetAt(loc.evaluate, loc.i);
+			if (StructKeyExists(arguments, loc.item) && Len(arguments[loc.item]))
+			{
+				loc.key = loc.item & "Evaluated";
+				try
+				{
+					loc[loc.key] = Evaluate(arguments[loc.item]);
+				}
+				catch (any e)
+				{
+					arguments[loc.item] = ReplaceList(arguments[loc.item], "==,!=,<,<=,>,>=", "eq,neq,lt,lte,gt,gte");
+					loc[loc.key] = Evaluate(arguments[loc.item]);
+				}
+			}
+		}
+
 		// proceed with validation when "condition" has been supplied and it evaluates to "true" or when "unless" has been supplied and it evaluates to "false"
 		// if both "condition" and "unless" have been supplied though, they both need to be evaluated correctly ("true"/false" that is) for validation to proceed
-		if ((!StructKeyExists(arguments, "condition") || !Len(arguments.condition) || Evaluate(arguments.condition)) && (!StructKeyExists(arguments, "unless") || !Len(arguments.unless) || !Evaluate(arguments.unless)))
+		if ((!StructKeyExists(arguments, "condition") || !Len(arguments.condition) || loc.conditionEvaluated) && (!StructKeyExists(arguments, "unless") || !Len(arguments.unless) || !loc.unlessEvaluated))
 		{
 			loc.rv = true;
 		}
@@ -478,7 +494,7 @@
 			}
 
 			// try to fetch existing object from the database
-			loc.existingObject = findOne(select=primaryKey(),where=ArrayToList(loc.where, " AND "), reload=true, includeSoftDeletes=arguments.includeSoftDeletes);
+			loc.existingObject = findOne(select=primaryKey(), where=ArrayToList(loc.where, " AND "), reload=true, includeSoftDeletes=arguments.includeSoftDeletes, callbacks=false);
 
 			// we add an error if an object was found in the database and the current object is either not saved yet or not the same as the one in the database
 			if (IsObject(loc.existingObject) && (isNew() || loc.existingObject.key() != key($persisted=true)))

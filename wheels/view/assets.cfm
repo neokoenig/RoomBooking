@@ -106,6 +106,10 @@
 
 <cffunction name="imageTag" returntype="string" access="public" output="false">
 	<cfargument name="source" type="string" required="true">
+	<cfargument name="onlyPath" type="boolean" required="false">
+	<cfargument name="host" type="string" required="false">
+	<cfargument name="protocol" type="string" required="false">
+	<cfargument name="port" type="numeric" required="false">
 	<cfscript>
 		var loc = {};
 		$args(name="imageTag", reserved="src", args=arguments);
@@ -170,13 +174,14 @@
 		else
 		{
 			arguments.src = application.wheels.webPath & application.wheels.imagePath & "/" & arguments.source;
+			loc.file = GetDirectoryFromPath(GetBaseTemplatePath()) & application.wheels.imagePath & "/" & arguments.source;
 			if (get("showErrorInformation"))
 			{
-				if (loc.localFile && !FileExists(ExpandPath(arguments.src)))
+				if (loc.localFile && !FileExists(loc.file))
 				{
-					$throw(type="Wheels.ImageFileNotFound", message="CFWheels could not find `#expandPath('#arguments.src#')#` on the local file system.", extendedInfo="Pass in a correct relative path from the `images` folder to an image.");
+					$throw(type="Wheels.ImageFileNotFound", message="CFWheels could not find `#loc.file#` on the local file system.", extendedInfo="Pass in a correct relative path from the `images` folder to an image.");
 				}
-				else if (!IsImageFile(ExpandPath(arguments.src)))
+				else if (!IsImageFile(loc.file))
 				{
 					$throw(type="Wheels.ImageFormatNotSupported", message="CFWheels can't read image files with that format.", extendedInfo="Use one of these image types instead: #GetReadableImageFormats()#.");
 				}
@@ -184,7 +189,7 @@
 			if (!StructKeyExists(arguments, "width") || !StructKeyExists(arguments, "height"))
 			{
 				// height and / or width arguments are missing so use cfimage to get them
-				loc.image = $image(action="info", source=ExpandPath(arguments.src));
+				loc.image = $image(action="info", source=loc.file);
 				if (!StructKeyExists(arguments, "width") && loc.image.width > 0)
 				{
 					arguments.width = loc.image.width;
@@ -208,12 +213,17 @@
 			}
 			// only append a query string if the file is local
 			arguments.src = $assetDomain(arguments.src) & $appendQueryString();
+
+			if (!arguments.onlyPath)
+			{
+				arguments.src = $prependUrl(path=arguments.src, argumentCollection=arguments);
+			}
 		}
 		if (!StructKeyExists(arguments, "alt"))
 		{
 			arguments.alt = capitalize(ReplaceList(SpanExcluding(Reverse(SpanExcluding(Reverse(arguments.src), "/")), "."), "-,_", " , "));
 		}
-		loc.rv = $tag(name="img", skip="source,key,category", close=true, attributes=arguments);
+		loc.rv = $tag(name="img", skip="source,key,category,onlyPath,host,protocol,port", close=true, attributes=arguments);
 	</cfscript>
 	<cfreturn loc.rv>
 </cffunction>

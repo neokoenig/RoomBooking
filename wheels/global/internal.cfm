@@ -238,11 +238,7 @@
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 		{
 			loc.item = ListGetAt(arguments.keys, loc.i);
-			loc.rv[loc.item] = "";
-			if (StructKeyExists(arguments.scope, loc.item))
-			{
-				loc.rv[loc.item] = arguments.scope[loc.item];
-			}
+			loc.rv[loc.item] = arguments.scope[loc.item];
 		}
 
 		// fix path_info if it contains any characters that are not ascii (see issue 138)
@@ -980,6 +976,45 @@
 		if (StructKeyExists(application, "$wheels"))
 		{
 			loc.rv = "$wheels";
+		}
+	</cfscript>
+	<cfreturn loc.rv>
+</cffunction>
+
+<cffunction name="$prependUrl" returntype="string" access="public" output="false">
+	<cfargument name="path" type="string" required="true">
+	<cfscript>
+		var loc = {};
+		loc.rv = arguments.path;
+		if (arguments.port != 0)
+		{
+			// use the port that was passed in by the developer
+			loc.rv = ":" & arguments.port & loc.rv;
+		}
+		else if (request.cgi.server_port != 80 && request.cgi.server_port != 443)
+		{
+			// if the port currently in use is not 80 or 443 we set it explicitly in the URL
+			loc.rv = ":" & request.cgi.server_port & loc.rv;
+		}
+		if (Len(arguments.host))
+		{
+			loc.rv = arguments.host & loc.rv;
+		}
+		else
+		{
+			loc.rv = request.cgi.server_name & loc.rv;
+		}
+		if (Len(arguments.protocol))
+		{
+			loc.rv = arguments.protocol & "://" & loc.rv;
+		}
+		else if (request.cgi.server_port_secure)
+		{
+			loc.rv = "https://" & loc.rv;
+		}
+		else
+		{
+			loc.rv = "http://" & loc.rv;
 		}
 	</cfscript>
 	<cfreturn loc.rv>

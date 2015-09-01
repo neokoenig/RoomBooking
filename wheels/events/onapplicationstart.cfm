@@ -46,7 +46,7 @@
 		request.cgi = $cgiScope();
 
 		// set up containers for routes, caches, settings etc
-		application.$wheels.version = "1.4.1";
+		application.$wheels.version = "1.4.2";
 		application.$wheels.hostName = CreateObject("java", "java.net.InetAddress").getLocalHost().getHostName();
 		application.$wheels.controllers = {};
 		application.$wheels.models = {};
@@ -278,7 +278,7 @@
 		application.$wheels.functions.hiddenField = {};
 		application.$wheels.functions.highlight = {delimiter=",", tag="span", class="highlight"};
 		application.$wheels.functions.hourSelectTag = {label="", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", includeBlank=false, twelveHour=false};
-		application.$wheels.functions.imageTag = {};
+		application.$wheels.functions.imageTag = {onlyPath=true, host="", protocol="", port=0};
 		application.$wheels.functions.includePartial = {layout="", spacer="", dataFunction=true};
 		application.$wheels.functions.javaScriptIncludeTag = {type="text/javascript", head=false};
 		application.$wheels.functions.linkTo = {onlyPath=true, host="", protocol="", port=0};
