@@ -1,21 +1,5 @@
 <!--- PUBLIC CONTROLLER REQUEST FUNCTIONS --->
 
-<cffunction name="pagination" returntype="struct" access="public" output="false">
-	<cfargument name="handle" type="string" required="false" default="query">
-	<cfscript>
-		var loc = {};
-		if (get("showErrorInformation"))
-		{
-			if (!StructKeyExists(request.wheels, arguments.handle))
-			{
-				$throw(type="Wheels.QueryHandleNotFound", message="CFWheels couldn't find a query with the handle of `#arguments.handle#`.", extendedInfo="Make sure your `findAll` call has the `page` argument specified and matching `handle` argument if specified.");
-			}
-		}
-		loc.rv = request.wheels[arguments.handle];
-	</cfscript>
-	<cfreturn loc.rv>
-</cffunction>
-
 <cffunction name="sendEmail" returntype="any" access="public" output="false">
 	<cfargument name="template" type="string" required="false" default="">
 	<cfargument name="from" type="string" required="false" default="">
@@ -30,7 +14,7 @@
 		$args(args=arguments, name="sendEmail", combine="template/templates/!,layout/layouts,file/files", required="template,from,to,subject");
 
 		loc.nonPassThruArgs = "template,templates,layout,layouts,file,files,detectMultipart,$deliver";
-		loc.mailTagArgs = "from,to,bcc,cc,charset,debug,failto,group,groupcasesensitive,mailerid,maxrows,mimeattach,password,port,priority,query,replyto,server,spoolenable,startrow,subject,timeout,type,username,useSSL,useTLS,wraptext,remove";
+		loc.mailTagArgs = "from,to,bcc,cc,charset,debug,failto,group,groupcasesensitive,mailerid,mailparams,maxrows,mimeattach,password,port,priority,query,replyto,server,spoolenable,startrow,subject,timeout,type,username,useSSL,useTLS,wraptext,remove";
 		loc.deliver = arguments.$deliver;
 
 		// if two templates but only one layout was passed in we set the same layout to be used on both
