@@ -215,7 +215,6 @@ pip-log.txt
 .mr.developer.cfg
 
 WEB-INF
-plugins/**/*
 db/sql
 config/auth.cfm
 bower_components
