@@ -7,10 +7,11 @@
 
 <cfoutput>
 	#hiddenFieldTag(name="tempkey", value=event.key())#
-	<div id="concurrencyCheckResult" 
+	#hiddenFieldTag(name="referrer", value=params.action)#
+	<div id="concurrencyCheckResult"
 		data-checkurl="#urlFor(controller='bookings', action='check')#"
-		data-doConcurrencyCheck=#application.rbs.setting.doConcurrencyCheckForBookings# 
-		data-allowOverlappingBookings=#application.rbs.setting.allowOverlappingBookings# 
+		data-doConcurrencyCheck=#application.rbs.setting.doConcurrencyCheckForBookings#
+		data-allowOverlappingBookings=#application.rbs.setting.allowOverlappingBookings#
 		data-includeAllDayEventsinConcurrency=#application.rbs.setting.includeAllDayEventsinConcurrency#></div>
 	<cfif structKeyExists(application.rbs.templates, "event") AND structKeyExists(application.rbs.templates.event, "form")>
 		<!--- Custom output--->
@@ -105,42 +106,44 @@
 	// Override default Layouts if appropriate
 	checkLayouts();
 	// When the datepicker changes, rerun concurrency checks
-	$("#event-startsat, #event-endsat").on("dp.hide", function(e){ 
-		concurrencyCheck();  
-	}); 
+	$("#event-startsat, #event-endsat").on("dp.hide", function(e){
+		concurrencyCheck();
+	});
 
 	function concurrencyCheck(){
 		var start=$("#event-startsat").val(),
 			end=$("#event-endsat").val(),
 			location=$("#event-locationid").val(),
-			id=$("#tempkey").val();
+			id=$("#tempkey").val(),
+			referrer=$("#referrer").val();
 			display=$("#concurrencyCheckResult"),
 			checkurl=display.data("checkurl");
-		if(start.length && end.length){ 
+		if(start.length && end.length){
 			if(display.data("doconcurrencycheck")){
-				console.log("Concurrency Check",  start, end); 
+				console.log("Concurrency Check",  start, end);
 				$.ajax({
 					url: checkurl,
 					data: {
 						start: start,
 						end: end,
 						location: location,
-						id: id
+						id: id,
+						referrer: referrer
 					},
-					success: function(r){  
+					success: function(r){
 						if(r.length > 0 && display.data("allowoverlappingbookings")){
 							$(".submitEvent").addClass("disabled");
-						} else {						
+						} else {
 							$(".submitEvent").removeClass("disabled");
 						}
-						$(display).html(r); 
+						$(display).html(r);
 					}
 				});
 			} else {
 				console.log("CC Skipped");
 			}
-			
-		}  
+
+		}
 	};
 
 	function checkLayouts(){

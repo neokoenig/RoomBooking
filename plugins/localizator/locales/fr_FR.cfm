@@ -216,3 +216,4 @@
 <cfset loc["We've identified {variable} event(s) which may clash with your selected time in that location"] = "">
 <cfset loc["Additional Information"] = "">
 <cfset loc["mins"] = "">
+<cfset loc["No bookable resources available"] = "">

@@ -54,8 +54,8 @@ component extends="Controller" hint="Main Events/Bookings Controller"
 		param name="params.end" 	 default="#dateFormat(dateAdd('m', 1, now()), 'YYYY-MM-DD')#";
 		param name="params.location" default="";
 		param name="params.q"		 default="";
-		events=parseEventsForCalendar(events=getEventsForRange(), viewPortStartDate=params.start, viewPortEndDate=params.end);  
-	} 
+		events=parseEventsForCalendar(events=getEventsForRange(), viewPortStartDate=params.start, viewPortEndDate=params.end);
+	}
 
 /******************** Admin ***********************/
 
@@ -113,7 +113,7 @@ component extends="Controller" hint="Main Events/Bookings Controller"
 	*  @hint Add a new booking
 	*/
 	public void function add() {
-		 nEventResources = model("eventresource").new(); 
+		 nEventResources = model("eventresource").new();
     	 event           = model("event").new(eventresources=nEventResources);
     	 customfields    = getCustomFields(objectname="event", key=event.key());
     	 $checkForEventDefaultsinURL();
@@ -198,9 +198,9 @@ component extends="Controller" hint="Main Events/Bookings Controller"
 				}
 				redirectTo(action="index", success="event successfully updated");
 			}
-	        else { 
+	        else {
 				customfields=getCustomFields(objectname=request.modeltype, key=params.key);
-				renderPage(action="edit", error="There were problems updating that event"); 
+				renderPage(action="edit", error="There were problems updating that event");
 			}
 		}
 	}
@@ -218,7 +218,7 @@ component extends="Controller" hint="Main Events/Bookings Controller"
 		}
 	}
 /******************** Private *********************/
-	 
+
 
 
 	/**
@@ -236,33 +236,35 @@ component extends="Controller" hint="Main Events/Bookings Controller"
 			AND structKeyExists(params, "end")
 			AND structKeyExists(params, "location")
 			AND structKeyExists(params, "id")){
-  		params.excludeeventid=params.id;
+		// We need to not check the eventid if editing, but still need it for cloning + adding
+		if(structKeyExists(params, "referrer") && params.referrer != "clone"){
+  			params.excludeeventid=params.id;
+		}
   		var loc={};
   			// get all for that day, including infinite repeats, excluding the current event if editing
   			loc.events=getEventsForRange(excludestatus="denied", start=dateFormat(params.start, "YYYY-MM-DD"), end=dateFormat(params.end, "YYYY-MM-DD") & " 23:59");
   			// generate repeats etc
-  			loc.eventsArray=parseEventsForCalendar(events=getEventsForRange(), viewPortStartDate=dateFormat(params.start, "YYYY-MM-DD"), viewPortEndDate=end=dateFormat(params.end, "YYYY-MM-DD") & " 23:59"); 
-  	 		
-			eCheck=[]; 
+  			loc.eventsArray=parseEventsForCalendar(events=getEventsForRange(), viewPortStartDate=dateFormat(params.start, "YYYY-MM-DD"), viewPortEndDate=end=dateFormat(params.end, "YYYY-MM-DD") & " 23:59");
+			eCheck=[];
   	 		for(potentialClash in loc.eventsArray){
-  	 			var allow=0; 
+  	 			var allow=0;
   	 			if(len(potentialClash.type)){
   	 				if(isTimeClash(start1=params.start,end1=params.end,start2=potentialClash.repeat.start,end2=potentialClash.repeat.end)){
-  	 					 allow=1
-  	 				} 
+  	 					 allow=1;
+  	 				}
   	 			} else {
   	 				if(isTimeClash(start1=params.start,end1=params.end,start2=potentialClash.start,end2=potentialClash.end)){
-  	 					allow=1 
-  	 				}  
+  	 					allow=1;
+  	 				}
   	 			}
-	  	 		// Skip All Day events if in settings 
+	  	 		// Skip All Day events if in settings
   	 			if(!application.rbs.setting.includeAllDayEventsinConcurrency && potentialClash.allDay){
   	 				allow=0;
   	 			}
   	 			if(allow){
-  	 				arrayAppend(eCheck, potentialClash); 
+  	 				arrayAppend(eCheck, potentialClash);
   	 			}
-  	 		}  
+  	 		}
 		}
 	}
 
