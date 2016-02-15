@@ -1,16 +1,18 @@
 <!---================= Room Booking System / https://github.com/neokoenig =======================--->
 <cfparam name="events">
+
 <cfoutput>
 	#includePartial(partial = "list/filter")#
-	#panel(title=l("Events ({#events.recordcount#}) records"))#
- <cfif events.recordcount>
+	#panel(title=l("Events ({#arrayLen(events)#}) records"))#
+ <cfif arrayLen(events)>
  <cfif application.rbs.setting.showlocationcolours>
-<style>
-<cfloop query="locations"><cfif len(colour)>.#class# {border-left: 6px solid #colour#; }</cfif>
-</cfloop>
-</style>
+	<style>
+	<cfloop query="locations"><cfif len(colour)>.#class# {border-left: 6px solid #colour#; }</cfif>
+	</cfloop>
+	</style>
 </cfif>
-<table class="table table-condensed   table-striped">
+
+<table class="table table-condensed table-striped">
 	<thead>
 		<tr>
 			<th colspan=2>#l("Date")#</th>
@@ -26,67 +28,68 @@
 		For date output, we want to hide the date if the event after this one is on the same day and only show the time
 		currentLoopDate is compared to current rows start date and uses alternative formatting if required
 	--->
-	<cfset currentLoopDate=_formatDate(events.start)>
+	<cfset currentLoopDate=_formatDate(events[1]["start"])>
 	<cfset isDateRow=1>
 
-	<cfloop query="events">
-
-		<cfif len(eventid)>
-			<cfif currentLoopDate NEQ _formatDate(start)>
+	<cfloop from="1" to="#arraylen(events)#" index="i">
+		<cfif len(events[i]["id"])>
+			<cfif currentLoopDate NEQ _formatDate(events[i]["start"])>
 				<cfset isDateRow=1>
 			</cfif>
 			<tr class="<cfif isDateRow>header-row</cfif>">
 			<td width=100>
 				<cfif isDateRow>
-				#_formatDate(start)#
+				#_formatDate(events[i]["start"])#
 				</cfif>
 			</td>
-			<td width=100><cfif !allDay>#_formatTime(start)# - #_formatTime(end)#
+			<td width=100><cfif !events[i]["allDay"]>#_formatTime(events[i]["start"])# 
 				<cfelse>#l("All Day")#
 			</cfif></td>
-			<td width=150 class="#class#"><cfif len(building)>
-				<small>#building#</small><br />
-			</cfif> #name#<br /><small>#description#</small></td>
-			<td class="#status#">
+			<td width=150 class="#events[i]["class"]#"><cfif len(events[i]["building"])>
+				<small>#events[i]["building"]#</small><br />
+			</cfif> #events[i]["name"]#<br /><small><!---#events[i]["locationdescription"]#---> loc desc?</small></td>
+			<td class="#events[i]["className"]#"> 
 				<cfif len(params.q)>
-					#highlight(text=title, phrases=params.q)#
+					#highlight(text=events[i]["title"], phrases=params.q)#
 				<cfelse>
-					#title#
+					#events[i]["title"]#
 				</cfif>
 			</td>
 
-			<td>#layoutstyle#</td>
+			<td>#events[i]["layoutstyle"]#</td>
 			<td>
-			<cfif len(eventdescription)>
+			<cfif len(events[i]["description"])>
 				<cfif len(params.q)>
-					#highlight(text=eventdescription, phrases=params.q)#
+					#highlight(text=events[i]["description"], phrases=params.q)#
 				<cfelse>
-					#eventdescription#
+					#events[i]["description"]#
 				</cfif><br />
 			</cfif>
 			<small>
-			<cfif len(contactemail) AND len(contactname)>
-				#l("Contact")#: <a href="mailto:#contactemail#">#contactname#</a>
-			<cfelseif len(contactname)>
-				#l("Contact")#: #contactname#
+			<!---cfif len(events[i]["contactemail"]) AND len(events[i]["contactname"])>
+				#l("Contact")#: <a href="mailto:#events[i]["contactemail"]#">#events[i]["contactname"]#</a>
+			<cfelseif len(events[i]["contactname"])>
+				#l("Contact")#: #events[i]["contactname"]#
 			</cfif>
-			<cfif len(contactno)>
-				(#contactno#)
-			</cfif>
+			<cfif len(events[i]["contactno"])>
+				(#events[i]["contactno"]#)
+			</cfif--->
 		</small></td>
 		<td>
 			<cfif checkPermission("allowRoomBooking")>
 				<div class="btn-group">
-				#linkTo(action="view", key=eventid, text="<span class='glyphicon glyphicon-eye-open'></span>", controller="bookings", class="btn btn-primary btn-xs")#
-				#linkTo(action="edit", key=eventid, text="<span class='glyphicon glyphicon-pencil'></span>", controller="bookings", class="btn btn-info btn-xs")#
+				#linkTo(action="view", key=events[i]["id"], text="<span class='glyphicon glyphicon-eye-open'></span>", controller="bookings", class="btn btn-primary btn-xs")#
+				#linkTo(action="edit", key=events[i]["id"], text="<span class='glyphicon glyphicon-pencil'></span>", controller="bookings", class="btn btn-info btn-xs")#
 
 				</div>
 			</cfif></td>
 		</tr>
 		</cfif>
-		<cfset currentLoopDate=_formatDate(start)>
+		<cfset currentLoopDate=_formatDate(events[i]["start"])>
 		<cfset  isDateRow=0>
 	</cfloop>
+
+		 
 	</tbody>
 </table>
 <cfelse>

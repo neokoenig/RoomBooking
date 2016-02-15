@@ -11,10 +11,10 @@
 			<div class="col-md-4">
 				<div class="row">
 					<div class="col-md-6">
-						#textFieldTag(name="datefrom", 	  value=params.datefrom, 	label=l("From"))#
+						#textFieldTag(name="start", 	  value=params.start, 	label=l("From"))#
 					</div>
 					<div class="col-md-6">
-						#textFieldTag(name="dateto",   value=params.dateto, 	label=l("To"))#
+						#textFieldTag(name="end",   value=params.end, 	label=l("To"))#
 					</div>
 				</div>
 				<div class="row">

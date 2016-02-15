@@ -26,5 +26,8 @@
     "minicolors": "~2.1.7",
     "gridmanager": "git@github.com:neokoenig/jQuery-gridmanager.git#0.3.2",
     "bootbox": "~4.3.0"
+  },
+  "resolutions": {
+    "moment": ">=2.9.0"
   }
 }

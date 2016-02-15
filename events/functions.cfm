@@ -67,10 +67,10 @@
     *  @hint Shoves auth'd user elsewhere
     */
     public void function redirectIfLoggedIn() {
-         if(isLoggedIn()){
-            redirectTo(route="home");
-        }
+       if(isLoggedIn()){
+        redirectTo(route="home");
     }
+}
 
     /**
     *  @hint Returns the current signed in user
@@ -87,9 +87,9 @@
     */
     public void function signOut() {
         if (isLoggedIn() ) {
-           StructDelete(session, "currentUser");
-        }
-    }
+         StructDelete(session, "currentUser");
+     }
+ }
 
     /*
     Notes on salting / hashing:
@@ -109,11 +109,11 @@
         var authkeyDefault=createUUID();
         if(fileExists(authkeyLocation)){
             return fileRead(authkeyLocation);
-        } else {
-            fileWrite(authkeyLocation, authkeyDefault);
-            return authkeyDefault;
+            } else {
+                fileWrite(authkeyLocation, authkeyDefault);
+                return authkeyDefault;
+            }
         }
-    }
 
     /**
     *  @hint Generate an API Key
@@ -152,31 +152,31 @@
             retValue = application.rbs.permission[arguments.permission][_returnUserRole()];
             if(retValue == 1){
                 return true;
-            } else {
-                return false;
+                } else {
+                    return false;
+                }
             }
         }
-    }
 
     /**
     *  @hint Checks a permission and redirects away to access denied, useful for use in filters etc
     */
     public void function checkPermissionAndRedirect(required string permission) {
-       if(!checkPermission(arguments.permission)){
-            redirectTo(route="denied", error="Sorry, you have insufficient permission to access this. If you believe this to be an error, please contact an administrator.");
-        }
+     if(!checkPermission(arguments.permission)){
+        redirectTo(route="denied", error="Sorry, you have insufficient permission to access this. If you believe this to be an error, please contact an administrator.");
     }
+}
 
     /**
     *  @hint Checks for the relevant permissions structs in application scope
     */
     public boolean function _permissionsSetup() {
         if(structKeyExists(application, "rbs") AND structKeyExists(application.rbs, "permission")){
-                return true;
-        }  else {
-            return false;
+            return true;
+            }  else {
+                return false;
+            }
         }
-    }
 
     /**
     *  @hint Looks for user role in session, returns guest otherwise
@@ -184,10 +184,10 @@
     public string function _returnUserRole() {
         if(_permissionsSetup() AND isLoggedIn() AND structKeyExists(session.currentuser, "role")){
             return session.currentuser.role;
-        } else {
-            return "guest";
+            } else {
+                return "guest";
+            }
         }
-    }
 
     /**
     *  @hint Used to redirect away in demo mode
@@ -198,347 +198,45 @@
         }
     }
 
-//================================ Shortcodes ======================================
+    //================================ Shortcodes ======================================
       /**
   * @hint Render a  field
   **/
-    function field_callback(attr) {
-        var result="";
-        var path="#application.wheels.webPath#/#application.wheels.viewPath#/shortcodes/field.cfm";
-        savecontent variable="result" {
-           include path;
-        }
-        return result;
-    }
+  function field_callback(attr) {
+    var result="";
+    var path="#application.wheels.webPath#/#application.wheels.viewPath#/shortcodes/field.cfm";
+    savecontent variable="result" {
+     include path;
+ }
+ return result;
+}
 
   /**
   * @hint Render a  field
   **/
-    function output_callback(attr) {
-        var result="";
-        var path="#application.wheels.webPath#/#application.wheels.viewPath#/shortcodes/output.cfm";
-        savecontent variable="result" {
-           include path;
-        }
-        return result;
-    }
+  function output_callback(attr) {
+    var result="";
+    var path="#application.wheels.webPath#/#application.wheels.viewPath#/shortcodes/output.cfm";
+    savecontent variable="result" {
+     include path;
+ }
+ return result;
+}
+ 
 
-
-//================================ Date Utils ======================================
-    /**
-    *  @hint Given any start date, repeat x times with step, starting after start date
-    */
-    public array function dateCalcIterations(
-        required date eventStart,
-        required date eventEnd,
-        required numeric step=1,
-        required numeric iterations=10,
-        required string daysOfWeek="",
-        required string datePart="d"
-    ) {
-        var r=[];
-        var x=0;
-        var lDate= dateAdd("d", 0, eventStart); // doing this as sometimes this is coming through as a string
-        var eventDuration=dateDiff("n", eventStart, eventEnd);
-
-        while (x LT iterations) {
-            x++;
-            if(listlen(daysOfWeek)){
-                if(listFind(daysOfWeek, dayOfWeek(lDate))){
-                     arrayAppend(r, {
-                        start: lDate,
-                        end:  dateAdd("n", eventDuration, lDate)
-                    });
-                } else {
-                    x--; // didn't find a valid date, reset counter back by 1
-                }
-            } else {
-                 arrayAppend(r, {
-                    start: lDate,
-                    end:  dateAdd("n", eventDuration, lDate)
-                });
-            }
-            lDate=dateAdd(datePart, step, lDate);
-        }
-
-        return r;
-    }
-
-
-    /**
-    *  @hint Used for Monthly/Yearly by DOM etc.
-    */
-    public array function dateCalcIterationsWithSkip(
-        required date eventStart,
-        required date eventEnd,
-        required numeric step=0,
-        required string dow="",
-        required numeric iterations=10,
-        required string datePart="d",
-        required string rule="dom",
-        optional numeric weekskip=1
-    ) {
-        var r=[];
-        var x=0;
-        var lDate= dateAdd("d", 0, eventStart); // doing this as sometimes this is coming through as a string
-        var eventDuration=dateDiff("n", eventStart, eventEnd);
-        var dow    = dayOfWeek(lDate);
-        var week   = week(lDate);
-        var month  = month(lDate);
-        var year   = year(lDate);
-
-        while (x LT iterations) {
-            x++;
-             if(rule EQ "dow"){
-                // Work out whether the date is the 1st/2nd/3rd/4th/5th occurance in the month. If 5th, make it the 'last' appearance. otherwise use 1-4.
-                firstX =  firstXDayOfMonth(dow, month, year);
-                firstx1 = dateAdd("d", (1 * 7), firstX );
-                firstx2 = dateAdd("d", (2 * 7), firstX );
-                firstx3 = dateAdd("d", (3 * 7), firstX );
-                firstx4 = dateAdd("d", (4 * 7), firstX );
-                if(dateFormat(lDate, "dd") EQ dateFormat(firstX, "dd")){
-                    isXinMonth=1;
-                }
-                if(dateFormat(lDate, "dd") EQ dateFormat(firstX1, "dd")){
-                    isXinMonth=2;
-                }
-                if(dateFormat(lDate, "dd") EQ dateFormat(firstX2, "dd")){
-                    isXinMonth=3;
-                }
-                if(dateFormat(lDate, "dd") EQ dateFormat(firstX3, "dd")){
-                    isXinMonth=4;
-                }
-                if(dateFormat(lDate, "dd") EQ dateFormat(firstX4, "dd")){
-                    isXinMonth=5;
-                }
-               // Exception Clause: IF user has selected the '5th' thursday, always give them the LAST thursday (which may be the 4th OR the 5th)
-                if(isXinMonth NEQ 5){
-                    nDate=GetNthDayOfMonth(lDate, dow, isXinMonth);
-                } else {
-                    nDate=GetLastDayOfWeekOfMonth(lDate, dow);
-                }
-
-                nDate=dateFormat(nDate, "yyyy-mm-dd") & " " & timeFormat(eventStart, "HH:MM");
-
-                arrayAppend(r, {
-                    start: dateAdd("d", 0, nDate),
-                    end:   dateAdd("n", eventDuration, nDate)
-                });
-                lDate=dateAdd(datePart, step, lDate);
-             } else if(rule EQ "dom") {
-                // Standard simple loop
-                arrayAppend(r, {
-                    start: lDate,
-                    end:  dateAdd("n", eventDuration, lDate)
-                });
-                lDate=dateAdd(datePart, step, lDate);
-             } else if(rule EQ "weekonskip"){
-                // Custom logic for looping over certain days in a week and skipping weeks
-                if(dayOfWeek(lDate) EQ 7){
-                    lDate=dateAdd("ww", weekstep, lDate);
-                }
-                 if(listlen(dow)){
-                    if(listFind(daysOfWeek, dayOfWeek(lDate))){
-                         arrayAppend(r, {
-                            start: lDate,
-                            end:  dateAdd("n", eventDuration, lDate)
-                        });
-                    } else {
-                        x--; // didn't find a valid date, reset counter back by 1
-                    }
-                 }
-                lDate=dateAdd(datePart, step, lDate);
-             }
-        } // End while
-
-        return r;
-    }
-
-    /**
-    *  @hint Days of Week filter
-    */
-    public boolean function dowFilter(required string dow, required date lDate ) {
-        if(listlen(dow)){
-           if(listFind(dow, dayOfWeek(lDate))){
-                return true;
-           }
-        }
-        return false;
-    }
-
-    /**
-    *  @hint Given any start and end date, return an array of calculated dates starting after start date
-    *
-    *   eventStart  = The Master Event Start Date/Time
-    *   eventEnd    = The Master Event End Date/Time
-    *   rangeStart = The repeating range start date
-    *   rangeEnd   = The repeating range end date
-    *   dow  = limit results to these days of the week
-    *   step        = incremenet each loop by
-    *   datePart    = step increment date part
-    */
-    public array function dateCalcRange(
-        required date eventStart,
-        required date eventEnd,
-        required numeric step=1,
-        required string dow,
-        required string datePart="d",
-        required date rangeStart,
-        required date rangeEnd
-    ) {
-        var r=[];                   // Result Array
-        var lDate=dateAdd("d", 0, eventStart);   // Main Loop Date
-        var eventDuration=dateDiff("n", eventStart, eventEnd); // store duration to add to end date
-
-        // lDate=dateAdd("d", 0, rangeStart);
-        // Loop can't also start before rangeStart or go after rangeEnd, as that's not what we've asked for
-        while(dateCompare(lDate, dateAdd("d", 1, rangeEnd)) LTE 0){
-
-            // If lDate if after rangeStart
-            if(dateCompare(lDate, rangeStart) GTE 0){
-
-                if(listlen(dow)){
-                    if(dowFilter(dow, lDate)){
-                         arrayAppend(r, {
-                            start: lDate,
-                            end:  dateAdd("n", eventDuration, lDate)
-                        });
-                    }
-                }
-                 else {
-                    arrayAppend(r, {
-                        start: lDate,
-                        end:  dateAdd("n", eventDuration, lDate)
-                    });
-                }
-            }
-            // Increment Loop by one day
-            lDate=dateAdd(datePart, step, lDate);
-        }
-        return r;
-    }
-
-     /**
-    *  @hint Used for Monthly/Yearly by DOM etc.
-    */
-    public array function dateCalcRangeWithSkip(
-        required date eventStart,
-        required date eventEnd,
-        required date rangeStart,
-        required date rangeEnd,
-        required numeric step=0,
-        required string dow,
-        required string datePart="d",
-        required string rule="dom"
-    ){
-        var r=[];
-        var x=0;
-        var lDate= dateAdd("d", 0, eventStart); // doing this as sometimes this is coming through as a string
-        var eventDuration=dateDiff("n", eventStart, eventEnd);
-        var dow    = dayOfWeek(lDate);
-        var month  = month(lDate);
-        var year   = year(lDate);
-
-        while(dateCompare(lDate, dateAdd("d", 1, rangeEnd)) LTE 0){
-            if(dateCompare(lDate, rangeStart) GTE 0){
-                if(rule EQ "dow"){
-                // Work out whether the date is the 1st/2nd/3rd/4th/5th occurance in the month. If 5th, make it the 'last' appearance. otherwise use 1-4.
-                firstX =  firstXDayOfMonth(dow, month, year);
-                firstx1 = dateAdd("d", (1 * 7), firstX );
-                firstx2 = dateAdd("d", (2 * 7), firstX );
-                firstx3 = dateAdd("d", (3 * 7), firstX );
-                firstx4 = dateAdd("d", (4 * 7), firstX );
-                if(dateFormat(lDate, "dd") EQ dateFormat(firstX, "dd")){
-                    isXinMonth=1;
-                }
-                if(dateFormat(lDate, "dd") EQ dateFormat(firstX1, "dd")){
-                    isXinMonth=2;
-                }
-                if(dateFormat(lDate, "dd") EQ dateFormat(firstX2, "dd")){
-                    isXinMonth=3;
-                }
-                if(dateFormat(lDate, "dd") EQ dateFormat(firstX3, "dd")){
-                    isXinMonth=4;
-                }
-                if(dateFormat(lDate, "dd") EQ dateFormat(firstX4, "dd")){
-                    isXinMonth=5;
-                }
-               // Exception Clause: IF user has selected the '5th' thursday, always give them the LAST thursday (which may be the 4th OR the 5th)
-                if(isXinMonth NEQ 5){
-                    nDate=GetNthDayOfMonth(lDate, dow, isXinMonth);
-                } else {
-                    nDate=GetLastDayOfWeekOfMonth(lDate, dow);
-                }
-
-                nDate=dateFormat(nDate, "yyyy-mm-dd") & " " & timeFormat(eventStart, "HH:MM");
-
-                arrayAppend(r, {
-                    start: dateAdd("d", 0, nDate),
-                    end:   dateAdd("n", eventDuration, nDate)
-                });
-
-             } else if(rule EQ "dom") {
-                // Standard simple loop
-                arrayAppend(r, {
-                    start: lDate,
-                    end:  dateAdd("n", eventDuration, lDate)
-                });
-             } else if(rule EQ "weekonskip"){
-                // Custom logic for looping over certain days in a week and skipping weeks
-                if(dowFilter(dow, lDate)){
-                     arrayAppend(r, {
-                        start: lDate,
-                        end:  dateAdd("n", eventDuration, lDate)
-                    });
-                }
-             }
-
-            lDate=dateAdd(datePart, step, lDate);
-            }
-        }
-
-        return r;
-    }
-
-
-    /**
-     * Returns a date object of the first occurrence of a specified day in the given month and year.
-     * v1.0 by Troy Pullis
-     * v1.1 by Adam Cameron (improved/simplified logic, added error handling)
-     *
-     * @param dayOfWeek      An integer in the range 1 - 7. 1=Sun, 2=Mon, 3=Tue, 4=Wed, 5=Thu, 6=Fri, 7=Sat. (Required)
-     * @param month      Month value.  (Required)
-     * @param year   Year value. (Required)
-     * @return The date of the first [dayOfWeek] of the specified month/year
-     * @author Troy Pullis (tpullis@yahoo.com)
-     * @version 1.1, July 6, 2014
-     */
-    date function firstXDayOfMonth(required numeric dayOfWeek, required numeric month, required numeric year){
-        if (dayOfWeek < 1 || dayOfWeek > 7){
-            throw(type="InvalidDayOfWeekException", message="Invalid day of week value", detail="the dayOfWeek argument must be between 1-7 (inclusive).");
-        }
-        var firstOfMonth    = createDate(year, month,1);
-        var dowOfFirst      = dayOfWeek(firstOfMonth);
-        var daysToAdd       = (7 - (dowOfFirst - dayOfWeek)) MOD 7;
-        var dow = dateAdd("d", daysToAdd, firstOfMonth);
-        return dow;
-    }
-
-
-
-//================================ Lang ======================================
+    //================================ Lang ======================================
     /**
     *  @hint
     */
     public string function getCurrentLanguage() {
         if(structKeyExists(session, "lang") AND len(session.lang)){
             return session.lang;
-        } else {
-            return "en_GB";
+            } else {
+                return "en_GB";
+            }
         }
-    }
 
-//================================ Utils ======================================
+        //================================ Utils ======================================
   /**
     *  @hint Get IP
     */
@@ -546,7 +244,7 @@
         var result="127.0.0.1";
         var myHeaders = GetHttpRequestData();
         if(structKeyExists(myHeaders, "headers") AND structKeyExists(myHeaders.headers, "x-forwarded-for")){
-        result=myHeaders.headers["x-forwarded-for"];
+            result=myHeaders.headers["x-forwarded-for"];
         }
         return result;
     }
@@ -556,12 +254,12 @@
     public string function returnStringFromBoolean(required boo) {
         if(arguments.boo){
             return "true";
-        } else {
-            return "false";
+            } else {
+                return "false";
+            }
         }
-    }
 
-//================================ Logging ======================================
+        //================================ Logging ======================================
     /**
     *  @hint Quick way to add a logline
     */
@@ -599,7 +297,7 @@
  * @author Adam Cameron (dac.cfml@gmail.com)
  * @version 1.01, September 9, 2013
  */
-public array function structFindKeyWithValue(required struct struct, required string key, required string value, string scope="ONE"){
+ public array function structFindKeyWithValue(required struct struct, required string key, required string value, string scope="ONE"){
     if (!isValid("regex", arguments.scope, "(?i)one|all")){
         throw(type="InvalidArgumentException", message="Search scope #arguments.scope# must be ""one"" or ""all"".");
     }
@@ -626,187 +324,18 @@ public array function structFindKeyWithValue(required struct struct, required st
         Request: request.cookie.username
 
         Keep this in tag form as for some reason I can never really get this to work in script form.
---->
+    --->
     <cffunction name="setCookieRememberUsername" hint="Sets a cookie which remembers the login">
         <cfargument name="username">
         <cfcookie name = "RBS_UN" expires="360" value="#arguments.username#" httpOnly="true">
-        <cfset addlogline(message="#arguments.username# used cookie remember email", type="Cookie")>
-    </cffunction>
+            <cfset addlogline(message="#arguments.username# used cookie remember email", type="Cookie")>
+        </cffunction>
 
-    <Cffunction name="setCookieForgetUsername" hint="Remove the username cookie">
-         <cfcookie  name = "RBS_UN" expires = "NOW"  httpOnly="true">
-        <cfset addlogline(message="Cookie remember email removed", type="Cookie")>
-    </Cffunction>
+        <Cffunction name="setCookieForgetUsername" hint="Remove the username cookie">
+           <cfcookie  name = "RBS_UN" expires = "NOW"  httpOnly="true">
+            <cfset addlogline(message="Cookie remember email removed", type="Cookie")>
+        </Cffunction>
 
-<cffunction
-    name="GetLastDayOfWeekOfMonth"
-    access="public"
-    returntype="date"
-    output="false"
-    hint="Returns the date of the last given weekday of the given month.">
-
-    <!--- Define arguments. --->
-    <cfargument
-        name="Date"
-        type="date"
-        required="true"
-        hint="Any date in the given month we are going to be looking at."
-        />
-
-    <cfargument
-        name="DayOfWeek"
-        type="numeric"
-        required="true"
-        hint="The day of the week of which we want to find the last monthly occurence."
-        />
-
-    <!--- Define the local scope. --->
-    <cfset var LOCAL = StructNew() />
-
-    <!--- Get the current month based on the given date. --->
-    <cfset LOCAL.ThisMonth = CreateDate(
-        Year( ARGUMENTS.Date ),
-        Month( ARGUMENTS.Date ),
-        1
-        ) />
-
-    <!---
-        Now, get the last day of the current month. We
-        can get this by subtracting 1 from the first day
-        of the next month.
-    --->
-    <cfset LOCAL.LastDay = (
-        DateAdd( "m", 1, LOCAL.ThisMonth ) -
-        1
-        ) />
-
-    <!---
-        Now, the last day of the month is part of the last
-        week of the month. However, there is no guarantee
-        that the target day of this week will be in the current
-        month. Regardless, let's get the date of the target day
-        so that at least we have something to work with.
-    --->
-    <cfset LOCAL.Day = (
-        LOCAL.LastDay -
-        DayOfWeek( LOCAL.LastDay ) +
-        ARGUMENTS.DayOfWeek
-        ) />
-
-
-    <!---
-        Now, we have the target date, but we are not exactly
-        sure if the target date is in the current month. if
-        is not, then we know it is the first of that type of
-        the next month, in which case, subracting 7 days (one
-        week) from it will give us the last occurence of it in
-        the current Month.
-    --->
-    <cfif (Month( LOCAL.Day ) NEQ Month( LOCAL.ThisMonth ))>
-
-        <!--- Subract a week. --->
-        <cfset LOCAL.Day = (LOCAL.Day - 7) />
-
-    </cfif>
-
-
-    <!--- Return the given day. --->
-    <cfreturn DateFormat( LOCAL.Day ) />
-</cffunction>
-
-<cffunction
-    name="GetNthDayOfMonth"
-    access="public"
-    returntype="any"
-    output="false"
-    hint="I return the Nth instance of the given day of the week for the given month (ex. 2nd Sunday of the month).">
-
-    <!--- Define arguments. --->
-    <cfargument
-        name="Month"
-        type="date"
-        required="true"
-        hint="I am the month for which we are gathering date information."
-        />
-
-    <cfargument
-        name="DayOfWeek"
-        type="numeric"
-        required="true"
-        hint="I am the day of the week (1-7) that we are locating."
-        />
-
-    <cfargument
-        name="Nth"
-        type="numeric"
-        required="false"
-        default="1"
-        hint="I am the Nth instance of the given day of the week for the given month."
-        />
-
-    <!--- Define the local scope. --->
-    <cfset var LOCAL = {} />
-
-    <!---
-        First, we need to make sure that the date we were given
-        was actually the first of the month.
-    --->
-    <cfset ARGUMENTS.Month = CreateDate(
-        Year( ARGUMENTS.Month ),
-        Month( ARGUMENTS.Month ),
-        1
-        ) />
-
-
-    <!---
-        Now that we have the correct start date of the month, we
-        need to find the first instance of the given day of the
-        week.
-    --->
-    <cfif (DayOfWeek( ARGUMENTS.Month ) LTE ARGUMENTS.DayOfWeek)>
-
-        <!---
-            The first of the month falls on or before the first
-            instance of our target day of the week. This means we
-            won't have to leave the current week to hit the first
-            instance.
-        --->
-        <cfset LOCAL.Date = (
-            ARGUMENTS.Month +
-            (ARGUMENTS.DayOfWeek - DayOfWeek( ARGUMENTS.Month ))
-            ) />
-
-    <cfelse>
-
-        <!---
-            The first of the month falls after the first instance
-            of our target day of the week. This means we will
-            have to move to the next week to hit the first target
-            instance.
-        --->
-        <cfset LOCAL.Date = (
-            ARGUMENTS.Month +
-            (7 - DayOfWeek( ARGUMENTS.Month )) +
-            ARGUMENTS.DayOfWeek
-            ) />
-
-    </cfif>
-
-
-    <!---
-        At this point, our Date is the first occurrence of our
-        target day of the week. Now, we have to navigate to the
-        target occurence.
-    --->
-    <cfset LOCAL.Date += (7 * (ARGUMENTS.Nth - 1)) />
-
-    <!---
-        Return the given date. There is a chance that this date
-        will be in the NEXT month of someone put in an Nth value
-        that was too large for the current month to handle.
-    --->
-    <cfreturn DateFormat( LOCAL.Date ) />
-</cffunction>
 
 <cfif listFirst(server.coldfusion.productVersion) LTE "10">
     <!---
@@ -820,49 +349,292 @@ public array function structFindKeyWithValue(required struct struct, required st
  @version 1, September 22, 2014
 --->
 <cffunction name="QueryExecute" output="false"
-            hint="
-                * result struct is returned to the caller by utilizing URL scope (no prefix needed) *
-                https://wikidocs.adobe.com/wiki/display/coldfusionen/QueryExecute">
-    <cfargument name="sql_statement" required="true">
-    <cfargument name="queryParams"  default="#structNew()#">
-    <cfargument name="queryOptions" default="#structNew()#">
+hint="
+* result struct is returned to the caller by utilizing URL scope (no prefix needed) *
+https://wikidocs.adobe.com/wiki/display/coldfusionen/QueryExecute">
+<cfargument name="sql_statement" required="true">
+<cfargument name="queryParams"  default="#structNew()#">
+<cfargument name="queryOptions" default="#structNew()#">
 
-    <cfset var parameters = []>
+<cfset var parameters = []>
 
-    <cfif isArray(queryParams)>
-        <cfloop array="#queryParams#" index="local.param">
-            <cfif isSimpleValue(param)>
-                <cfset arrayAppend(parameters, {value=param})>
+<cfif isArray(queryParams)>
+    <cfloop array="#queryParams#" index="local.param">
+        <cfif isSimpleValue(param)>
+            <cfset arrayAppend(parameters, {value=param})>
             <cfelse>
                 <cfset arrayAppend(parameters, param)>
             </cfif>
         </cfloop>
-    <cfelseif isStruct(queryParams)>
-        <cfloop collection="#queryParams#" item="local.key">
-            <cfif isSimpleValue(queryParams[key])>
-                <cfset arrayAppend(parameters, {name=local.key, value=queryParams[key]})>
-            <cfelse>
-                <cfset var parameter = {name=key}>
-                <cfset structAppend(parameter, queryParams[key])>
-                <cfset arrayAppend(parameters, parameter)>
-            </cfif>
-        </cfloop>
-    <cfelse>
-        <cfthrow message="unexpected type for queryParams">
-    </cfif>
+        <cfelseif isStruct(queryParams)>
+            <cfloop collection="#queryParams#" item="local.key">
+                <cfif isSimpleValue(queryParams[key])>
+                    <cfset arrayAppend(parameters, {name=local.key, value=queryParams[key]})>
+                    <cfelse>
+                        <cfset var parameter = {name=key}>
+                        <cfset structAppend(parameter, queryParams[key])>
+                        <cfset arrayAppend(parameters, parameter)>
+                    </cfif>
+                </cfloop>
+                <cfelse>
+                    <cfthrow message="unexpected type for queryParams">
+                </cfif>
 
-    <cfif structKeyExists(queryOptions, "result")>
-        <!--- strip scope, not supported --->
-        <cfset queryOptions.result = listLast(queryOptions.result, '.')>
-    </cfif>
+                <cfif structKeyExists(queryOptions, "result")>
+                    <!--- strip scope, not supported --->
+                    <cfset queryOptions.result = listLast(queryOptions.result, '.')>
+                </cfif>
 
-    <cfset var executeResult = new Query(sql=sql_statement, parameters=parameters, argumentCollection=queryOptions).execute()>
+                <cfset var executeResult = new Query(sql=sql_statement, parameters=parameters, argumentCollection=queryOptions).execute()>
 
-    <cfif structKeyExists(queryOptions, "result")>
-        <!--- workaround for passing result struct value out to the caller by utilizing URL scope (no prefix needed) --->
-        <cfset URL[queryOptions.result] = executeResult.getPrefix()>
-    </cfif>
+                <cfif structKeyExists(queryOptions, "result")>
+                    <!--- workaround for passing result struct value out to the caller by utilizing URL scope (no prefix needed) --->
+                    <cfset URL[queryOptions.result] = executeResult.getPrefix()>
+                </cfif>
 
-    <cfreturn executeResult.getResult()>
-</cffunction>
-</cfif>
+                <cfreturn executeResult.getResult()>
+            </cffunction>
+        </cfif>
+
+        <cfscript>
+        // Date Functions refactor
+
+
+
+        /**
+        *  @hint The main events query. The Where clause is a little... silly.
+        */
+        public query function getEventsForRange() {
+            param name="params.start"  default="#now()#";
+            param name="params.end"    default="#dateAdd('m', 1, now())#";
+            param name="params.type"   default="";
+            param name="params.status" default="";
+            param name="params.building" default="";
+            param name="params.location" default=""; 
+            param name="params.q" default="";
+            param name="params.excludeeventid" default="";  
+            param name="params.excludestatus" default="";    
+            param name="params.key" default="";
+
+            var loc={
+                start          = params.start,
+                end            = params.end,
+                type           = params.type,
+                status         = params.status,
+                building       = params.building,
+                location       = params.location,
+                q              = params.q,
+                excludeeventid = params.excludeeventid,
+                excludestatus  = params.excludestatus,
+                key            = params.key
+            }  
+            // Allow args scope to override params
+            for(item in arguments){
+                loc[item]=arguments[item];
+            } 
+ 
+            loc.viewPortStartDate=createDateTime(year(loc.start), month(loc.start), day(loc.start), hour(loc.start),minute((loc.start)),00);
+            loc.viewPortEndDate=createDateTime(year(loc.end), month(loc.end), day(loc.end), hour(loc.end),minute((loc.end)),00);
+            loc.wc="(((startsat >= '#loc.viewPortStartDate#' AND endsat <= '#loc.viewPortEndDate#') AND type IS NULL) OR ((startsat >= '#loc.viewPortStartDate#' AND endsat >= '#loc.viewPortEndDate#' AND startsat < '#loc.viewPortEndDate#') AND type IS NULL) OR ((startsat < '#loc.viewPortStartDate#' AND endsat < '#loc.viewPortEndDate#' AND endsat > '#loc.viewPortStartDate#') AND type IS NULL) OR ((startsat < '#loc.viewPortStartDate#' AND endsat > '#loc.viewPortEndDate#') AND type IS NULL) OR (repeatstartsat < '#loc.viewPortEndDate#' AND isnever = 1 AND type IS NOT NULL) OR (repeatstartsat < '#loc.viewPortEndDate#' AND repeatendsat > '#loc.viewPortStartDate#' AND type IS NOT NULL) OR (repeatstartsat < '#loc.viewPortEndDate#' AND repeatendsafter IS NOT NULL AND type IS NOT NULL)) ";
+
+                // Allows us to pull events either by single location or by whole building
+                if(loc.type EQ "building"){
+                    loc.building=loc.key;
+                } else if(loc.type EQ "location"){ 
+                    loc.location=loc.key;
+                } 
+
+                if(len(loc.building)){
+                    loc.wc = loc.wc & " AND building = '#loc.building#'";  
+                }
+                if(len(loc.location)){
+                    loc.wc = loc.wc & " AND locationid = #loc.location#";
+                }
+                if(len(loc.status) && !len(loc.excludestatus)){
+                    loc.wc = loc.wc & " AND status = '#loc.status#'";
+                }
+                if(len(loc.excludestatus)){ 
+                    loc.wc = loc.wc & " AND status != '#loc.status#'";
+                }
+                if(len(loc.q) GT 2 && len(loc.q) LT 50){
+                    loc.wc = loc.wc & " AND title LIKE '%#loc.q#%'";
+                }
+                // Useful for when we don't want to include the current event: i.e, in concurrency checks
+                if(len(loc.excludeeventid) && isNumeric(loc.excludeeventid)){
+                    loc.wc = loc.wc & " AND id != #loc.excludeeventid#";
+                }
+
+                allEvents=model("event").findAll(
+                        where=loc.wc,
+                        include="location",
+                        order="startsat ASC");   
+
+            return allEvents;
+        }
+
+     /**
+    *  @hint For each event in the query calculate repeat dates and return appropriate array of events for renderwith()
+    */
+    public array function parseEventsForCalendar(required query events, required date viewPortStartDate, required date viewPortEndDate) {
+        var r=[]; 
+        var c=1;
+        var rEvents="";
+        var maxrows=10000;
+        if(structKeyExists(params, "maxrows") && isNumeric(params.maxrows)){
+            maxrows=params.maxrows;
+        }
+        for(event in events){
+          if(c <= maxrows){  
+            if(len(event.type)){ 
+                repeatingevents=generateRepeatingEvents(event, viewPortStartDate, viewPortEndDate);
+                // We'll get an array of events back, so we need to add them to the main events array
+                for(repeatingevent in repeatingevents){   
+                    r[c]["id"]            =   event.id;
+                    r[c]["title"]         =   event.title;
+                    r[c]["locationid"]    =   event.locationid; 
+                    r[c]["class"]         =   event.class;
+                    r[c]["start"]         =   _f_d(repeatingevent.start);
+                    r[c]["end"]           =   _f_d(repeatingevent.end);
+                    r[c]["allDay"]        =   event.allDay;
+                    r[c]["status"]        =   event.status;
+                    r[c]["type"]          =   event.type;
+                    r[c]["className"]     =   event.class & ' ' & event.status & ' repeater';
+                    r[c]["description"]   =   event.description;
+                    r[c]["locationname"]  =   event.name;
+                    r[c]["locationdescription"]  =   event.locationdescription;
+                    r[c]["layoutstyle"]   =   event.layoutstyle;
+                    r[c]["building"]      =   event.building;
+                    r[c]["name"]          =   event.name;
+                    r[c]["event"]         =   event;
+                    r[c]["repeat"]        =   repeatingevent;
+                    c++;
+                }  
+            } else {
+                // Normal event, skip the repeat logic
+                r[c]["id"]           =   event.id;
+                r[c]["title"]        =   event.title;
+                r[c]["locationid"]   =   event.locationid; 
+                r[c]["class"]        =   event.class;
+                r[c]["start"]        =   _f_d(event.startsat);
+                r[c]["end"]          =   _f_d(event.endsat);
+                r[c]["allDay"]       =   event.allDay;
+                r[c]["status"]       =   event.status;
+                r[c]["type"]         =   event.type;
+                r[c]["className"]    =   event.class & ' ' & event.status;
+                r[c]["description"]  =   event.description;
+                r[c]["locationname"]  =   event.name;
+                r[c]["locationdescription"]  =   event.locationdescription;
+                r[c]["layoutstyle"]  =   event.layoutstyle;
+                r[c]["building"]     =   event.building;
+                r[c]["name"]         =   event.name;
+                c++; 
+            } 
+          }
+        }    
+        return arrayOfStructsSort(r, "start");
+    }
+
+    /**
+    *  @hint All Events get passed through here to check for repeat rules
+    */
+    public array function generateRepeatingEvents(required struct event, viewPortStartDate, viewPortEndDate) {
+        var events=[];
+        var repeatArguments={};
+        var t=1; 
+        // Doublecheck we've got a start repeater date, if not, set the event start as the repeat start date
+        if(!isDate(event.repeatstartsat)){ event.repeatstartsat=event.startsat;}
+
+        // If never, set the range end date to the end of the current viewable range
+        if(isBoolean(event.isNever) AND event.isNever){
+            event.repeatendsat=viewPortEndDate;
+        }   
+
+        // Check for Monthly DOW as opposed to DOM
+        if(event.type == "monthly" && len(event.repeatby) && event.repeatby == "dow"){
+            event.type = "monthlydow";
+        }
+        // Check for Weekly DOW  
+        if(event.type == "weekly" && len(event.repeatOn)){
+            event.type = "weeklydow";
+        }
+        // Create Repeat Arguments;
+        repeatArguments.date        = event.startsat;
+        repeatArguments.type        = event.type;
+        repeatArguments.from        = event.repeatstartsat;
+        if(isDate(event.repeatendsat)){
+            repeatArguments.till        = event.repeatendsat;                
+        }
+        if(event.repeatEvery !=0 && isNumeric(event.repeatEvery)){ 
+            repeatArguments.every       = event.repeatEvery;
+        } else {
+            repeatArguments.every       = 1;
+        }
+        if(event.repeatendsafter != ""){
+            repeatArguments.iterations  = event.repeatendsafter;
+        }
+        repeatArguments.dow         = event.repeatOn;
+        repeatArguments.filterstart = viewPortStartDate;
+        repeatArguments.filterend   = viewPortEndDate;
+        // Generate the repeating dates via plugin
+        events=repeatDate(argumentCollection=repeatArguments);  
+        events=addEventDuration(eventstart=event.startsAt, dates=events, duration=event.duration);   
+        
+        return events;
+    }
+
+    /**
+    *  @hint Experimental date format
+    */
+    public string function _f_d(str) {
+       return dateFormat(arguments.str, "YYYY-MM-DD") & "T" & timeFormat(arguments.str, "HH:MM:00");
+   }
+ 
+
+    /**
+ * Sorts an array of structures based on a key in the structures.
+ * 
+ * @param aofS   Array of structures. (Required)
+ * @param key    Key to sort by. (Required)
+ * @param sortOrder      Order to sort by, asc or desc. (Optional)
+ * @param sortType   Text, textnocase, or numeric. (Optional)
+ * @param delim      Delimiter used for temporary data storage. Must not exist in data. Defaults to a period. (Optional)
+ * @return Returns a sorted array. 
+ * @author Nathan Dintenfass (nathan@changemedia.com) 
+ * @version 1, April 4, 2013 
+ */
+function arrayOfStructsSort(aOfS,key){
+        //by default we'll use an ascending sort
+        var sortOrder = "asc";      
+        //by default, we'll use a textnocase sort
+        var sortType = "textnocase";
+        //by default, use ascii character 30 as the delim
+        var delim = ".";
+        //make an array to hold the sort stuff
+        var sortArray = arraynew(1);
+        //make an array to return
+        var returnArray = arraynew(1);
+        //grab the number of elements in the array (used in the loops)
+        var count = arrayLen(aOfS);
+        //make a variable to use in the loop
+        var ii = 1;
+        //if there is a 3rd argument, set the sortOrder
+        if(arraylen(arguments) GT 2)
+            sortOrder = arguments[3];
+        //if there is a 4th argument, set the sortType
+        if(arraylen(arguments) GT 3)
+            sortType = arguments[4];
+        //if there is a 5th argument, set the delim
+        if(arraylen(arguments) GT 4)
+            delim = arguments[5];
+        //loop over the array of structs, building the sortArray
+        for(ii = 1; ii lte count; ii = ii + 1)
+            sortArray[ii] = aOfS[ii][key] & delim & ii;
+        //now sort the array
+        arraySort(sortArray,sortType,sortOrder);
+        //now build the return array
+        for(ii = 1; ii lte count; ii = ii + 1)
+            returnArray[ii] = aOfS[listLast(sortArray[ii],delim)];
+        //return the array
+        return returnArray;
+}
+</cfscript>

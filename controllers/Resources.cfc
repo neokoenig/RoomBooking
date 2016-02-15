@@ -106,14 +106,15 @@ component extends="Controller" hint="Resources Controller"
 			params.end=dateAdd("h", 1, params.start);
 		}
 		// Check for any events which may have booked the unique resource in the given timeframe, excluding the event itself
+		// Repeat events?
 		checkEvent=model("event").findAll(
-			where="start <= '#params.start#' AND end >= '#params.end#' AND id != #params.eventid# AND resourceid = #params.id#",
+			where="startsat <= '#params.start#' AND endsat >= '#params.end#' AND id != #params.eventid# AND resourceid = #params.id#",
 			include="eventresources");
 		/* Check for events with an All Day flag which might have incorrect timings set; this shouldn't affect events which span multiple days, as the above check (should) pick them up;*/
 			tempstart=dateFormat(params.start, "yyyy-mm-dd") & ' ' & timeFormat(params.start, "00:00");
 			tempend=dateFormat(params.end, "yyyy-mm-dd") & ' ' & timeFormat(params.end, "23:59");
 		checkEvent2=model("event").findAll(
-			where="start >= '#tempstart#' AND end <= '#tempend#' AND id != #params.eventid# AND allday=1 AND resourceid=#params.id#",
+			where="startsat >= '#tempstart#' AND endsat <= '#tempend#' AND id != #params.eventid# AND allday=1 AND resourceid=#params.id#",
 			include="eventresources");
 
 		if(checkEvent.recordCount OR checkEvent2.recordcount){

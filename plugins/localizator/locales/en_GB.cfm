@@ -211,3 +211,10 @@
 <cfset loc["No Resources available yet"] = "No Resources available yet">
 <cfset loc["Update Location"] = "Update Location">
 <cfset loc["Update Location"] = "Update Location">
+<cfset loc["Contact"] = "Contact"> 
+<cfset loc["Create Booking"] = "Create Booking">
+<cfset loc["Capacity"] = "Capacity">
+<cfset loc["Potential Clash"] = "Potential Clash">
+<cfset loc["We've identified {variable} event(s) which may clash with your selected time in that location"] = "We've identified {variable} event(s) which may clash with your selected time in that location">
+<cfset loc["Additional Information"] = "Additional Information">
+<cfset loc["mins"] = "mins">

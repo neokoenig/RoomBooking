@@ -131,6 +131,7 @@
 	 				</li>
 	 				<li>Update/Add the default locations</li>
 	 				<li>Update the default permissions to suit</li>
+	 				<li>Ensure you have an SMTP server setup in /CFIDE/administrator or /lucee/admin/server.cfm (or add tag defaults to /events/onapplicationstart.cfm)</li>
 	 			</ul>
 	 		</div>
  		</cfif>

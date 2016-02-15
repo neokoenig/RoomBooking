@@ -5,14 +5,16 @@ This concept is blatantly nicked from Google Calendar, but hey.
 Thing is, Google uses ends='never', so must presumably generate all the repeating event logic for those every time, as you can't add child events 'forever';
 
 So we need a way to:
- - store the repeat logic in the master event for editing (serialize it);
- - generate (quickly) the repeating events logic for 'never' - everything else can have a child event
- - flag events with repeating logic (easy, len(event.repeatlogic))
- - flag events which depend on a master event (easy, len(event.parentid))
- - When events are updated, update all child events if they exist depending on event logic
+ - store the repeat logic for an event, and it should be editable 'after' creation
+ - generate (quickly) the repeating events logic for the current viewport;
+
+Assuming we're looking at a calendar view (say From: 01-01-2015 => To: 15-02-2015), we need to get events for the following conditions:
+ - Non repeating events which fall within From/To Date: this means checking for events whose *range* falls inbetween the view range.
+  	- So, we'd need to do events=model("event")
+
 
 Repeats can be
- - Daily (type=day)
+ - Daily (type=daily)
  		- Repeat every 'x' days (repeatEvery)
  		- Starting on (starts)
  		- Ends
@@ -46,7 +48,7 @@ Repeats can be
  			- Never (isNever)
  			- After 'x' occurences (endsAfter)
 			- on 'x' (endsOn)
- - Monthly (type=month)
+ - Monthly (type=monthly)
   		- Repeat every 'x' months (repeatEvery)
  		- Repeat by (repeatBy)
  			- DOM
@@ -56,7 +58,7 @@ Repeats can be
  			- Never (isNever)
  			- After 'x' occurences (endsAfter)
 			- on 'x' (endsOn)
- - Yearly (type=year)
+ - Yearly (type=yearly)
   		- Repeat every 'x' years (repeatEvery)
  		- Starting on (starts)
  		- Ends
@@ -67,7 +69,7 @@ Repeats can be
 <cfscript>
 	rTypes=queryNew("value,text");
 	queryAddRow(rTypes, 7);
-	querySetCell(rTypes, "value", "day", 1);
+	querySetCell(rTypes, "value", "daily", 1);
 	querySetCell(rTypes, "text", "Daily", 1);
 	querySetCell(rTypes, "value", "weekday", 2);
 	querySetCell(rTypes, "text", "Every Weekday", 2);
@@ -75,9 +77,9 @@ Repeats can be
 	querySetCell(rTypes, "text", "Every Mon/Weds/Fri", 3);
 	querySetCell(rTypes, "value", "tt", 4);
 	querySetCell(rTypes, "text", "Every Tue/Thu", 4);
-	querySetCell(rTypes, "value", "week", 5);
+	querySetCell(rTypes, "value", "weekly", 5);
 	querySetCell(rTypes, "text", "Weekly", 5);
-	querySetCell(rTypes, "value", "month", 6);
+	querySetCell(rTypes, "value", "monthly", 6);
 	querySetCell(rTypes, "text", "Monthly", 6);
 	querySetCell(rTypes, "value", "year", 7);
 	querySetCell(rTypes, "text", "Yearly", 7);
@@ -94,12 +96,12 @@ Repeats can be
 	}
 </cfscript>
 <!--- Repeat Form --->
-<cfoutput>
- 	<fieldset>
+<cfoutput> 
+ 	<fieldset> 
  		<legend>#l("Repeat Rules")#</legend>
  		<div class="row">
  			<div class="col-sm-3">
-				#select(objectName="event", includeBlank="Never", options=rTypes, association="repeatrule", property="type", label=l("Repeats"))#
+				#select(objectName="event", includeBlank="Never", options=rTypes, property="type", label=l("Repeats"))#
  			</div>
  			<div id="repeatrule-fields" class="col-sm-9">
 
@@ -107,17 +109,17 @@ Repeats can be
  					<div class="col-sm-4">
 
 				<!--- Repeat Every   days/weeks/months/years--->
- 				#select(objectName="event", association="repeatrule", options=lazyList, property="repeatevery", label=l("Repeat Every 'x'") & " <span class='unitoftime'></span>" )#
+ 				#select(objectName="event", options=lazyList, property="repeatevery", label=l("Repeat Every 'x'") & " <span class='unitoftime'></span>" )#
  					</div>
  					<div class="col-sm-4">
 
 				<!--- Repeat on: m/t/w/t/f/s/s/ --->
-				#select(objectName="event", association="repeatrule", options=weekdays, property="repeaton", multiple=true, label=l("Repeat On"))#
+				#select(objectName="event", options=weekdays, property="repeaton", multiple=true, label=l("Repeat On"))#
  					</div>
  					<div class="col-sm-4">
 
 				<!--- Repeat by --->
-				#select(objectName="event", association="repeatrule", options=rBylist, property="repeatby", label="Repeat By" )#
+				#select(objectName="event", options=rBylist, property="repeatby", label="Repeat By" )#
  					</div>
  				</div>
 
@@ -125,24 +127,19 @@ Repeats can be
 				<div class="row">
 					<div class="col-sm-6">
 
-	 				<h4>Starts</h4>
-	 				#textField(objectName="event", association="repeatrule", property="starts", label=l("Starts on"))#
+	 				<h4>Start Repeating On</h4>
+	 				#textField(objectName="event", property="repeatstarts", label=l("Starts on"))#
 					</div>
 					<div class="col-sm-6">
 
 					<h4>Ends</h4>
-	 				#checkBox(objectname="event", association="repeatrule", property="isnever", label=l("Never"))#
+	 				#checkBox(objectname="event", property="isnever", label=l("Never"))#
 
-	 				#select(objectname="event", association="repeatrule", property="endsafter", includeBlank="", options=lazyList, label="After 'x' occurences")#
+	 				#select(objectname="event", property="repeatendsafter", includeBlank="", options=lazyList, label="After 'x' occurences")#
 
-	 				#textField(objectName="event", association="repeatrule", property="endson", label=l("Or on a Certain Date"))#
+	 				#textField(objectName="event", property="repeatendson", label=l("Or on a Certain Date"))#
 					</div>
-				</div>
-
-
-
-
-
+				</div>  
  			</div>
  		</div>
 	</fieldset>
@@ -161,23 +158,48 @@ var currentLanguage=$("html").attr("lang");
 		$("#repeatrule-fields :input").attr({"disabled": true});
 	}
 
-	$("#event-repeatrule-type").on("change", function(e){
+	$("#event-type").on("change", function(e){
 		loadEventRuleForm();
 	});
 
 	// Generic datepicker
-	$("#event-repeatrule-starts, #event-repeatrule-endson").datetimepicker({
+	$("#event-repeatstarts, #event-repeatendson").datetimepicker({
 		locale: currentLanguage,
 		showTodayButton: true,
 		format: 'YYYY-MM-DD'
 	});
 
 	function enableCommonFields(){
-		$("#event-repeatrule-starts, #event-repeatrule-isnever, #event-repeatrule-endsafter, #event-repeatrule-endson").attr({"disabled": false});
+		$("#event-repeatstarts, #event-isnever, #event-repeatendsafter, #event-repeatendson").attr({"disabled": false});
 	}
 
+	$("#event-isnever").on("click", function(e){
+		var isnever = $("#event-isnever:checked").length;
+		if(isnever){
+			$("#event-repeatendsafter, #event-repeatendson").attr({disabled:true});
+		} else {
+			$("#event-repeatendsafter, #event-repeatendson").attr({disabled:false});
+		}
+	});
+
+	$("#event-repeatendsafter").on("change", function(e){
+		if($(this).val().length){
+			$("#event-isnever, #event-repeatendson").attr({disabled:true});
+		} else {
+			$("#event-isnever, #event-repeatendson").attr({disabled:false});
+		}
+	});
+
+	$("#event-repeatendson").on("click", function(e){
+		if($(this).val().length){
+			$("#event-isnever, #event-repeatendsafter").attr({disabled:true});
+		} else {
+			$("#event-isnever, #event-repeatendsafter").attr({disabled:false});
+		}
+	});
+
 	function loadEventRuleForm(){
-		var type=$("#event-repeatrule-type").val();
+		var type=$("#event-type").val();
 		// Hide all fields by default
 		console.log("Loading Rule Form");
 		if(typeof type !== "undefined" && type.length){
@@ -185,39 +207,39 @@ var currentLanguage=$("html").attr("lang");
 			enableCommonFields();
 			console.log(type);
 			switch(type) {
-			case "day":
+			case "daily":
 				$(".unitoftime").html("Days");
-				$("#event-repeatrule-repeatevery").attr({"disabled": false});
-				$("#event-repeatrule-repeaton > option").attr("selected",false);
+				$("#event-repeatevery").attr({"disabled": false});
+				$("#event-repeaton > option").attr("selected",false);
 			break;
 
 			case "weekday":
-				$("#event-repeatrule-repeaton > option").attr("selected",false);
+				$("#event-repeaton > option").attr("selected",false);
 			break;
 
 			case "mwf":
-				$("#event-repeatrule-repeaton > option").attr("selected",false);
+				$("#event-repeaton > option").attr("selected",false);
 			break;
 
 			case "tt":
-				$("#event-repeatrule-repeaton > option").attr("selected",false);
+				$("#event-repeaton > option").attr("selected",false);
 			break;
 
-			case "week":
+			case "weekly":
 				$(".unitoftime").html("Weeks");
-				$("#event-repeatrule-repeatevery, #event-repeatrule-repeaton").attr({"disabled": false});
+				$("#event-repeatevery, #event-repeaton").attr({"disabled": false});
 			break;
 
-			case "month":
+			case "monthly":
 				$(".unitoftime").html("Months");
-				$("#event-repeatrule-repeatevery, #event-repeatrule-repeatby").attr({"disabled": false});
-				$("#event-repeatrule-repeaton > option").attr("selected",false);
+				$("#event-repeatevery, #event-repeatby").attr({"disabled": false});
+				$("#event-repeaton > option").attr("selected",false);
 			break;
 
-			case "year":
+			case "yearly":
 				$(".unitoftime").html("Years");
-				$("#event-repeatrule-repeatevery").attr({"disabled": false});
-				$("#event-repeatrule-repeaton > option").attr("selected",false);
+				$("#event-repeatevery").attr({"disabled": false});
+				$("#event-repeaton > option").attr("selected",false);
 			break;
 
 			default:

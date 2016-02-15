@@ -6,17 +6,20 @@ component extends="Model" hint="Main Event Object"
 	 */
 	public void function init() {
 		// Assocations
-		belongsTo("location");
-		hasMany("eventresources");
-		hasOne("repeatrule");
-		nestedproperties(associations="eventresources", allowDelete=true);
-		nestedproperties(associations="repeatrule", 	allowDelete=true);
+		belongsTo(name="location");
+		hasMany(name="eventresources", dependent="delete"); 
+		nestedproperties(associations="eventresources", allowDelete=true); 
 		// Validation
 		//validate("checkDates");
 		//afterFind("formatDates");
 		afterInitialization("registerSystemFields");
 		beforeCreate("checkApproval");
+		 
+		validate("requiresEndCondition");  
+		validate("requiresRepeatStart");  
+		property(name="duration", sql="TIMESTAMPDIFF(MINUTE,events.startsat,events.endsat)");
 	}
+ 
 
 	/**
 	*  @hint Sets a default status - if approval is on, set to pending, otherwise autoapprove
@@ -68,6 +71,27 @@ component extends="Model" hint="Main Event Object"
 		//	this.end=LSdateFormat(this.end, "YYYY-MM-DD") & ' ' & LStimeFormat(this.end, "HH:MM");
 		//}
 	}
+ 
+	/**
+	*  @hint
+	*/
+	public void function requiresRepeatStart() { 
+		if(!structKeyExists(this, "repeatstartsat") OR !isDate(this.repeatstartsat)){
+			this.repeatstartsat=this.startsat;
+		} 
+		if(!structKeyExists(this, "repeatevery")){
+			this.repeatevery=1;
+		} 
+	}
+	/**
+	*  @hint Repeat rule requires at least one ending condition
+	*/
+	public void function requiresEndCondition() { 
+		if(!structkeyexists(this, "isNever") && structKeyExists(this, "repeatendsAfter") && !len(this.repeatendsAfter) && !len(this.repeatendsOn)){
+			// Set a default of 10 repeats
+			this.repeatendsAfter = 10;
+		}
+	}
 
 	/**
 	*  @hint NB, these can be localised, as the output has the l() wrapper
@@ -86,7 +110,7 @@ component extends="Model" hint="Main Event Object"
 				required: 1
 			},
 			{
-				name: "start",
+				name: "startsat",
 				label: "Starts",
 				type: "datepicker",
 				options: "",
@@ -106,7 +130,7 @@ component extends="Model" hint="Main Event Object"
 				required: 0
 			},
 			{
-				name: "end",
+				name: "endsat",
 				label: "Ends",
 				type: "datepicker",
 				options: "",

@@ -12,14 +12,14 @@
 		<ttl>60</ttl>		
 		<pubDate>#dateFormat(now(), "ddd, dd mmm yyyy")# #timeFormat(now(), "HH:MM:SS")# UT</pubDate>
     	<lastBuildDate>#dateFormat(now(), "ddd, dd mmm yyyy")# #timeFormat(now(), "HH:MM:SS")# UT</lastBuildDate>
-		<cfloop query="data">
+		<cfloop from="1" to="#arraylen(events)#" index="i">
 			<item>
-			<title><![CDATA[#title#]]></title>
-			<link>#urlFor(controller="bookings", action="view", key=eventid,  onlyPath=false)#</link>
-			<description><![CDATA[#eventdescription#]]></description>
-			<category><![CDATA[#name#]]></category>
-			<pubDate>#dateFormat(start, "ddd, dd mmm yyyy")# #timeFormat(start, "HH:MM:SS")# UT</pubDate>
-			<guid isPermaLink="true">#urlFor(controller="bookings", action="view", key=eventid,  onlyPath=false)#</guid>
+			<title><![CDATA[#events[i]['title']#]></title>
+			<link>#urlFor(controller="bookings", action="view", key=events[i]['id'],  onlyPath=false)#</link>
+			<description><![CDATA[#events[i]['description']#]]></description>
+			<category><![CDATA[#events[i]['name']#]]></category>
+			<pubDate>#dateFormat(events[i]['start'], "ddd, dd mmm yyyy")# #timeFormat(events[i]['start'], "HH:MM:SS")# UT</pubDate>
+			<guid isPermaLink="true">#urlFor(controller="bookings", action="view", key=events[i]['id'],  onlyPath=false)#</guid>
 		</item> 
 		</cfloop> 
 	</channel>	

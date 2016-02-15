@@ -208,5 +208,11 @@
 <cfset loc["Repeat On"] = "">
 <cfset loc["No Locations available yet"] = "">
 <cfset loc["No Resources available yet"] = "">
-<cfset loc["Update Location"] = "">
-<cfset loc["Update Location"] = "">
+<cfset loc["Update Location"] = ""> 
+<cfset loc["Contact"] = "">
+<cfset loc["Create Booking"] = "">
+<cfset loc["Capacity"] = "">
+<cfset loc["Potential Clash"] = "">
+<cfset loc["We've identified {variable} event(s) which may clash with your selected time in that location"] = "">
+<cfset loc["Additional Information"] = "">
+<cfset loc["mins"] = "">

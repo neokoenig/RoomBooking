@@ -26,27 +26,39 @@ component extends="Controller" hint="RSS/ICal Etc"
 	public void function display() {
 		param name="params.maxrows" default="5" type="numeric";
 		param name="params.today" default=0 type="numeric";
+		param name="params.status" default="approved" type="string";
 		request.bodyClass="displayBoard";
 		var sd=createDateTime(year(now()), month(now()), day(now()), 00, 00, 00);
 		var ed=createDateTime(year(now()), month(now()), day(now()), 23, 59, 00);
-		if(params.today){
-			isToday=true;
-			if(structKeyExists(params, "location") AND isnumeric(params.location)){
-				isSingleLocation=true;
-				events=model("location").findAll(where="status = 'approved' AND start > '#sd#' AND end < '#ed#' AND id = #params.location#", include="events", order="start", maxrows=params.maxrows);
-			}
-			else {
-				events=model("location").findAll(where="status = 'approved' AND start > '#sd#' AND end < '#ed#'", include="events", order="start", maxrows=params.maxrows);
-			}
+		if(structkeyexists(params, "today") && params.today){
+			params.start=sd;
+			params.end=ed;
 		} else {
-			if(structKeyExists(params, "location") AND isnumeric(params.location)){
-				isSingleLocation=true;
-				events=model("location").findAll(where="status = 'approved' AND start > '#now()#' AND id = #params.location#", include="events", order="start", maxrows=params.maxrows);
-			}
-			else {
-				events=model("location").findAll(where="status = 'approved' AND start > '#now()#'", include="events", order="start", maxrows=params.maxrows);
-			}
+			params.start=sd;
+			params.end=dateAdd("yyyy", 1, ed);
 		}
+		if(structKeyExists(params, "location") AND isnumeric(params.location)){
+			isSingleLocation=true;
+		} 
+		//	if(structKeyExists(params, "location") AND isnumeric(params.location)){
+		//		isSingleLocation=true; 	
+		//		events=model("location").findAll(where="status = 'approved' AND startsat > '#sd#' AND endsAt < '#ed#' AND id = #params.location#", include="events", order="startsat", maxrows=params.maxrows);
+		//	}
+		//	else {
+		//		events=model("location").findAll(where="status = 'approved' AND startsat > '#sd#' AND endsAt < '#ed#'", include="events", order="startsat", maxrows=params.maxrows);
+		//	}
+		//} else {
+		//	if(structKeyExists(params, "location") AND isnumeric(params.location)){
+		//		isSingleLocation=true;
+		//		events=model("location").findAll(where="status = 'approved' AND startsat > '#now()#' AND id = #params.location#", include="events", order="startsat", maxrows=params.maxrows);
+		//	}
+		//	else {
+		//		events=model("location").findAll(where="status = 'approved' AND startsat > '#now()#'", include="events", order="startsat", maxrows=params.maxrows);
+		//	}
+		//}
+
+		events=parseEventsForCalendar(events=getEventsForRange(), viewPortStartDate=params.start, viewPortEndDate=params.end); 
+
 
 	}
 
@@ -56,13 +68,11 @@ component extends="Controller" hint="RSS/ICal Etc"
 	public void function rss2() {
 		param name="params.maxrows" default="25" type="numeric";
 		param name="params.format" default="xml" type="string";
-		if(structKeyExists(params, "location") AND isnumeric(params.location)){
-				events=model("location").findAll(where="status = 'approved' AND start > '#now()#' AND id = #params.location#", include="events", order="start", maxrows=params.maxrows);
-			}
-			else {
-				events=model("location").findAll(where="status = 'approved' AND start > '#now()#'", include="events", order="start", maxrows=params.maxrows);
-			}
-			renderWith(data=events);
+		param name="params.status" default="approved" type="string";
+		param name="params.start" default="#now()#";
+		param name="params.end" default="#dateAdd("m", 3, now())#";
+		events=parseEventsForCalendar(events=getEventsForRange(), viewPortStartDate=params.start, viewPortEndDate=params.end);  
+		renderWith(data=events);
 	}
 
 	/**
@@ -73,12 +83,13 @@ component extends="Controller" hint="RSS/ICal Etc"
 		var vCal = "";
 		var CRLF=chr(13)&chr(10);
 		data = "";
-		if(structKeyExists(params, "location") AND isnumeric(params.location)){
-			events=model("location").findAll(where="status = 'approved' AND start > '#now()#' AND id = #params.location#", include="events", order="start", maxrows=params.maxrows);
-		}
-		else {
-			events=model("location").findAll(where="status = 'approved' AND start > '#now()#'", include="events", order="start", maxrows=params.maxrows);
-		}
+		events=parseEventsForCalendar(events=getEventsForRange(), viewPortStartDate=params.start, viewPortEndDate=params.end);
+		//if(structKeyExists(params, "location") AND isnumeric(params.location)){
+		//	events=model("location").findAll(where="status = 'approved' AND startsat > '#now()#' AND id = #params.location#", include="events", order="startsat", maxrows=params.maxrows);
+		//}
+		//else {
+		//	events=model("location").findAll(where="status = 'approved' AND startsat > '#now()#'", include="events", order="startsat", maxrows=params.maxrows);
+		//}
 		vCal = "BEGIN:VCALENDAR" & CRLF;
 		vCal = vCal & "PRODID: -//#application.rbs.setting.sitetitle#//Room Booking System//EN" & CRLF;
 		vCal = vCal & "VERSION:2.0" & CRLF;
@@ -100,7 +111,7 @@ component extends="Controller" hint="RSS/ICal Etc"
 					TimeFormat(event.end, "HHmmss") & CRLF;
 			vCal = vCal & "SUMMARY:#event.title#" & CRLF;
 			vCal = vCal & "LOCATION:#event.name# - #event.description#" & CRLF;
-			vCal = vCal & "DESCRIPTION:#striptags(event.eventdescription)#" & CRLF;
+			vCal = vCal & "DESCRIPTION:#striptags(event.description)#" & CRLF;
 			vCal = vCal & "PRIORITY:1" & CRLF;
 			vCal = vCal & "TRANSP:OPAQUE" & CRLF;
 			vCal = vCal & "CLASS:PUBLIC" & CRLF;
@@ -108,7 +119,9 @@ component extends="Controller" hint="RSS/ICal Etc"
 		}
 		vCal = vCal & "END:VCALENDAR";
 		data  = vCal;
-		renderWith(data=data);
+		writeDump(data);
+		abort;
+		//renderWith(data=data);
 	}
 /******************** Private *********************/
 	/**

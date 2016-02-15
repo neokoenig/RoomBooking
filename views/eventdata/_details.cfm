@@ -49,7 +49,7 @@
 				<p><strong>From</strong></p>
 			</div>
 			<div class="col-sm-10">
-				[output id="start"]
+				[output id="startsat"]
 			</div>
 		</div>
 
@@ -58,7 +58,7 @@
 				<p><strong>To</strong></p>
 			</div>
 			<div class="col-sm-10">
-				[output id="end"]
+				[output id="endsat"]
 			</div>
 		</div>
 

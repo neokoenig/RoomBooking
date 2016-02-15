@@ -24,7 +24,7 @@ component output=false {
 		public function init() {
 			var loc = {};
 
-			this.version = "1.1.8,1.3,1.3.1";
+			this.version = "1.1.8,1.3,1.3.1,1.4.4";
 
 			application.localizator = {};
 			application.localizator = $initLocalizatorPluginSettings();
@@ -41,7 +41,7 @@ component output=false {
 		 * --------------------------------------
 		*/
 		public string function l(required string text, required string localeid="") {
-			return localizeme(argumentCollection=arguments);
+			return localizeme(argumentCollection=arguments); 
 		}
 
 		/* ----------------------------

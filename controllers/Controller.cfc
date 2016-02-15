@@ -12,6 +12,8 @@ component extends="Wheels" hint="Global Controller"
 	}
 
 /******************** Custom Fields***********************/
+
+
 	/**
 	*  @hint Get Custom fields for any model
 	*/

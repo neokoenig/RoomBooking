@@ -122,7 +122,7 @@ $(document).ready(function(){
 
 	// Date Pickers-----------------------
 	// NB, irrespective of locale, it's easier to keep dates in YYYY-MM-DD HH:mm!
-	$('#event-start, #event-end').datetimepicker({
+	$('#event-startsat, #event-endsat').datetimepicker({
 			locale: currentLanguage,
 			format: "YYYY-MM-DD HH:mm",
 			showTodayButton: true,
@@ -130,28 +130,28 @@ $(document).ready(function(){
 	});
 
 	// Link pickers: NB, using dp.hide not dp.change otherwise you can't select a start date without setting end date first
-	$('#event-start').on("dp.hide", function(e){
-		$('#event-end').data("DateTimePicker").minDate(e.date);
+	$('#event-startsat').on("dp.hide", function(e){
+		$('#event-endsat').data("DateTimePicker").minDate(e.date);
 	});
 
-	$('#event-end').on("dp.hide", function(e){
-		$('#event-start').data("DateTimePicker").maxDate(e.date);
+	$('#event-endsat').on("dp.hide", function(e){
+		$('#event-startsat').data("DateTimePicker").maxDate(e.date);
 	});
 
 	// All day switches to maximum range
 	$("#event-allday").on("click", function(e){
-		var sd=$('#event-start').data("DateTimePicker").date(),
-			ed=$('#event-end').data("DateTimePicker").date();
-		$("#event-start").data("DateTimePicker").date(moment(
+		var sd=$('#event-startsat').data("DateTimePicker").date(),
+			ed=$('#event-endsat').data("DateTimePicker").date();
+		$("#event-startsat").data("DateTimePicker").date(moment(
 			{y: sd.year(), M: sd.month(), d: sd.date(), h: 0, m: 0}
 		));
-		$("#event-end").data("DateTimePicker").date(moment(
+		$("#event-endsat").data("DateTimePicker").date(moment(
 			{y: ed.year(), M: ed.month(), d: ed.date(), h: 23, m: 59}
 		));
 	});
 
 	// Generic datepicker (list view)
-	$("#datefrom, #dateto").datetimepicker({
+	$("#start, #end").datetimepicker({
 		locale: currentLanguage,
 		showTodayButton: true,
 		format: 'YYYY-MM-DD'

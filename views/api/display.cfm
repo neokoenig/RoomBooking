@@ -11,11 +11,11 @@
       <cfelse>
         <h1>#l("Upcoming Events")#:</h1>
       </cfif>
-      <cfif isSingleLocation>
-        <h2>#events.name#</h2>
+      <cfif isSingleLocation && arraylen(events)>
+        <h2>#events[1]['locationname']#</h2>
       </cfif>
     </div>
-  <cfif !events.recordcount>
+  <cfif !arraylen(events)>
       <h1>#l("No Events")#</h1>
   <cfelse>
        <table class="table display-board">
@@ -26,21 +26,21 @@
            </tr>
          </thead>
          <tbody>
-          <cfloop query="events">
+          <cfloop from="1" to="#arraylen(events)#" index="i">
           <cfoutput>
             <tr>
              <td><cfif !params.today>
-               <cfif LSdateFormat(start, "dd mmm") EQ LSdateFormat(now(), "dd mmm")>
+               <cfif LSdateFormat(events[i]['start'], "dd mmm") EQ LSdateFormat(now(), "dd mmm")>
                   #l("Today")#
                  <Cfelse>
-                  #LSdateFormat(start, "dd mmm")#
+                  #LSdateFormat(events[i]['start'], "dd mmm")#
                </cfif>
-             </cfif>#LStimeFormat(start, "h:MM tt")#<br /><span class="duration"><cfif allday>
+             </cfif>#LStimeFormat(events[i]['start'], "h:MM tt")#<br /><span class="duration"><cfif events[i]['allday']>
              (#l("All Day")#)
                <cfelse>
-                #_durationString(DateDiff("n", start, end))#
+                #_durationString(DateDiff("n", events[i]['start'], events[i]['end']))#
              </cfif></span></td>
-             <td>#title#<br /><span class="location">#name# (#description#)</small></span></td>
+             <td>#events[i]['title']#<br /><span class="location">#events[i]['name']# (#events[i]['locationdescription']#)</small></span></td>
            </tr>
          </cfoutput>
         </cfloop>
