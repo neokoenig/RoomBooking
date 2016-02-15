@@ -70,8 +70,8 @@ DROP TABLE IF EXISTS `events`;
 CREATE TABLE `events` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `title` varchar(500) COLLATE utf8_unicode_ci NOT NULL,
-  `startsat` datetime DEFAULT NOT NULL,
-  `endsat` datetime DEFAULT NOT NULL,
+  `startsat` datetime DEFAULT NULL,
+  `endsat` datetime DEFAULT NULL,
   `allday` int(11) NOT NULL DEFAULT '0',
   `url` varchar(500) COLLATE utf8_unicode_ci DEFAULT NULL,
   `className` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
@@ -84,7 +84,7 @@ CREATE TABLE `events` (
   `createdat` datetime DEFAULT NULL,
   `updatedat` datetime DEFAULT NULL,
   `deletedat` datetime DEFAULT NULL,
-  `status` varchar(50) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'pending', 
+  `status` varchar(50) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'pending',
  `type` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
  `repeatstartsAt` datetime DEFAULT NULL,
  `isNever` tinyint(1) NOT NULL DEFAULT '0',
@@ -92,7 +92,7 @@ CREATE TABLE `events` (
  `repeatendsAt` datetime DEFAULT NULL,
  `repeatEvery` tinyint(2) DEFAULT NULL,
  `repeatOn` varchar(18) COLLATE utf8_unicode_ci DEFAULT NULL,
- `repeatBy` varchar(3) COLLATE utf8_unicode_ci DEFAULT NULL,  
+ `repeatBy` varchar(3) COLLATE utf8_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
@@ -245,9 +245,9 @@ INSERT INTO `settings` VALUES ('sitelogo', '/', 'Path or Full URL to your Site L
 INSERT INTO `settings` VALUES ('sitetitle', 'Room Booking System', 'The Main Site Title', 'string', '1', 'General');
 INSERT INTO `settings` VALUES ('version', '1.2', 'Version Number', 'string', '1', 'General');
 INSERT INTO `settings` VALUES ('doConcurrencyCheckForBookings', '1', 'Whether to do concurrency checks when booking an event', 'boolean', '1', 'General');
-INSERT INTO `settings` VALUES ('allowOverlappingBookings', '1', 'Whether to allow overlapping bookings to be created', 'boolean', '1', 'General');  
-INSERT INTO `settings` VALUES ('includeAllDayEventsinConcurrency', '0', 'Whether to include all day events in concurrency checks', 'boolean', '1', 'General'); 
- 
+INSERT INTO `settings` VALUES ('allowOverlappingBookings', '1', 'Whether to allow overlapping bookings to be created', 'boolean', '1', 'General');
+INSERT INTO `settings` VALUES ('includeAllDayEventsinConcurrency', '0', 'Whether to include all day events in concurrency checks', 'boolean', '1', 'General');
+
 -- ----------------------------
 -- Table structure for templates
 -- ----------------------------
@@ -285,4 +285,3 @@ CREATE TABLE `users` (
   `apitoken` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
- 
