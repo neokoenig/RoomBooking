@@ -263,3 +263,4 @@
 <cfset loc["Generate API Key"] = "">
 <cfset loc["Update Template"] = "">
 <cfset loc["Delete Instance"] = "">
+<cfset loc["Delete All"] = "">

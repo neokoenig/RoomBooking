@@ -220,3 +220,4 @@
 <cfset loc["You can use custom fields to collect and display data which isn't provided by the system (default) fields. Examples might include 'Room Capacity' for locations, or a radio select for Dietary requirements when creating a booking."] = "">
 <cfset loc["You do not have an API token associated with your account"] = "Sie haben kein mit Ihrem Konto verbundenes API-Token ">
 <cfset loc["You must enter a start and end date/time before attempting to book this resource"] = "Sie müssen eine Anfangs- und Endzeit vor dem Buchungsversuch dieser Resource eintragen">
+<cfset loc["Delete All"] = "">

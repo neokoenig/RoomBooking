@@ -19,7 +19,7 @@
 			<th>#l("Location")#</th>
 			<th>#l("Title")#</th>
 			<th>#l("Layout")#</th>
-			<th colspan=2>#l("Description")#</th>
+			<th colspan=2>#l("Actions")#</th>
 		</tr>
 	</thead>
 	<tbody>

@@ -220,3 +220,4 @@
 <cfset loc["iCal"]                                           = "iCal">
 <cfset loc["mins"] = "">
 <cfset loc["these URLs provide authenticated read only access to forthcoming events: only use or share them with trusted users. Administrators can revoke access to feeds by regenerating API keys"] = "Ces URL fournissent authentifiés accès en lecture seule les événements à venir : seulement utiliser ou de les partager avec des utilisateurs de confiance . Les administrateurs peuvent révoquer l'accès à des aliments en régénérant clés API">
+<cfset loc["Delete All"] = "">
