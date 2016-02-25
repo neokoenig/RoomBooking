@@ -1,14 +1,14 @@
 <!---================= Room Booking System / https://github.com/neokoenig =======================--->
 <cfscript>
-	/**
-	*  @hint Shortcut to XMLFormat
+	/*
+	 * @hint Shortcut to XMLFormat
 	*/
 	public string function h(required string s) {
 		return xmlFormat(s);
 	}
 
-	/**
-	*  @hint Turn mins into friendly string, localised
+	/*
+	 * @hint Turn mins into friendly string, localised
 	*/
 	public string function _durationString(numeric d) {
 		var h=(arguments.d\60);
@@ -35,8 +35,8 @@
 		}
 	}
 
-	/**
-	*  @hint General use date Formatter using user preferences
+	/*
+	 * @hint General use date Formatter using user preferences
 	*/
 	public string function _formatDate(required d) {
 		if(isDate(arguments.d)){
@@ -46,8 +46,8 @@
 		}
 	}
 
-	/**
-	*  @hint General use time Formatter using user preferences
+	/*
+	 * @hint General use time Formatter using user preferences
 	*/
 	public string function _formatTime(required d) {
 		if(isDate(arguments.d)){
@@ -57,15 +57,15 @@
 		}
 	}
 
-	 /**
-	 *  @hint General use date and Time Formatter using user preferences
+	 /*
+	 * @hint General use date and Time Formatter using user preferences
 	 */
 	 public string function _formatDateTime(required d) {
 	 	return _formatDate(arguments.d) & ' - ' & _formatTime(arguments.d);
 	 }
 
-	 /**
-	 *  @hint Format two dates as a single range: e.g, 7th March 2003, 4pm - 9th March 2003, 6pm
+	 /*
+	 * @hint Format two dates as a single range: e.g, 7th March 2003, 4pm - 9th March 2003, 6pm
 	 */
 	 public string function _formatDateRange(required d1,required d2, allday=0) {
 	 	local.d1=_formatDate(arguments.d1);
@@ -92,8 +92,8 @@
 		}
 	 }
 
-	 /**
-	 *  @hint used in dropdowns filters
+	 /*
+	 * @hint used in dropdowns filters
 	 */
 	 //public array function _monthList() {
 	 //	var r=[];
@@ -107,8 +107,8 @@
 	 //	return r;
 	 //}
 
-	 /**
-	 *  @hint used in dropdowns filters, defaults to now - 5, and now + 5
+	 /*
+	 * @hint used in dropdowns filters, defaults to now - 5, and now + 5
 	 */
 	 //public string function _yearList() {
 	 //	var r="";
@@ -119,7 +119,7 @@
 	 //}
 
 
-  /**
+  	/*
     *  @hint Alll the countries
     */
     public string function countryList() {
@@ -127,7 +127,7 @@
         return list;
     }
 
-        /**
+    /*
     * @hint Tick or cross
     */
     public string function tickorcross(required boo){
@@ -141,7 +141,7 @@
     }
 
 
-    /**
+    /*
     * @hint Render Bootstrap Panels
     */
     public string function panel(required string title, string theclass="panel-primary", boolean ignorebody=false, string morelink=""){
@@ -167,7 +167,7 @@
          }
     }
 
-    /**
+    /*
     *  @hint Takes a string like Building One and converts to building-one
     */
     public string function toTagSafe(string) {
@@ -177,7 +177,7 @@
     		return r;
     }
 
-    /**
+    /*
     *  @hint  Takes a string like building-one and converts to Building One
     */
     public string function fromTagSafe(string) {

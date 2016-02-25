@@ -1,7 +1,7 @@
 //================= Room Booking System / https://github.com/neokoenig =======================--->
 component extends="Wheels" hint="Global Controller"
 {
-	/**
+	/*
 	 * @hint Constructor.
 	 */
 	public void function init() {
@@ -11,11 +11,11 @@ component extends="Wheels" hint="Global Controller"
 		filters(through="logFlash", type="after");
 	}
 
-/******************** Custom Fields***********************/
-
-
-	/**
-	*  @hint Get Custom fields for any model
+//=====================================================================
+//= 	Custom Fields
+//=====================================================================
+	/*
+	 * @hint Get Custom fields for any model
 	*/
 	public query function getCustomFields(required string objectname, required string key) {
 		var result="";
@@ -53,8 +53,8 @@ component extends="Wheels" hint="Global Controller"
 		return result;
 	}
 
-	/**
-	*  @hint Get Custom fields for any model
+	/*
+	 * @hint Get Custom fields for any model
 	*/
 	public query function getBlankCustomFields(required string objectname) {
 		var result="";
@@ -79,8 +79,8 @@ component extends="Wheels" hint="Global Controller"
 		return result;
 	}
 
-	/**
-	*  @hint Update Custom Fields for any model
+	/*
+	 * @hint Update Custom Fields for any model
 	*/
 	public void function updateCustomFields(required string objectname, required numeric key, required struct customfields) {
 
@@ -98,11 +98,11 @@ component extends="Wheels" hint="Global Controller"
 	 		}
 	 	}
 	}
-
-
-
-/******************** Global Filters***********************/
- 	/**
+  
+//=====================================================================
+//= 	Global Filters : might be called from anywhere
+//=====================================================================
+ 	 	/**
  	*  @hint Return all room locations
  	*/
  	public void function _getLocations() {
@@ -128,7 +128,7 @@ component extends="Wheels" hint="Global Controller"
  	*/
  	public void function _isValidAjax() {
  		if(!isAjax()){
- 			abort;
+ 			//abort;
  		}
  	}
 }

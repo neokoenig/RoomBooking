@@ -1,17 +1,17 @@
 <!---================= Room Booking System / https://github.com/neokoenig =======================--->
 <!--- Template Form --->
 <cfoutput>
-  <div id="template-editor">
+  <div id="template-editor" data-picker="#urlFor(controller='customfields', action='fieldpicker', key=params.key)#">
 	 #template.template#
   </div>
   #hiddenField(objectname="template", property="template")#
   #hiddenField(objectname="template", property="type")#
 </cfoutput>
 
-	<cfsavecontent variable="request.js.gridmanager">
-	<!---script src="//cdnjs.cloudflare.com/ajax/libs/ckeditor/4.4.5/ckeditor.js"></script>
+	<!---cfsavecontent variable="request.js.gridmanager">
+	<script src="//cdnjs.cloudflare.com/ajax/libs/ckeditor/4.4.5/ckeditor.js"></script>
 	<script src="//cdnjs.cloudflare.com/ajax/libs/ckeditor/4.4.5/adapters/jquery.js"></script--->
-	<script>
+	<!---script>
 	var gm=$("#template-editor").gridmanager({
 		debug: 0,
 		colSelectEnabled: false,
@@ -36,7 +36,8 @@
 	});
 
 	 function insert_customfield(container, btnElem) {
-	 	$.ajax({url: "<cfoutput>#urlFor(controller='customfields', action='fieldpicker', key=params.key)#</cfoutput>",
+	 	var pickerURL = $('#template-editor').data("picker");
+	 	$.ajax({url: pickerURL,
 			success: function(data){
 				bootbox.dialog({
 				  message: data,
@@ -59,4 +60,4 @@
 		});
 	 }
 	</script>
-	</cfsavecontent>
+	</cfsavecontent--->

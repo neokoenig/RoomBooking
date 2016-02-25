@@ -79,15 +79,8 @@
 			#javascriptIncludeTag("https://cdnjs.cloudflare.com/ajax/libs/ace/1.1.3/ace.js")#
 			<script>
 			var editor = ace.edit("editor");
-			editor.setTheme("ace/theme/chrome");
-			editor.getSession().setMode("ace/mode/json");
-
-			$("##customfieldSubmit").on("click", function(e){
-				e.preventDefault();
-				var code = editor.getSession().getValue();
-				$("##customfield-options").val(code);
-				$(this).parent().submit();
-			});
+				editor.setTheme("ace/theme/chrome");
+				editor.getSession().setMode("ace/mode/json"); 
 			</script>
 		</cfsavecontent>
 

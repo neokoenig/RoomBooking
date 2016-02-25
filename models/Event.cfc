@@ -1,13 +1,14 @@
 //================= Room Booking System / https://github.com/neokoenig =======================--->
 component extends="Model" hint="Main Event Object"
 {
-	/**
+	/*
 	 * @hint Constructor
 	 */
 	public void function init() {
 		// Assocations
 		belongsTo(name="location");
 		hasMany(name="eventresources", dependent="delete"); 
+		hasMany(name="eventexceptions", dependent="delete"); 
 		nestedproperties(associations="eventresources", allowDelete=true); 
 		// Validation
 		//validate("checkDates");
@@ -21,8 +22,8 @@ component extends="Model" hint="Main Event Object"
 	}
  
 
-	/**
-	*  @hint Sets a default status - if approval is on, set to pending, otherwise autoapprove
+	/*
+	 * @hint Sets a default status - if approval is on, set to pending, otherwise autoapprove
 	*/
 	public void function checkApproval() {
 		if(application.rbs.setting.approveBooking){
@@ -32,8 +33,8 @@ component extends="Model" hint="Main Event Object"
 		}
 	}
 
-	/**
-	*  @hint If there's no end date, add a default end date 1hour into future
+	/*
+	 * @hint If there's no end date, add a default end date 1hour into future
 	*/
 	public void function checkDates() {
 		//this.start = LSParseDateTime(this.start);
@@ -60,8 +61,8 @@ component extends="Model" hint="Main Event Object"
 		//}
 	}
 
-	/**
-	*  @hint Formats Date for DateTime Picker
+	/*
+	 * @hint Formats Date for DateTime Picker
 	*/
 	public void function formatDates() {
 		//if(structKeyExists(this, "start")){
@@ -72,8 +73,8 @@ component extends="Model" hint="Main Event Object"
 		//}
 	}
  
-	/**
-	*  @hint
+	/*
+	 * @hint
 	*/
 	public void function requiresRepeatStart() { 
 		if(!structKeyExists(this, "repeatstartsat") OR !isDate(this.repeatstartsat)){
@@ -83,8 +84,8 @@ component extends="Model" hint="Main Event Object"
 			this.repeatevery=1;
 		} 
 	}
-	/**
-	*  @hint Repeat rule requires at least one ending condition
+	/*
+	 * @hint Repeat rule requires at least one ending condition
 	*/
 	public void function requiresEndCondition() { 
 		if(!structkeyexists(this, "isNever") && structKeyExists(this, "repeatendsAfter") && !len(this.repeatendsAfter) && !len(this.repeatendsOn)){
@@ -93,8 +94,8 @@ component extends="Model" hint="Main Event Object"
 		}
 	}
 
-	/**
-	*  @hint NB, these can be localised, as the output has the l() wrapper
+	/*
+	 * @hint NB, these can be localised, as the output has the l() wrapper
 	*/
 	public void function registerSystemFields() {
 

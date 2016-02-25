@@ -1,7 +1,7 @@
 //================= Room Booking System / https://github.com/neokoenig =======================--->
 component extends="Controller" hint="Settings Controller"
 {
-	/**
+	/*
 	 * @hint Constructor.
 	 */
 	public void function init() {
@@ -20,8 +20,8 @@ component extends="Controller" hint="Settings Controller"
 	}
 
 /******************** Public***********************/
-	/**
-	*  @hint Edit a setting
+	/*
+	 * @hint Edit a setting
 	*/
 	public void function edit() {
 		setting=model("setting").findOne(where="id = '#params.key#'");
@@ -30,8 +30,8 @@ component extends="Controller" hint="Settings Controller"
 		}
 	}
 
-	/**
-	*  @hint Update a setting
+	/*
+	 * @hint Update a setting
 	*/
 	public void function update() {
 		if(structkeyexists(params, "setting")){
@@ -51,8 +51,8 @@ component extends="Controller" hint="Settings Controller"
 	}
 
 /******************** Private *********************/
-	/**
-	*  @hint
+	/*
+	 * @hint
 	*/
 	private void function _checkSettingsAdmin() {
 		if(!application.rbs.setting.allowSettings){

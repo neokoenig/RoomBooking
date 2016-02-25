@@ -1,7 +1,7 @@
 //================= Room Booking System / https://github.com/neokoenig =======================--->
 component extends="Controller" hint="Permissions Controller"
 {
-	/**
+	/*
 	 * @hint Constructor.
 	 */
 	public void function init() {
@@ -15,15 +15,15 @@ component extends="Controller" hint="Permissions Controller"
 	}
 
 /******************** Public***********************/
-	/**
-	*  @hint List Permissions
+	/*
+	 * @hint List Permissions
 	*/
 	public void function index() {
 		permissions=model("permission").findAll(order="id");
 	}
 
-	/**
-	*  @hint Edit Form
+	/*
+	 * @hint Edit Form
 	*/
 	public void function edit() {
 		permission=model("permission").findOne(where="id = '#params.key#'");
@@ -32,8 +32,8 @@ component extends="Controller" hint="Permissions Controller"
 		}
 	}
 
-	/**
-	*  @hint Update
+	/*
+	 * @hint Update
 	*/
 	public void function update() {
 		if(structkeyexists(params, "permission")){

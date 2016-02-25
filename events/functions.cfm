@@ -1,7 +1,10 @@
 <cfscript>
 //================= Room Booking System / https://github.com/neokoenig =======================--->
-//================================ Global Auth Functions ======================================
-    /**
+
+//=====================================================================
+//=     Global Auth Functions
+//=====================================================================
+    /*
     *  @hint Get logged in user
     */
     public void function getCurrentUser() {
@@ -11,7 +14,7 @@
         }
     }
 
-    /**
+    /*
     *  @hint Basically loads all user details and permissions into session scope for easy reference
     */
     private void function _createUserInScope(required user) {
@@ -27,14 +30,14 @@
         redirectTo(route="home");
     }
 
-    /**
+    /*
     *  @hint Returns true if session exists / useful for simple checks
     */
     public boolean function isLoggedIn() {
         return StructKeyExists(session, "currentUser");
     }
 
-    /**
+    /*
     *  @hint Returns true if user is a specified role
     */
     public boolean function userIsInRole(required string role) {
@@ -47,7 +50,7 @@
         return r;
     }
 
-    /**
+    /*
     *  @hint Used in filters
     */
     public void function _checkLoggedIn() {
@@ -56,14 +59,14 @@
         }
     }
 
-    /**
+    /*
     *  @hint Returns a list of potential roles
     */
     public void function _getRoles() {
         roles=application.rbs.roles;
     }
 
-    /**
+    /*
     *  @hint Shoves auth'd user elsewhere
     */
     public void function redirectIfLoggedIn() {
@@ -72,7 +75,7 @@
     }
 }
 
-    /**
+    /*
     *  @hint Returns the current signed in user
     */
     public struct function currentUser() {
@@ -82,7 +85,7 @@
         }
     }
 
-    /**
+    /*
     *  @hint Signs out the user
     */
     public void function signOut() {
@@ -101,7 +104,7 @@
     The authKey is unique per installation; It's useful as you can invalidate all the site passwords in one go by just changing it
     */
 
-    /**
+    /*
     *  @hint Returns a semi-unique key per installation
     */
     public string function getAuthKey() {
@@ -115,35 +118,35 @@
             }
         }
 
-    /**
+    /*
     *  @hint Generate an API Key
     */
     public string function _generateApiKey(){
         return hash(createUUID() & getAuthKey(), 'SHA-512');
     }
 
-    /**
+    /*
     *  @hint Create Salt using authkey
     */
     public string function createSalt() {
         return encrypt(createUUID(), getAuthKey(), 'CFMX_COMPAT');
     }
 
-    /**
+    /*
     *  @hint Get salt using authkey
     */
     public string function decryptSalt(required string salt) {
         return decrypt(arguments.salt, getAuthKey(), 'CFMX_COMPAT');
     }
 
-    /**
+    /*
     *  @hint Hash Password using SHA512
     */
     public string function hashPassword(required string password, required string salt) {
         return hash(arguments.password & arguments.salt, 'SHA-512');
     }
 
-    /**
+    /*
     *  @hint Checks a permission against permissions loaded into application scope for the user
     */
     public boolean function checkPermission(required string permission) {
@@ -158,7 +161,7 @@
             }
         }
 
-    /**
+    /*
     *  @hint Checks a permission and redirects away to access denied, useful for use in filters etc
     */
     public void function checkPermissionAndRedirect(required string permission) {
@@ -167,7 +170,7 @@
     }
 }
 
-    /**
+    /*
     *  @hint Checks for the relevant permissions structs in application scope
     */
     public boolean function _permissionsSetup() {
@@ -178,7 +181,7 @@
             }
         }
 
-    /**
+    /*
     *  @hint Looks for user role in session, returns guest otherwise
     */
     public string function _returnUserRole() {
@@ -189,7 +192,7 @@
             }
         }
 
-    /**
+    /*
     *  @hint Used to redirect away in demo mode
     */
     public void function denyInDemoMode() {
@@ -198,34 +201,40 @@
         }
     }
 
-    //================================ Shortcodes ======================================
-      /**
-  * @hint Render a  field
-  **/
-  function field_callback(attr) {
-    var result="";
-    var path="#application.wheels.webPath#/#application.wheels.viewPath#/shortcodes/field.cfm";
-    savecontent variable="result" {
-     include path;
- }
- return result;
-}
+//=====================================================================
+//=     Short codes callbacks for custom templating
+//=====================================================================
+     
+    /*
+    *  @hint Render a  field
+    */
+    
+      function field_callback(attr) {
+        var result="";
+        var path="#application.wheels.webPath#/#application.wheels.viewPath#/shortcodes/field.cfm";
+        savecontent variable="result" {
+         include path;
+     }
+     return result;
+    }
 
-  /**
-  * @hint Render a  field
-  **/
-  function output_callback(attr) {
-    var result="";
-    var path="#application.wheels.webPath#/#application.wheels.viewPath#/shortcodes/output.cfm";
-    savecontent variable="result" {
-     include path;
- }
- return result;
-}
+    /*
+    *  @hint Render a  field
+    */
+      function output_callback(attr) {
+        var result="";
+        var path="#application.wheels.webPath#/#application.wheels.viewPath#/shortcodes/output.cfm";
+        savecontent variable="result" {
+         include path;
+     }
+     return result;
+    }
  
 
-    //================================ Lang ======================================
-    /**
+//=====================================================================
+//=     Language switcher
+//=====================================================================
+    /*
     *  @hint
     */
     public string function getCurrentLanguage() {
@@ -236,8 +245,10 @@
             }
         }
 
-        //================================ Utils ======================================
-  /**
+//=====================================================================
+//=     Various Utils
+//=====================================================================
+  /*
     *  @hint Get IP
     */
     public string function getIPAddress() {
@@ -248,7 +259,7 @@
         }
         return result;
     }
-    /**
+    /*
     *  @hint I know this is stupid, but it's a hack with the way I'm doing the settings in the db
     */
     public string function returnStringFromBoolean(required boo) {
@@ -259,8 +270,10 @@
             }
         }
 
-        //================================ Logging ======================================
-    /**
+//=====================================================================
+//=     Logging
+//=====================================================================
+    /*
     *  @hint Quick way to add a logline
     */
     public void function addlogline() {
@@ -270,7 +283,7 @@
         arguments.ipaddress=getIPAddress();
         l=model("logfile").create(arguments);
     }
-    /**
+    /*
     *  @hint Log the flash via filter
     */
     public void function logFlash() {
@@ -402,7 +415,7 @@ https://wikidocs.adobe.com/wiki/display/coldfusionen/QueryExecute">
 
 
         /**
-        *  @hint The main events query. The Where clause is a little... silly.
+            *  @hint The main events query. The Where clause is a little... silly.
         */
         public query function getEventsForRange() {
             param name="params.start"  default="#now()#";
@@ -415,8 +428,10 @@ https://wikidocs.adobe.com/wiki/display/coldfusionen/QueryExecute">
             param name="params.excludeeventid" default="";  
             param name="params.excludestatus" default="";    
             param name="params.key" default="";
+            param name="params.resourceid" default="";
 
             var loc={
+                allEvents      = "",
                 start          = params.start,
                 end            = params.end,
                 type           = params.type,
@@ -426,7 +441,9 @@ https://wikidocs.adobe.com/wiki/display/coldfusionen/QueryExecute">
                 q              = params.q,
                 excludeeventid = params.excludeeventid,
                 excludestatus  = params.excludestatus,
-                key            = params.key
+                key            = params.key,
+                resourceid     = params.resourceid,
+                includeModel   = "location,eventexceptions"
             }  
             // Allow args scope to override params
             for(item in arguments){
@@ -435,15 +452,20 @@ https://wikidocs.adobe.com/wiki/display/coldfusionen/QueryExecute">
  
             loc.viewPortStartDate=createDateTime(year(loc.start), month(loc.start), day(loc.start), hour(loc.start),minute((loc.start)),00);
             loc.viewPortEndDate=createDateTime(year(loc.end), month(loc.end), day(loc.end), hour(loc.end),minute((loc.end)),00);
-            loc.wc="(((startsat >= '#loc.viewPortStartDate#' AND endsat <= '#loc.viewPortEndDate#') AND type IS NULL) OR ((startsat >= '#loc.viewPortStartDate#' AND endsat >= '#loc.viewPortEndDate#' AND startsat < '#loc.viewPortEndDate#') AND type IS NULL) OR ((startsat < '#loc.viewPortStartDate#' AND endsat < '#loc.viewPortEndDate#' AND endsat > '#loc.viewPortStartDate#') AND type IS NULL) OR ((startsat < '#loc.viewPortStartDate#' AND endsat > '#loc.viewPortEndDate#') AND type IS NULL) OR (repeatstartsat < '#loc.viewPortEndDate#' AND isnever = 1 AND type IS NOT NULL) OR (repeatstartsat < '#loc.viewPortEndDate#' AND repeatendsat > '#loc.viewPortStartDate#' AND type IS NOT NULL) OR (repeatstartsat < '#loc.viewPortEndDate#' AND repeatendsafter IS NOT NULL AND type IS NOT NULL)) ";
+            loc.wc="(((startsat >= '#loc.viewPortStartDate#' AND endsat <= '#loc.viewPortEndDate#') AND type IS NULL) 
+                OR ((startsat >= '#loc.viewPortStartDate#' AND endsat >= '#loc.viewPortEndDate#' AND startsat < '#loc.viewPortEndDate#') AND type IS NULL) 
+                OR ((startsat < '#loc.viewPortStartDate#' AND endsat < '#loc.viewPortEndDate#' AND endsat > '#loc.viewPortStartDate#') AND type IS NULL) 
+                OR ((startsat < '#loc.viewPortStartDate#' AND endsat > '#loc.viewPortEndDate#') AND type IS NULL) 
+                OR (repeatstartsat < '#loc.viewPortEndDate#' AND isnever = 1 AND type IS NOT NULL) 
+                OR (repeatstartsat < '#loc.viewPortEndDate#' AND repeatendsat > '#loc.viewPortStartDate#' AND type IS NOT NULL) 
+                OR (repeatstartsat < '#loc.viewPortEndDate#' AND repeatendsafter IS NOT NULL AND type IS NOT NULL)) ";
 
                 // Allows us to pull events either by single location or by whole building
                 if(loc.type EQ "building"){
                     loc.building=loc.key;
                 } else if(loc.type EQ "location"){ 
                     loc.location=loc.key;
-                } 
-
+                }  
                 if(len(loc.building)){
                     loc.wc = loc.wc & " AND building = '#loc.building#'";  
                 }
@@ -463,16 +485,53 @@ https://wikidocs.adobe.com/wiki/display/coldfusionen/QueryExecute">
                 if(len(loc.excludeeventid) && isNumeric(loc.excludeeventid)){
                     loc.wc = loc.wc & " AND id != #loc.excludeeventid#";
                 }
-
-                allEvents=model("event").findAll(
-                        where=loc.wc,
-                        include="location",
-                        order="startsat ASC");   
-
-            return allEvents;
+                // Used when checking against a specific resource
+                if(structKeyExists(loc, "resourceid") && isNumeric(loc.resourceid)){
+                    loc.includeModel=listAppend(loc.includeModel, "eventresources");
+                    loc.wc = loc.wc & " AND resourceid = #loc.resourceid#";
+                } 
+                loc.events=model("event").findAll(
+                    select="events.id,
+                    events.title,
+                    events.startsat,
+                    events.endsat,
+                    events.allday,
+                    events.url,
+                    events.className,
+                    events.description,
+                    events.locationid,
+                    events.contactname,
+                    events.contactno,
+                    events.contactemail,
+                    events.layoutstyle,
+                    events.createdat,
+                    events.updatedat,
+                    events.deletedat,
+                    events.status,
+                    events.type,
+                    events.isNever,
+                    events.repeatstartsat,
+                    events.repeatendsat,
+                    events.repeatendsAfter,
+                    events.repeatEvery,
+                    events.repeatOn,
+                    events.repeatby,
+                    (TIMESTAMPDIFF(MINUTE, events.startsat, events.endsat)) AS duration,
+                    locations.name,
+                    locations.description AS locationdescription,
+                    locations.class,
+                    locations.colour,
+                    locations.building,
+                    GROUP_CONCAT(eventexceptions.exceptiondate) as exceptions", 
+                    where=loc.wc,
+                    include=loc.includeModel,
+                    group="events.id",
+                    order="startsat ASC");   
+                
+            return loc.events;
         }
 
-     /**
+     /*
     *  @hint For each event in the query calculate repeat dates and return appropriate array of events for renderwith()
     */
     public array function parseEventsForCalendar(required query events, required date viewPortStartDate, required date viewPortEndDate) {
@@ -534,7 +593,7 @@ https://wikidocs.adobe.com/wiki/display/coldfusionen/QueryExecute">
         return arrayOfStructsSort(r, "start");
     }
 
-    /**
+    /*
     *  @hint All Events get passed through here to check for repeat rules
     */
     public array function generateRepeatingEvents(required struct event, viewPortStartDate, viewPortEndDate) {
@@ -576,13 +635,32 @@ https://wikidocs.adobe.com/wiki/display/coldfusionen/QueryExecute">
         repeatArguments.filterstart = viewPortStartDate;
         repeatArguments.filterend   = viewPortEndDate;
         // Generate the repeating dates via plugin
-        events=repeatDate(argumentCollection=repeatArguments);  
+        events=repeatDate(argumentCollection=repeatArguments); 
+        // Remove any manual exceptions to the rule 
+        if(len(event.exceptions)){
+            events=removeExceptionsFromArray(events=events, exceptions=event.exceptions);
+        }
+        // Add Event Duration to remaining events
         events=addEventDuration(eventstart=event.startsAt, dates=events, duration=event.duration);   
-        
         return events;
     }
 
-    /**
+    /*
+    * @hint: 
+    */
+    public array function removeExceptionsFromArray(required array events, required string exceptions) {
+        var loc={
+            r=[]
+        }
+        for(var event in arguments.events){
+            if(!listFind(arguments.exceptions, dateFormat(event, "YYYY-MM-DD")) ){
+                arrayAppend(loc.r, event);
+            }
+        }
+        return loc.r;
+    }
+
+    /*
     *  @hint Experimental date format
     */
     public string function _f_d(str) {

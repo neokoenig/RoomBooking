@@ -1,17 +1,4 @@
-<!--- Repeat Rules --->
-<!---
-
-This concept is blatantly nicked from Google Calendar, but hey.
-Thing is, Google uses ends='never', so must presumably generate all the repeating event logic for those every time, as you can't add child events 'forever';
-
-So we need a way to:
- - store the repeat logic for an event, and it should be editable 'after' creation
- - generate (quickly) the repeating events logic for the current viewport;
-
-Assuming we're looking at a calendar view (say From: 01-01-2015 => To: 15-02-2015), we need to get events for the following conditions:
- - Non repeating events which fall within From/To Date: this means checking for events whose *range* falls inbetween the view range.
-  	- So, we'd need to do events=model("event")
-
+<!--- Repeat Rules
 
 Repeats can be
  - Daily (type=daily)
@@ -97,7 +84,7 @@ Repeats can be
 </cfscript>
 <!--- Repeat Form --->
 <cfoutput> 
- 	<fieldset> 
+ 	<fieldset id="repeatrules"> 
  		<legend>#l("Repeat Rules")#</legend>
  		<div class="row">
  			<div class="col-sm-3">
@@ -144,7 +131,7 @@ Repeats can be
  		</div>
 	</fieldset>
 </cfoutput>
-<cfsavecontent variable="request.js.repeatrules">
+<!---cfsavecontent variable="request.js.repeatrules">
 <script>
 //RM this when moving to main.js
 var currentLanguage=$("html").attr("lang");
@@ -249,4 +236,4 @@ var currentLanguage=$("html").attr("lang");
 	}
 
 </script>
-</cfsavecontent>
+</cfsavecontent--->

@@ -1,7 +1,7 @@
 //================= Room Booking System / https://github.com/neokoenig =======================--->
 component extends="Controller" hint="Main Events/Bookings Controller"
 {
-	/**
+	/*
 	 * @hint Constructor.
 	 */
 	public void function init() {
@@ -25,29 +25,31 @@ component extends="Controller" hint="Main Events/Bookings Controller"
 		usesLayout(template=false, only="check");
 	}
 
-/******************** Views ***********************/
-	/**
-	*  @hint Static display of a single event, mainly used in RSS permalinks etc
+//=====================================================================
+//= 	Views
+//=====================================================================
+	/*
+	 * @hint Static display of a single event, mainly used in RSS permalinks etc
 	*/
 	public void function view() {
 		event=model("location").findAll(where="events.id = #params.key#", include="events(eventresources)");
 		customfields=getCustomFields(objectname=request.modeltype, key=event.id);
 	}
 
-	/**
-	*  @hint By Building
+	/*
+	 * @hint By Building
 	*/
 	public void function building() {
 		renderPage(action="index");
 	}
-	/**
-	*  @hint By Location
+	/*
+	 * @hint By Location
 	*/
 	public void function location() {
 		renderPage(action="index");
 	}
-	/**
-	*  @hint Shows Agenda style view table for a given month
+	/*
+	 * @hint Shows Agenda style view table for a given month
 	*/
 	public void function list() {
 		param name="params.start" default="#dateFormat(now(), 'YYYY-MM-DD')#";
@@ -57,11 +59,12 @@ component extends="Controller" hint="Main Events/Bookings Controller"
 		events=parseEventsForCalendar(events=getEventsForRange(), viewPortStartDate=params.start, viewPortEndDate=params.end);
 	}
 
-/******************** Admin ***********************/
+//=====================================================================
+//= 	Admin
+//=====================================================================
 
-
-	/**
-	*  @hint Approve a listing
+	/*
+	 * @hint Approve a listing
 	*/
 	public void function approve() {
 		event=model("event").findOne(where="id = #params.key#");
@@ -73,8 +76,8 @@ component extends="Controller" hint="Main Events/Bookings Controller"
 		redirectTo(success="#event.title# was approved", back=true);
 	}
 
-	/**
-	*  @hint Deny a listing (can also delete)
+	/*
+	 * @hint Deny a listing (can also delete)
 	*/
 	public void function deny() {
 		event=model("event").findOne(where="id = #params.key#");
@@ -92,8 +95,8 @@ component extends="Controller" hint="Main Events/Bookings Controller"
 		}
 	}
 
-	/**
-	*  @hint Shortcut to duplicating a booking
+	/*
+	 * @hint Shortcut to duplicating a booking
 	*/
 	public void function clone() {
 	 	event=model("event").findOne(where="id = #params.key#", include="eventresources");
@@ -101,16 +104,16 @@ component extends="Controller" hint="Main Events/Bookings Controller"
         renderPage(action="add");
 	}
 
-	/**
-	*  @hint Event CRUD
+	/*
+	 * @hint Event CRUD
 	*/
 	public void function edit() {
 		event=model("event").findOne(where="id = #params.key#", include="eventresources");
 		customfields=getCustomFields(objectname=request.modeltype, key=params.key);
 	}
 
-	/**
-	*  @hint Add a new booking
+	/*
+	 * @hint Add a new booking
 	*/
 	public void function add() {
 		 nEventResources = model("eventresource").new();
@@ -119,8 +122,20 @@ component extends="Controller" hint="Main Events/Bookings Controller"
     	 $checkForEventDefaultsinURL();
 	}
 
-	/**
-	*  @hint Fill some defaults if passed in by URL
+	/*
+	* @hint: Essentially adds a delete to a repeated event
+	*/
+	public void function addexception() {
+		if(structKeyExists(params, "key") && isNumeric(params.key) && structKeyExists(params, "exceptiondate") && isDate(params.exceptiondate)){
+			exception=model("eventexception").create(eventid=params.key, exceptiondate=params.exceptiondate);
+			redirectTo(back=true, success="Instance Removed: Event Exception Added");
+		} else {
+			redirectTo(route="home", error="Exception Date or Event ID invalid");
+		}
+	}
+
+	/*
+	 * @hint Fill some defaults if passed in by URL
 	*/
 	public void function $checkForEventDefaultsinURL() {
 		var qDate="";
@@ -136,8 +151,8 @@ component extends="Controller" hint="Main Events/Bookings Controller"
     	}
 	}
 
-	/**
-	*  @hint Event CRUD
+	/*
+	 * @hint Event CRUD
 	*/
 	public void function create() {
 		if(structkeyexists(params, "event")){
@@ -160,11 +175,9 @@ component extends="Controller" hint="Main Events/Bookings Controller"
 			}
 		}
 	}
-
-
-
-	/**
-	*  @hint Email to send on approval/denial etc.
+  
+	/*
+	 * @hint Email to send on approval/denial etc.
 	*/
 	public void function notifyContact(required struct event) {
 		if( isValid("email", arguments.event.contactemail)
@@ -182,8 +195,8 @@ component extends="Controller" hint="Main Events/Bookings Controller"
 		}
 	}
 
-	/**
-	*  @hint Event CRUD
+	/*
+	 * @hint Event CRUD
 	*/
 	public void function update() {
 		if(structkeyexists(params, "event")){
@@ -205,8 +218,8 @@ component extends="Controller" hint="Main Events/Bookings Controller"
 		}
 	}
 
-	/**
-	*  @hint Event CRUD
+	/*
+	 * @hint Event CRUD
 	*/
 	public void function delete() {
     	event = model("event").findOne(where="id = #params.key#", include="eventresources");
@@ -217,19 +230,23 @@ component extends="Controller" hint="Main Events/Bookings Controller"
 			redirectTo(action="index", error="There were problems deleting that event");
 		}
 	}
-/******************** Private *********************/
 
 
+//=====================================================================
+//= 	Private
+//=====================================================================
 
-	/**
-	*  @hint Sets the model type to use with Custom Fields + Templates
+	/*
+	 * @hint Sets the model type to use with Custom Fields + Templates
 	*/
-	public void function _setModelType() {
+	private void function _setModelType() {
 		request.modeltype="event";
 	}
-
-	/**
-	*  @hint Remote concurrency Check: gets all events for that day for that location and then narrows it down again.
+//=====================================================================
+//= 	Ajax/Remote/Misc
+//=====================================================================
+	/*
+	 * @hint Remote concurrency Check: gets all events for that day for that location and then narrows it down again.
 	*/
 	public void function check() {
 		if(structKeyExists(params, "start")
@@ -239,6 +256,10 @@ component extends="Controller" hint="Main Events/Bookings Controller"
 		// We need to not check the eventid if editing, but still need it for cloning + adding
 		if(structKeyExists(params, "referrer") && params.referrer != "clone"){
   			params.excludeeventid=params.id;
+		}
+		// Override empty eventid 
+		if(structKeyExists(params, "eventid") && !isNumeric(params.eventid)){
+			params.eventid=0;
 		}
   		var loc={};
   			// get all for that day, including infinite repeats, excluding the current event if editing

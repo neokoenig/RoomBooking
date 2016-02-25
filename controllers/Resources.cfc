@@ -1,7 +1,7 @@
 //================= Room Booking System / https://github.com/neokoenig =======================--->
 component extends="Controller" hint="Resources Controller"
 {
-	/**
+	/*
 	 * @hint Constructor.
 	 */
 	public void function init() {
@@ -11,7 +11,7 @@ component extends="Controller" hint="Resources Controller"
 		// Permissions
 		filters(through="checkPermissionAndRedirect", permission="accessresources");
 		filters(through="_checkResourcesAdmin");
-		//filters(through="_isValidAjax", only="checkavailability");
+		filters(through="_isValidAjax", only="check");
 
 		// Data
 		filters(through="_getresources", only="index");
@@ -19,22 +19,21 @@ component extends="Controller" hint="Resources Controller"
 
 		// Verification
 		verifies(only="view,edit,update,delete", params="key", paramsTypes="integer", route="home", error="Sorry, that event can't be found");
-
-
+ 
 		// Format
 		provides("html,json");
 	}
 
 /******************** Public***********************/
-	/**
-	*  @hint Add Resource
+	/*
+	 * @hint Add Resource
 	*/
 	public void function add() {
 		resource=model("resource").new();
 	}
 
-	/**
-	*  @hint Create Resource
+	/*
+	 * @hint Create Resource
 	*/
 	public void function create() {
 		if(structkeyexists(params, "resource")){
@@ -48,15 +47,15 @@ component extends="Controller" hint="Resources Controller"
 		}
 	}
 
-	/**
-	*  @hint Edit Resource
+	/*
+	 * @hint Edit Resource
 	*/
 	public void function edit() {
 		resource=model("resource").findOne(where="id = #params.key#");
 	}
 
-	/**
-	*  @hint Update Resource
+	/*
+	 * @hint Update Resource
 	*/
 	public void function update() {
 		if(structkeyexists(params, "resource")){
@@ -71,8 +70,8 @@ component extends="Controller" hint="Resources Controller"
 		}
 	}
 
-	/**
-	*  @hint Delete Resource
+	/*
+	 * @hint Delete Resource
 	*/
 	public void function delete() {
     	resource = model("resource").findOne(where="id = #params.key#");
@@ -85,8 +84,8 @@ component extends="Controller" hint="Resources Controller"
 	}
 
 /******************** Private *********************/
-	/**
-	*  @hint
+	/*
+	 * @hint
 	*/
 	public void function _checkResourcesAdmin() {
 		if (!application.rbs.setting.allowResources){
@@ -94,14 +93,70 @@ component extends="Controller" hint="Resources Controller"
 		}
 	}
 /******************** Ajax/Remote/Misc*************/
-	/**
-	*  @hint Bit of a hack, but a quick lookup to see if a resource is already booked
+	/*
+	 * @hint Bit of a hack, but a quick lookup to see if a resource is already booked
 	*/
-	public void function checkavailability() {
+	public void function check() {
+		param name="params.format" default="json";
+		if(structKeyExists(params, "start")
+			AND structKeyExists(params, "end")
+			AND structKeyExists(params, "id") ){
+		// We need to not check the eventid if editing, but still need it for cloning + adding
+		if(structKeyExists(params, "referrer") && params.referrer != "clone"){
+  			params.excludeeventid=params.id;
+		}
+		// Override empty eventid 
+		if(structKeyExists(params, "eventid") && !isNumeric(params.eventid)){
+			params.eventid=0;
+		}
+		params.resourceid=params.id;
+  		var loc={};
+  			// get all for that day, including infinite repeats, excluding the current event if editing
+  			loc.events=getEventsForRange(excludestatus="denied", start=dateFormat(params.start, "YYYY-MM-DD"), end=dateFormat(params.end, "YYYY-MM-DD") & " 23:59");
+  			// generate repeats etc
+  			loc.eventsArray=parseEventsForCalendar(events=getEventsForRange(), viewPortStartDate=dateFormat(params.start, "YYYY-MM-DD"), viewPortEndDate=end=dateFormat(params.end, "YYYY-MM-DD") & " 23:59");
+			eCheck=[];
+  	 		for(potentialClash in loc.eventsArray){
+  	 			var allow=0;
+  	 			if(len(potentialClash.type)){
+  	 				if(isTimeClash(start1=params.start,end1=params.end,start2=potentialClash.repeat.start,end2=potentialClash.repeat.end)){
+  	 					 allow=1;
+  	 				}
+  	 			} else {
+  	 				if(isTimeClash(start1=params.start,end1=params.end,start2=potentialClash.start,end2=potentialClash.end)){
+  	 					allow=1;
+  	 				}
+  	 			}
+	  	 		// Skip All Day events if in settings
+  	 			if(!application.rbs.setting.includeAllDayEventsinConcurrency && potentialClash.allDay){
+  	 				allow=0;
+  	 			}
+  	 			if(allow){
+  	 				arrayAppend(eCheck, potentialClash);
+  	 			}
+  	 		}
+			renderWith(eCheck);
+		} else{
+			renderWith(params);
+		}
+	}
+	/*public void function checkavailability() {
+		param name="params.format" default="json"; 
 		param name="params.id" default="" type="numeric";
-		param name="params.eventid" default="" type="numeric";
+		param name="params.eventid" default=0 type="any";
 		param name="params.start" default="" type="string";
 		param name="params.end" default="" type="string";
+		params.resourceid = params.id;
+		structDelete(params, "location");
+		var loc={};
+		var response={};
+		// get all for that day, including infinite repeats, excluding the current event if editing
+  			loc.events=getEventsForRange(resourceid=params.resourceid, excludestatus="denied", start=dateFormat(params.start, "YYYY-MM-DD"), end=dateFormat(params.end, "YYYY-MM-DD") & " 23:59");
+  			response.eventsArray=parseEventsForCalendar(events=loc.events, viewPortStartDate=dateFormat(params.start, "YYYY-MM-DD"), viewPortEndDate=end=dateFormat(params.end, "YYYY-MM-DD") & " 23:59");
+	 		response.events=loc.events;
+	 		response.params=params;
+		renderWith(response);
+		 
 		if(!isDate(params.end)){
 			params.end=dateAdd("h", 1, params.start);
 		}
@@ -110,19 +165,14 @@ component extends="Controller" hint="Resources Controller"
 		checkEvent=model("event").findAll(
 			where="startsat <= '#params.start#' AND endsat >= '#params.end#' AND id != #params.eventid# AND resourceid = #params.id#",
 			include="eventresources");
-		/* Check for events with an All Day flag which might have incorrect timings set; this shouldn't affect events which span multiple days, as the above check (should) pick them up;*/
+		// Check for events with an All Day flag which might have incorrect timings set; this shouldn't affect events which span multiple days, as the above check (should) pick them up;
 			tempstart=dateFormat(params.start, "yyyy-mm-dd") & ' ' & timeFormat(params.start, "00:00");
 			tempend=dateFormat(params.end, "yyyy-mm-dd") & ' ' & timeFormat(params.end, "23:59");
 		checkEvent2=model("event").findAll(
 			where="startsat >= '#tempstart#' AND endsat <= '#tempend#' AND id != #params.eventid# AND allday=1 AND resourceid=#params.id#",
 			include="eventresources");
 
-		if(checkEvent.recordCount OR checkEvent2.recordcount){
-			renderText(0);
-		} else {
-			renderText(1);
-		}
-
-
-	}
+		
+		*/
+ 
 }

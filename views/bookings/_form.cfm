@@ -4,16 +4,27 @@
 <cfparam name="resources">
 <cfparam name="event">
 <cfparam name="customfields">
-
+<cfscript>
+	ll={};
+	for(location in locations){
+		ll["#location.id#"] = location.layouts;
+	} 
+</cfscript>
 <cfoutput>
-	#hiddenFieldTag(name="tempkey", value=event.key())#
-	#hiddenFieldTag(name="referrer", value=params.action)#
-	<div id="concurrencyCheckResult"
+	<div id="bookingFormSettings" 
 		data-checkurl="#urlFor(controller='bookings', action='check')#"
 		data-doConcurrencyCheck=#application.rbs.setting.doConcurrencyCheckForBookings#
 		data-allowOverlappingBookings=#application.rbs.setting.allowOverlappingBookings#
-		data-includeAllDayEventsinConcurrency=#application.rbs.setting.includeAllDayEventsinConcurrency#></div>
-	<cfif structKeyExists(application.rbs.templates, "event") AND structKeyExists(application.rbs.templates.event, "form")>
+		data-includeAllDayEventsinConcurrency=#application.rbs.setting.includeAllDayEventsinConcurrency#
+		data-locationLayouts='#serializeJSON(ll)#'
+		data-defaultlayouts="#application.rbs.setting.roomlayouttypes#"
+		data-resourceCheckURL="#urlFor(controller='resources', action='check', params="format=json")#"
+		data-eventid="#event.key()#"
+	>
+	#hiddenFieldTag(name="tempkey", value=event.key())#
+	#hiddenFieldTag(name="referrer", value=params.action)#
+	<div id="concurrencyCheckResult"></div>
+	<cfif structKeyExists(application.rbs.templates, "event") && structKeyExists(application.rbs.templates.event, "form")>
 		<!--- Custom output--->
 		#processShortCodes(application.rbs.templates.event.form)#
 		<cfelse>
@@ -74,31 +85,17 @@
 		<!--- Event Resources output irrespective of template, for now--->
 		<cfif application.rbs.setting.allowResources>
 			#includePartial("resources")#
-		</cfif>
-
+		</cfif> 
 		<!--- Ditto repeat fields --->
-		 #includePartial("repeatrule")#
-
+		 #includePartial("repeatrule")# 
+	</cfoutput>
 <!---
 	TODO: localiser is adding a line break before this?
 	//<cfoutput>#l('Available')#</cfoutput>
 	//<cfoutput>#l('Item is already reserved for another booking!')#</cfoutput>
 
-	--->
-	</cfoutput>
-
-	<cfsavecontent variable="request.js.datepicker">
-		<script>
-		$(document).ready(function(){
-	    var layouts={
-	    	<cfloop query="locations">
-				<cfoutput>#id#: '#layouts#'<cfif locations.recordcount NEQ currentrow>
-					,
-				</cfif></cfoutput>
-			</cfloop>
-	    }
-
-
+	---> 
+	<!---
 	// Concurrency Check
 	concurrencyCheck();
 	// Deselect resources if restricted
@@ -229,4 +226,4 @@
 	});
 });
 </script>
-</cfsavecontent>
+</cfsavecontent--->

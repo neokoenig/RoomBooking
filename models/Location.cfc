@@ -1,7 +1,7 @@
 //================= Room Booking System / https://github.com/neokoenig =======================--->
 component extends="Model" hint="Locations Model"
 {
-	/**
+	/*
 	 * @hint Constructor
 	 */
 	public void function init() {
@@ -10,8 +10,8 @@ component extends="Model" hint="Locations Model"
 		afterInitialization("registerSystemFields");
 	}
 
-	/**
-	*  @hint  NB, these can be localised, as the output has the l() wrapper
+	/*
+	 * @hint  NB, these can be localised, as the output has the l() wrapper
 	*/
 	public void function registerSystemFields() {
 		this.systemfields=[

@@ -8,37 +8,37 @@ set(dataSourceName="roombooking");
 // Setting URL rewriting to off by default, as running wheels in a subdirectory requires more complex configuration
 set(URLRewriting="off");
 
-// Whether to allow ?reload=production etc via URL. I tend to keep this on.
-set(allowedEnvironmentSwitchThroughURL=true);
-
 // Reload Password: you'll definitely want to change this to something unique.
 set(reloadPassword="roombooking");
 
-// Environment-agnostic settings
+//=====================================================================
+//= 	Environment-agnostic settings
+//=====================================================================
 set(assetQueryString=true);
-
-// set to false for plugin development
-set(deletePluginDirectories=false);
-
 set(excludeFromErrorEmail="password,hashedpassword,passwordsalt,ssn");
 
 // valid values are "session" or "cookie"
 set(flashStorage="session");
 
-set(obfuscateURLs=false);
-
-// set to false for plugin development
+// In this app, plugins are part of the source and not designed to be distributed in zip form
 set(overwritePlugins=false);
+set(deletePluginDirectories=false);
 
-// Localisation
+// Highlight defaults
+set(functionName="highlight", tag="mark");
+
+//=====================================================================
+//= 	Localisation
+//=====================================================================
 set(localizatorGetLocalizationFromFile=true);
 set(localizatorLanguageDefault="en_GB");
 // NB, not putting this in the currentuser scope on purpose.
 set(localizatorLanguageSession="session.lang");
 
-// Highlight defaults
-set(functionName="highlight", tag="mark");
-// Bootstrap 3 form defaults
+//=====================================================================
+//= 	Bootstrap 3 form Defaults: this is so you can more easily build
+//=		Form fields without having to append/prepend markup
+//=====================================================================
 set(functionName="startFormTag");
 set(functionName="submitTag", class="btn btn-primary", value="Save Changes");
 set(functionName="checkBox,checkBoxTag", labelPlacement="aroundRight", prependToLabel="<div class=""checkbox"">", appendToLabel="</div>", uncheckedValue="0");

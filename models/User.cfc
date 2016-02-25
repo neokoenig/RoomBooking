@@ -1,7 +1,7 @@
 //================= Room Booking System / https://github.com/neokoenig =======================--->
 component extends="Model" hint="User Model"
 {
-	/**
+	/*
 	 * @hint Constructor
 	 */
 	public void function init() {
@@ -17,8 +17,8 @@ component extends="Model" hint="User Model"
 		validatesUniquenessOf("email");
 	}
 
-	/**
-	*  @hint Sanitize inputs
+	/*
+	 * @hint Sanitize inputs
 	*/
 	public void function sanitize() {
 		this.firstname = htmlEditFormat(this.firstname);
@@ -31,8 +31,8 @@ component extends="Model" hint="User Model"
 		this.tel = htmlEditFormat(this.tel);
 	}
 
-	/**
-	*  @hint Secure Password
+	/*
+	 * @hint Secure Password
 	*/
 	public void function securePassword() {
 	  	var	p={};
@@ -45,8 +45,8 @@ component extends="Model" hint="User Model"
 	     }
 	}
 
-	/**
-	*  @hint Password to blank
+	/*
+	 * @hint Password to blank
 	*/
 	public void function passwordToBlank() {
 		if ( StructKeyExists(this, "password") ){
@@ -57,15 +57,15 @@ component extends="Model" hint="User Model"
 		}
 	}
 
-	/**
-	*  @hint Set Email conf token (not actually used)
+	/*
+	 * @hint Set Email conf token (not actually used)
 	*/
 	public void function setEmailConfirmationToken() {
 		this.emailConfirmationToken = generateToken();
 	}
 
-	/**
-	*  @hint Set PW reset token
+	/*
+	 * @hint Set PW reset token
 	*/
 	public void function createPasswordResetToken() {
 		this.passwordResetToken = generateToken();
@@ -73,8 +73,8 @@ component extends="Model" hint="User Model"
 		this.save();
 	}
 
-	/**
-	*  @hint make unique token
+	/*
+	 * @hint make unique token
 	*/
 	public string function generateToken() {
 		return Replace(LCase(CreateUUID()), "-", "", "all");

@@ -1,7 +1,7 @@
 //================= Room Booking System / https://github.com/neokoenig =======================--->
 component extends="Controller" hint="RSS/ICal Etc"
 {
-	/**
+	/*
 	 * @hint Constructor.
 	 */
 	public void function init() {
@@ -19,9 +19,11 @@ component extends="Controller" hint="RSS/ICal Etc"
 		usesLayout(template="displayboard", only="display");
 	}
 
-/******************** Public***********************/
-	/**
-	*  @hint Full Screen Display/digital signage
+//=====================================================================
+//= 	Public 
+//=====================================================================
+	/*
+	 * @hint Full Screen Display/digital signage
 	*/
 	public void function display() {
 		param name="params.maxrows" default="5" type="numeric";
@@ -62,8 +64,8 @@ component extends="Controller" hint="RSS/ICal Etc"
 
 	}
 
-	/**
-	*  @hint RSS2 Feed Defaults to 25 rows, but you can add maxrows=x to override
+	/*
+	 * @hint RSS2 Feed 
 	*/
 	public void function rss2() {
 		param name="params.maxrows" default="25" type="numeric";
@@ -75,8 +77,8 @@ component extends="Controller" hint="RSS/ICal Etc"
 		renderWith(data=events);
 	}
 
-	/**
-	*  @hint iCal feed - Bit of an experiment! based on cflib.org USiCal()
+	/*
+	 * @hint iCal feed - Bit of an experiment! based on cflib.org USiCal()
 	*/
 	public void function ical() {
 		param name="params.maxrows" default="25" type="numeric";
@@ -123,9 +125,11 @@ component extends="Controller" hint="RSS/ICal Etc"
 		abort;
 		//renderWith(data=data);
 	}
-/******************** Private *********************/
-	/**
-	*  @hint Whether the URL has a valid API token
+//=====================================================================
+//= 	Private
+//=====================================================================
+	/*
+	 * @hint Whether the URL has a valid API token
 	*/
 	private void function f_isValidAPIRequest() {
 		var r=false;

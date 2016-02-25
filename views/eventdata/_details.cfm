@@ -21,12 +21,9 @@
 				#linkTo(action="approve", key=event.eventid, text="<span class='glyphicon glyphicon-ok'></span> " & l("Approve?"), controller="bookings", class="btn btn-success btn-sm")#
 				#linkTo(action="deny", key=event.eventid, text="<span class='glyphicon glyphicon-remove'></span> " & l("Deny"), controller="bookings", class="btn btn-danger btn-sm")#
 				#linkTo(action="deny", key=event.eventid, text="<span class='glyphicon glyphicon-trash'></span> " & l("Deny & Delete"), controller="bookings", class="btn btn-danger btn-sm", params="delete=1")#
-			</div>
+			</div> 
 		</cfif>
-	</cfif>
-
-
-
+	</cfif> 
 </cfif>
 
 <!--- Editing --->
@@ -34,8 +31,19 @@
 	<div class="btn-group btn-group-justified">
 		#linkTo(action="edit", key=event.eventid, text="<span class='glyphicon glyphicon-pencil'></span> " & l("Edit"), controller="bookings", class="btn btn-info btn-sm")#
 		#linkTo(action="clone", key=event.eventid, text="<span class='glyphicon glyphicon-repeat'></span> " & l("Clone"), controller="bookings", class="btn btn-warning btn-sm")#
-		#linkTo(action="delete", key=event.eventid, text="<span class='glyphicon glyphicon-trash'></span> " & l("Delete"), controller="bookings", class="btn btn-danger btn-sm", confirm="Are you sure?")#
+		<!--- Repeat Controls --->
+		<cfif len(event.type) && structkeyExists(params, "instanceDate")> 
+		#linkTo(action="addexception", key=event.eventid, params="exceptiondate=#dateFormat(params.instanceDate, 'yyyy-mm-dd')#", text="<span class='glyphicon glyphicon-trash'></span> " & l("Delete Instance"), controller="bookings", class="btn btn-danger btn-xs", confirm="Are you sure?")#
+
+		#linkTo(action="delete", key=event.eventid, text="<span class='glyphicon glyphicon-trash'></span> " & l("Delete All"), controller="bookings", class="btn btn-danger btn-sm", confirm="Are you sure?")#
+		<cfelse>
+			#linkTo(action="delete", key=event.eventid, text="<span class='glyphicon glyphicon-trash'></span> " & l("Delete"), controller="bookings", class="btn btn-danger btn-sm", confirm="Are you sure?")#
+		</cfif>
+		
 	</div>
+
+
+
 </cfif>
 <cfif checkPermission("viewRoomBooking")>
 <cfif structKeyExists(application.rbs.templates, "event") AND structKeyExists(application.rbs.templates.event, "output")>

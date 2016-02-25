@@ -1,7 +1,7 @@
 //================= Room Booking System / https://github.com/neokoenig =======================--->
 component extends="Controller" hint="Locations Controller"
 {
-	/**
+	/*
 	 * @hint Constructor.
 	 */
 	public void function init() {
@@ -21,31 +21,36 @@ component extends="Controller" hint="Locations Controller"
 
 	}
 
-/******************** Admin ***********************/
-	/**
-	*  @hint Public Location List
+//=====================================================================
+//= 	Public
+//=====================================================================
+	/*
+	 * @hint Public Location List
 	*/
 	public void function list() {
 	}
 
-	/**
-	*  @hint
+	/*
+	 * @hint
 	*/
 	public void function view() {
 		location=model("location").findOne(where="id = #params.key#");
 		customfields=getCustomFields(objectname=request.modeltype, key=location.key());
 	}
-/******************** Admin ***********************/
-	/**
-	*  @hint Add Location
+
+//=====================================================================
+//= 	Admin 
+//=====================================================================
+	/*
+	 * @hint Add Location
 	*/
 	public void function add() {
 		location=model("location").new();
 		customfields=getCustomFields(objectname=request.modeltype, key=location.key());
 	}
 
-	/**
-	*  @hint Create Location
+	/*
+	 * @hint Create Location
 	*/
 	public void function create() {
 		if(structkeyexists(params, "location")){
@@ -59,8 +64,8 @@ component extends="Controller" hint="Locations Controller"
 		}
 	}
 
-	/**
-	*  @hint Edit  Location
+	/*
+	 * @hint Edit  Location
 	*/
 	public void function edit() {
 		location=model("location").findOne(where="id = #params.key#");
@@ -69,8 +74,8 @@ component extends="Controller" hint="Locations Controller"
 
 	}
 
-	/**
-	*  @hint Update Location
+	/*
+	 * @hint Update Location
 	*/
 	public void function update() {
 		if(structkeyexists(params, "location")){
@@ -88,8 +93,8 @@ component extends="Controller" hint="Locations Controller"
 		}
 	}
 
-	/**
-	*  @hint Delete Location
+	/*
+	 * @hint Delete Location
 	*/
 	public void function delete() {
 		checkLocation=model("location").findAll();
@@ -107,20 +112,23 @@ component extends="Controller" hint="Locations Controller"
  			redirectTo(action="index", error="At least one Location is required.");
 		}
 	}
-/******************** Private *********************/
-	/**
-	*  @hint Whether to allow access
+
+//=====================================================================
+//= 	Private
+//=====================================================================
+	/*
+	 * @hint Whether to allow access
 	*/
-	public void function f_checkLocationsAdmin() {
+	private void function f_checkLocationsAdmin() {
 		if(!application.rbs.setting.allowLocations){
 			redirectTo(route="home", error="Facility to edit Locations has been disabled");
 		}
 	}
 
-	/**
-	*  @hint Sets the model type to use with Custom Fields + Templates
+	/*
+	 * @hint Sets the model type to use with Custom Fields + Templates
 	*/
-	public void function _setModelType() {
+	private void function _setModelType() {
 		request.modeltype="location";
 	}
 }

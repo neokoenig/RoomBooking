@@ -1,7 +1,7 @@
 ﻿//================= Room Booking System / https://github.com/neokoenig =======================--->
-component extends="Controller" hint=""
+component extends="Controller" hint="Password Resets"
 {
-	/**
+	/*
 	 * @hint Constructor.
 	 */
 	public void function init() {
@@ -11,7 +11,9 @@ component extends="Controller" hint=""
 		filters(through="denyInDemoMode");
 	}
 
-/******************** Public***********************/
+//=====================================================================
+//= 	Public
+//=====================================================================
  	/**
  	*  @hint Create a pw reset email
  	*/

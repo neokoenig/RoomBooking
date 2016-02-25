@@ -47,12 +47,14 @@
             <li class="dropdown">
             <a href="##" class="dropdown-toggle" data-toggle="dropdown"><span class='glyphicon glyphicon-cog'></span> #l("Settings")# <b class="caret"></b></a>
             <ul class="dropdown-menu">
+            <cfif application.rbs.setting.useLocalUserAccounts> 
             <cfif checkPermission("updateOwnAccount")>
                <li>#linkTo(route="myaccount", text="<span class='glyphicon glyphicon-user'></span> " & l('My Account'))#</li>
             </cfif>
              <cfif checkpermission("accessUsers")>
                <li>#linkTo(controller="users",  text="<span class='glyphicon glyphicon-user'></span> " & l('Users'))#</li>
              </cfif>
+            </cfif>
 
             <cfif application.rbs.setting.allowLocations AND checkpermission("accessLocations")>
               <li>#linkTo(controller="locations",  text="<span class='glyphicon glyphicon-plus-sign'></span> " & l('Locations'))#</li>

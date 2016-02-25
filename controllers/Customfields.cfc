@@ -1,7 +1,7 @@
 //================= Room Booking System / https://github.com/neokoenig =======================--->
 component extends="Controller" hint="Custom Fields and Templating"
 {
-	/**
+	/*
 	 * @hint Constructor.
 	 */
 	public void function init() {
@@ -16,27 +16,27 @@ component extends="Controller" hint="Custom Fields and Templating"
 
 	}
 
-/******************** Public***********************/
+//=====================================================================
+//= 	Admin
+//=====================================================================
 
-/******************** Admin ***********************/
-
-	/**
-	*  @hint Custom fields index
+	/*
+	 * @hint Custom fields index
 	*/
 	public void function index() {
 		customfields=model("customfield").findAll(order="parentmodel ASC,sortorder ASC");
 		customtemplates=model("template").findAll(order="parentmodel ASC");
 	}
 
-	/**
-	*  @hint Add New Custom Field
+	/*
+	 * @hint Add New Custom Field
 	*/
 	public void function add() {
 		customfield=model("customfield").new();
 	}
 
-	/**
-	*  @hint Create Custom Field
+	/*
+	 * @hint Create Custom Field
 	*/
 	public void function create() {
 		if(structkeyexists(params, "customfield")){
@@ -50,15 +50,15 @@ component extends="Controller" hint="Custom Fields and Templating"
 		}
 	}
 
-	/**
-	*  @hint Edit Custom Field
+	/*
+	 * @hint Edit Custom Field
 	*/
 	public void function edit() {
 		customfield=model("customfield").findOne(where="id = #params.key#");
 	}
 
-	/**
-	*  @hint Update Custom Field
+	/*
+	 * @hint Update Custom Field
 	*/
 	public void function update() {
 		if(structkeyexists(params, "customfield")){
@@ -73,8 +73,8 @@ component extends="Controller" hint="Custom Fields and Templating"
 		}
 	}
 
-	/**
-	*  @hint Delete Custom Field
+	/*
+	 * @hint Delete Custom Field
 	*/
 	public void function delete() {
     	customfield = model("customfield").findOne(where="id = #params.key#");
@@ -86,17 +86,19 @@ component extends="Controller" hint="Custom Fields and Templating"
 		}
 	}
 
-/******************** Templating ***********************/
-	/**
-	*  @hint Add New Template
+//=====================================================================
+//= 	Templating
+//=====================================================================
+	/*
+	 * @hint Add New Template
 	*/
 	public void function addtemplate() {
 		template=model("template").new();
 		template.template='';
  	}
 
-	/**
-	*  @hint Create Template
+	/*
+	 * @hint Create Template
 	*/
 	public void function createtemplate() {
 		if(structkeyexists(params, "template")){
@@ -110,15 +112,15 @@ component extends="Controller" hint="Custom Fields and Templating"
 		}
 	}
 
-	/**
-	*  @hint Edit Template
+	/*
+	 * @hint Edit Template
 	*/
 	public void function edittemplate() {
 		template=model("template").findOne(where="parentmodel = '#params.key#' AND type='#params.type#'");
 	}
 
-	/**
-	*  @hint Update Template
+	/*
+	 * @hint Update Template
 	*/
 	public void function updatetemplate() {
 		if(structkeyexists(params, "template")){
@@ -133,8 +135,8 @@ component extends="Controller" hint="Custom Fields and Templating"
 		}
 	}
 
-	/**
-	*  @hint Delete Template
+	/*
+	 * @hint Delete Template
 	*/
 	public void function deletetemplate() {
     	template = model("template").findOne(where="parentmodel = '#params.key#' AND type='#params.type#'");
@@ -145,16 +147,16 @@ component extends="Controller" hint="Custom Fields and Templating"
 			redirectTo(action="index", error="There were problems deleting that template");
 		}
 	}
-/******************** Private *********************/
 
-/******************** Ajax/Remote/Misc*************/
-	/**
-	*  @hint Gridmanger field picker
+//=====================================================================
+//= 	Ajax/Remote
+//=====================================================================
+	/*
+	 * @hint Gridmanger field picker
 	*/
 	public string function fieldpicker() {
-			systemfields=model(params.key).new();
-			customfields=getBlankCustomFields(params.key);
-
+		systemfields=model(params.key).new();
+		customfields=getBlankCustomFields(params.key); 
 	}
 
 }

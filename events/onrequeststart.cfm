@@ -20,7 +20,9 @@ if(StructCount(form)){
 	}
 }
 
-//-------------------------------------Languages
+//=====================================================================
+//= 	Languages
+//=====================================================================
 request.lang={};
 
 // Languages with a translation file
@@ -47,7 +49,9 @@ if(listFirst(request.lang.current, '_') EQ ListLast(request.lang.current, "_")){
 	request.lang.currentCodeWithSub=replace(lcase(request.lang.current), '_', '-', 'all');
 }
 
-//Other default request level vars
+//=====================================================================
+//= 	Other Request Level Vars
+//=====================================================================
 request.showNavBar="true";
 SetLocale(request.lang.current);
 </cfscript>

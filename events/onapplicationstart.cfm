@@ -1,6 +1,8 @@
 <cfscript>
 //================= Room Booking System / https://github.com/neokoenig =======================--->
-	 	// Application Specific settings
+//=====================================================================
+//= 	Application Level Settings: the rbs struct contains all the things.
+//=====================================================================
 		if(structKeyExists(application, "rbs")){
 			structDelete(application, "rbs");
 		}

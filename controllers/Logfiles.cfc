@@ -1,7 +1,7 @@
 //================= Room Booking System / https://github.com/neokoenig =======================--->
 component extends="Controller" hint="Manage Logfiles"
 {
-	/**
+	/*
 	 * @hint Constructor.
 	 */
 	public void function init() {
@@ -11,9 +11,11 @@ component extends="Controller" hint="Manage Logfiles"
 		filters(through="checkPermissionAndRedirect", permission="accesslogfiles");
 	}
 
-/******************** Public***********************/
-	/**
-	*  @hint Log viewer
+//=====================================================================
+//= 	Admin
+//=====================================================================
+	/*
+	 * @hint Log viewer
 	*/
 	public void function index() {
 		param name="params.type" type="string" default="";
@@ -35,14 +37,15 @@ component extends="Controller" hint="Manage Logfiles"
 		else {
 			logfiles=model("logfiles").findAll(maxrows=500,  maxrows=params.rows, order="createdAt DESC", includeSoftDeletes=true);
 		}
-	}
-/******************** Admin ***********************/
+	} 
 
-/******************** Private *********************/
-	/**
-	*  @hint
+//=====================================================================
+//= 	Private
+//=====================================================================
+	/*
+	 * @hint
 	*/
-	public string function _getLogFileTypes() {
+	private string function _getLogFileTypes() {
 		return "login,success,error,ajax,cookie";
 	}
 }

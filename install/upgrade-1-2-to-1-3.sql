@@ -18,3 +18,13 @@ CHANGE COLUMN `endsat` `endsat`  datetime NULL DEFAULT NULL AFTER `startsat`;
 INSERT INTO `settings` VALUES ('doConcurrencyCheckForBookings', '1', 'Whether to do concurrency checks when booking an event', 'boolean', '1', 'General');
 INSERT INTO `settings` VALUES ('allowOverlappingBookings', '1', 'Whether to allow overlapping bookings to be created', 'boolean', '1', 'General');  
 INSERT INTO `settings` VALUES ('includeAllDayEventsinConcurrency', '0', 'Whether to include all day events in concurrency checks', 'boolean', '1', 'General'); 
+INSERT INTO `settings` VALUES ('useExternalAuthentication', '0', 'Whether to use local or external authentication', 'boolean', '1', 'Authentication');
+INSERT INTO `settings` VALUES ('useLocalUserAccounts', '1', 'Whether to use local user accounts', 'boolean', '1', 'Authentication');
+INSERT INTO `settings` VALUES ('authenticationEndPoint', 'N/A', 'External Authentication API Endpoint', 'string', '1', 'Authentication');
+
+DROP TABLE IF EXISTS `eventexceptions`;
+CREATE TABLE `eventexceptions` (
+  `eventid` int(11) NOT NULL,
+  `exceptiondate` date NOT NULL,
+  PRIMARY KEY (`eventid`,`exceptiondate`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
