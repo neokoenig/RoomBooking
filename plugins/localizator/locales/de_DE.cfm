@@ -15,11 +15,12 @@
 <cfset loc["All Resources"] = "Alle Resourcen">
 <cfset loc["any"] = "beliebig">
 <cfset loc["API Token"] = "API Token">
-<cfset loc["API useage requires a token to be created for your account. Administrators, or those with user creation privledges can create these for you on request"] = "">
+<cfset loc["API useage requires a token to be created for your account. Administrators, or those with user creation privledges can create these for you on request"] = "Die Benutzung der API erfordert ein Token, das für Ihr Konto erstellt werden muss. Administratoren, oder Personen mit dem Privileg Benutzer anzulegen, könne diese für Sie auf Anfrage erstellen.">
 <cfset loc["Appears below the form helper for this custom field"] = "">
 <cfset loc["Approve?"] = "Bestätigen?">
 <cfset loc["Are you sure you want to disable this account?"] = "Sind Sie sicher, dass Sie dieses Konto deaktivieren möchten?">
 <cfset loc["Are you Sure?"] = "Sind Sie sicher?">
+<cfset loc["Assume"] = "">
 <cfset loc["Available Locations"] = "Verfügbare Orte">
 <cfset loc["Available"] = "Verfügbar">
 <cfset loc["Book a Room"] = "Buchen Sie einen Raum">
@@ -60,13 +61,13 @@
 <cfset loc["Data Feed"] = "Datenfeed">
 <cfset loc["Data Feeds for your account"] = "Datenfeeds für Ihr Konto">
 <cfset loc["Date"] = "Datum">
+<cfset loc["Delete All"] = "">
 <cfset loc["Delete Instance"] = "">
 <cfset loc["Delete"] = "Löschen">
 <cfset loc["Deny & Delete"] = "Ablehnen & Löschen">
 <cfset loc["Deny"] = "Ablehnen">
 <cfset loc["Description"] = "Beschreibung">
-<cfset loc["Details"] = "Details">
-<cfset loc["Die Benutzung der API erfordert ein Token, das für Ihr Konto erstellt werden muss. Administratoren, oder Personen mit dem Privileg Benutzer anzulegen, könne diese für Sie auf Anfrage erstellen."] = "">
+<cfset loc["Details"] = "Details"> 
 <cfset loc["Disable"] = "Deaktivieren">
 <cfset loc["Displays"] = "Anzeigen">
 <cfset loc["Don't Repeat"] = "Nicht wiederholen">
@@ -220,4 +221,3 @@
 <cfset loc["You can use custom fields to collect and display data which isn't provided by the system (default) fields. Examples might include 'Room Capacity' for locations, or a radio select for Dietary requirements when creating a booking."] = "">
 <cfset loc["You do not have an API token associated with your account"] = "Sie haben kein mit Ihrem Konto verbundenes API-Token ">
 <cfset loc["You must enter a start and end date/time before attempting to book this resource"] = "Sie müssen eine Anfangs- und Endzeit vor dem Buchungsversuch dieser Resource eintragen">
-<cfset loc["Delete All"] = "">

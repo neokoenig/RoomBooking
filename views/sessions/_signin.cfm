@@ -24,7 +24,9 @@
 			#checkBoxTag(name="rememberme", label=l("Remember my email"),  checked=savedemail)#
 		</cfif>
 			#submitTag(value=l("Sign in"),  class="btn btn-primary btn-block append")#
-			#linkTo(text=l("Forgot your password?"),  controller="passwordResets", action="new")#
+			<cfif application.rbs.setting.useLocalUserAccounts>
+				#linkTo(text=l("Forgot your password?"),  controller="passwordResets", action="new")#
+			</cfif>
  		</div></div>
 		#endFormTag()#
 </cfoutput>

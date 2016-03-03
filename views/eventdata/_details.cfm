@@ -27,8 +27,8 @@
 </cfif>
 
 <!--- Editing --->
-<cfif checkPermission("allowRoomBooking")>
-	<div class="btn-group btn-group-justified">
+<cfif checkPermission("allowRoomBooking")> 
+ 	<div class="btn-group btn-group-justified">
 		#linkTo(action="edit", key=event.eventid, text="<span class='glyphicon glyphicon-pencil'></span> " & l("Edit"), controller="bookings", class="btn btn-info btn-sm")#
 		#linkTo(action="clone", key=event.eventid, text="<span class='glyphicon glyphicon-repeat'></span> " & l("Clone"), controller="bookings", class="btn btn-warning btn-sm")#
 		<!--- Repeat Controls --->
@@ -38,12 +38,8 @@
 		#linkTo(action="delete", key=event.eventid, text="<span class='glyphicon glyphicon-trash'></span> " & l("Delete All"), controller="bookings", class="btn btn-danger btn-sm", confirm="Are you sure?")#
 		<cfelse>
 			#linkTo(action="delete", key=event.eventid, text="<span class='glyphicon glyphicon-trash'></span> " & l("Delete"), controller="bookings", class="btn btn-danger btn-sm", confirm="Are you sure?")#
-		</cfif>
-		
-	</div>
-
-
-
+		</cfif> 
+	</div> 
 </cfif>
 <cfif checkPermission("viewRoomBooking")>
 <cfif structKeyExists(application.rbs.templates, "event") AND structKeyExists(application.rbs.templates.event, "output")>

@@ -75,6 +75,11 @@ component extends="Controller" hint="Sessions Controller"
 				    if(!structKeyExists(loc.result, "apitoken")){
 				    	loc.result.apitoken="";
 				    }
+				    // This cookie is only set AFTER a successful login, to prevent mistyped email
+					if(structkeyexists(params, "rememberme")){
+						setCookieRememberUsername(params.email);
+					}
+					
 					addlogline(type="Login", message="#loc.result.id# - #loc.result.email# successfully logged in via External Auth", userid=loc.result.id);
 				    _createUserInScope(loc.result);
 			    } else { 

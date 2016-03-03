@@ -109,6 +109,7 @@ component extends="Controller" hint="Main Events/Bookings Controller"
 	*/
 	public void function edit() {
 		event=model("event").findOne(where="id = #params.key#", include="eventresources");
+		_checkOwnershipAndRedirect(event);
 		customfields=getCustomFields(objectname=request.modeltype, key=params.key);
 	}
 
@@ -156,8 +157,14 @@ component extends="Controller" hint="Main Events/Bookings Controller"
 	*/
 	public void function create() {
 		if(structkeyexists(params, "event")){
+			
 	    	event = model("event").new(properties=params.event);
+	    	// Assign OwnerID ifloggedin; this is deliberately not set as integer in the DB to allow non numeric UUIDs from external APIs
+			if(isLoggedIn()){
+				event.ownerid=session.currentuser.id;
+			}
 			if ( event.save() ) {
+
 				// Update approval status if allowed to bypass
 				if(application.rbs.setting.approveBooking AND checkPermission("bypassApproveBooking")){
 					event.status="approved";
@@ -200,8 +207,8 @@ component extends="Controller" hint="Main Events/Bookings Controller"
 	*/
 	public void function update() {
 		if(structkeyexists(params, "event")){
-
 	    	event = model("event").findOne(where="id = #params.key#", include="eventresources");
+			_checkOwnershipAndRedirect(event);
 			event.update(params.event);
 
 			if ( event.save() )  {
@@ -242,6 +249,7 @@ component extends="Controller" hint="Main Events/Bookings Controller"
 	private void function _setModelType() {
 		request.modeltype="event";
 	}
+	
 //=====================================================================
 //= 	Ajax/Remote/Misc
 //=====================================================================

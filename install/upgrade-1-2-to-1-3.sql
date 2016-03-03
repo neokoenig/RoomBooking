@@ -10,7 +10,7 @@ ADD COLUMN  `repeatendsat` datetime DEFAULT NULL,
 ADD COLUMN  `repeatEvery` tinyint(2) DEFAULT NULL,
 ADD COLUMN  `repeatOn` varchar(18) COLLATE utf8_unicode_ci DEFAULT NULL,
 ADD COLUMN  `repeatBy` varchar(3) COLLATE utf8_unicode_ci DEFAULT NULL ,
-
+ADD COLUMN `ownerid`  varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL ;
 CHANGE COLUMN `starts` `startsat`  datetime NULL DEFAULT NULL AFTER `title`,
 CHANGE COLUMN `endsat` `endsat`  datetime NULL DEFAULT NULL AFTER `startsat`; 
 
@@ -21,6 +21,7 @@ INSERT INTO `settings` VALUES ('includeAllDayEventsinConcurrency', '0', 'Whether
 INSERT INTO `settings` VALUES ('useExternalAuthentication', '0', 'Whether to use local or external authentication', 'boolean', '1', 'Authentication');
 INSERT INTO `settings` VALUES ('useLocalUserAccounts', '1', 'Whether to use local user accounts', 'boolean', '1', 'Authentication');
 INSERT INTO `settings` VALUES ('authenticationEndPoint', 'N/A', 'External Authentication API Endpoint', 'string', '1', 'Authentication');
+INSERT INTO `permissions` (`id`, `admin`, `editor`, `notes`) VALUES ('editAnyBooking', '1', '1', 'Allow user to edit any booking, not just their own');
 
 DROP TABLE IF EXISTS `eventexceptions`;
 CREATE TABLE `eventexceptions` (

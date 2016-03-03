@@ -91,8 +91,8 @@
     public void function signOut() {
         if (isLoggedIn() ) {
          StructDelete(session, "currentUser");
+        }
      }
- }
 
     /*
     Notes on salting / hashing:
@@ -167,8 +167,30 @@
     public void function checkPermissionAndRedirect(required string permission) {
      if(!checkPermission(arguments.permission)){
         redirectTo(route="denied", error="Sorry, you have insufficient permission to access this. If you believe this to be an error, please contact an administrator.");
+        }
     }
-}
+
+    /*
+    * @hint: Check the owner id of the event against the currently logged in user
+    */
+    public boolean function _checkOwnership(required struct data) {
+        if(structKeyExists(event, "ownerid") && len(event.ownerid) && isloggedin()){
+            if(event.ownerid == session.currentuser.id || checkPermission("editAnyBooking")){
+                return true;
+            } else {
+                return false;
+            }
+        }
+        return true;
+    }
+    /*
+    * @hint: Check the owner id of the event against the currently logged in user
+    */
+    public void function _checkOwnershipAndRedirect(required struct event) {
+        if(!_checkOwnership(event)){
+            redirectTo(route="home", error="You don't have permission to edit that event");
+        } 
+    }
 
     /*
     *  @hint Checks for the relevant permissions structs in application scope

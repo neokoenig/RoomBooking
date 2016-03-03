@@ -93,6 +93,7 @@ CREATE TABLE `events` (
  `repeatEvery` tinyint(2) DEFAULT NULL,
  `repeatOn` varchar(18) COLLATE utf8_unicode_ci DEFAULT NULL,
  `repeatBy` varchar(3) COLLATE utf8_unicode_ci DEFAULT NULL,
+ `ownerid`  varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
@@ -179,6 +180,7 @@ INSERT INTO `permissions` VALUES ('allowRSS', '1', '1', '1', '1', 'Reserved for 
 INSERT INTO `permissions` VALUES ('bypassApproveBooking', '1', '1', '0', '0', 'Allows user to bypass event approval process');
 INSERT INTO `permissions` VALUES ('updateOwnAccount', '1', '1', '1', '0', 'Allows a user to update their own details');
 INSERT INTO `permissions` VALUES ('viewRoomBooking', '1', '1', '1', '1', 'View Room Booking Details');
+INSERT INTO `permissions` VALUES ('editAnyBooking', '1', '1','0','0','Allow user to edit any booking, not just their own');
 
 
 -- ----------------------------
