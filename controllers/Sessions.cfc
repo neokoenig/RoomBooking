@@ -79,12 +79,17 @@ component extends="Controller" hint="Sessions Controller"
 					if(structkeyexists(params, "rememberme")){
 						setCookieRememberUsername(params.email);
 					}
-					
-					addlogline(type="Login", message="#loc.result.id# - #loc.result.email# successfully logged in via External Auth", userid=loc.result.id);
+					// NB: if using a non integer based ID from an external system, logging won't record the user id of an action;
+					addlogline(type="Login", message="#loc.result.id# - #loc.result.email# successfully logged in via External Auth");
 				    _createUserInScope(loc.result);
 			    } else { 
+			    	// If we get a bad response, it's either a bad login, or they're trying to login with a local user acc;
+			    	// So try for local user if local user accounts are enabled
+			    	if(application.rbs.setting.useLocalUserAccounts){
+			    		localAuth();
+		    		} 
 		    		addLogline(type="Login", message="Bad Login [Incorrect Login?]");
-					redirectTo(error="We could not sign you in. Please try that again.", route="login");
+					redirectTo(error="We could not sign you in. Please try that again.", route="login"); 
 			    }  
 		    } else {  
 		    	addLogline(type="Login", message="Bad Login [External API not returning JSON]");

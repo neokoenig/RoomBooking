@@ -299,7 +299,8 @@
     *  @hint Quick way to add a logline
     */
     public void function addlogline() {
-        if(isLoggedIn()){
+        // NB, external auth won't log non numeric userids.
+        if(isLoggedIn() && isnumeric(session.currentuser.id)){
             arguments.userid=session.currentuser.id;
         }
         arguments.ipaddress=getIPAddress();
