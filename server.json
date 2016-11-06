@@ -1,0 +1,14 @@
+{
+    "name":"roombooking",
+    "force":true,
+    "web":{
+        "http":{
+            "host":"localhost",
+            "port":60015
+        },
+        "rewrites":{
+            "enable":true,
+            "config":"urlrewrite.xml"
+        }
+    }
+}
