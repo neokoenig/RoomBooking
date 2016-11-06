@@ -323,8 +323,8 @@ public array function structFindKeyWithValue(required struct struct, required st
         <cfset addlogline(message="Cookie remember email removed", type="Cookie")>
     </Cffunction>
 
-<cfif listFirst(server.coldfusion.productVersion) LTE "10">
-    <!---
+<!--- uncomment if running CF10 --->
+<!---
  Backport of QueryExecute in CF11 to CF9 &amp; CF10
 
  @param sql_statement    SQL. (Required)
@@ -333,7 +333,7 @@ public array function structFindKeyWithValue(required struct struct, required st
  @return Returns a query.
  @author Henry Ho (henryho167@gmail.com)
  @version 1, September 22, 2014
---->
+
 <cffunction name="QueryExecute" output="false"
             hint="
                 * result struct is returned to the caller by utilizing URL scope (no prefix needed) *
@@ -379,5 +379,4 @@ public array function structFindKeyWithValue(required struct struct, required st
     </cfif>
 
     <cfreturn executeResult.getResult()>
-</cffunction>
-</cfif>
+</cffunction> --->
