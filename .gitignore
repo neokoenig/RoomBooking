@@ -219,3 +219,7 @@ db/sql
 config/auth.cfm
 bower_components
 node_modules
+
+/public/WEB-INF
+/public/db/sql
+/public/config/auth.cfm

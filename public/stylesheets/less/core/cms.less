@@ -1,0 +1,77 @@
+/*************** RBS / core *******************/
+
+@lib: 		"../../../../bower_components";
+@bs:		"bootstrap/less";
+@site:  	"../site";
+@fontdir:	"fonts/";
+
+@import "@{lib}/@{bs}/variables.less";
+
+
+// cfwheels specific overrides:
+@icon-font-path:  @fontdir;
+
+// Core mixins
+@import "@{lib}/@{bs}/mixins.less";
+
+// Reset and dependencies
+@import "@{lib}/@{bs}/normalize.less";
+@import "@{lib}/@{bs}/print.less";
+@import "@{lib}/@{bs}/glyphicons.less";
+
+// Core CSS
+@import "@{lib}/@{bs}/scaffolding.less";
+@import "@{lib}/@{bs}/type.less";
+@import "@{lib}/@{bs}/code.less";
+@import "@{lib}/@{bs}/grid.less";
+@import "@{lib}/@{bs}/tables.less";
+@import "@{lib}/@{bs}/forms.less";
+@import "@{lib}/@{bs}/buttons.less";
+
+// Components
+@import "@{lib}/@{bs}/component-animations.less";
+@import "@{lib}/@{bs}/dropdowns.less";
+@import "@{lib}/@{bs}/button-groups.less";
+@import "@{lib}/@{bs}/input-groups.less";
+@import "@{lib}/@{bs}/navs.less";
+@import "@{lib}/@{bs}/navbar.less";
+@import "@{lib}/@{bs}/breadcrumbs.less";
+@import "@{lib}/@{bs}/pagination.less";
+@import "@{lib}/@{bs}/pager.less";
+@import "@{lib}/@{bs}/labels.less";
+@import "@{lib}/@{bs}/badges.less";
+@import "@{lib}/@{bs}/jumbotron.less";
+@import "@{lib}/@{bs}/thumbnails.less";
+@import "@{lib}/@{bs}/alerts.less";
+@import "@{lib}/@{bs}/progress-bars.less";
+@import "@{lib}/@{bs}/media.less";
+@import "@{lib}/@{bs}/list-group.less";
+@import "@{lib}/@{bs}/panels.less";
+@import "@{lib}/@{bs}/responsive-embed.less";
+@import "@{lib}/@{bs}/wells.less";
+@import "@{lib}/@{bs}/close.less";
+
+// Components w/ JavaScript
+@import "@{lib}/@{bs}/modals.less";
+@import "@{lib}/@{bs}/tooltip.less";
+@import "@{lib}/@{bs}/popovers.less";
+@import "@{lib}/@{bs}/carousel.less";
+
+
+// Vendor LESS and CSS files
+@import (less) "@{lib}/fullcalendar/dist/fullcalendar.css";
+//@import (less) "@{lib}/fullcalendar/dist/fullcalendar.print.css";
+@import (less) "@{lib}/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css";
+@import (less) "@{lib}/bootstrapvalidator/src/css/bootstrapValidator.css";
+@import (less) "@{lib}/minicolors/jquery.minicolors.css";
+@import (less) "@{lib}/gridmanager/dist/css/jquery.gridmanager.css";
+//@import (less) "@{lib}/bootstrap-language/languages.css";
+
+// Import our main site LESS files
+//@import "@{site}/layout.less";
+//@import "@{site}/displayboard.less";
+@import "@{site}/calendar.less";
+
+// Utility classes
+@import "@{lib}/@{bs}/utilities.less";
+@import "@{lib}/@{bs}/responsive-utilities.less";

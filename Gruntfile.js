@@ -1,6 +1,9 @@
 module.exports = function(grunt) {
 
   grunt.initConfig({
+    bp: 'bower_components',
+    ss: 'public/stylesheets',
+    js: 'public/javascripts',
     pkg: grunt.file.readJSON('package.json'),
 
     // Task configuration
@@ -10,7 +13,7 @@ module.exports = function(grunt) {
               compress: false,  //minifying the result
             },
              files: {
-                  "stylesheets/rbs.css":"stylesheets/less/core/rbs.less"
+                  "<%= ss %>/cms.css":"<%= ss %>/less/core/cms.less"
             }
         }
     },
@@ -21,17 +24,17 @@ module.exports = function(grunt) {
       },
       css: {
         files: {
-         "stylesheets/rbs.min.css": [ "stylesheets/rbs.css" ]
+         "<%= ss %>/cms.min.css": [ "<%= ss %>/cms.css" ]
          }
       }
         },
 
     clean : {
       css : {
-         src: ["stylesheets/rbs.css", "stylesheets/rbs.min.css"]
+         src: ["<%= ss %>/cms.css", "<%= ss %>/cms.min.css"]
       },
       js: {
-         src: ["javascripts/rbs.js","javascripts/rbs.min.js"]
+         src: ["<%= js %>/cms.js","<%= js %>/cms.min.js","<%= js %>/cms-admin.js","<%= js %>/cms-admin.min.js"]
       }
     },
 
@@ -41,32 +44,33 @@ module.exports = function(grunt) {
       },
       frontend: {
         src: [
-          // Bootstrap & JQuery
-          'bower_components/jquery/dist/jquery.js',
-          'bower_components/bootstrap/js/alert.js',
-          'bower_components/bootstrap/js/button.js',
-          'bower_components/bootstrap/js/carousel.js',
-          'bower_components/bootstrap/js/collapse.js',
-          'bower_components/bootstrap/js/dropdown.js',
-          'bower_components/bootstrap/js/modal.js',
-          'bower_components/bootstrap/js/tooltip.js',
-          'bower_components/bootstrap/js/popover.js',
-          'bower_components/bootstrap/js/tab.js',
-          'bower_components/bootstrap/js/transition.js',
-          // Calendar
-          'bower_components/moment/moment.js',
-          'bower_components/fullcalendar/dist/fullcalendar.js',
-          'bower_components/eonasdan-bootstrap-datetimepicker/src/js/bootstrap-datetimepicker.js',
-          'bower_components/bootstrapvalidator/dist/js/bootstrapValidator.js',
-          'bower_components/minicolors/jquery.minicolors.js',
-          'bower_components/jquery-ui/jquery-ui.js',
-          'bower_components/gridmanager/src/gridmanager.js',
-          'bower_components/bootbox/bootbox.js',
-          'bower_components/fullcalendar/dist/lang-all.js',
-          // Main.js is any custom JS
-          'javascripts/main.js'
+         // jQuery
+         '<%= bp %>/jquery/dist/jquery.js',
+        // Bootstrap individual components: delete what we don't need/use
+          //'<%= bp %>/bootstrap/js/alert.js',
+          //'<%= bp %>/bootstrap/js/button.js',
+          //'<%= bp %>/bootstrap/js/carousel.js',
+          //'<%= bp %>/bootstrap/js/collapse.js',
+          //'<%= bp %>/bootstrap/js/dropdown.js',
+          //'<%= bp %>/bootstrap/js/modal.js',
+          //'<%= bp %>/bootstrap/js/tooltip.js',
+          //'<%= bp %>/bootstrap/js/popover.js',
+          //'<%= bp %>/bootstrap/js/tab.js',
+          //'<%= bp %>/bootstrap/js/transition.js',
+        // Vendor
+          //'<%= bp %>/moment/moment.js',
+          //'<%= bp %>/fullcalendar/dist/fullcalendar.js',
+          //'<%= bp %>/eonasdan-bootstrap-datetimepicker/src/js/bootstrap-datetimepicker.js',
+          //'<%= bp %>/bootstrapvalidator/dist/js/bootstrapValidator.js',
+          //'<%= bp %>/minicolors/jquery.minicolors.js',
+          //'<%= bp %>/jquery-ui/jquery-ui.js',
+          //'<%= bp %>/gridmanager/src/gridmanager.js',
+          //'<%= bp %>/bootbox/bootbox.js',
+          //'<%= bp %>/fullcalendar/dist/lang-all.js',
+        // Custom Front end JS - all your custom JS here!
+          '<%= js %>/main.js'
         ],
-        dest: 'javascripts/rbs.js'
+        dest: '<%= js %>/cms.js'
       }
     },
 
@@ -82,13 +86,13 @@ module.exports = function(grunt) {
           jQuery: true
         },
       },
-      all: ['Gruntfile.js', 'javascripts/main.js']
+      all: ['Gruntfile.js', '<%= js %>/frontend.js','<%= js %>/backend.js']
     },
 
     uglify : {
       frontend: {
         files: {
-          'javascripts/rbs.min.js' : [ 'javascripts/rbs.js' ]
+          '<%= js %>/cms.min.js' : [ '<%= js %>/cms.js' ]
         }
       }
     },
@@ -103,10 +107,10 @@ module.exports = function(grunt) {
           // Set to true to enable the following options…
           expand: true,
           // cwd is 'current working directory'
-          cwd: '/images/',
+          cwd: 'public/images/',
           src: ['**/*.png'],
           // Could also match cwd line above. i.e. project-directory/img/
-          dest: '/images/',
+          dest: 'public/images/',
           ext: '.png'
         }
       ]
@@ -120,10 +124,10 @@ module.exports = function(grunt) {
           // Set to true to enable the following options…
           expand: true,
           // cwd is 'current working directory'
-          cwd: '/images/',
+          cwd: 'public/images/',
           src: ['**/*.jpg'],
           // Could also match cwd. i.e. project-directory/img/
-          dest: '/images/',
+          dest: 'public/images/',
           ext: '.jpg'
         }
       ]
@@ -132,11 +136,11 @@ module.exports = function(grunt) {
 
     watch: {
       js: {
-        files: ['javascripts/main.js'],
+        files: ['<%= js %>/backend.js', '<%= js %>/frontend.js'],
         tasks: ['js']
       },
       css: {
-        files: ['stylesheets/less/core/*.less', 'stylesheets/less/site/*.less'],
+        files: ['<%= ss %>/less/core/*.less', '<%= ss %>/less/site/*.less'],
         tasks: ['css']
       }
     }
@@ -150,13 +154,11 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-uglify');
-  grunt.loadNpmTasks('grunt-contrib-imagemin');
   grunt.loadNpmTasks('grunt-contrib-less');
   grunt.loadNpmTasks('grunt-injector');
   grunt.loadNpmTasks('grunt-rev');
 
   grunt.registerTask('css', ['clean:css', 'less:css', 'cssmin:css']);
   grunt.registerTask('js', ['jshint', 'clean:js', 'concat', 'uglify']);
-  grunt.registerTask('img', ['imagemin']);
   grunt.registerTask('default', ['watch']);
 };

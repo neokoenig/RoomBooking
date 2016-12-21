@@ -1,6 +1,6 @@
 {
   "name": "RoomBookingSystem",
-  "version": "1.1.0",
+  "version": "2.0.0",
   "description": "Room Booking System",
   "main": "index.cfm",
   "repository": {
@@ -18,7 +18,6 @@
     "grunt-contrib-clean": "^0.5.0",
     "grunt-contrib-concat": "^0.4.0",
     "grunt-contrib-cssmin": "^0.9.0",
-    "grunt-contrib-imagemin": "^0.7.1",
     "grunt-contrib-jshint": "^0.10.0",
     "grunt-contrib-less": "^0.11.1",
     "grunt-contrib-uglify": "^0.4.0",
