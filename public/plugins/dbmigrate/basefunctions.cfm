@@ -40,7 +40,7 @@
 	else if (loc.info.driver_name Contains "SQLite")
 			loc.adapterName = "SQLite";
 	else {
-		loc.adapterName = "";
+		loc.adapterName = "MySQL";
 	}
 	</cfscript>
 	<cfreturn loc.adapterName>
