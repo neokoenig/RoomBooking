@@ -60,4 +60,70 @@
         }
         return result;
     }
+
+    public string function sidebarlink(
+        required string controller,
+        required string route,
+        required string icon,
+        required string text,
+        string permission="",
+        numeric key=0
+    ){
+        if(checkPermission(permission)){
+            local.rv="<li class='";
+            if(params.controller == controller){
+               local.rv&=("active");
+            }
+            local.rv&="'>";
+            if(key){
+            local.rv&=linkTo(route=route, key=key, text="<i class='fa #icon#'></i> <span>" & l(text) & "</span></li>");
+            } else {
+            local.rv&=linkTo(route=route, text="<i class='fa #icon#'></i> <span>" & l(text) & "</span></li>");
+            }
+            return local.rv;
+        } else {
+            return "";
+        }
+
+    }
+
+    public string function tickorcross(required boo){
+        var result="";
+        if(structKeyexists(arguments, "boo") AND isBoolean(arguments.boo) AND arguments.boo){
+            result="<i class='fa fa-check text-success'></i>";
+        } else {
+            result="<i class='fa fa-times text-danger'></i>";
+        }
+        return result;
+    }
+
+    public string function LSDateFormatDuration(required date start, required date end){
+
+            local.rv="";
+            local.start=LSdateFormat(arguments.start);
+            local.startTime=LStimeFormat(arguments.start);
+            local.end=LSdateFormat(arguments.end);
+            local.endTime=LStimeFormat(arguments.end);
+
+            local.isForever= year(local.end) == 9999 ? true:false;
+
+            if(local.startTime EQ "00:00"){
+                local.startTime="";
+            }
+            if(local.endTime EQ "00:00"){
+                local.endTime="";
+            }
+
+            local.rv=local.start & ' ' & local.startTime;
+
+            if(local.start != local.end && !local.isForever){
+                local.rv= local.start & ' ' & local.startTime & ' - ' & local.end  & ' ' & local.endTime;
+            } else {
+                if(local.startTime !=  local.endTime){
+                    local.rv= local.start & ' ' & local.startTime & ' - '    & local.endTime;
+                }
+            }
+        return local.rv;
+
+    }
 </cfscript>

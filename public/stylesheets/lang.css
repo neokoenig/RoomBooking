@@ -1,0 +1,172 @@
+
+/* Define properties for our icons (default to the unknown language flag) */
+.lang-xs { background-position: 0px  -473px; min-width: 14px; height: 11px; min-height: 11px; max-height: 11px; background-repeat: no-repeat; display: inline-block; background-image: url('languages.png'); }
+.lang-sm { background-position: 0px -1172px; min-width: 22px; height: 16px; min-height: 16px; max-height: 16px; background-repeat: no-repeat; display: inline-block; background-image: url('languages.png'); }
+.lang-lg { background-position: 0px -2134px; min-width: 30px; height: 22px; min-height: 22px; max-height: 22px; background-repeat: no-repeat; display: inline-block; background-image: url('languages.png'); }
+
+/* Positions in our sprite for sm-sized images */
+.lang-sm[lang=ar] { background-position: 0px  -484px; }
+.lang-sm[lang=be] { background-position: 0px  -500px; }
+.lang-sm[lang=bg] { background-position: 0px  -516px; }
+.lang-sm[lang=cs] { background-position: 0px  -532px; }
+.lang-sm[lang=da] { background-position: 0px  -548px; }
+.lang-sm[lang=de] { background-position: 0px  -564px; }
+.lang-sm[lang=el] { background-position: 0px  -580px; }
+.lang-sm[lang=en] { background-position: 0px  -596px; }
+.lang-sm[lang=es] { background-position: 0px  -612px; }
+.lang-sm[lang=et] { background-position: 0px  -628px; }
+.lang-sm[lang=fi] { background-position: 0px  -644px; }
+.lang-sm[lang=fr] { background-position: 0px  -660px; }
+.lang-sm[lang=ga] { background-position: 0px  -676px; }
+.lang-sm[lang=hi] { background-position: 0px  -692px; }
+.lang-sm[lang=hr] { background-position: 0px  -708px; }
+.lang-sm[lang=hu] { background-position: 0px  -724px; }
+.lang-sm[lang=in] { background-position: 0px  -740px; }
+.lang-sm[lang=is] { background-position: 0px  -756px; }
+.lang-sm[lang=it] { background-position: 0px  -772px; }
+.lang-sm[lang=iw] { background-position: 0px  -788px; }
+.lang-sm[lang=ja] { background-position: 0px  -804px; }
+.lang-sm[lang=ko] { background-position: 0px  -820px; }
+.lang-sm[lang=lt] { background-position: 0px  -836px; }
+.lang-sm[lang=lv] { background-position: 0px  -852px; }
+.lang-sm[lang=mk] { background-position: 0px  -868px; }
+.lang-sm[lang=ms] { background-position: 0px  -884px; }
+.lang-sm[lang=mt] { background-position: 0px  -900px; }
+.lang-sm[lang=nl] { background-position: 0px  -916px; }
+.lang-sm[lang=no] { background-position: 0px  -932px; }
+.lang-sm[lang=pl] { background-position: 0px  -948px; }
+.lang-sm[lang=pt] { background-position: 0px  -964px; }
+.lang-sm[lang=ro] { background-position: 0px  -980px; }
+.lang-sm[lang=ru] { background-position: 0px  -996px; }
+.lang-sm[lang=sk] { background-position: 0px -1012px; }
+.lang-sm[lang=sl] { background-position: 0px -1028px; }
+.lang-sm[lang=sq] { background-position: 0px -1044px; }
+.lang-sm[lang=sr] { background-position: 0px -1060px; }
+.lang-sm[lang=sv] { background-position: 0px -1076px; }
+.lang-sm[lang=th] { background-position: 0px -1092px; }
+.lang-sm[lang=tr] { background-position: 0px -1108px; }
+.lang-sm[lang=uk] { background-position: 0px -1124px; }
+.lang-sm[lang=vi] { background-position: 0px -1140px; }
+.lang-sm[lang=zh] { background-position: 0px -1156px; }
+
+/* Labels for the unknown language */
+.lang-lbl:after      { padding-left:30px; color:@gray-light; content: "Unknown language"; }
+.lang-lbl-en:after   { padding-left:30px; color:@gray-light; content: "Unknown language"; }
+.lang-lbl-full:after { padding-left:30px; color:@gray-light; content: "Unknown language"; }
+
+/* Labels in native (default) language */
+.lang-lbl[lang=ar]:after { content: "\000627\000644\000639\000631\000628\00064A\000629"; }
+.lang-lbl[lang=be]:after { content: "\000411\000435\00043B\000430\000440\000443\000441\00043A\000456"; }
+.lang-lbl[lang=bg]:after { content: "\000411\00044A\00043B\000433\000430\000440\000441\00043A\000438"; }
+.lang-lbl[lang=cs]:after { content: "\00010Ce\000161tina"; }
+.lang-lbl[lang=da]:after { content: "Dansk"; }
+.lang-lbl[lang=de]:after { content: "Deutsch"; }
+.lang-lbl[lang=el]:after { content: "\000395\0003BB\0003BB\0003B7\0003BD\0003B9\0003BA\0003AC"; }
+.lang-lbl[lang=en]:after { content: "English"; }
+.lang-lbl[lang=es]:after { content: "Espa\0000F1ol"; }
+.lang-lbl[lang=et]:after { content: "Eesti"; }
+.lang-lbl[lang=fi]:after { content: "Suomi"; }
+.lang-lbl[lang=fr]:after { content: "Fran\0000E7ais"; }
+.lang-lbl[lang=ga]:after { content: "Gaeilge"; }
+.lang-lbl[lang=hi]:after { content: "\000939\00093F\000902\000926\000940"; }
+.lang-lbl[lang=hr]:after { content: "Hrvatski"; }
+.lang-lbl[lang=hu]:after { content: "Magyar"; }
+.lang-lbl[lang=in]:after { content: "Bahasa\000020indonesia"; }
+.lang-lbl[lang=is]:after { content: "\0000CDslenska"; }
+.lang-lbl[lang=it]:after { content: "Italiano"; }
+.lang-lbl[lang=iw]:after { content: "\0005E2\0005D1\0005E8\0005D9\0005EA"; }
+.lang-lbl[lang=ja]:after { content: "\0065E5\00672C\008A9E"; }
+.lang-lbl[lang=ko]:after { content: "\00D55C\00AD6D\00C5B4"; }
+.lang-lbl[lang=lt]:after { content: "Lietuvi\000173"; }
+.lang-lbl[lang=lv]:after { content: "Latvie\000161u"; }
+.lang-lbl[lang=mk]:after { content: "\00041C\000430\00043A\000435\000434\00043E\00043D\000441\00043A\000438"; }
+.lang-lbl[lang=ms]:after { content: "Bahasa\000020melayu"; }
+.lang-lbl[lang=mt]:after { content: "Malti"; }
+.lang-lbl[lang=nl]:after { content: "Nederlands"; }
+.lang-lbl[lang=no]:after { content: "Norsk"; }
+.lang-lbl[lang=pl]:after { content: "Polski"; }
+.lang-lbl[lang=pt]:after { content: "Portugu\0000EAs"; }
+.lang-lbl[lang=ro]:after { content: "Rom\0000E2n\000103"; }
+.lang-lbl[lang=ru]:after { content: "\000420\000443\000441\000441\00043A\000438\000439"; }
+.lang-lbl[lang=sk]:after { content: "Sloven\00010Dina"; }
+.lang-lbl[lang=sl]:after { content: "Sloven\000161\00010Dina"; }
+.lang-lbl[lang=sq]:after { content: "Shqipe"; }
+.lang-lbl[lang=sr]:after { content: "\000421\000440\00043F\000441\00043A\000438"; }
+.lang-lbl[lang=sv]:after { content: "Svenska"; }
+.lang-lbl[lang=th]:after { content: "\000E44\000E17\000E22"; }
+.lang-lbl[lang=tr]:after { content: "T\0000FCrk\0000E7e"; }
+.lang-lbl[lang=uk]:after { content: "\000423\00043A\000440\000430\000457\00043D\000441\00044C\00043A\000430"; }
+.lang-lbl[lang=vi]:after { content: "Ti\001EBFng\000020vi\001EC7t"; }
+.lang-lbl[lang=zh]:after { content: "\004E2D\006587"; }
+
+/* Labels in english language */
+.lang-lbl-en[lang=ar]:after { content: "Arabic"; }
+.lang-lbl-en[lang=be]:after { content: "Belarusian"; }
+.lang-lbl-en[lang=bg]:after { content: "Bulgarian"; }
+.lang-lbl-en[lang=cs]:after { content: "Czech"; }
+.lang-lbl-en[lang=da]:after { content: "Danish"; }
+.lang-lbl-en[lang=de]:after { content: "German"; }
+.lang-lbl-en[lang=el]:after { content: "Greek"; }
+.lang-lbl-en[lang=en]:after { content: "English"; }
+.lang-lbl-en[lang=es]:after { content: "Spanish"; }
+.lang-lbl-en[lang=et]:after { content: "Estonian"; }
+.lang-lbl-en[lang=fi]:after { content: "Finnish"; }
+.lang-lbl-en[lang=fr]:after { content: "French"; }
+.lang-lbl-en[lang=ga]:after { content: "Irish"; }
+.lang-lbl-en[lang=hi]:after { content: "Hindi"; }
+.lang-lbl-en[lang=hr]:after { content: "Croatian"; }
+.lang-lbl-en[lang=hu]:after { content: "Hungarian"; }
+.lang-lbl-en[lang=in]:after { content: "Indonesian"; }
+.lang-lbl-en[lang=is]:after { content: "Icelandic"; }
+.lang-lbl-en[lang=it]:after { content: "Italian"; }
+.lang-lbl-en[lang=iw]:after { content: "Hebrew"; }
+.lang-lbl-en[lang=ja]:after { content: "Japanese"; }
+.lang-lbl-en[lang=ko]:after { content: "Korean"; }
+.lang-lbl-en[lang=lt]:after { content: "Lithuanian"; }
+.lang-lbl-en[lang=lv]:after { content: "Latvian"; }
+.lang-lbl-en[lang=mk]:after { content: "Macedonian"; }
+.lang-lbl-en[lang=ms]:after { content: "Malay"; }
+.lang-lbl-en[lang=mt]:after { content: "Maltese"; }
+.lang-lbl-en[lang=nl]:after { content: "Dutch"; }
+.lang-lbl-en[lang=no]:after { content: "Norwegian"; }
+.lang-lbl-en[lang=pl]:after { content: "Polish"; }
+.lang-lbl-en[lang=pt]:after { content: "Portuguese"; }
+.lang-lbl-en[lang=ro]:after { content: "Romanian"; }
+.lang-lbl-en[lang=ru]:after { content: "Russian"; }
+.lang-lbl-en[lang=sk]:after { content: "Slovak"; }
+.lang-lbl-en[lang=sl]:after { content: "Slovenian"; }
+.lang-lbl-en[lang=sq]:after { content: "Albanian"; }
+.lang-lbl-en[lang=sr]:after { content: "Serbian"; }
+.lang-lbl-en[lang=sv]:after { content: "Swedish"; }
+.lang-lbl-en[lang=th]:after { content: "Thai"; }
+.lang-lbl-en[lang=tr]:after { content: "Turkish"; }
+.lang-lbl-en[lang=uk]:after { content: "Ukrainian"; }
+.lang-lbl-en[lang=vi]:after { content: "Vietnamese"; }
+.lang-lbl-en[lang=zh]:after { content: "Chinese"; }
+
+/* One breaking space if we have an image */
+.lang-xs:before,
+.lang-sm:before,
+.lang-lg:before  { content: '\0000A0'; }
+
+/* Pad the image and remove the non-breaking space when we have both an icon and a label
+.lang-xs.lang-lbl,
+.lang-xs.lang-lbl-en,
+.lang-xs.lang-lbl-full  { padding-left: 16px; }
+.lang-sm.lang-lbl,
+.lang-sm.lang-lbl-en,
+.lang-sm.lang-lbl-full  { padding-left: 24px; }
+.lang-lg.lang-lbl,
+.lang-lg.lang-lbl-en,
+.lang-lg.lang-lbl-full  { padding-left: 32px; }*/
+
+.lang-xs.lang-lbl:before,
+.lang-sm.lang-lbl:before,
+.lang-lg.lang-lbl:before,
+.lang-xs.lang-lbl-en:before,
+.lang-sm.lang-lbl-en:before,
+.lang-lg.lang-lbl-en:before,
+.lang-xs.lang-lbl-full:before,
+.lang-sm.lang-lbl-full:before,
+.lang-lg.lang-lbl-full:before  { content: ''; }
+

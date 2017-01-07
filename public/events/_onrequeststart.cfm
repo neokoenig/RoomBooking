@@ -54,6 +54,8 @@ if(listFirst(request.lang.current, '_') EQ ListLast(request.lang.current, "_")){
 //=====================================================================
 request.showNavBar="true";
 SetLocale(request.lang.current);
+
+allcalendars=f_allCalendars();
 </cfscript>
 
 <!---

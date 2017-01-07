@@ -222,4 +222,4 @@ node_modules
 
 /public/WEB-INF
 /public/db/sql
-/public/config/auth.cfm
+/public/db/h2

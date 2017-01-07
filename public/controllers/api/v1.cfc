@@ -7,6 +7,7 @@ component extends="controllers.Controller"
 	function init() {
 		provides("json");
 		filters(through="isValidAPIRequest");
+		filters(through="requiresAuthentication", except="environment,authenticate");
 	}
 
 //=====================================================================
@@ -16,14 +17,37 @@ component extends="controllers.Controller"
 	function environment(){
 		respond("data": {"environment": get("environment")});
 	}
+	function authenticate(){
+		auth=model("auth." & application.rbs.settings.authentication_gateway).new(email=requestdata.email, password=requestdata.password);
+		if(!auth.hasErrors() && auth.login()){
+			respond("data": {"message": "Authentication Successful"});
+		} else {
+			resp["errors"]=[];
+			arrayAppend(resp.errors, {"code": 403, "title": "Incorrect Credentials"});
+			renderWith(data=resp, status=403);
+		}
+	}
 
 //=====================================================================
 //= 	Auth'd / Checked Endpoints
 //=====================================================================
 
+	function users(){
+		respond("data": {"users": ""});
+	}
+
 //=====================================================================
 //= 	Private
 //=====================================================================
+
+	private function requiresAuthentication(){
+		if(!isAuthenticated()){
+			resp["errors"]=[];
+			arrayAppend(resp.errors, {"code": 403, "title": "Session or API Key Required"});
+			renderWith(data=resp, status=403);
+		}
+	}
+
 	private function isValidAPIRequest(){
 		var req=GetHTTPRequestData();
 
@@ -35,6 +59,7 @@ component extends="controllers.Controller"
 		params.format="json";
 		checkUnsupportedMediaType(req);
 		checkMediaParameters(req);
+		parseRequestIntoParams(req);
 	}
 
 	// Servers MUST respond with a 415 Unsupported Media Type status code if a request
@@ -54,6 +79,19 @@ component extends="controllers.Controller"
 	private function checkMediaParameters(required struct req){
 
 	}
+
+	// Look in the main request and get the passed in data and chuck in params scope
+	private function parseRequestIntoParams(required struct req){
+		if(isJSON(req.content)){
+			params.data=deserializeJSON(req.content);
+			if(structKeyExists(requestdata,"data")){
+				params.data=requestdata.data;
+			}
+		} else {
+			params.data={};
+		}
+	}
+
 
 	private function respond(struct data, struct errors, status=200){
 		if(structKeyExists(arguments, "data")){

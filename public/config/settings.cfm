@@ -19,7 +19,7 @@ set(overwritePlugins=false);
 set(deletePluginDirectories=false);
 
 // Override standard JSON mime type with JSONAPI spec
-addFormat(extension="json", mimeType="application/vnd.api+json");
+//addFormat(extension="json", mimeType="application/vnd.api+json");
 
 //=====================================================================
 //= 	Localisation

@@ -4,9 +4,9 @@
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
-      <cfif len(request.pagetitle)>
+      <!---cfif len(request.pagetitle)>
         <h1>#request.pagetitle#</h1>
-      </cfif>
+      </cfif--->
       <!---ol class="breadcrumb">
         <li><a href=""><i class="fa fa-dashboard"></i> Level</a></li>
         <li class="active">Here</li>

@@ -43,5 +43,11 @@
     	LoadPaths = ["/miscellaneous"]
   	};
 
-
+  	// Test Environment Embedded h2 Database
+	this.datasources["rbs_test"] = {
+		class: "org.h2.Driver",
+		connectionString: "jdbc:h2:file:#expandPath('/db/h2/')#rbs_test;MODE=MySQL",
+		username: "sa",
+		password: ""
+	}
 </cfscript>
