@@ -29,7 +29,7 @@ component extends="tests.Test" {
 
 	// Event Data
 	function Test_data_returns_valid_json(){
-		_params = {route="calendarDetail", controller="calendar", action="data"};
+		_params = {route="calendarDetail", controller="calendar", action="data", key=1};
 		_controller = controller("calendar", _params);
 		_controller.$processAction('data', _params);
 		r=_controller.response();
