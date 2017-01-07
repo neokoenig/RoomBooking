@@ -10,13 +10,13 @@ component extends="tests.Test" {
 	function teardown() {}
 
 	// Main Calendar Page
-	function Test_index_basic_render(){
+	/*function Test_index_basic_render(){
 		_params = {route="calendarIndex", controller="calendar", action="index"};
 		_controller = controller("calendar", _params);
 		_controller.$processAction('index', _params);
 		r=_controller.response();
 		assert('r CONTAINS "<div id=""calendar""></div>"');
-	}
+	}*/
 
 	// Clicked Event Detail
 	function Test_display_booking_detail_not_found(){
