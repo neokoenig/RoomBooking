@@ -8,7 +8,7 @@ component extends="tests.Test" {
 		end=createDateTime(2010,01,01,12,00,00);
 		duration=120;
 		r=LSDateFormatDuration(start,end,duration);
-		debug("r");
+		//debug("r");
 	}
 
 	include template="/views/helpers.cfm";
