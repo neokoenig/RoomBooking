@@ -34,3 +34,6 @@ jdk:
 services:
   - mysql
   #- postgresql
+
+notifications:
+  email: false

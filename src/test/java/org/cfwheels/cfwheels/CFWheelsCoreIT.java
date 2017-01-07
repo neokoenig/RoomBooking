@@ -50,13 +50,13 @@ public class CFWheelsCoreIT {
 	@Parameters(name="package {0}{1}")
     public static Collection<Object[]> getDirectories() {
     	Collection<Object[]> params = new ArrayList<Object[]>();
-    	addSubDirectories(params, "/", "", "wheels/tests");
+    	addSubDirectories(params, "/", "", "/tests");
 		if ("true".equals(System.getProperty("testSubfolder"))) {
-	    	addSubDirectories(params, "/subfolder/", "", "wheels/tests");
+	    	addSubDirectories(params, "/subfolder/", "", "/tests");
 		}
 		String secondPort=System.getProperty("testSecondPort");
 		if (secondPort != null) {
-	    	addSubDirectories(params, ":" + secondPort + "/", "", "wheels/tests");
+	    	addSubDirectories(params, ":" + secondPort + "/", "", "/tests");
 		}
 
     	return params;
@@ -88,7 +88,7 @@ public class CFWheelsCoreIT {
 	@BeforeClass
 	static public void setUpServices() throws Exception {
 		Files.copy(Paths.get("wheels/model/initialization.cfm"), Paths.get("wheels/model/initialization.cfm.bak"), StandardCopyOption.REPLACE_EXISTING);
-		Files.copy(Paths.get("wheels/tests/populate.cfm"), Paths.get("wheels/tests/populate.cfm.bak"), StandardCopyOption.REPLACE_EXISTING);
+		Files.copy(Paths.get("/tests/populate.cfm"), Paths.get("/tests/populate.cfm.bak"), StandardCopyOption.REPLACE_EXISTING);
 		Path path = Paths.get("target/failsafe-reports");
 
 		if (!Files.exists(path)) Files.createDirectory(path);
@@ -125,29 +125,29 @@ public class CFWheelsCoreIT {
 	}
 
 	private static void recreateTestDatabase() throws Exception {
-		if (testOracleEmulation) {
-			String content = new String(Files.readAllBytes(Paths.get("wheels/model/initialization.cfm")));
-			content = content.replace("loc.adapterName = \"H2\"","loc.adapterName = 'Oracle'");
-			Files.write(Paths.get("wheels/model/initialization.cfm"), content.getBytes());
-
-			content = new String(Files.readAllBytes(Paths.get("src/test/coldfusion/_oracle-emu.cfm")));
-			content += new String(Files.readAllBytes(Paths.get("wheels/tests/populate.cfm")));
-			content = content.replace("loc.dbinfo.database_productname","'Oracle'");
-			content = content.replace("booleanType bit DEFAULT 0 NOT NULL","booleanType number(1) DEFAULT 0 NOT NULL");
-			content = content.replace("to_timestamp(#loc.dateTimeDefault#,'yyyy-dd-mm hh24:mi:ss.FF')","'2000-01-01 18:26:08.690'");
-			content = content.replace("CREATE TRIGGER bi_#loc.i# BEFORE INSERT ON #loc.i# FOR EACH ROW BEGIN SELECT #loc.seq#.nextval INTO :NEW.<cfif loc.i IS \"photogalleries\">photogalleryid<cfelseif loc.i IS \"photogalleryphotos\">photogalleryphotoid<cfelse>id</cfif> FROM dual; END;",
-					"ALTER TABLE #loc.i# MODIFY COLUMN <cfif loc.i IS \"photogalleries\">photogalleryid<cfelseif loc.i IS \"photogalleryphotos\">photogalleryphotoid<cfelse>id</cfif> #loc.identityColumnType# DEFAULT #loc.seq#.nextval");
-			Files.write(Paths.get("wheels/tests/populate.cfm"), content.getBytes());
-		}
-		if ("true".equals(System.getProperty("testSharedAppName"))) {
-			driver.get(baseUrl + "/wheels/tests/_assets/sharedappname/test.cfm");
-			driver.get(baseUrl);
-	        String pageSource = driver.getPageSource();
-	        if (pageSource.contains("Error")) {
-	        	fail("Shared App Name test failed");
-	    		Files.write(Paths.get("target/failsafe-reports/_databaseRecreateERROR.html"), pageSource.getBytes());
-	        }
-		}
+		//if (testOracleEmulation) {
+		//	String content = new String(Files.readAllBytes(Paths.get("wheels/model/initialization.cfm")));
+		//	content = content.replace("loc.adapterName = \"H2\"","loc.adapterName = 'Oracle'");
+		//	Files.write(Paths.get("wheels/model/initialization.cfm"), content.getBytes());
+//
+//		//	content = new String(Files.readAllBytes(Paths.get("src/test/coldfusion/_oracle-emu.cfm")));
+//		//	content += new String(Files.readAllBytes(Paths.get("wheels/tests/populate.cfm")));
+//		//	content = content.replace("loc.dbinfo.database_productname","'Oracle'");
+//		//	content = content.replace("booleanType bit DEFAULT 0 NOT NULL","booleanType number(1) DEFAULT 0 NOT NULL");
+//		//	content = content.replace("to_timestamp(#loc.dateTimeDefault#,'yyyy-dd-mm hh24:mi:ss.FF')","'2000-01-01 18:26:08.690'");
+//		//	content = content.replace("CREATE TRIGGER bi_#loc.i# BEFORE INSERT ON #loc.i# FOR EACH ROW BEGIN SELECT #loc.seq#.nextval INTO :NEW.<cfif loc.i IS \"photogalleries\">photogalleryid<cfelseif loc.i IS \"photogalleryphotos\">photogalleryphotoid<cfelse>id</cfif> FROM dual; END;",
+//		//			"ALTER TABLE #loc.i# MODIFY COLUMN <cfif loc.i IS \"photogalleries\">photogalleryid<cfelseif loc.i IS \"photogalleryphotos\">photogalleryphotoid<cfelse>id</cfif> #loc.identityColumnType# DEFAULT #loc.seq#.nextval");
+//		//	Files.write(Paths.get("wheels/tests/populate.cfm"), content.getBytes());
+		//}
+		//if ("true".equals(System.getProperty("testSharedAppName"))) {
+		//	driver.get(baseUrl + "/wheels/tests/_assets/sharedappname/test.cfm");
+		//	driver.get(baseUrl);
+	    //    String pageSource = driver.getPageSource();
+	    //    if (pageSource.contains("Error")) {
+	    //    	fail("Shared App Name test failed");
+	    //		Files.write(Paths.get("target/failsafe-reports/_databaseRecreateERROR.html"), pageSource.getBytes());
+	    //    }
+		//}
 		if ("true".equals(System.getProperty("testParallelStart"))) {
 			hitHomepageWithParallelRequest();
 		}
@@ -196,7 +196,7 @@ public class CFWheelsCoreIT {
 	public void testCFWheels() throws IOException {
 		System.out.print(contextPath);
 		System.out.println(packageName);
-		String packageUrl = baseUrl + contextPath + "index.cfm?controller=wheels&action=wheels&view=tests&type=core&package="+packageName;
+		String packageUrl = baseUrl + contextPath + "index.cfm?controller=wheels&action=wheels&view=tests&type=app&package="+packageName;
 		driver.get(packageUrl);
         String pageSource = driver.getPageSource();
         assertTrue("The page should have results",pageSource.trim().length()>0);
@@ -221,9 +221,9 @@ public class CFWheelsCoreIT {
 	@AfterClass
 	static public void tearDownServices() throws Exception {
 		Files.copy(Paths.get("wheels/model/initialization.cfm.bak"), Paths.get("wheels/model/initialization.cfm"), StandardCopyOption.REPLACE_EXISTING);
-		Files.copy(Paths.get("wheels/tests/populate.cfm.bak"), Paths.get("wheels/tests/populate.cfm"), StandardCopyOption.REPLACE_EXISTING);
+		Files.copy(Paths.get("/tests/populate.cfm.bak"), Paths.get("/tests/populate.cfm"), StandardCopyOption.REPLACE_EXISTING);
 		Files.delete(Paths.get("wheels/model/initialization.cfm.bak"));
-		Files.delete(Paths.get("wheels/tests/populate.cfm.bak"));
+		Files.delete(Paths.get("/tests/populate.cfm.bak"));
 
 		driver.quit();
 	}
