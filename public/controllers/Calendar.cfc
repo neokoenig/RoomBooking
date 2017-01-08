@@ -29,7 +29,7 @@ component extends="Controller"
     params.format="json";
     if(structKeyExists(params, "key") && isNumeric(params.key)){
       // Return Array of Structs including repeats
-      renderWith(formatDataForCalendar(getEventsForRange(start=params.start, end=params.end)));
+      renderWith( formatDataForCalendar( getEventsForRange(start=params.start, end=params.end) ) );
     } else {
       renderWith("{'error': 'No Calendar ID Specified'}", status=500);
     }
