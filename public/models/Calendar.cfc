@@ -1,10 +1,13 @@
 component extends="Model"
 {
 	function init() {
-		belongsTo("user");
-		hasMany("bookings");
-		hasMany("calendarbuildings");
-		hasMany("calendarrooms");
+		// Associations
+		belongsTo(name="user");
+		hasMany(name="bookings");
+		hasMany(name="calendarbuildings");
+		hasMany(name="calendarrooms");
+		nestedProperties(associations="calendarrooms,calendarbuildings", allowDelete=true);
+
 		property(name="icon", defaultValue="fa-calendar");
 		afterFind("checkForIcon");
 		validatesPresenceOf(properties="title");

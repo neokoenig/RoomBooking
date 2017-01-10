@@ -6,6 +6,7 @@ component extends="Model"
 */
 {
 	function init() {
+		// Associations
 		belongsTo(name="user");
 		belongsTo(name="calendar");
 		belongsTo(name="building", joinType="outer");
@@ -13,9 +14,11 @@ component extends="Model"
 
 		property(name="duration", defaultValue=60);
 		property(name="startUTC", defaultValue=now());
+		property(name="isallday", defaultValue=0);
 
-		beforeValidation(methods="calculateEndUTC");
-		validatesPresenceOf(properties="title,startUTC,endUTC,duration", message="There are missing required fields");
+		afterFind(methods="splitStartUTC");
+		beforeValidation(methods="mergeStartUTC,calculateEndUTC");
+		validatesPresenceOf(properties="title,startUTC,endUTC,duration,isallday", message="There are missing required fields");
 		validatesnumericalityof(properties="userid", message="An owner is required for any booking");
 		validate(methods="validateDates,validateLocation");
 
@@ -34,8 +37,23 @@ component extends="Model"
 			this.addError(property="buildingid", message="Either a Room or Building is required");
 		 }
 	}
+
+	function splitStartUTC(){
+		arguments.startUTCDate=createDate(year(startUTC),month(startUTC),day(startUTC));
+		arguments.startUTCDate=LSdateFormat(arguments.startUTC, "YYYY-MM-DD");
+		arguments.startUTCTime=createTime(hour(startUTC),minute(startUTC),00);
+		arguments.startUTCTime=LSTimeFormat(arguments.startUTC, "HH:MM");
+		return arguments;
+	}
+
+	function mergeStartUTC(){
+		if(structKeyExists(this, "startUTCDate") && structKeyExists(this, "startUTCTime")){
+			this.startUTC=createDateTime(year(this.startUTCDate),month(this.startUTCDate),day(this.startUTCDate),hour(this.startUTCTime),minute(this.startUTCTime),00);
+		}
+	}
 	function calculateEndUTC(){
-		if(structKeyExists(this, "repeatpattern")){
+
+		if(structKeyExists(this, "repeatpattern") && len(this.repeatpattern) && this.isrepeat){
 			var rrule=parseRRuleString(this.repeatpattern);
 			// if there's an UNTIL rrule, set that as the enddate (plus duration?)
 			if(structKeyExists(rrule, "UNTIL")){
@@ -56,11 +74,23 @@ component extends="Model"
 				);
 			} else {
 			// if there's no rrule end date (UNTIL), and no COUNT, set maxdate
-				this.endUTC=createDateTime(9999,12,31,00,00,00);
+				this.endUTC=createDateTime(9999,12,31,23,59,59);
 			}
+			// Add Day Event? Set the start/end time appropriately
+			if(this.isallday) this.startUTC=createDateTime(year(this.startUTC), month(this.startUTC), day(this.startUTC), 00,00,00);
+
 		} else {
-			// Normal event, just add the duration
-			this.endUTC=dateAdd("n", this.duration,this.startUTC);
+			// Add Day Event? Set the start/end time appropriately
+			if(this.isallday){
+				// Event duration is in minutes; if duration is under 1440, then ceiling to one day
+				var days=(ceiling(this.duration/1440) - 1);
+				this.startUTC=createDateTime(year(this.startUTC),month(this.startUTC),day(this.startUTC),00,00,00);
+				this.endUTC=dateAdd("d", days, createDateTime(year(this.startUTC),month(this.startUTC),day(this.startUTC),23,59,59));
+			} else {
+				// Normal event, just add the duration;
+				this.endUTC=dateAdd("n", this.duration, this.startUTC);
+
+			}
 		}
 
 	}

@@ -10,7 +10,7 @@ component extends="tests.Test" {
 			"buildingid": 1,
 			"isrepeat": 0,
 			"repeatpattern": ""
-		}
+		};
 	}
 	function teardown() {}
 
@@ -85,5 +85,84 @@ component extends="tests.Test" {
 		actual = booking.allErrors();
 		//debug("actual");
 	    assert("arraylen(actual) GT 0");
+	}
+
+	/*
+		is there a repeat rule?
+			if there's an UNTIL rrule:
+				- END =  until date + add duration
+			if there's a COUNT rrule:
+				- END = Calculate Last Possible date + add duration
+			if there's no rrule end date (UNTIL), and no COUNT
+				- END = 9999-12-31, i.e MaxDate
+		no repeat rule?
+			END = start + duration
+
+		finally, is it an allday?
+			Set time to be 00:00 -> 23:59
+
+	*/
+	function Test_calculate_endUTC_no_repeat_rule_not_allday(){
+		booking.setProperties(properties);
+		booking.startUTC=createDateTime(2017,01,01,10,00,00);
+		booking.duration=120;
+		booking.calculateEndUTC();
+		//debug("Booking.properties()");
+	    assert("booking.endUTC EQ '2017-01-01 12:00:00'");
+	}
+	function Test_calculate_endUTC_no_repeat_rule_is_allday(){
+		booking.setProperties(properties);
+		booking.isallday=1;
+		booking.startUTC=createDateTime(2017,01,01,10,00,00);
+		booking.duration=120;
+		booking.calculateEndUTC();
+		//debug("Booking.properties()");
+	    assert("booking.startUTC EQ '2017-01-01 00:00:00'");
+	    assert("booking.endUTC EQ '2017-01-01 23:59:59'");
+	}
+	function Test_calculate_endUTC_no_repeat_rule_is_allday_multiday(){
+		booking.setProperties(properties);
+		booking.isallday=1;
+		booking.startUTC=createDateTime(2017,01,01,10,00,00);
+		booking.duration=14400; // 10 days
+		booking.calculateEndUTC();
+		//debug("Booking.properties()");
+	    assert("booking.startUTC EQ '2017-01-01 00:00:00'");
+	    assert("booking.endUTC EQ '2017-01-10 23:59:59'");
+	}
+	function Test_calculate_endUTC_repeat_rule_daily_forever_not_allday(){
+		booking.setProperties(properties);
+		booking.startUTC=createDateTime(2017,01,01,10,00,00);
+		booking.duration=120;
+		booking.isrepeat=1;
+		booking.repeatpattern="FREQ:DAILY";
+		booking.calculateEndUTC();
+		//debug("Booking.properties()");
+	    assert("booking.startUTC EQ '2017-01-01 10:00:00'");
+	    assert("booking.endUTC EQ '9999-12-31 23:59:59'");
+	}
+	function Test_calculate_endUTC_repeat_rule_daily_forever_is_allday(){
+		booking.setProperties(properties);
+		booking.isallday=1;
+		booking.startUTC=createDateTime(2017,01,01,10,00,00);
+		booking.duration=120;
+		booking.isrepeat=1;
+		booking.repeatpattern="FREQ:DAILY";
+		booking.calculateEndUTC();
+		//debug("Booking.properties()");
+	    assert("booking.startUTC EQ '2017-01-01 00:00:00'");
+	    assert("booking.endUTC EQ '9999-12-31 23:59:59'");
+	}
+	function Test_calculate_endUTC_repeat_rule_daily_forever_is_allday_multiday(){
+		booking.setProperties(properties);
+		booking.isallday=1;
+		booking.startUTC=createDateTime(2017,01,01,10,00,00);
+		booking.isrepeat=1;
+		booking.repeatpattern="FREQ:DAILY";
+		booking.duration=14400; // 10 days
+		booking.calculateEndUTC();
+		//debug("Booking.properties()");
+	    assert("booking.startUTC EQ '2017-01-01 00:00:00'");
+	    assert("booking.endUTC EQ '9999-12-31 23:59:59'");
 	}
 }

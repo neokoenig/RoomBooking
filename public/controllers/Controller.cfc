@@ -10,9 +10,9 @@ component extends="Wheels" hint="Global Controller"
 		filters(through="checkPermissionAndRedirect", permission="accessApplication");
 	}
 
-	include template="functions/auth.cfm";
-	include template="functions/filters.cfm";
-	include template="functions/dates.cfm";
-	include template="functions/utils.cfm";
+	include "functions/auth.cfm";
+	include "functions/filters.cfm";
+	include "functions/dates.cfm";
+	include "functions/utils.cfm";
 
 }

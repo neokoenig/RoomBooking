@@ -1,7 +1,8 @@
 component extends="Model"
 {
 	function init() {
-		hasMany("rolepermissions");
-		hasMany("userpermissions");
+		// Associations
+		hasMany(name="rolepermissions");
+		hasMany(name="userpermissions");
 	}
 }

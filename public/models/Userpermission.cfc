@@ -1,7 +1,8 @@
 component extends="Model"
 {
 	function init() {
-		belongsTo("user");
-		belongsTo("permission");
+		// Associations
+		belongsTo(name="user");
+		belongsTo(name="permission");
 	}
 }

@@ -82,7 +82,7 @@
 
             #includePartial("/common/layout/lang")#
          <cfif isAuthenticated()>
-            #includePartial("/common/layout/tasks")#
+            <!---#includePartial("/common/layout/tasks")#--->
             #includePartial("/common/layout/account")#
           </cfif>
           <!-- Control Sidebar Toggle Button

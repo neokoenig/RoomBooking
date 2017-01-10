@@ -22,7 +22,7 @@
                   <td>#lastname#</td>
                   <td>#email#</td>
                   <td>#name#</td>
-                  <td>#LSDateFormat(date=createdat, locale=application.rbs.settings.i8n_defaultLocale)#</td>
+                  <td>#LSDateFormat(createdat, "YYYY MM DD")#</td>
                   <td>
                     <div class="btn-group">
                     #linkTo(route="editAdminUser", key=id, text="<i class='fa fa-edit'></i> " & l("Edit"), class="btn btn-xs btn-flat btn-primary")#
@@ -34,7 +34,11 @@
                       <li><a href="">Reset Password</a></li>
                       <li><a href="">Edit Permissions</a></li>
                       <li class="divider"></li>
-                      <li><a href="">Assume User</a></li>
+                      <li>
+                      <cfif session.user.properties.id NEQ id>
+                      #linkTo(route="adminAssume", key=id, text="<i class='fa fa-user-secret'></i> " & l("Assume"))#
+                      </cfif>
+                    </li>
                       <li><a href="">Disable</a></li>
                     </ul>
                   </div>

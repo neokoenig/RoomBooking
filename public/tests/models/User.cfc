@@ -21,7 +21,7 @@ component extends="tests.Test" {
 	function test_should_have_default_roleid_of_0(){
 	   user.setProperties({});
 	   assert("structKeyExists(user, 'roleid')");
-	   assert("user.roleid == 0");
+	   assert("user.roleid EQ 0");
 	}
 
 	function test_should_fail_without_firstname(){
@@ -53,7 +53,7 @@ component extends="tests.Test" {
 	   user.setProperties(properties);
 	   user.valid();
 	   assert("structKeyExists(user, 'passwordconfirmation')");
-	   assert("user.passwordconfirmation == 'foobar'");
+	   assert("user.passwordconfirmation EQ 'foobar'");
 	}
 
 	function test_fails_confirmation_if_password_present(){

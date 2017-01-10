@@ -1,7 +1,8 @@
 component extends="Model"
 {
 	function init() {
-		belongsTo("calendar");
-		belongsTo("building");
+		// Associations
+		belongsTo(name="calendar");
+		belongsTo(name="building");
 	}
 }

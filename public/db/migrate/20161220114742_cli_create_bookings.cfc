@@ -28,7 +28,7 @@
 				t.string(columnNames='title', null=false, limit='255');
 				t.datetime(columnNames='startUTC,endUTC');
 				t.integer(columnNames='userid,duration', default='0', null=false, limit='11');
-				t.integer(columnNames='calendarid,buildingid,roomid,approvedby,allday,isrepeat', default='0', null=true, limit='11');
+				t.integer(columnNames='buildingid,roomid,approvedby,isallday,isrepeat', default='0', null=true, limit='11');
 				t.boolean(columnNames='approved', default=false);
 				t.text(columnNames="usernotes,adminnotes");
 				t.string(columnNames='repeatpattern', null=true, limit=500);

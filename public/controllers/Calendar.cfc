@@ -3,8 +3,9 @@ component extends="Controller"
   function init() {
     super.init();
     filters(through="checkPermissionAndRedirect", permission="accessCalendar");
-    verifies(only="show", params="key", paramsTypes="integer", handler="objectNotFound");
     filters(through="f_getCalendarLocations", only="show");
+
+    verifies(only="show", params="key", paramsTypes="integer", handler="objectNotFound");
     provides("html,json");
     usesLayout(template=false, only="detail");
   }
@@ -23,7 +24,8 @@ component extends="Controller"
     request.pagetitle=calendar.title;
   }
 
-  function data(){
+  // Render data specifically for full calendar
+  function fullcalendardata(){
     param name="params.start" default="#dateFormat(now(), 'YYYY-MM-DD')#";
     param name="params.end" default="#dateFormat(dateAdd('d', 30, now()), 'YYYY-MM-DD')#";
     params.format="json";
@@ -31,9 +33,21 @@ component extends="Controller"
       // Return Array of Structs including repeats
       renderWith( formatDataForCalendar( getEventsForRange(start=params.start, end=params.end) ) );
     } else {
-      renderWith("{'error': 'No Calendar ID Specified'}", status=500);
+      renderWith(data="{'error': 'No Calendar ID Specified'}", status=500);
     }
   }
+
+  // Render data specifically for year calendar
+  function yearcalendardata(){
+    param name="params.year" default=year(now());
+    params.format="json";
+    local.start="2017-01-01";
+    local.end="2017-12-31";
+    local.bookings=getEventsForRange(start=local.start, end=local.end );
+    writeDump(local.bookings);
+    abort;
+  }
+
 
   function detail(){
     booking=model("booking").findByKey(params.key);
@@ -51,7 +65,6 @@ component extends="Controller"
     calendarbuildings=model("calendarbuilding").findAll(where="calendarid = #params.key#", include="building", order="title");
     calendarrooms=model("calendarroom").findAll(where="calendarid = #params.key#", include="room", order="title");
     locations=mergeLocations(calendarbuildings, calendarrooms);
-
   }
 
     // Merge Buildings and Rooms, seperate by floor etc

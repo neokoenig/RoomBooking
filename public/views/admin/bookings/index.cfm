@@ -23,7 +23,7 @@
 			<td>#ID#</td>
 			<td>#title# <cfif isRepeat && len(repeatpattern)><i class="fa fa-refresh pull-right"></i></cfif></td>
 			<th>#LSDateFormat(startUTC)#
-			<cfif allDay>(#l("All Day")#)<Cfelse>#LSTimeFormat(startUTC)#</cfif></th>
+			<cfif isallDay>(#l("All Day")#)<Cfelse>#LSTimeFormat(startUTC)#</cfif></th>
 			<th>#tickorcross(approved)#</th>
 			<td>#linkTo(route="editAdminBooking", key=id, text="<i class='fa fa-edit'></i> " & l("Edit"), class="btn btn-xs btn-flat btn-primary")#
 		</tr>

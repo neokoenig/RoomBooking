@@ -3,7 +3,7 @@ component extends="Admin"
 	function init() {
 		super.init();
 		filters(through="checkPermissionAndRedirect", permission="accessSettings");
-		filters(through="f_getUsers", only="new,create,edit,update");
+		filters(through="f_getUsers,f_getBuildings,f_getRooms", only="new,create,edit,update");
 		verifies(except="index,new,create", params="key", paramsTypes="integer", handler="objectNotFound");
 		verifies(post=true, only="create,update,delete");
 	}
@@ -36,11 +36,11 @@ component extends="Admin"
 
 	function edit() {
 		request.pagetitle="Update Calendar";
-		calendar=model("calendar").findByKey(params.key);
+		calendar=model("calendar").findByKey(key=params.key, include="calendarbuildings,calendarrooms");
 	}
 
 	function update() {
-		calendar=model("calendar").findByKey(params.key);
+		calendar=model("calendar").findByKey(key=params.key, include="calendarbuildings,calendarrooms");
 		if(calendar.update(params.calendar)){
 			return redirectTo(action="index", success="calendar #calendar.title# successfully updated");
 		} else {

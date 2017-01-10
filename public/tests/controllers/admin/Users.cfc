@@ -13,7 +13,7 @@ component extends="tests.Test" {
 	  _controller.$processAction();
 	}
 
-	/*function test_users_show_should_redirect_to_index_if_no_key(){
+	function test_users_show_should_redirect_to_index_if_no_key(){
 	  _params = {
 	    route="adminUsers",
 	    controller="admin.users",
@@ -25,7 +25,7 @@ component extends="tests.Test" {
 	  t=_controller.$performedRedirect();
 	  debug("redirect");
 	  debug("t");
-	}*/
+	}
 
 	function test_users_new(){
 	  _params = {

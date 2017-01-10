@@ -3,8 +3,9 @@ component extends="Admin" {
 	function init() {
 		super.init();
 		filters(through="checkPermissionAndRedirect", permission="accessUsers");
+		filters(through="checkPermissionAndRedirect", permission="allowAssume");
 
-		verifies(except="index,new,create", params="key", paramsTypes="integer", handler="objectNotFound");
+		verifies(except="index,new,create,assume,show", params="key", paramsTypes="integer", handler="objectNotFound");
 		verifies(post=true, only="create,update,delete");
 
 		filters(through="f_getRoles", only="index,new,create,edit,update");
@@ -30,8 +31,10 @@ component extends="Admin" {
 	}
 
 	function create() {
-		user=model("user").create(params.user);
-		if(user.hasErrors()){
+		user=model("user").new(params.user);
+		// Allow assigning of role here as they should have the accessUsers permission
+		user.roleid=params.user.roleid;
+		if(!user.save()){
 			renderPage(action="new");
 		} else {
 			return redirectTo(action="index", success="User #user.firstname# #user.lastname# successfully created");
@@ -45,6 +48,8 @@ component extends="Admin" {
 
 	function update() {
 		user=model("user").findByKey(params.key);
+		// Allow assigning of role here as they should have the accessUsers permission
+		user.roleid=params.user.roleid;
 		if(user.update(params.user)){
 			return redirectTo(action="index", success="User #user.firstname# #user.lastname# successfully updated");
 		} else {
@@ -57,8 +62,24 @@ component extends="Admin" {
 		return redirectTo(action="index", success="User successfully deleted");
 	}
 
+	function assume() {
+		userToAssume=model("user").findByKey(params.key);
+		if(isObject(userToAssume)){
+			session.auth.assignPermissions(userToAssume);
+			redirectTo(route="root", success=l("Assumed User") & ' ' &  userToAssume.email);
+			//if(auth.login()){
+			//	return redirectTo(route="root", success=l("Assumed User") & ' ' &  userToAssume.email);
+			//} else {
+			//	writeDump(auth.allErrors());
+			//	abort;
+			//}
+		} else {
+			objectNotFound();
+		}
+	}
+
 	function objectNotFound() {
-		return redirectTo(action="index", error="That User wasn't found");
+		return redirectTo(action="index", error="That User wasn't found", delay=true);
 	}
 
 }

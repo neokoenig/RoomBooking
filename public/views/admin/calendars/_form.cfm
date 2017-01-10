@@ -15,9 +15,40 @@
 #box(title=l("Preferences"))#
 	<div class="row">
 		<div class="col-md-3">
+			#select(objectname="calendar", property="template", label=l("Template"), options="fullcalendar,hotelcalendar")#
+		</div>
+		<div class="col-md-3">
 			#textField(objectname="calendar", property="icon", label=l("Icon"))#
 		</div>
 	</div>
 #boxend()#
 
+#box(title=l("Buildings & Rooms"))#
+<div class="row">
+
+<div class="col-md-4">
+	<div id="buildingselector">
+		<cfloop query="allbuildings">
+			#hasManyCheckBox(objectName="calendar", association="calendarbuildings", keys="#calendar.key()#,#id#", label=title)#
+		</cfloop>
+	</div>
+</div>
+<div class="col-md-4">
+	<div id="roomselector">
+		<cfloop query="allrooms">
+			#hasManyCheckBox(objectName="calendar", association="calendarrooms", keys="#calendar.key()#,#id#", label=title)#
+		</cfloop>
+	</div>
+</div>
+</div>
+#boxEnd()#
+
 </cfoutput>
+
+<cfsavecontent variable="request.js.buildingselector">
+<script>
+$("#buildingselector .checkbox").on("click", function(e){
+	console.log($(this).find("[input]").data());
+});
+</script>
+</cfsavecontent>

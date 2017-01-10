@@ -1,7 +1,8 @@
 component extends="Model"
 {
 	function init() {
-		belongsTo("building");
-		belongsTo("room");
+		// Associations
+		belongsTo(name="building");
+		belongsTo(name="room");
 	}
 }

@@ -2,6 +2,7 @@ component extends="Controller"
 {
 	function init() {
 		super.init();
+		filters(through="trigger", name="language.before", type="before");
 	}
 
 	function index(){

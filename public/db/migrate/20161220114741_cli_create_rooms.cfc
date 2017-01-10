@@ -43,7 +43,7 @@
 					default='', null=true, limit='15');
 				t.integer(columnNames='capacity',   null=true, limit='6');
 				t.boolean(columnNames='allowconcurrent', default='1');
-				t.boolean(columnNames='accessible,hearingloop', default='0');
+				t.boolean(columnNames='isaccessible,hearingloop', default='0');
 				t.timestamps();
 				t.create();
 	    	}

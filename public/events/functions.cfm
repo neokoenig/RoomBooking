@@ -1,5 +1,6 @@
 <cfscript>
 
+    // loads application settings
     public function getRBSApplicationSettings(){
         var local.settings=model("setting").findAll();
         for(var setting in local.settings){
@@ -11,6 +12,7 @@
         }
     }
 
+    // Install check for sysadmin
     public boolean function checkForAtLeastOneSysAdmin(){
         var local.sys=model("user").findAll(where="roles.name='sysadmin'", include="role");
         if(!local.sys.recordcount){
@@ -36,7 +38,7 @@
 
 	// Get Current Session Language
     public string function getCurrentLanguage() {
-        if(structKeyExists(session, "lang") AND len(session.lang)){
+        if(structKeyExists(session, "lang") && len(session.lang)){
             return session.lang;
         } else {
             return "en_GB";
@@ -48,28 +50,33 @@
        local.rv="0.0.0.0";
        local.myHeaders = GetHttpRequestData();
        // Try for x-forwarded-for
-        if(structKeyExists(local.myHeaders, "headers") AND structKeyExists(local.myHeaders.headers, "x-forwarded-for")){
+        if(structKeyExists(local.myHeaders, "headers") && structKeyExists(local.myHeaders.headers, "x-forwarded-for")){
             local.rv=local.myHeaders.headers["x-forwarded-for"];
        // Fall back to host
-        } else if(structKeyExists(local.myHeaders, "headers") AND structKeyExists(local.myHeaders.headers, "host")){
+        } else if(structKeyExists(local.myHeaders, "headers") && structKeyExists(local.myHeaders.headers, "host")){
             local.rv=listFirst(local.myHeaders.headers["host"], ":");
         }
         return local.rv;
     }
 
-
+    // Return a list of available locales from Java
     public function getLocaleListDropDown(){
         local.rv=server.coldfusion.supportedlocales;
         local.rv=listSort(local.rv, "textnocase");
         return local.rv;
     }
 
+    // List of available theme layouts
     public function getThemeLayoutDropDown(){
          return "fixed,layout-boxed,layout-top-nav,sidebar-collapse,sidebar-mini";
     }
+
+    // List of available theme skins
     public function getThemeSkinDropDown(){
          return "skin-blue,skin-black,skin-purple,skin-yellow,skin-red,skin-green,skin-blue-light,skin-black-light,skin-purple-light,skin-yellow-light,skin-red-light,skin-green-light";
     }
+
+    // List of available roles
     public function getRoleDropdownList(){
         return model("role").findAll();
     }
@@ -189,5 +196,6 @@ function arrayOfStructsSort(aOfS,key){
         }
         return local.rv;
     }
+
 
 </cfscript>

@@ -1,0 +1,105 @@
+==========================================================================================
+2.0.0
+Release Date: TBA
+==========================================================================================
+2.0.0-rc2
+Release Date: TBA
+==========================================================================================
+2.0.0-rc1
+Release Date: TBA
+==========================================================================================
+2.0.0-beta
+Release Date: TBA
+==========================================================================================
+2.0.0-alpha
+Release Date: TBA
+
+New Features
+==================
+
+Calendars:
+
+* Multiple Calendar Support - allows multiple calendars with different configurations.
+* Buildings/Rooms can be tied to multiple calendars.
+* Adds Icon/Title support for calendars
+* Add an "owner" for each calendar
+* Adds better Calendar giltering for locations via dropdown
+* Allows for multiple buildings and their rooms, or just a selection of standalone rooms
+* Uses FullCalendar 3.x
+* Adds Full Repeating Rules Logic via iCalendar spec
+
+Locations:
+
+* Locations are now split into Buildings and rooms
+* Adds per Location Time Zone Support, so you could list buildings in multiple zones
+* Now have a grouping field (currently called "floor" but might just change to group)
+* Adds an "owner" for each location
+* Adds an icon for each location
+
+Bookings:
+
+* Add Full Repeating Rules Logic JS widget selector
+* Adds an "owner" for each Booking
+
+Framework:
+
+* New Theme via AdminLTE
+* Significantly better installer; runs various tests on application start and prompts for fixes
+* RESTful routing via coldRoute Plugin
+* Full Database migration scripts can be triggered by the installer
+* Initial "sysadmin" user is now created on install - user is allowed to set the initial password for this default user
+
+TODO
+==================
+Add Location floorplans/attachments/images/capacity/type
+Add FullCalendar Scheduler addon - double check licencing
+Add "Year" based calendar (think booking a rental cottage)
+Add Ability to restrict each calendar viewing/editing/booking by role + user
+Add Workflow/Notification System
+Add Simplify Pending/Approved/Denied workflow
+Add Create some sort of "slot based" js widget
+Add Concurrency Checks / Event Overlap restrictions
+Add Search for "Next Available Slot / Find me a room with ...x "
+Add Full Text search for titles/descriptions (filter by past/future)
+Add Print friendly PDF Agendas
+Add permission to show only users events
+Add Create an event on behalf of any user of the system (only available to the administrator)
+Add Resources
+Add Digital Signage as a standalone self contained front end using an API key
+Add Data import -> Export would be nice, maybe via CSV if Lucee vs ACF isn't too bad
+Maybe Multiple Rooms per booking?
+
+Bug Fixes
+=========
+* N/A
+
+Breaking Changes
+================
+* Absolutely Everything. Deliberately no upgrade path from 1.x
+* Minimum ACF Support in CF11
+* Minimum Lucee Support is 4.5.3/5.x
+* Drops custom fields concept
+* Drops MSSQL support
+
+Plugin Enhancements
+==================
+* Adds Database Migrations via dbmigrate
+* Adds RESTful routing via coldroute
+* Adds CSRF Protection viacsrfprotection
+* Adds dbmigratebridge
+* Adds flashwrapper
+* Adds Repeat Rule Definitions via ical4j
+* Adds Localisation Support via localizator
+* Adds Custom HTTP response codes via responsecodes
+
+Model Enhancements
+==================
+* Adds all initial models
+
+View Enhancements
+=================
+* Adds all initial views
+
+Controller Enhancements
+=======================
+* Adds all initial controllers

@@ -4,4 +4,10 @@ component extends="controllers.Controller"
 		super.init();
 		usesLayout(template="/common/admin");
 	}
+
+	function index(){
+		param name="params.page" default="1";
+		param name="params.perpage" default="10";
+		pendingBookings=model("booking").findAll(page=params.page, perpage=params.perpage, where="approved = 0", include="user,room,building");
+	}
 }

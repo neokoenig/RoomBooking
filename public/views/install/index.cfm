@@ -55,11 +55,11 @@ if(arraylen(application.rbs.setupchecks.passes)){
 
 		if(structKeyExists(checks[i], "passes")){
 			teststatus = "success";
-			icon="check"
+			icon="check";
 		}
 		if(structKeyExists(checks[i], "errors")){
 			teststatus = "danger";
-			icon="times"
+			icon="times";
 		}
 		</cfscript>
 
@@ -68,14 +68,14 @@ if(arraylen(application.rbs.setupchecks.passes)){
 				<i class="fa fa-#icon#"></i>
 				</cfif> #checks[i]["title"]#
 			</h4>
-			<cfif teststatus == "muted">
+			<cfif teststatus EQ "muted">
 				<p class="text-muted">#checks[i]["description"]#</p>
 			</cfif>
-			<cfif teststatus == "success">
+			<cfif teststatus EQ "success">
 				<p>#checks[i]["description"]#</p>
 				<p class="text-success"><strong>#checks[i]["passes"]["message"]#</strong></p>
 			</cfif>
-			<cfif teststatus == "danger">
+			<cfif teststatus EQ "danger">
 				<p>#checks[i]["description"]#</p>
 				<p class="text-danger"><strong>#checks[i]["errors"]["message"]#</strong></p>
 				<cfif structKeyExists(checks[i], "partial")>

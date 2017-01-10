@@ -24,10 +24,10 @@
   	<cftransaction>
 	    <cfscript>
 	    	try{
-				addRecord(table='calendars', userid=1, description="Example Calendar using Buildings and Rooms", icon="fa-calendar", title='Meeting Rooms');
-				addRecord(table='calendars', userid=1, description="Example Calendar using Day based booking", icon="fa-bed", title='My B&B');
-				addRecord(table='calendars', userid=1, description="Example Calendar using Buildings,Rooms,Resources", icon="fa-flask", title='Science Labs');
-				addRecord(table='calendars', userid=1, description="Example Calendar using Slot based Booking and Resources", icon="fa-microphone", title='Recording Studio');
+				addRecord(table='calendars', template="fullcalendar", userid=1, description="Example Calendar using Buildings and Rooms", icon="fa-calendar", title='Meeting Rooms');
+				addRecord(table='calendars', template="fullcalendar", userid=1, description="Example Calendar using Day based booking", icon="fa-bed", title='My B&B');
+				addRecord(table='calendars', template="fullcalendar", userid=1, description="Example Calendar using Buildings,Rooms,Resources", icon="fa-flask", title='Science Labs');
+				addRecord(table='calendars', template="fullcalendar", userid=1, description="Example Calendar using Slot based Booking and Resources", icon="fa-microphone", title='Recording Studio');
 	    	}
 	    	catch (any ex){
 	    		hasError = true;

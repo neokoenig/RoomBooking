@@ -8,7 +8,7 @@
  <li>
     <!-- Inner menu: contains the languages -->
     <ul class="menu">
-      <cfloop list="#request.lang.languages#" key="i">
+      <cfloop list="#request.lang.languages#" index="i">
         <cfif request.lang.current EQ i>
           <li class="active">
         <cfelse>

@@ -63,6 +63,16 @@
 				addRecord(table='calendarrooms', calendarid=2, roomid=33);
 				addRecord(table='calendarrooms', calendarid=2, roomid=34);
 				addRecord(table='calendarrooms', calendarid=2, roomid=35);
+				addRecord(table='calendarrooms', calendarid=2, roomid=36);
+				addRecord(table='calendarrooms', calendarid=2, roomid=37);
+				addRecord(table='calendarrooms', calendarid=2, roomid=38);
+				addRecord(table='calendarrooms', calendarid=2, roomid=39);
+				addRecord(table='calendarrooms', calendarid=2, roomid=40);
+				addRecord(table='calendarrooms', calendarid=2, roomid=41);
+				addRecord(table='calendarrooms', calendarid=2, roomid=42);
+				addRecord(table='calendarrooms', calendarid=2, roomid=43);
+				addRecord(table='calendarrooms', calendarid=2, roomid=44);
+				addRecord(table='calendarrooms', calendarid=2, roomid=45);
 
 				addRecord(table='calendarrooms', calendarid=2, roomid=46);
 				addRecord(table='calendarrooms', calendarid=2, roomid=47);

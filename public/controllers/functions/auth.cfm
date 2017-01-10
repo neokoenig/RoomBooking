@@ -16,7 +16,7 @@
 
 	function checkPermissionAndRedirect(required string permission){
 		if(!checkPermission(permission)){
-			redirectTo(route="authenticationDenied");
+			return redirectTo(route="authenticationDenied");
 		}
 	}
 

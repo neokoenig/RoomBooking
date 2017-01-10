@@ -40,15 +40,30 @@
 
 
 			<div class="row">
-				<div class="col-md-3">
-					#textField(objectname="booking", property="startUTC")#
-					<!---#textField(objectname="booking", property="endUTC")#--->
+				<div class="col-md-2">
+					#textField(objectname="booking", property="startUTCDate", label=l("Date"))#
+				</div>
+				<div class="col-md-2">
+
+              <div class="bootstrap-timepicker">
+                <div class="form-group">
+                <label>#l("Time")#</label>
+                  <div class="input-group">
+					#textField(objectname="booking", prepend="", append="", label="", prependToLabel="", appendToLabel="", property="startUTCTime", class="form-control timepicker")#
+                    <div class="input-group-addon">
+                      <i class="fa fa-clock-o"></i>
+                    </div>
+                  </div>
+                  <!-- /.input group -->
+                </div>
+                <!-- /.form group -->
+              </div>
 				</div>
 				<div class="col-md-1">
 					#textField(objectname="booking", property="duration")#
 				</div>
 				<div class="col-md-2">
-					#checkBox(objectname="booking", property="allday", label=l("All Day"))#
+					#checkBox(objectname="booking", property="isallday", label=l("All Day"))#
 					#checkBox(objectname="booking", property="isrepeat", label=l("Use Repeats"))#
 				</div>
 				<div class="col-md-4">
@@ -83,10 +98,17 @@
 </cfoutput>
 <cfsavecontent variable="request.js.picker">
 <script>
-//Date picker
-$("#booking-startUTC").datepicker({
-
+// Date picker
+$("#booking-startUTCDate").datepicker({
+	language: $('html').attr('lang'),
+	format: 'yyyy-mm-dd',
+    autoclose: true
 });
+// Time Picker
+$(".timepicker").timepicker({
+      showInputs: false
+});
+// RRULE
 $("#booking-repeatpattern").recurrenceinput();
 </script>
 </cfsavecontent>

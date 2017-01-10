@@ -9,4 +9,34 @@
 		}
 		return ArrayToList(loc.array, " #arguments.operator# ");
 	}
+
 </cfscript>
+    <cffunction name="queryToArray" access="private" returntype="array" output="false">
+        <cfargument name="q" type="query" required="yes" />
+        <cfargument name="cb" type="any" required="no" />
+        <cfscript>
+            var local = {};
+            if (structKeyExists(server, "railo") or structKeyExists(server, "lucee")) {
+                local.Columns = listToArray(arguments.q.getColumnList(false));
+            }
+            else {
+                local.Columns = arguments.q.getMetaData().getColumnLabels();
+            }
+            local.QueryArray = ArrayNew(1);
+            for (local.RowIndex = 1; local.RowIndex <= arguments.q.RecordCount; local.RowIndex++){
+                local.Row = {};
+                local.numCols = ArrayLen( local.Columns );
+                for (local.ColumnIndex = 1; local.ColumnIndex <= local.numCols; local.ColumnIndex++){
+                    local.ColumnName = local.Columns[ local.ColumnIndex ];
+                    if( local.ColumnName NEQ "" ) {
+                        local.Row[ local.ColumnName ] = arguments.q[ local.ColumnName ][ local.RowIndex ];
+                    }
+                }
+                if ( structKeyExists( arguments, "cb" ) ) {
+                    local.Row = cb( local.Row );
+                }
+                ArrayAppend( local.QueryArray, local.Row );
+            }
+            return( local.QueryArray );
+        </cfscript>
+    </cffunction>

@@ -55,10 +55,10 @@
 			}
 		);
 	}
-
 //=====================================================================
 //= 	DBmigrate checks
 //=====================================================================
+if(arraylen(application.rbs.setupchecks.errors) == 0){
 	// Get Current Version
 	application.rbs.dbmigrate.current=application.wheels.plugins.dbmigrate.getCurrentMigrationVersion();
 	// Get Migration Array
@@ -87,43 +87,44 @@
 	}
 	// No need to keep this in application scope, can get a little big.
 	structDelete(application.rbs.dbmigrate, "migrations");
+}
 
 //=====================================================================
 //= 	Ensure there's at least one sysadmin user;
 //=		unlock ability to create a sysadmin if this fails - don't run if DB not setup
 //=====================================================================
-	if(arraylen(application.rbs.setupchecks.errors) == 0){
-		if(!checkForAtLeastOneSysAdmin()){
-			arrayAppend(application.rbs.setupchecks.errors,
-				{
-					"checkname": "sysadmin",
-					"message": "No Sysadmin user has been found/created"
-				}
-			);
-			application.rbs.allowSysadminCreation=true;
-		} else {
-			arrayAppend(application.rbs.setupchecks.passes,
-				{
-					"checkname": "sysadmin",
-					"message": "At least one Sysadmin has been found"
-				}
-			);
-		}
+if(arraylen(application.rbs.setupchecks.errors) == 0){
+	if(!checkForAtLeastOneSysAdmin()){
+		arrayAppend(application.rbs.setupchecks.errors,
+			{
+				"checkname": "sysadmin",
+				"message": "No Sysadmin user has been found/created"
+			}
+		);
+		application.rbs.allowSysadminCreation=true;
+	} else {
+		arrayAppend(application.rbs.setupchecks.passes,
+			{
+				"checkname": "sysadmin",
+				"message": "At least one Sysadmin has been found"
+			}
+		);
 	}
+}
 //=====================================================================
 //= 	Apply Application Settings
 //=====================================================================
 
-	// All Checks above passed? Cool. Load the app
-	if(!arraylen(application.rbs.setupchecks.errors)){
-		getRBSApplicationSettings();
-		application.rbs.installed=true;
-	} else {
-		// redirect to the installer; url flag is to stop looping redirect
-		if(!isDefined("url.redirected")){
-			location url="/install/?redirected";
-		}
-		//abort;
+// All Checks above passed? Cool. Load the app
+if(!arraylen(application.rbs.setupchecks.errors)){
+	getRBSApplicationSettings();
+	application.rbs.installed=true;
+} else {
+	// redirect to the installer; url flag is to stop looping redirect
+	if(!isDefined("url.redirected")){
+		location("/install/?redirected");
 	}
+	//abort;
+}
 
 </cfscript>

@@ -26,7 +26,7 @@
 	    	try{
 				t = createTable(name='calendars', force='true', id='true', primaryKey='id');
 				t.string(columnNames='title', null=false, limit='255');
-				t.string(columnNames='icon', null=false, limit='55');
+				t.string(columnNames='template,icon', null=false, limit='55');
 				t.integer(columnNames='userid', default='0', null=false, limit='11');
 				t.text(columnNames="description");
 				t.timestamps();

@@ -1,12 +1,12 @@
 component extends="Model"
 {
 	function init() {
+		// Associations
 		belongsTo(name="role", joinType="left");
-
-		hasMany("bookings");
-		hasMany("buildings");
-		hasMany("rooms");
-		hasMany("userpermissions");
+		hasMany(name="bookings");
+		hasMany(name="buildings");
+		hasMany(name="rooms");
+		hasMany(name="userpermissions");
 
 		property(name="roleid", defaultValue=0);
 		property(name="fullname", sql="CONCAT(firstname, ' ', lastname)");
@@ -71,7 +71,7 @@ component extends="Model"
 		ArrayAppend(local.result, Mid(local.ucase, RandRange(1, len(local.ucase)), 1)); // 1 uppercase
 		ArrayAppend(local.result, Mid(local.numbers, RandRange(1, len(local.numbers)), 1)); // 1 number
 		for (i=1;i LTE (length -3);i=i+1) {
-			ArrayAppend(local.result, Mid(local.all, RandRange(1, len(local.all)), 1))
+			ArrayAppend(local.result, Mid(local.all, RandRange(1, len(local.all)), 1));
 		}
 		return ArrayToList(local.result, "");
 		CreateObject("java", "java.util.Collections").Shuffle(local.result);

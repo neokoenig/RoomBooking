@@ -12,24 +12,24 @@ component extends="tests.Test" {
 			"foo": "bar",
 			"foo2": " bar",
 			"foo3": "bar  "
-		}
+		};
 		testScope["sub"]={
 			"foo4" : " bar ",
 			"foo5" : {
 				"foo6": " bar"
 			}
-		}
+		};
 		testScope=trimScope(testScope);
-		assert("len(testscope.foo) == 3");
-		assert("len(testscope.foo2) == 3");
-		assert("len(testscope.foo3) == 3");
-		assert("len(testscope.sub.foo4) == 3");
-		assert("len(testscope.sub.foo5.foo6) == 3");
+		assert("len(testscope.foo) EQ 3");
+		assert("len(testscope.foo2) EQ 3");
+		assert("len(testscope.foo3) EQ 3");
+		assert("len(testscope.sub.foo4) EQ 3");
+		assert("len(testscope.sub.foo5.foo6) EQ 3");
 	}
 
 	function Test_get_ip_address(){
 		actual=getIPAddress();
 		// Test might fail on mac?
-		assert("actual != '0.0.0.0'");
+		assert("actual NEQ '0.0.0.0'");
 	}
 }

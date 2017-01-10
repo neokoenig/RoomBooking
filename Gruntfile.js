@@ -44,30 +44,24 @@ module.exports = function(grunt) {
       },
       frontend: {
         src: [
-         // jQuery
-         '<%= bp %>/jquery/dist/jquery.js',
-        // Bootstrap individual components: delete what we don't need/use
-          //'<%= bp %>/bootstrap/js/alert.js',
-          //'<%= bp %>/bootstrap/js/button.js',
-          //'<%= bp %>/bootstrap/js/carousel.js',
-          //'<%= bp %>/bootstrap/js/collapse.js',
-          //'<%= bp %>/bootstrap/js/dropdown.js',
-          //'<%= bp %>/bootstrap/js/modal.js',
-          //'<%= bp %>/bootstrap/js/tooltip.js',
-          //'<%= bp %>/bootstrap/js/popover.js',
-          //'<%= bp %>/bootstrap/js/tab.js',
-          //'<%= bp %>/bootstrap/js/transition.js',
-        // Vendor
-          //'<%= bp %>/moment/moment.js',
-          //'<%= bp %>/fullcalendar/dist/fullcalendar.js',
-          //'<%= bp %>/eonasdan-bootstrap-datetimepicker/src/js/bootstrap-datetimepicker.js',
-          //'<%= bp %>/bootstrapvalidator/dist/js/bootstrapValidator.js',
-          //'<%= bp %>/minicolors/jquery.minicolors.js',
-          //'<%= bp %>/jquery-ui/jquery-ui.js',
-          //'<%= bp %>/gridmanager/src/gridmanager.js',
-          //'<%= bp %>/bootbox/bootbox.js',
-          //'<%= bp %>/fullcalendar/dist/lang-all.js',
-        // Custom Front end JS - all your custom JS here!
+          //jquery + bootstrap
+          '<%= bp %>/jquery/dist/jquery.js',
+          '<%= bp %>/bootstrap/dist/js/bootstrap.js',
+          //Fullcalendar3
+          '<%= bp %>/moment/min/moment-with-locales.js',
+          '<%= bp %>/fullcalendar/dist/fullcalendar.js',
+          //recurrenceinput
+          '<%= bp %>/recurrenceinput/lib/jquery.tmpl.js',
+          '<%= bp %>/recurrenceinput/lib/jquery.tools.dateinput.js',
+          '<%= bp %>/recurrenceinput/lib/jquery.tools.overlay.js',
+          '<%= bp %>/recurrenceinput/src/jquery.recurrenceinput.js',
+          //AdminLTE
+          '<%= bp %>/AdminLTE/dist/js/app.js',
+          '<%= bp %>/AdminLTE/plugins/datepicker/bootstrap-datepicker.js',
+          '<%= bp %>/AdminLTE/plugins/fastclick/fastclick.js',
+          '<%= bp %>/AdminLTE/plugins/slimScroll/jquery.slimscroll.js',
+          '<%= bp %>/AdminLTE/plugins/timepicker/bootstrap-timepicker.js',
+          //RBS
           '<%= js %>/main.js'
         ],
         dest: '<%= js %>/cms.js'
@@ -86,7 +80,7 @@ module.exports = function(grunt) {
           jQuery: true
         },
       },
-      all: ['Gruntfile.js', '<%= js %>/frontend.js','<%= js %>/backend.js']
+      all: ['Gruntfile.js', '<%= js %>/main.js']
     },
 
     uglify : {
@@ -143,9 +137,28 @@ module.exports = function(grunt) {
         files: ['<%= ss %>/less/core/*.less', '<%= ss %>/less/site/*.less'],
         tasks: ['css']
       }
+    },
+
+  replace: {
+      dist: {
+        options: {
+          patterns: [
+            {
+              match: "url('fonts/",
+              replacement: "url('/stylesheets/fonts/"
+            },
+            {
+              match: "url('../img/",
+              replacement: "url('/images/"
+            }
+          ],
+          usePrefix: false
+        },
+        files: [
+          {expand: true, flatten: true, src: ['<%= ss %>/cms.css'], dest: '<%= ss %>'}
+        ]
+      }
     }
-
-
   });
 
   grunt.loadNpmTasks('grunt-contrib-concat');
@@ -155,10 +168,10 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-less');
-  grunt.loadNpmTasks('grunt-injector');
+  grunt.loadNpmTasks('grunt-replace');
   grunt.loadNpmTasks('grunt-rev');
 
-  grunt.registerTask('css', ['clean:css', 'less:css', 'cssmin:css']);
+  grunt.registerTask('css', ['clean:css', 'less:css','replace','cssmin:css']);
   grunt.registerTask('js', ['jshint', 'clean:js', 'concat', 'uglify']);
   grunt.registerTask('default', ['watch']);
 };

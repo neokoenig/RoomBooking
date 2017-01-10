@@ -29,7 +29,7 @@ component extends="tests.Test" {
 	function Test_Auth_validation_fails(){
 		properties={
 			password: "bar"
-		}
+		};
 		auth.setProperties(properties);
 		auth.valid();
 		assert("!auth.valid()");
@@ -39,7 +39,7 @@ component extends="tests.Test" {
 		properties={
 			email: "foo@foo.com",
 			password: "barbar"
-		}
+		};
 		auth.setProperties(properties);
 		auth.valid();
 		assert("auth.valid()");
@@ -49,7 +49,7 @@ component extends="tests.Test" {
 		properties={
 			email: "admin@fakedomain.com",
 			password: "doesntmatter"
-		}
+		};
 		auth.setProperties(properties);
 		assert("!auth.authenticate()");
 	}
@@ -59,7 +59,7 @@ component extends="tests.Test" {
 		properties={
 			email: "admin@fakedomain.com",
 			password: "doesntmatter"
-		}
+		};
 		auth.setProperties(properties);
 		assert("!auth.login()");
 		assert("!structKeyExists(session, 'auth')");
@@ -70,7 +70,7 @@ component extends="tests.Test" {
 		properties={
 			email: "test@test.com",
 			password: "validPassword"
-		}
+		};
 		auth.setProperties(properties);
 		assert("auth.login()");
 		assert("structKeyExists(session, 'auth')");
@@ -79,7 +79,7 @@ component extends="tests.Test" {
 		properties={
 			email: "test@test.com",
 			password: "validPassword"
-		}
+		};
 		auth.setProperties(properties);
 		assert("auth.authenticate()");
 	}

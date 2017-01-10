@@ -6,7 +6,7 @@
 <cfdump var="#session.user#" label="User">
 </cfif>
 <cfdump var="#application.rbs#" label="RBS">
+<cfdump var="#server#" label="Server">
 <cfscript>
 //writeDump(getTZList());
-#writeDump(server)#
 </cfscript>

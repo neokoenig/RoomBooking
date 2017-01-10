@@ -8,7 +8,7 @@
 		 	<!--- Buildings & Rooms--->
 			<div class="btn-group">
 				<cfloop from="1" to="#arraylen(locations)#" index="i">
-					<cfif locations[i]["type"] == "building">
+					<cfif locations[i]["type"] EQ "building">
 						<div class="btn-group">
 							<button href=""  class="btn btn-xs  btn-default  locationfilter" title="#locations[i]['description']#" data-filtertype="#locations[i]['type']#" data-id="#locations[i]['id']#">
 								<i style="color:###locations[i]['hexcolour']#" class="fa #locations[i]['icon']#"></i> #locations[i]['title']#
@@ -20,8 +20,8 @@
 				            <ul class="dropdown-menu" role="menu">
 								<cfif structKeyExists(locations[i], "floors") && !structIsEmpty(locations[i]["floors"])>
 								 <cfloop collection="#locations[i]["floors"]#" item="floor">
-								 	<cfif floor != "0">
-										<li class="" style="padding:5px;">#floor#</li>
+								 	<cfif floor NEQ "0">
+										<li class="dropdown-header">#floor#</li>
 										<li class="divider"></li>
 									</cfif>
 									<cfloop from="1" to="#arraylen(locations[i]["floors"][floor])#" index="r">

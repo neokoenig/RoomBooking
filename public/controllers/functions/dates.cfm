@@ -21,7 +21,7 @@
 
       //=   Filters (AND)
       // By Calendar (required)
-      ArrayAppend(local.filters, "calendarid = #params.key#");
+      ArrayAppend(local.filters, "(calendarbuildings.calendarid = #params.key# OR calendarrooms.calendarid = #params.key#)");
 
       // By Building
       if(structKeyExists(params, "filtertype") && params.filtertype == "building"){
@@ -41,7 +41,12 @@
       if(arraylen(local.filters)){
           local.wc &= "AND " & whereify(local.filters, "AND");
       }
-      local.bookings=model("booking").findAll(where=local.wc, order="startUTC ASC", include="building,room", returnAS="structs");
+      // Can't do returnas structs here as we need the deeper associations
+      local.bookings=model("booking").findAll(where=local.wc, order="startUTC ASC", include="building(calendarbuildings),room(calendarrooms)");
+      //writeDump(local.bookings);
+      //abort;
+      local.bookings=queryToArray(local.bookings);
+
       local.bookings=generateRepeatingDates(local.bookings, local.start, local.end);
       return local.bookings;
     }
@@ -100,13 +105,33 @@
 
     // Massage array/struct for return to fullcalendar
     public array function formatDataForCalendar(required array bookings){
-      local.bookings=arguments.bookings;
-      local.delete=["adminnotes","approvedby","room","building","usernotes"];
-      for(b in local.bookings){
+      local.rv=[];
+      // Fields to pass though, delete everything else
+      local.passthrough=[
+        "id",
+        "title",
+        "start",
+        "end",
+        "detailurl",
+        "isPast",
+        "startUTC",
+        "duration",
+        "endUTC",
+        "allDay",
+        "buildingid",
+        "hexcolour",
+        "roomhexcolour",
+        "roomid",
+        "color",
+        "backgroundColor",
+        "textColor",
+        "borderColor",
+        "approved"];
+      for(b in arguments.bookings){
         // Format Dates for full calendar
         b["start"]=dateTimeFormat(b.startUTC, "ISO8601");
         b["end"]=dateTimeFormat(dateAdd("n", b.duration, b.startUTC), "ISO8601");
-        b["allDay"]    =   b.allday;
+        b["allDay"]    =   b.isallday;
 
         // Flag past events
          b["isPast"]= b.startUTC < now() ? true:false;
@@ -116,22 +141,23 @@
 
         // calculate colours
         if(len(b.buildingid) && isNumeric(b.buildingid)){
-          b["color"]        =   "###b.building.hexcolour#";
+          b["color"]        =   "###b.hexcolour#";
         }
         if(len(b.roomid) && isNumeric(b.roomid)){
           b["backgroundColor"]    =   "white";
-          b["textColor"]          =   "###b.room.hexcolour#";
-          if(len(b.room.hexcolour)){
-            b["borderColor"]        =   "###b.room.hexcolour#";
+          b["textColor"]          =   "###b.roomhexcolour#";
+          if(len(b.roomhexcolour)){
+            b["borderColor"]        =   "###b.roomhexcolour#";
           } else {
             b["borderColor"]        =   "white";
           }
         }
-        // Delete any unneeded info
-        for(d in local.delete){
-          if(structKeyExists(b, d)){ structDelete(b, d)}
+        for(f in b){
+          if(!arrayFindNoCase(local.passthrough, f)){structDelete(b, f);}
         }
+        // Append the final struct
+        arrayAppend(local.rv, b);
       }
-      return local.bookings;
+      return local.rv;
     }
     </cfscript>

@@ -4,7 +4,7 @@
 #box(title="Your Setup:")#
 	<div class="row">
 		<div class="col-md-3">
-			CFML engine: <code>#server.coldfusion.productname#</code>
+			CFML engine: <code>#application.wheels.servername# #application.wheels.serverversion#</code>
 		</div>
 		<div class="col-md-3">
 			RBS Version: <code>#application.rbs.version#</code>

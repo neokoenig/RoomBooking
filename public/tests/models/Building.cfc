@@ -19,11 +19,11 @@ component extends="tests.Test" {
 
 	function Test_building_sets_default_icon(){
 		building.setProperties(properties);
-	    assert("building.icon == 'fa-building'");
+	    assert("building.icon EQ 'fa-building'");
 	}
 
 	function Test_building_inherits_timezone_if_not_set(){
 		building.setProperties(properties);
-	    assert("building.timezone == 'Europe/London'");
+	    assert("building.timezone EQ 'Europe/London'");
 	}
 }

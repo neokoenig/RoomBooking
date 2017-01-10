@@ -11,5 +11,5 @@ component extends="tests.Test" {
 		//debug("r");
 	}
 
-	include template="/views/helpers.cfm";
+	include "/views/helpers.cfm";
 }

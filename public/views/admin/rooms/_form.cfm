@@ -37,7 +37,7 @@
 		<div class="col-md-3">
 			#checkBox(objectname="room", property="allowconcurrent", label=l("Allow Concurrent Bookings"))#
 			#checkBox(objectname="room", property="initialstatus", label=l("Requires confirmation"))#
-			#checkBox(objectname="room", property="accessible", label=l("Wheelchair Accessible"))#
+			#checkBox(objectname="room", property="isaccessible", label=l("Wheelchair Accessible"))#
 			#checkBox(objectname="room", property="hearingloop", label=l("Hearing Loop Enabled"))#
 		</div>
 		<div class="col-md-3">

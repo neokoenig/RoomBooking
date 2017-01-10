@@ -7,7 +7,6 @@
 
 @import "@{lib}/@{bs}/variables.less";
 
-
 // cfwheels specific overrides:
 @icon-font-path:  @fontdir;
 
@@ -58,19 +57,39 @@
 @import "@{lib}/@{bs}/carousel.less";
 
 
-// Vendor LESS and CSS files
+// Font Awesome
+@import "@{lib}/font-awesome/less/variables.less";
+// cfwheels specific overrides:
+@fa-font-path: @fontdir;
+@import "@{lib}/font-awesome/less/mixins.less";
+@import "@{lib}/font-awesome/less/path.less";
+@import "@{lib}/font-awesome/less/core.less";
+@import "@{lib}/font-awesome/less/larger.less";
+@import "@{lib}/font-awesome/less/fixed-width.less";
+@import "@{lib}/font-awesome/less/list.less";
+@import "@{lib}/font-awesome/less/bordered-pulled.less";
+@import "@{lib}/font-awesome/less/animated.less";
+@import "@{lib}/font-awesome/less/rotated-flipped.less";
+@import "@{lib}/font-awesome/less/stacked.less";
+@import "@{lib}/font-awesome/less/icons.less";
+@import "@{lib}/font-awesome/less/screen-reader.less";
+
+// AdminLTE Main Theme
+@import (less) "@{lib}/AdminLTE/dist/css/AdminLTE.css";
+
+// Full Calendar
 @import (less) "@{lib}/fullcalendar/dist/fullcalendar.css";
-//@import (less) "@{lib}/fullcalendar/dist/fullcalendar.print.css";
-@import (less) "@{lib}/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css";
-@import (less) "@{lib}/bootstrapvalidator/src/css/bootstrapValidator.css";
-@import (less) "@{lib}/minicolors/jquery.minicolors.css";
-@import (less) "@{lib}/gridmanager/dist/css/jquery.gridmanager.css";
-//@import (less) "@{lib}/bootstrap-language/languages.css";
+
+// Recurrence
+@import (less) "@{lib}/recurrenceinput/src/jquery.recurrenceinput.css";
+
+// Admin LTE Plugins
+@import (less) "@{lib}/AdminLTE/plugins/datepicker/datepicker3.css";
+@import (less) "@{lib}/AdminLTE/plugins/timepicker/bootstrap-timepicker.css";
 
 // Import our main site LESS files
-//@import "@{site}/layout.less";
-//@import "@{site}/displayboard.less";
-@import "@{site}/calendar.less";
+@import "@{site}/lang.less";
+@import "@{site}/calendars.less";
 
 // Utility classes
 @import "@{lib}/@{bs}/utilities.less";

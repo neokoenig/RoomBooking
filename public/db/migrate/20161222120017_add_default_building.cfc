@@ -31,7 +31,7 @@
 				addRecord(table='buildings', title='Farnsworth House', userid=1, description="For the Elderly and Insane", icon="fa-bed", hexcolour="0E8A9E");
 
 				addRecord(table='buildings', title='Bio Labs', userid=1, description="Not for small children or fluffy animals", icon="fa-flask", hexcolour="0E8A9E");
-				addRecord(table='buildings', title='Physics Labs', userid=1, description="Space-X Experimental Labs", icon="fa-flask", hexcolour="0E8A9E");
+				addRecord(table='buildings', title='Physics Labs', userid=1, description="Space-X Experimental Labs", icon="fa-space-shuttle", hexcolour="0E8A9E");
 	    	}
 	    	catch (any ex){
 	    		hasError = true;

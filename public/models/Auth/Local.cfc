@@ -49,29 +49,33 @@ component extends="models.Model"
 		} else {
 			// If Found, check the pw
 			if(local.user.checkPassword(this.password)){
-				// If coming from an external auth source, it might be that the the roleid is set in active directory (for instance)
-				local.rolePermissions=getRolePermissions(local.user.roleid);
-				// Get User Permissions from local user account which override Role based permissions
-				local.userPermissions=getUserPermissions(local.user.id);
-				// Merge Permissions in Scope
-				local.permissions=mergePermissions(local.rolePermissions, local.userPermissions);
-			 	// Store convienient data in Session Scope
-				session["user"]={
-					"permissions"= {},
-					"properties" = local.user.properties()
-				}
-				for(permission in local.permissions){
-					session["user"]["permissions"][permission]=local.permissions[permission]["value"];
-				}
-				// Mark last login time
-				local.user.lastloggedinat=now();
-				local.user.save();
+				assignPermissions(local.user);
 				return true;
 			} else {
 				this.addError(property="password", message=l("Password does not match user account"));
 				return false;
 			}
 		}
+	}
+
+	function assignPermissions(user){
+		// If coming from an external auth source, it might be that the the roleid is set in active directory (for instance)
+		local.rolePermissions=getRolePermissions(arguments.user.roleid);
+		// Get User Permissions from local user account which override Role based permissions
+		local.userPermissions=getUserPermissions(arguments.user.id);
+		// Merge Permissions in Scope
+		local.permissions=mergePermissions(local.rolePermissions, local.userPermissions);
+	 	// Store convienient data in Session Scope
+		session["user"]={
+			"permissions"= {},
+			"properties" = arguments.user.properties()
+		};
+		for(permission in local.permissions){
+			session["user"]["permissions"][permission]=local.permissions[permission]["value"];
+		}
+		// Mark last login time
+		arguments.user.lastloggedinat=now();
+		arguments.user.save();
 	}
 
 	include "functions.cfm";
