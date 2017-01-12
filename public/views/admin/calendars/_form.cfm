@@ -15,7 +15,7 @@
 #box(title=l("Preferences"))#
 	<div class="row">
 		<div class="col-md-3">
-			#select(objectname="calendar", property="template", label=l("Template"), options="fullcalendar,hotelcalendar")#
+			#select(objectname="calendar", property="template", label=l("Template"), options="fullcalendar,yearcalendar")#
 		</div>
 		<div class="col-md-3">
 			#textField(objectname="calendar", property="icon", label=l("Icon"))#

@@ -275,5 +275,13 @@ function arrayOfStructsSort(aOfS,key){
         return local.rv;
     }
 
+    public string function ISODateFormat(required date datetime){
+        return(
+            dateFormat( datetime, "yyyy-mm-dd" ) &
+            "T" &
+            timeFormat( datetime, "HH:mm:ss" ) &
+            "Z"
+        );
+    }
 
 </cfscript>

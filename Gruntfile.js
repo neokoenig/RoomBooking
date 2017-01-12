@@ -50,6 +50,8 @@ module.exports = function(grunt) {
           //Fullcalendar3
           '<%= bp %>/moment/min/moment-with-locales.js',
           '<%= bp %>/fullcalendar/dist/fullcalendar.js',
+          //Full Year Calendar
+          '<%= bp %>/bootstrapyearcalendar/js/bootstrap-year-calendar.js',
           //recurrenceinput
           '<%= bp %>/recurrenceinput/lib/jquery.tmpl.js',
           '<%= bp %>/recurrenceinput/lib/jquery.tools.dateinput.js',

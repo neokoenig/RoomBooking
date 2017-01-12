@@ -34,9 +34,9 @@ component extends="tests.Test" {
 		_controller=controller(name="controller", params=_params);
 		r=_controller.getDefaultPermissionString();
 		//debug("r");
-		assert("len(r) EQ 9");
+		assert("len(r) EQ 8");
 	}
-	function Test_getDefaultPermissionString_with_simple_controller_with_action(){
+	function Test_getDefaultPermissionString_with_dotted_controller_with_action(){
 		_params={"controller"="Test.Foo","action"="Bar"};
 		_controller=controller(name="controller", params=_params);
 		r=_controller.getDefaultPermissionString();

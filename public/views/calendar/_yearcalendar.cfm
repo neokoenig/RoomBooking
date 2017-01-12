@@ -1,5 +1,4 @@
 <cfoutput>
-<cfhtmlhead text="#stylesheetLinkTag("yearcalendar")#">
 <cfset settings=application.rbs.settings>
     <!--- This is just a way of getting settings from the DB into Javascript a bit more easily --->
       <div id="settings"
@@ -12,8 +11,9 @@
 </cfoutput>
 <cfsavecontent variable="request.js.yearcalendar">
 <cfoutput>
-	#javascriptIncludeTag("yearcalendar")#
-    #javascriptIncludeTag("bootstrap-year-calendar.fr,bootstrap-year-calendar.de")#
+<cfif request.lang.currentCode NEQ "en">
+    #javascriptIncludeTag("locales/yearcalendar/bootstrap-year-calendar.#request.lang.currentCode#")#
+</cfif>
 </cfoutput>
 <script>
 $(function() {

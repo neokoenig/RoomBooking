@@ -38,7 +38,8 @@ Locations:
 
 Bookings:
 
-* Add Full Repeating Rules Logic JS widget selector
+* Adds Full Repeating Rules Logic
+* Adds RRULE JS widget selector
 * Adds an "owner" for each Booking
 
 Framework:
@@ -48,9 +49,16 @@ Framework:
 * RESTful routing via coldRoute Plugin
 * Full Database migration scripts can be triggered by the installer
 * Initial "sysadmin" user is now created on install - user is allowed to set the initial password for this default user
+* Granular Permissions system triggered by controller->route
+* "Anon" role for non logged in users become the application defaults
+* When logged in, role permissions kick in with per user overrides
+* A permission to access admin.bookings.new would require admin && admin.bookings && admin.bookings.new all to be true
 
 TODO
 ==================
+Add Repeating Event Exceptions
+Add "This Instance | Future only | All Instances" for repeating
+Add Custom Permissions which can be triggered anywhere
 Add Location floorplans/attachments/images/capacity/type
 Add FullCalendar Scheduler addon - double check licencing
 Add "Year" based calendar (think booking a rental cottage)
@@ -68,6 +76,7 @@ Add Resources
 Add Digital Signage as a standalone self contained front end using an API key
 Add Data import -> Export would be nice, maybe via CSV if Lucee vs ACF isn't too bad
 Maybe Multiple Rooms per booking?
+Add Google Calendar (read only) Integration
 
 Bug Fixes
 =========

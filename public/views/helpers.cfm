@@ -101,6 +101,7 @@
         return xmlFormat(s);
     }
 
+
     public string function LSDateFormatDuration(required date start, required date end){
             local.rv="";
             local.start=LSdateFormat(arguments.start);

@@ -106,8 +106,8 @@
       for(b in arguments.bookings){
         t["id"]             =b.id;
         t["title"]          =b.title;
-        t["start"]          =dateTimeFormat(b.startUTC, "ISO8601");
-        t["end"]            =dateTimeFormat(dateAdd("n", b.duration, b.startUTC), "ISO8601");
+        t["start"]          =ISODateFormat(b.startUTC);
+        t["end"]            =ISODateFormat(dateAdd("n", b.duration, b.startUTC));
         t["detailurl"]      =urlFor(route='calendarDetail', key=b.id);
         t["isPast"]         =b.startUTC < now() ? true:false;
         t["isApproved"]     =b.isapproved;
