@@ -56,10 +56,10 @@ $(document).ready(function() {
             }
         ],
         eventRender: function(event, element) {
-          if(!event.approved){
+          if(!event.isApproved){
             $(element).find(".fc-time").prepend('<i class="fa fa-question-circle"></i> ');
           }
-          if(event.repeat){
+          if(event.isRepeat){
             $(element).find(".fc-time").prepend('<i class="fa fa-repeat"></i> ');
           }
           if(event.isPast){

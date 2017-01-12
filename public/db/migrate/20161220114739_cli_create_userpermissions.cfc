@@ -28,7 +28,7 @@
 				t = createTable(name='userpermissions', force='true', id='false');
 				t.primaryKey(name="userid",limit=11);
 				t.primaryKey(name="permissionid",limit=11);
-				t.boolean(columnNames='value', default=false, null=false);
+				//t.boolean(columnNames='value', default=false, null=false);
 				t.create();
 
 

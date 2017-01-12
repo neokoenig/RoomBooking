@@ -71,7 +71,7 @@ component extends="models.Model"
 			"properties" = arguments.user.properties()
 		};
 		for(permission in local.permissions){
-			session["user"]["permissions"][permission]=local.permissions[permission]["value"];
+			session["user"]["permissions"][permission]=true;
 		}
 		// Mark last login time
 		arguments.user.lastloggedinat=now();

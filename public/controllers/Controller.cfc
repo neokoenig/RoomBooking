@@ -6,8 +6,9 @@ component extends="Wheels" hint="Global Controller"
 		if(arguments.includeForgeryProtection){
 			protectFromForgery();
 		}
-		// Allow Basic Application Access
-		filters(through="checkPermissionAndRedirect", permission="accessApplication");
+		// Check Permission for any given controller + action
+		filters(through="checkPermissionAndRedirect");
+
 	}
 
 	include "functions/auth.cfm";

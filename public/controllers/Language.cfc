@@ -1,8 +1,7 @@
 component extends="Controller"
 {
 	function init() {
-		super.init();
-		filters(through="trigger", name="language.before", type="before");
+		// Shouldn't go via central permissions, so we don't call super.init
 	}
 
 	function index(){

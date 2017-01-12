@@ -66,10 +66,10 @@
         required string route,
         required string icon,
         required string text,
-        string permission="",
+        string permissionCheck="",
         numeric key=0
     ){
-        if(checkPermission(permission)){
+        if(hasPermission(controller)){
             local.rv="<li class='";
             if(params.controller == controller){
                local.rv&=("active");
@@ -87,18 +87,21 @@
 
     }
 
-    public string function tickorcross(required boo){
-        var result="";
-        if(structKeyexists(arguments, "boo") AND isBoolean(arguments.boo) AND arguments.boo){
-            result="<i class='fa fa-check text-success'></i>";
+    public string function tickorcross(required boolean boolean){
+        local.rv="";
+        if(structKeyexists(arguments, "boolean") AND isBoolean(arguments.boolean) AND arguments.boolean){
+            local.rv="<i class='fa fa-check text-success'></i>";
         } else {
-            result="<i class='fa fa-times text-danger'></i>";
+            local.rv="<i class='fa fa-times text-danger'></i>";
         }
-        return result;
+        return local.rv;
+    }
+
+    public string function h(required string s) {
+        return xmlFormat(s);
     }
 
     public string function LSDateFormatDuration(required date start, required date end){
-
             local.rv="";
             local.start=LSdateFormat(arguments.start);
             local.startTime=LStimeFormat(arguments.start);
@@ -124,6 +127,30 @@
                 }
             }
         return local.rv;
+    }
 
+    public string function LSdurationString(numeric d) {
+        var h=(arguments.d\60);
+        var m=numberformat(arguments.d % 60, "0");
+        var r="";
+        switch(h){
+            case 0:
+                r=r & "";
+            break;
+            case 1:
+                r=r & h  & " " & l("hour");
+            break;
+            default:
+                r=r & h  & " " & l("hours");
+            break;
+        }
+        if(m != 0){
+            r=r & h  & " " & l("mins");
+        }
+        if(len(r)){
+            return "(" & r & ")";
+        } else {
+            return "";
+        }
     }
 </cfscript>

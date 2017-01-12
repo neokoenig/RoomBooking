@@ -10,13 +10,9 @@
 		return ArrayToList(loc.array, " #arguments.operator# ");
 	}
 
-</cfscript>
-    <cffunction name="queryToArray" access="private" returntype="array" output="false">
-        <cfargument name="q" type="query" required="yes" />
-        <cfargument name="cb" type="any" required="no" />
-        <cfscript>
-            var local = {};
-            if (structKeyExists(server, "railo") or structKeyExists(server, "lucee")) {
+    // Turn a simple query into an array of structures
+    public array function queryToArray(required query q){
+         if (structKeyExists(server, "railo") or structKeyExists(server, "lucee")) {
                 local.Columns = listToArray(arguments.q.getColumnList(false));
             }
             else {
@@ -29,14 +25,11 @@
                 for (local.ColumnIndex = 1; local.ColumnIndex <= local.numCols; local.ColumnIndex++){
                     local.ColumnName = local.Columns[ local.ColumnIndex ];
                     if( local.ColumnName NEQ "" ) {
-                        local.Row[ local.ColumnName ] = arguments.q[ local.ColumnName ][ local.RowIndex ];
+                        local.Row[ "#local.ColumnName#" ] = arguments.q[ "#local.ColumnName#" ][ local.RowIndex ];
                     }
-                }
-                if ( structKeyExists( arguments, "cb" ) ) {
-                    local.Row = cb( local.Row );
                 }
                 ArrayAppend( local.QueryArray, local.Row );
             }
             return( local.QueryArray );
-        </cfscript>
-    </cffunction>
+    }
+</cfscript>

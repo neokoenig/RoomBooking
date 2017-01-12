@@ -19,26 +19,6 @@
 #boxEnd()#
 
 #box(title=l("Date &amp; Time"))#
-	<!---div class="row">
-		<div class="col-md-6">
-			<div class="form-group">
-				<label>#l("Duration")#</label>
-	                <div class="input-group">
-				<div class="input-group-addon">
-					<i class="fa fa-clock-o"></i>
-			</div>
-			#textField(objectname="booking", prepend="", append="", prependToLabel="", appendToLabel="", property="startUTC", label="")#
-			 </div>
-                <!-- /.input group -->
-              </div>
-
-		</div>
-		<div class="col-md-4">
-			#checkBox(objectname="booking", property="allday", label=l("All Day"))#
-		</div>
-	</div--->
-
-
 			<div class="row">
 				<div class="col-md-2">
 					#textField(objectname="booking", property="startUTCDate", label=l("Date"))#
@@ -79,7 +59,7 @@
 #box(title=l("Approval Status"))#
 	<div class="row">
 		<div class="col-md-4 ">
-			#checkBox(objectname="booking", property="approved", label=l("Approved"))#
+			#checkBox(objectname="booking", property="isapproved", label=l("Approved"))#
 			#select(objectname="booking", property="approvedby", label=l("Approved By"), valueField="id", textField="fullname", options=allusers, includeBlank=l("Unknown"))#
 		</div>
 	</div>

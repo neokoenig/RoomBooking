@@ -20,11 +20,16 @@ component extends="tests.Test" {
 	    action="show"
 	  };
 	  _controller = controller(name="admin.users", params=_params);
-	  _controller.$callAction("index");
-	  redirect = _controller.$getRedirect();
-	  t=_controller.$performedRedirect();
-	  debug("redirect");
-	  debug("t");
+	  //_controller.$runfilters(type="before", action="show", params=_params);
+	  //_controller.$runverifications(action="show", params=_params);
+	  //_controller.$callAction("show");
+	  //redirect = _controller.$getRedirect();
+	  //t=_controller.$performedRedirect();
+	  debug("_controller.init()");
+	  debug("_controller.$PERFORMEDRENDERORREDIRECT()");
+	  //debug("_controller.$LOCATION()");
+	  debug("_controller.$RUNFILTERS(type='before', action='show')");
+	  //debug("t");
 	}
 
 	function test_users_new(){

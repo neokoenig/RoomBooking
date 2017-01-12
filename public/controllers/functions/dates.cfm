@@ -1,6 +1,5 @@
 <cfscript>
-
-   //=====================================================================
+    //=====================================================================
     //=     Main Calendar Data & Event Repeat Functions
     //=====================================================================
     public array function getEventsForRange(required start, required end){
@@ -43,10 +42,7 @@
       }
       // Can't do returnas structs here as we need the deeper associations
       local.bookings=model("booking").findAll(where=local.wc, order="startUTC ASC", include="building(calendarbuildings),room(calendarrooms)");
-      //writeDump(local.bookings);
-      //abort;
-      local.bookings=queryToArray(local.bookings);
-
+      local.bookings=queryToArray(local.bookings, false, false, false);
       local.bookings=generateRepeatingDates(local.bookings, local.start, local.end);
       return local.bookings;
     }
@@ -104,59 +100,39 @@
     }
 
     // Massage array/struct for return to fullcalendar
+    // This is the only cross platform consistent way of preserving case
     public array function formatDataForCalendar(required array bookings){
       local.rv=[];
-      // Fields to pass though, delete everything else
-      local.passthrough=[
-        "id",
-        "title",
-        "start",
-        "end",
-        "detailurl",
-        "isPast",
-        "startUTC",
-        "duration",
-        "endUTC",
-        "allDay",
-        "buildingid",
-        "hexcolour",
-        "roomhexcolour",
-        "roomid",
-        "color",
-        "backgroundColor",
-        "textColor",
-        "borderColor",
-        "approved"];
       for(b in arguments.bookings){
-        // Format Dates for full calendar
-        b["start"]=dateTimeFormat(b.startUTC, "ISO8601");
-        b["end"]=dateTimeFormat(dateAdd("n", b.duration, b.startUTC), "ISO8601");
-        b["allDay"]    =   b.isallday;
-
-        // Flag past events
-         b["isPast"]= b.startUTC < now() ? true:false;
-
-        // OnClick Detail URL
-        b["detailurl"]    =   urlFor(route='calendarDetail', key=b.id);
-
+        t["id"]             =b.id;
+        t["title"]          =b.title;
+        t["start"]          =dateTimeFormat(b.startUTC, "ISO8601");
+        t["end"]            =dateTimeFormat(dateAdd("n", b.duration, b.startUTC), "ISO8601");
+        t["detailurl"]      =urlFor(route='calendarDetail', key=b.id);
+        t["isPast"]         =b.startUTC < now() ? true:false;
+        t["isApproved"]     =b.isapproved;
+        t["isRepeat"]       =b.isrepeat;
+        t["duration"]       =b.duration;
+        t["allDay"]         =b.isallday;
+        t["buildingid"]     =b.buildingid;
+        t["hexcolour"]      =b.hexcolour;
+        t["roomhexcolour"]  =b.roomhexcolour;
+        t["roomid"]         =b.roomid;
         // calculate colours
-        if(len(b.buildingid) && isNumeric(b.buildingid)){
-          b["color"]        =   "###b.hexcolour#";
-        }
+        if(len(b.buildingid) && isNumeric(b.buildingid))
+          t["color"]        =   "###b.hexcolour#";
         if(len(b.roomid) && isNumeric(b.roomid)){
-          b["backgroundColor"]    =   "white";
-          b["textColor"]          =   "###b.roomhexcolour#";
+          t["backgroundColor"]    =   "white";
+          t["textColor"]          =   "###b.roomhexcolour#";
           if(len(b.roomhexcolour)){
-            b["borderColor"]        =   "###b.roomhexcolour#";
+            t["borderColor"]        =   "###b.roomhexcolour#";
           } else {
-            b["borderColor"]        =   "white";
+            t["borderColor"]        =   "white";
           }
         }
-        for(f in b){
-          if(!arrayFindNoCase(local.passthrough, f)){structDelete(b, f);}
-        }
         // Append the final struct
-        arrayAppend(local.rv, b);
+        arrayAppend(local.rv, t);
+        t={};
       }
       return local.rv;
     }

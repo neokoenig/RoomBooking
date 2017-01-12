@@ -8,41 +8,6 @@
   <title><cfif structKeyExists(request, "pagetitle")>#request.pagetitle#</cfif></title>
   <!-- Tell the browser to be responsive to screen width -->
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-  <!-- Bootstrap 3.3.6
-  <link rel="stylesheet" href="/stylesheets/bootstrap.min.css">-->
-  <!-- Font Awesome
- <style name="FontAwesome">
-        @font-face {
-          font-family: 'FontAwesome';
-          src: url('https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/fonts/fontawesome-webfont.eot');
-          src: url('https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/fonts/fontawesome-webfont.eot?##iefix') format('embedded-opentype'),
-               url('https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/fonts/fontawesome-webfont.woff2') format('woff2'),
-               url('https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/fonts/fontawesome-webfont.woff') format('woff'),
-               url('https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/fonts/fontawesome-webfont.ttf') format('truetype'),
-               url('https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/fonts/fontawesome-webfont.svg?##fontawesomeregular') format('svg');
-          font-weight: normal;
-          font-style: normal;
-        }
-  </style>
-
-  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="/stylesheets/AdminLTE.min.css">-->
-  <!--- DataTables
-  <link rel="stylesheet" href="/stylesheets/datatables.min.css">
-  <link rel="stylesheet" href="/stylesheets/datepicker3.css">
-  <link rel="stylesheet" href="/stylesheets/daterangepicker.css">
-  <link rel="stylesheet" href="/stylesheets/timepicker.css">--->
-  <!--- Lang
-  <link rel="stylesheet" href="/stylesheets/lang.css">
-
-  <link type="text/css" href="/stylesheets/jquery.tools.dateinput.css" rel="stylesheet" />
-  <link type="text/css" href="/stylesheets/jquery.tools.overlay.css" rel="stylesheet" />
-  <link type="text/css" href="/stylesheets/jquery.recurrenceinput.css" rel="stylesheet" />
-  <link type="text/css" href="/stylesheets/rbs.css" rel="stylesheet" />
-  <link type="text/css" href="/stylesheets/custom.css" rel="stylesheet" />
-  <link rel="stylesheet" href="/stylesheets/icheck.css">
---->
-
   <!--- If not in production mode, load non min sources --->
   <cfif get("environment") EQ "production">
     #stylesheetlinkTag("cms.min")#
@@ -59,5 +24,6 @@
   #csrfMetaTags()#
 </head>
 <body class="#request.bodyClass#">
+<cfif structKeyExists(request, "debug")><cfdump var="#request.debug#"></cfif>
 <div class="wrapper">
 </cfoutput>

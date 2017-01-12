@@ -6,11 +6,14 @@ set(dataSourceName="roombooking");
 // Reload Password: you'll definitely want to change this to something unique.
 set(reloadPassword="roombooking");
 
-// Setting URL rewriting to off by default, as running wheels in a subdirectory requires more complex configuration
+// Setting URL rewriting
 set(URLRewriting="on");
 
 // Commandbox/Tuckey URL rewrite override - most of the time this will be rewrite.cfm (the default) for apache etc.
-if(cgi.server_name CONTAINS "127.0.0.1"){
+// We're looking for undertow as that's the CB servlet engine
+if(structKeyExists(server, "servlet")
+	&& structKeyExists(server.servlet, "name")
+	&& server.servlet.name CONTAINS "Undertow"){
 	set(rewriteFile="index.cfm");
 }
 

@@ -34,9 +34,9 @@ testUser = queryExecute("
 
 // Add a user permission
 testUserPermission = queryExecute("
-	INSERT INTO userpermissions (userid,permissionid,value)
-	VALUES (?,?,?);",
-    [1,1,1],
+	INSERT INTO userpermissions (userid,permissionid)
+	VALUES (?,?);",
+    [1,1],
     {
         datasource    = "rbs_test"
     }

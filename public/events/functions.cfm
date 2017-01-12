@@ -1,14 +1,87 @@
 <cfscript>
 
-    // loads application settings
+    //=====================================================================
+    //=     Global Auth Functions
+    //=====================================================================
+    function isAuthenticated(){
+        return structKeyExists(session, "auth");
+    }
+
+    function forcelogout(){
+        if(structKeyExists(session, "auth")){
+            // Call Auth's built in logout() method
+            session.auth.logout();
+            // Destroy all auth stuff
+            structDelete(session, "auth");
+        }
+        if(structKeyExists(session, "user")){
+            // Destroy user data
+            structDelete(session, "user");
+        }
+    }
+
+    //=====================================================================
+    //=     Permission System
+    //=====================================================================
+    // Manually call permission(controller='calendar', action='show')
+    // checks application.rbs.permissions if not logged in, otherwise session.user.permissions
+    // should then return a boolean, false by default;
+    // Automatically should default to current controller + action
+    // Permission is stored in db as a string, so calendar.show
+    // So a permission of admin.bookings.new would require admin && admin.bookings && admin.bookings.new
+    public function hasPermission(string permission=getDefaultPermissionString()){
+        local.rv=false;
+        local.arr=[];
+        local.passes=[];
+        local.fails=[];
+        local.permissions=getPermissionArr(arguments.permission);
+        for(p in getPermissionArr(arguments.permission)){
+            // If auth'd check session
+            if(isAuthenticated() && structKeyExists(session.user.permissions, p) && session.user.permissions[p]){
+                arrayAppend(local.passes, { "#p#": true });
+            } else if( structKeyExists(application.rbs.permissions, p) && application.rbs.permissions[p]){
+                arrayAppend(local.passes, { "#p#": true });
+            } else {
+                arrayAppend(local.fails, { "#p#": false });
+            }
+        }
+        // If user has all the permissions required, approve
+        if(arraylen(local.passes) == arraylen(local.permissions) && !arraylen(local.fails)){
+            local.rv=true;
+        }
+        return local.rv;
+    }
+
+    // Attempt to construct a default permission string by nested controller + action
+    public string function getDefaultPermissionString(){
+        local.string="";
+        if(structKeyExists(params, "Controller")) local.string &= params.controller;
+        if(structKeyExists(params, "Action") && len(params.action)) local.string &= '.' & params.action;
+        return local.string;
+    }
+    // Convert a dot notation string to an array
+    public array function getPermissionArr(required string permission){
+        local.rv=[];
+        local.t="";
+        local.arr=listToArray(lcase(arguments.permission), '.');
+        for(p in local.arr){
+            local.t&='.' & p;
+            arrayAppend(local.rv, right(local.t, (len(local.t)-1) ) );
+        }
+        return local.rv;
+    }
+
+    //=====================================================================
+    //=     Installation
+    //=====================================================================
     public function getRBSApplicationSettings(){
         var local.settings=model("setting").findAll();
         for(var setting in local.settings){
             application.rbs.settings[setting.name]=setting.value;
         }
-        var local.permissions=model("permission").findAll(where="rolepermissions.roleid=6", include="rolepermissions", order="permissions.id,rolepermissions.roleid");
+        var local.permissions=model("permission").findAll(include="rolepermissions", where="roleid=6");
          for(var permission in local.permissions){
-            application.rbs.permissions[permission.name]=permission.value;
+            application.rbs.permissions[permission.name]=true;
         }
     }
 
@@ -22,6 +95,10 @@
         }
     }
 
+
+    //=====================================================================
+    //=     utils
+    //=====================================================================
     // Trim whitespace from incoming URL/Form scopes
 	public function trimScope(struct scope){
 		if(structCount(scope)){
@@ -80,6 +157,7 @@
     public function getRoleDropdownList(){
         return model("role").findAll();
     }
+
 
     /**
  * Sorts an array of structures based on a key in the structures.

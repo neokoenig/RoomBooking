@@ -7,19 +7,9 @@
   <title>Maintenance!</title>
   <!-- Tell the browser to be responsive to screen width -->
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-  <!-- Bootstrap 3.3.6 -->
-  <link rel="stylesheet" href="/stylesheets/bootstrap.min.css">
-  <!-- Theme style -->
-  <link rel="stylesheet" href="/stylesheets/AdminLTE.min.css">
-
-  <!-- AdminLTE Skins. We have chosen the skin-blue for this starter
-        page. However, you can choose any other skin. Make sure you
-        apply the skin class to the body tag so the changes take effect.
-  -->
-
-  <link rel="stylesheet" href="/stylesheets/skins/skin-black-light.min.css">
-
-  <link rel="stylesheet" href="/stylesheets/icheck.css">
+  <link href="/stylesheets/cms.min.css" media="all" rel="stylesheet" type="text/css" />
+  <link href="/stylesheets/skins/skin-blue-light.min.css" media="all" rel="stylesheet" type="text/css" />
+  <link href="/stylesheets/custom.css" media="all" rel="stylesheet" type="text/css" />
 
   <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
   <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -28,7 +18,7 @@
   <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
   <![endif]-->
 </head>
-<body class="hold-transition login-page sidebar-mini skin-black-light">
+<body class="hold-transition login-page sidebar-mini skin-blue-light">
 <div class="wrapper">
 
 <div class="login-box">

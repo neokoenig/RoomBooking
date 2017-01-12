@@ -2,7 +2,6 @@ component extends="Admin"
 {
 	function init() {
 		super.init();
-		filters(through="checkPermissionAndRedirect", permission="accessPermissions");
 		filters(through="f_getRoles", only="index");
 		verifies(except="index,new,create", params="key", paramsTypes="integer", handler="objectNotFound");
 		verifies(post=true, only="create,update,delete");

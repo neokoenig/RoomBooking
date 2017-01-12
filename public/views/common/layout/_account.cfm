@@ -6,15 +6,15 @@
               <!-- The user image in the navbar-->
                 <img src="https://www.gravatar.com/avatar/#lcase(Hash(lcase(session.user.properties.email)))#" alt="Gravatar" class="img-circle user-image" />
               <!-- hidden-xs hides the username on small devices so only the image appears. -->
-              <span class="hidden-xs">#session.user.properties.firstname# #session.user.properties.lastname#</span>
+              <span class="hidden-xs">#session.user.properties.username#</span>
             </a>
             <ul class="dropdown-menu">
               <!-- The user image in the menu -->
               <li class="user-header">
                 <img src="https://www.gravatar.com/avatar/#lcase(Hash(lcase(session.user.properties.email)))#" alt="Gravatar" class="img-circle" />
                 <p>
-                  Logged In User
-                  <small>Member since Nov. XXXX</small>
+                  #session.user.properties.fullname#
+                  <small>#session.user.properties.roleid#</small>
                 </p>
               </li>
               </li>

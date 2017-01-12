@@ -2,7 +2,7 @@ component extends="Admin"
 {
 	function init() {
 		super.init();
-		filters(through="checkPermissionAndRedirect", permission="accessBookings");
+		//filters(through="checkPermissionAndRedirect", permission="accessBookings");
 		verifies(except="index,new,create", params="key", paramsTypes="integer", handler="objectNotFound");
 		verifies(post=true, only="create,update,delete");
 		filters(through="f_getBuildings,f_getRooms,f_getUsers", only="index,new,edit,create,update");
@@ -53,9 +53,18 @@ component extends="Admin"
 		}
 	}
 
+	/* Triggered from JS */
+	function approve() {
+		booking=model("booking").UpdateByKey(key=params.key, isapproved=1, approvedby=session.user.properties.id);
+		flashInsert(success="Booking Approved");
+		redirectTo(back=true);
+	}
+
+	/* Triggered from JS */
 	function delete() {
 		booking=model("booking").deleteByKey(params.key);
-		return redirectTo(action="index", success="booking successfully deleted");
+		flashInsert(success="Booking successfully deleted");
+		redirectTo(back=true);
 	}
 
 	function objectNotFound() {

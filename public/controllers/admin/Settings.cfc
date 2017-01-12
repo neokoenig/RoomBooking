@@ -2,7 +2,6 @@ component extends="Admin"
 {
 	function init() {
 		super.init();
-		filters(through="checkPermissionAndRedirect", permission="accessSettings");
 		verifies(except="index", params="key", paramsTypes="integer", handler="objectNotFound");
 		verifies(post=true, only="update");
 	}

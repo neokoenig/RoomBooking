@@ -2,9 +2,7 @@ component extends="Controller"
 {
   function init() {
     super.init();
-    filters(through="checkPermissionAndRedirect", permission="accessCalendar");
     filters(through="f_getCalendarLocations", only="show");
-
     verifies(only="show", params="key", paramsTypes="integer", handler="objectNotFound");
     provides("html,json");
     usesLayout(template=false, only="detail");

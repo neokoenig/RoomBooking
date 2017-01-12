@@ -1,6 +1,7 @@
 component extends="Controller"
 {
 	function init() {
+		// Shouldn't go via central permissions, so we don't call super.init
 		usesLayout("/common/simple");
 		verifies(post=true, only="create,reset");
 		verifies(only="recover", params="token", paramsTypes="string", handler="objectNotFound");

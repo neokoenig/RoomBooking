@@ -12,8 +12,8 @@
 <div style="padding:10px;">
 <h3>#booking.title#</h3>
 <p>#LSDateFormatDuration(booking.startUTC, booking.endUTC, booking.duration)#</p>
-<p>Status: #booking.approved#</p>
-<p>Duration: #booking.duration# #l("minutes")#</p>
+<p>Status: #booking.isapproved#</p>
+<p>Duration: #LSdurationString(booking.duration)#</p>
 </div>
 <div class="btn-group  btn-group-justified">
 	<cfif !booking.approved>

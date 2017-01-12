@@ -18,21 +18,25 @@
 
       <!-- Sidebar Menu -->
       <ul class="sidebar-menu">
-        <li class="header">#l("Calendars")#</li>
+        <cfif hasPermission("calendar")>
+          <li class="header">#l("Calendars")#</li>
+        </cfif>
         <cfloop query="request.allcalendars">
-        #sidebarlink(permission="accessCalendar", controller="calendar", route="calendarShow", key=id, icon=icon, text=title)#
+        #sidebarlink(controller="calendar", route="calendarShow", key=id, icon=icon, text=title)#
         </cfloop>
         <!---
-        #sidebarlink(permission="accessSchedule", controller="schedule", route="calendarSchedule", icon="fa-calendar", text="Schedule")#
+        #sidebarlink(hasPermissionCheck="accessSchedule", controller="schedule", route="calendarSchedule", icon="fa-calendar", text="Schedule")#
 
-        #sidebarlink(permission="canCreateBooking", controller="bookings", route="bookings", icon="fa-plus", text="Book a Room")#
+        #sidebarlink(hasPermissionCheck="canCreateBooking", controller="bookings", route="bookings", icon="fa-plus", text="Book a Room")#
 --->
+        <cfif hasPermission("admin")>
         <li class="header">#l("Administration")#</li>
+          #sidebarlink(controller="admin.admin", route="adminIndex", icon="fa-cog", text="Administration")#
+        </cfif><li class="active">
         <cfif isAuthenticated()>
-          #sidebarlink(permission="accessSettings", controller="admin.admin", route="adminIndex", icon="fa-cog", text="Administration")#
-          #sidebarlink(permission="accessApplication", controller="authentication", route="authenticationLogout", icon="fa-unlock-alt", text="Logout")#
+          <li>#linkTo(controller="authentication", route="authenticationLogout",  text="<i class='fa fa-unlock'></i><span>" & l("Logout") & "</span>")#</li>
         <cfelse>
-          #sidebarlink(permission="accessApplication", controller="authentication", route="authenticationLogin", icon="fa-lock", text="Login")#
+          <li>#linkTo(controller="authentication", route="authenticationLogin",  text="<i class='fa fa-lock'></i><span>" & l("Login") & "</span>")#</li>
         </cfif>
       </ul>
       <!-- /.sidebar-menu -->

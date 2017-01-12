@@ -24,8 +24,11 @@
 			<td>#title# <cfif isRepeat && len(repeatpattern)><i class="fa fa-refresh pull-right"></i></cfif></td>
 			<th>#LSDateFormat(startUTC)#
 			<cfif isallDay>(#l("All Day")#)<Cfelse>#LSTimeFormat(startUTC)#</cfif></th>
-			<th>#tickorcross(approved)#</th>
-			<td>#linkTo(route="editAdminBooking", key=id, text="<i class='fa fa-edit'></i> " & l("Edit"), class="btn btn-xs btn-flat btn-primary")#
+			<th>#tickorcross(isapproved)#</th>
+			<td><div class="btn-group">
+				#linkTo(route="editAdminBooking", key=id, title=l("Edit"), text="<i class='fa fa-edit'></i> " & l("Edit"), class="btn btn-xs btn-flat btn-primary")#
+				#linkTo(href=adminBookingPath(id), method="delete", title=l("Delete"), text="<i class='fa fa-trash-o'></i>", class="btn btn-xs btn-flat btn-danger", confirm=l("Delete This Booking?"))#
+			</div>
 		</tr>
 	</cfloop>
 	</tbody>

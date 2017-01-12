@@ -26,9 +26,9 @@
 			<cfif isallDay>(#l("All Day")#)<Cfelse>#LSTimeFormat(startUTC)#</cfif></th>
 			<td>
 			<div class="btn-group">
-				#linkTo(route="editAdminBooking", key=id, text="<i class='fa fa-edit'></i> " & l("Edit"), class="btn btn-xs btn-flat btn-primary")#
-			#linkTo(route="editAdminBooking", key=id, text="<i class='fa fa-check'></i> " & l("Approve"), class="btn btn-xs btn-flat btn-success")#
-			#linkTo(route="editAdminBooking", key=id, text="<i class='fa fa-trash-o'></i> " & l("Deny"), class="btn btn-xs btn-flat btn-danger")#
+			#linkTo(route="editAdminBooking", key=id, text="<i class='fa fa-edit'></i> " & l("Edit"), class="btn btn-xs btn-flat btn-primary")#
+			#linkTo(route="adminApprove", method="put", key=id, text="<i class='fa fa-check'></i> " & l("Approve"), class="btn btn-xs btn-flat btn-success")#
+			#linkTo(href=adminBookingPath(id), method="delete", text="<i class='fa fa-trash-o'></i> " & l("Delete"), class="btn btn-xs btn-flat btn-danger", confirm=l("Delete This Booking?"))#
 			</div>
 		</tr>
 	</cfloop>

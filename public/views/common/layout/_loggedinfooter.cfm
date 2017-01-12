@@ -5,7 +5,7 @@
   </footer>
   <cfif params.controller EQ "calendar">
   <!-- Control Sidebar -->
-  <aside class="control-sidebar control-sidebar-dark">
+  <aside class="control-sidebar control-sidebar-light">
       <button class="btn btn-block btn-flat btn-info btn-lg" data-toggle="control-sidebar"><i class="fa fa-times"></i> Close</button>
       <div id="sidebar-dynamic-content"></div>
   </aside>

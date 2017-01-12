@@ -28,8 +28,8 @@
 				t.string(columnNames='title', null=false, limit='255');
 				t.datetime(columnNames='startUTC,endUTC');
 				t.integer(columnNames='userid,duration', default='0', null=false, limit='11');
-				t.integer(columnNames='buildingid,roomid,approvedby,isallday,isrepeat', default='0', null=true, limit='11');
-				t.boolean(columnNames='approved', default=false);
+				t.integer(columnNames='buildingid,roomid,approvedby', default='0', null=true, limit='11');
+				t.boolean(columnNames='isapproved,isallday,isrepeat', default=false);
 				t.text(columnNames="usernotes,adminnotes");
 				t.string(columnNames='repeatpattern', null=true, limit=500);
 				t.timestamps();

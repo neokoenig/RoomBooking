@@ -20,6 +20,7 @@ component extends="Controller"
 
 	*/
 	function init() {
+		// Shouldn't go via central permissions, so we don't call super.init
 		usesLayout("/common/static");
 		filters(through="abortifinstalled", only="rundbmigrate,createsysadmin");
 	}

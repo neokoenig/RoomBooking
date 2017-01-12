@@ -122,7 +122,7 @@ if(!arraylen(application.rbs.setupchecks.errors)){
 } else {
 	// redirect to the installer; url flag is to stop looping redirect
 	if(!isDefined("url.redirected")){
-		location("/install/?redirected");
+		location("/install/?redirected", false);
 	}
 	//abort;
 }

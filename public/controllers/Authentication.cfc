@@ -1,7 +1,7 @@
 component extends="Controller"
 {
 	function init() {
-		//super.init();
+		// Shouldn't go via central permissions, so we don't call super.init
 		verifies(post=true, only="authenticate,resetaction");
 		usesLayout("/common/simple");
 	}

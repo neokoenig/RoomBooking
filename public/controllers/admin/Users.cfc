@@ -2,12 +2,8 @@ component extends="Admin" {
 
 	function init() {
 		super.init();
-		filters(through="checkPermissionAndRedirect", permission="accessUsers");
-		filters(through="checkPermissionAndRedirect", permission="allowAssume");
-
 		verifies(except="index,new,create,assume,show", params="key", paramsTypes="integer", handler="objectNotFound");
 		verifies(post=true, only="create,update,delete");
-
 		filters(through="f_getRoles", only="index,new,create,edit,update");
 		filters(through="f_getCountries", only="index,new,create,edit,update");
 	}
@@ -60,6 +56,11 @@ component extends="Admin" {
 	function delete() {
 		user=model("user").deleteByKey(params.key);
 		return redirectTo(action="index", success="User successfully deleted");
+	}
+
+	function recover() {
+	//	user=model("user").deleteByKey(params.key);
+	//	return redirectTo(action="index", success="User successfully deleted");
 	}
 
 	function assume() {
