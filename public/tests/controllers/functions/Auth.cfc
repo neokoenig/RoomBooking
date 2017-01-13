@@ -96,8 +96,6 @@ component extends="tests.Test" {
 	}
 	function Test_hasPermission_with_ifail(){
 		r=_controller.hasPermission("ifail");
-		debug("r");
-		//assert("arraylen(r) EQ 3");
-		//assert("r[1] EQ 'test'");
+		assert("r EQ false");
 	}
 }

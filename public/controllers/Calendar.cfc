@@ -42,8 +42,12 @@ component extends="Controller"
     local.start="2017-01-01";
     local.end="2017-12-31";
     local.bookings=getEventsForRange(start=local.start, end=local.end );
-    writeDump(local.bookings);
-    abort;
+    if(structKeyExists(params, "key") && isNumeric(params.key)){
+      // Return Array of Structs including repeats
+      renderWith( formatDataForYearCalendar( getEventsForRange(start=local.start, end=local.end) ) );
+    } else {
+      renderWith(data="{'error': 'No Calendar ID Specified'}", status=500);
+    }
   }
 
 
@@ -65,7 +69,7 @@ component extends="Controller"
     locations=mergeLocations(calendarbuildings, calendarrooms);
   }
 
-    // Merge Buildings and Rooms, seperate by floor etc
+    // Merge Buildings and Rooms, seperate by groupby etc
   array function mergeLocations(calendarbuildings, calendarrooms){
     local.rv=[];
     local.cb=1;
@@ -77,17 +81,17 @@ component extends="Controller"
         "icon": local.b.icon,
         "description": local.b.description,
         "type": "building",
-        "floors": {}
+        "groupby": {}
       });
 
       for(local.r in calendarrooms){
         // Rooms attached to buildings
         if(local.r.buildingid == local.b.id && local.b.id != 0 && local.b.id != ""){
-          if( structKeyExists(local.rv[local.cb], "floors") ){
-            if( !structKeyExists(local.rv[local.cb]["floors"], local.r.floor) ){
-              local.rv[local.cb]["floors"][local.r.floor]=[];
+          if( structKeyExists(local.rv[local.cb], "groupby") ){
+            if( !structKeyExists(local.rv[local.cb]["groupby"], local.r.groupby) ){
+              local.rv[local.cb]["groupby"][local.r.groupby]=[];
             }
-            arrayAppend(local.rv[local.cb]["floors"][local.r.floor], {
+            arrayAppend(local.rv[local.cb]["groupby"][local.r.groupby], {
               "id": local.r.id,
               "title": local.r.title,
               "hexcolour": local.r.hexcolour,

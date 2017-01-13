@@ -7,7 +7,7 @@ component extends="Model"
 		hasMany(name="calendarrooms");
 
 		property(name="icon", defaultValue="fa-square-o");
-		property(name="floor", defaultValue=0);
+		property(name="groupby", defaultValue=0);
 		property(name="allowconcurrent", defaultValue=1);
 		property(name="timezone", defaultValue=application.rbs.settings.i8n_defaultTimeZone);
 		afterFind("checkForDefaults");
@@ -18,8 +18,8 @@ component extends="Model"
 		if(structKeyExists(arguments, "icon") && !len(arguments.icon)){
 			arguments.icon="fa-square-o";
 		}
-		if(structKeyExists(arguments, "floor") && !len(arguments.floor)){
-			arguments.floor=0;
+		if(structKeyExists(arguments, "groupby") && !len(arguments.groupby)){
+			arguments.groupby=0;
 		}
 		return arguments;
 	}

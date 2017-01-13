@@ -25,9 +25,9 @@
         #sidebarlink(controller="calendar", route="calendarShow", key=id, icon=icon, text=title)#
         </cfloop>
         <!---
-        #sidebarlink(hasPermissionCheck="accessSchedule", controller="schedule", route="calendarSchedule", icon="fa-calendar", text="Schedule")#
+        #sidebarlink(hashasPermission="accessSchedule", controller="schedule", route="calendarSchedule", icon="fa-calendar", text="Schedule")#
 
-        #sidebarlink(hasPermissionCheck="canCreateBooking", controller="bookings", route="bookings", icon="fa-plus", text="Book a Room")#
+        #sidebarlink(hashasPermission="canCreateBooking", controller="bookings", route="bookings", icon="fa-plus", text="Book a Room")#
 --->
         <cfif hasPermission("admin")>
         <li class="header">#l("Administration")#</li>

@@ -1,6 +1,8 @@
 <cfparam name="bookings">
 <cfoutput>
+<cfif hasPermission("admin.bookings.new")>
 #linkTo(route="newAdminBooking", class="btn btn-primary", text="<i class='fa fa-plus'></i> " & l("Create New Booking") )#
+</cfif>
 <hr />
 
 <cfif bookings.recordcount>
@@ -26,8 +28,12 @@
 			<cfif isallDay>(#l("All Day")#)<Cfelse>#LSTimeFormat(startUTC)#</cfif></th>
 			<th>#tickorcross(isapproved)#</th>
 			<td><div class="btn-group">
+			<cfif hasPermission("admin.bookings.edit")>
 				#linkTo(route="editAdminBooking", key=id, title=l("Edit"), text="<i class='fa fa-edit'></i> " & l("Edit"), class="btn btn-xs btn-flat btn-primary")#
+			</cfif>
+			<cfif hasPermission("admin.bookings.delete")>
 				#linkTo(href=adminBookingPath(id), method="delete", title=l("Delete"), text="<i class='fa fa-trash-o'></i>", class="btn btn-xs btn-flat btn-danger", confirm=l("Delete This Booking?"))#
+			</cfif>
 			</div>
 		</tr>
 	</cfloop>

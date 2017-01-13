@@ -14,14 +14,22 @@
                 <img src="https://www.gravatar.com/avatar/#lcase(Hash(lcase(session.user.properties.email)))#" alt="Gravatar" class="img-circle" />
                 <p>
                   #session.user.properties.fullname#
-                  <small>#session.user.properties.roleid#</small>
+                  <small>
+                  <cfif isDate(session.user.properties.lastLoggedInAt)>
+                    #l("Last Logged In:")# #lsDateTimeFormat(session.user.properties.lastLoggedInAt)#
+                  <cfelse>
+                    #l("This is your first login")#
+                  </cfif>
+                  </small>
                 </p>
               </li>
               </li>
               <!-- Menu Footer-->
               <li class="user-footer">
                 <div class="pull-left">
-                  <a href="##" class="btn btn-default btn-flat">Profile</a>
+                <cfif hasPermission("my.account")>
+                  #linkTo(route="account", text=l("Account"), class="btn btn-default btn-flat")#
+                </cfif>
                 </div>
                 <div class="pull-right">
                   #linkTo(route="authenticationLogout", text=l("Logout"), class="btn btn-default btn-flat")#

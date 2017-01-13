@@ -36,11 +36,23 @@ $(function() {
         data: getFilterData,
         cache: false,
         success: function(data){
-            return data;
+            var r=[];
+            // Parse ISO date as passed by cf
+            for(var d in data){
+                var a = data[d].startDate.split('-').map(Number);
+                var b = data[d].endDate.split('-').map(Number);
+                r.push({
+                    startDate:new Date(a[0], a[1]-1, a[2]),
+                    endDate: new Date(b[0], b[1]-1, b[2])
+                });
+            }
+            console.log(r);
+            return r;
         },
         error: fetchError
-        })
+        });
     }
+
     function setFilterData(filtertype,id){
          filters= {
           filtertype: filtertype,
@@ -56,11 +68,37 @@ $(function() {
         var h="<div class='alert alert-warning alert-dismissible '><button type='button' class='close' data-dismiss='alert' aria-hidden='true'><i class='fa fa-times'></i></button><h4><i class='icon fa fa-exclamation-triangle'></i>Error</h4>Error Fetching Bookings...</div>";
           $("#notices").html(h);
       }
+      var eventData=getEvents();
+      /*function eventData(){
+        var data=[
+            {
+                endDate: new Date(2017,01,12),
+                startDate: new Date(2017,01,15)
+            },
+            {
+                endDate: new Date(2017,01,16),
+                startDate: new Date(2017,01,15)
+            },
+            {
+                endDate: new Date(2017,01,17),
+                startDate: new Date(2017,01,16)
+            },
+            {
+                endDate: new Date(2017,01,20),
+                startDate: new Date(2017,01,18)
+            },
+            {
+                endDate: new Date(2017,01,25),
+                startDate: new Date(2017,01,22)
+            }
+        ];
+        return data
+      }*/
     $('#calendar').calendar({
         language: $('html').attr('lang'),
         style:'background',
         alwaysHalfDay: true,
-        dataSource: getEvents(),
+        dataSource: eventData,
         customDayRenderer: function(element, date) {
             // if(date.getTime() == date.now()) {
             //    $(element).css('border', '2px solid blue');

@@ -32,7 +32,7 @@ Locations:
 
 * Locations are now split into Buildings and rooms
 * Adds per Location Time Zone Support, so you could list buildings in multiple zones
-* Now have a grouping field (currently called "floor" but might just change to group)
+* Now have a grouping field
 * Adds an "owner" for each location
 * Adds an icon for each location
 
@@ -41,6 +41,7 @@ Bookings:
 * Adds Full Repeating Rules Logic
 * Adds RRULE JS widget selector
 * Adds an "owner" for each Booking
+* Admin Users can create bookings owned by another user
 
 Framework:
 
@@ -56,27 +57,32 @@ Framework:
 
 TODO
 ==================
+Add MultiRoom events: linked booking to multiple locations: linkid, islinked; creates events but takes details from parent
+Add Blocking vs non-blocking: a "calendar" level event not including in concurrency checks; all day events which are non-blocking
 Add Repeating Event Exceptions
 Add "This Instance | Future only | All Instances" for repeating
-Add Custom Permissions which can be triggered anywhere
-Add Location floorplans/attachments/images/capacity/type
+Add Create some sort of "slot based" js widget
 Add FullCalendar Scheduler addon - double check licencing
 Add "Year" based calendar (think booking a rental cottage)
-Add Ability to restrict each calendar viewing/editing/booking by role + user
-Add Workflow/Notification System
-Add Simplify Pending/Approved/Denied workflow
-Add Create some sort of "slot based" js widget
 Add Concurrency Checks / Event Overlap restrictions
 Add Search for "Next Available Slot / Find me a room with ...x "
+
+Add Custom Permissions which can be triggered anywhere
+Add Workflow/Notification System
+Add Ability to restrict each calendar viewing/editing/booking by role + user
+Add Simplify Pending/Approved/Denied workflow
+Add permission to show only users events
+
+Add Location floorplans/attachments/images/capacity/type
+
 Add Full Text search for titles/descriptions (filter by past/future)
 Add Print friendly PDF Agendas
-Add permission to show only users events
-Add Create an event on behalf of any user of the system (only available to the administrator)
+
 Add Resources
 Add Digital Signage as a standalone self contained front end using an API key
 Add Data import -> Export would be nice, maybe via CSV if Lucee vs ACF isn't too bad
-Maybe Multiple Rooms per booking?
 Add Google Calendar (read only) Integration
+Add User Profile Updating/Viewing
 
 Bug Fixes
 =========

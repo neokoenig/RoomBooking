@@ -39,10 +39,10 @@ component extends="Model"
 	}
 
 	function splitStartUTC(){
-		arguments.startUTCDate=createDate(year(startUTC),month(startUTC),day(startUTC));
-		arguments.startUTCDate=LSdateFormat(arguments.startUTC, "YYYY-MM-DD");
-		arguments.startUTCTime=createTime(hour(startUTC),minute(startUTC),00);
-		arguments.startUTCTime=LSTimeFormat(arguments.startUTC, "HH:MM");
+		arguments['startUTCDate']=createDate(year(startUTC),month(startUTC),day(startUTC));
+		arguments['startUTCDate']=LSdateFormat(arguments.startUTC, "YYYY-MM-DD");
+		arguments['startUTCTime']=createTime(hour(startUTC),minute(startUTC),00);
+		arguments['startUTCTime']=LSTimeFormat(arguments.startUTC, "HH:MM");
 		return arguments;
 	}
 

@@ -11,7 +11,7 @@
 		#select(objectname="room", property="buildingid", label=l("Building"), options=allbuildings, includeBlank="Standalone Room")#
 		</div>
 		<div class="col-sm-2">
-		#select(objectname="room", property="floor", label=l("Floor"), options="0")#
+		#select(objectname="room", property="groupby", label=l("Group By"), options="0")#
 		</div>
 	</div>
 

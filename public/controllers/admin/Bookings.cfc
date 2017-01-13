@@ -28,6 +28,8 @@ component extends="Admin"
 	function new() {
 		request.pagetitle="Create New Booking";
 		booking=model("booking").new();
+		booking.email=session.user.properties.email;
+		booking.tel=session.user.properties.tel;
 	}
 
 	function create() {
@@ -51,6 +53,10 @@ component extends="Admin"
 		} else {
 			renderPage(action="edit");
 		}
+	}
+
+	function clone(){
+		// Not Yet Implemented
 	}
 
 	/* Triggered from JS */

@@ -21,9 +21,9 @@ component extends="tests.Test" {
 		room.setProperties(properties);
 	    assert("room.icon EQ 'fa-square-o'");
 	}
-	function Test_room_sets_default_floor(){
+	function Test_room_sets_default_groupby(){
 		room.setProperties(properties);
-	    assert("room.floor EQ 0");
+	    assert("room.groupby EQ 0");
 	}
 	function Test_room_inherits_timezone_if_not_set(){
 		room.setProperties(properties);

@@ -58,6 +58,8 @@
         	.get(name="switch", pattern="[lang]", action="index")
     	.end()
 
+ 		.get(name="account", pattern="my/account", controller="my", action="account")
+
  		.root(to="calendar##index", method="get")
  	.end();
  </cfscript>

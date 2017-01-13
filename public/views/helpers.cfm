@@ -66,7 +66,6 @@
         required string route,
         required string icon,
         required string text,
-        string permissionCheck="",
         numeric key=0
     ){
         if(hasPermission(controller)){

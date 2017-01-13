@@ -26,6 +26,13 @@ component extends="tests.Test" {
 		r=_controller.response();
 		assert('r EQ "Booking Not Found"');
 	}
+	function Test_display_booking_detail_renders(){
+		_params = {route="calendarDetail", controller="calendar", action="detail", key=1};
+		_controller = controller("calendar", _params);
+		_controller.$processAction('detail', _params);
+		r=_controller.response();
+		//assert('r EQ "Booking Not Found"');
+	}
 
 	// Full Calendar Data
 	function Test_fullcalendar_data_returns_valid_json(){

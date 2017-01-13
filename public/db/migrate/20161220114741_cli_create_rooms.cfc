@@ -30,7 +30,7 @@
 				t.integer(columnNames='categoryid', default='0', null=false, limit='11');
 				t.integer(columnNames='userid', default='0', null=true, limit='11');
 				t.string(
-					columnNames='title,floor',
+					columnNames='title,groupby',
 					default='', null=false, limit='60');
 				t.string(
 					columnNames='description',

@@ -77,6 +77,11 @@
 					addRecord(table='rolepermissions', roleid=1, permissionid=c);
 					addRecord(table='rolepermissions', roleid=2, permissionid=c);
 					addRecord(table='rolepermissions', roleid=3, permissionid=c);
+					c++;
+					addRecord(table='permissions', name='admin.bookings.clone', description='Clone Booking');
+					addRecord(table='rolepermissions', roleid=1, permissionid=c);
+					addRecord(table='rolepermissions', roleid=2, permissionid=c);
+					addRecord(table='rolepermissions', roleid=3, permissionid=c);
 				c++;
 				addRecord(table='permissions', name='admin.buildings', description='Allow General Administrative Access to Buildings');
 				addRecord(table='rolepermissions', roleid=1, permissionid=c);
@@ -324,7 +329,22 @@
 				addRecord(table='rolepermissions', roleid=1, permissionid=c);
 				addRecord(table='rolepermissions', roleid=2, permissionid=c);
 				addRecord(table='rolepermissions', roleid=3, permissionid=c);
-
+				c++;
+				addRecord(table='permissions', name='my', description='Allow General Access to Own Profile/Booking Listings');
+				addRecord(table='rolepermissions', roleid=1, permissionid=c);
+				addRecord(table='rolepermissions', roleid=2, permissionid=c);
+				addRecord(table='rolepermissions', roleid=3, permissionid=c);
+				addRecord(table='rolepermissions', roleid=4, permissionid=c);
+				addRecord(table='rolepermissions', roleid=5, permissionid=c);
+				addRecord(table='rolepermissions', roleid=6, permissionid=c);
+					c++;
+					addRecord(table='permissions', name='my.account', description='View Own Account');
+					addRecord(table='rolepermissions', roleid=1, permissionid=c);
+					addRecord(table='rolepermissions', roleid=2, permissionid=c);
+					addRecord(table='rolepermissions', roleid=3, permissionid=c);
+					addRecord(table='rolepermissions', roleid=4, permissionid=c);
+					addRecord(table='rolepermissions', roleid=5, permissionid=c);
+					addRecord(table='rolepermissions', roleid=6, permissionid=c);
 				c++;
 				addRecord(table='permissions', name='calendar', description='Allow General Calendar Access');
 				addRecord(table='rolepermissions', roleid=1, permissionid=c);

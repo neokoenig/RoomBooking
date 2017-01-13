@@ -4,7 +4,7 @@
     <!--- This is just a way of getting settings from the DB into Javascript a bit more easily --->
       <div id="settings"
         data-dataurl="#urlFor(route="calendarFullcalendardata", key=params.key)#"
-        data-headerleft="#settings.calendar_headerLeft#"
+        data-headerleft="#settings.calendar_headerLeft#,"
         data-headercenter="#settings.calendar_headerCenter#"
         data-headerright="#settings.calendar_headerRight#"
         data-weekends=#settings.calendar_weekends#
@@ -67,11 +67,11 @@ $(document).ready(function() {
           }
       },
       eventClick: function( event, jsEvent, view ){
-        console.log(event);
+        //console.log(event);
         $.ajax({
         url: event.detailurl,
         success: function(data){
-          console.log(data);
+          //console.log(data);
           $("#sidebar-dynamic-content").html(data);
         }
       });

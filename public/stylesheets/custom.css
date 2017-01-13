@@ -1,3 +1,9 @@
 /*
 	Custom CSS: Add your overrides here
- */
+	Alternatively you can edit the less files, and recompile using grunt css
+*/
+.fc-state-default.fc-corner-left, .fc-state-default.fc-corner-right {border-radius: 0;}
+
+.fc-state-default {background:none;}
+.fc-state-active {background-color: #3c8dbc; color:white; text-decoration: none;}
+.fc-state-down, .fc-state-active {box-shadow: none; text-shadow:none;}

@@ -1,6 +1,6 @@
 <cfparam name="pendingBookings">
 <cfoutput>
-
+<cfif hasPermission("admin.bookings.approve")>
 #box(title=l("Pending Bookings"))#
 <cfif pendingbookings.recordcount>
 #paginationLinks()#
@@ -26,9 +26,15 @@
 			<cfif isallDay>(#l("All Day")#)<Cfelse>#LSTimeFormat(startUTC)#</cfif></th>
 			<td>
 			<div class="btn-group">
+			<cfif hasPermission("admin.bookings.edit")>
 			#linkTo(route="editAdminBooking", key=id, text="<i class='fa fa-edit'></i> " & l("Edit"), class="btn btn-xs btn-flat btn-primary")#
+			</cfif>
+			<cfif hasPermission("admin.bookings.approve")>
 			#linkTo(route="adminApprove", method="put", key=id, text="<i class='fa fa-check'></i> " & l("Approve"), class="btn btn-xs btn-flat btn-success")#
+			</cfif>
+			<cfif hasPermission("admin.bookings.delete")>
 			#linkTo(href=adminBookingPath(id), method="delete", text="<i class='fa fa-trash-o'></i> " & l("Delete"), class="btn btn-xs btn-flat btn-danger", confirm=l("Delete This Booking?"))#
+			</cfif>
 			</div>
 		</tr>
 	</cfloop>
@@ -39,4 +45,5 @@
 <p>#l("No outstanding pending bookings requiring approval")#</p>
 </cfif>
 #boxEnd()#
+</cfif>
 </cfoutput>

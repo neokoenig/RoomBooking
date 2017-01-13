@@ -16220,6 +16220,7 @@ fieldset[disabled] .datepicker table tr td span.active.disabled:hover.active {
     width: 100%;
   }
 }
+/* Language Picker Flags */
 /* Define properties for our icons (default to the unknown language flag) */
 .lang-xs {
   background-position: 0px -473px;
@@ -16684,7 +16685,10 @@ fieldset[disabled] .datepicker table tr td span.active.disabled:hover.active {
 .lang-lg.lang-lbl-full:before {
   content: '';
 }
-/* RBS Tweaks */
+/* Recurrence Input */
+div.ridisplay label.ridisplay {
+  font-weight: 500;
+}
 /* Full Calendar */
 .fc-event,
 .fc-future,

@@ -54,7 +54,7 @@
 
 	       // Calendar
 	       addRecord(table='settings', name="calendar_headerLeft", description="Calendar Header Top Left Buttons",
-            type="textfield", value="prev,next today", docs="https://fullcalendar.io/docs/display/header/");
+            type="textfield", value=" prevYear,prev,today,next,nextYear", docs="https://fullcalendar.io/docs/display/header/");
 	       addRecord(table='settings', name="calendar_headerCenter", description="Calendar Header Center",
             type="textfield", value="title", docs="https://fullcalendar.io/docs/display/header/");
 	       addRecord(table='settings', name="calendar_headerRight", description="Calendar Header Right",
