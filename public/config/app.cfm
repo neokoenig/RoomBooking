@@ -45,24 +45,26 @@
     	LoadPaths = ["/miscellaneous"]
   	};
 
-  	// Test Environment Embedded h2 Database lucee only
+//=====================================================================
+//= 	Test Databases
+//=====================================================================
+  	// Embedded h2 Database lucee only
   	if(server.coldfusion.productname == "Lucee"){
-		this.datasources["rbs_test"] = {
+		this.datasources["rbstesting"] = {
 			class: "org.h2.Driver",
-			connectionString: "jdbc:h2:file:#expandPath('/db/h2/')#rbs_test;MODE=MySQL",
+			connectionString: "jdbc:h2:file:#expandPath('/db/h2/')#rbstesting;MODE=MySQL",
 			username: "sa",
 			password: ""
 		};
-	// ACF11 Derby
   	} else {
-  		this.datasources["rbs_test"] = {
-			database: getRootDirectory() & "db/derby/",
-			driver: "Apache Derby Embedded"
+	// ACF11 Derby
+		this.datasources["rbstesting"] = {
+			  driver: 'Apache Derby Embedded'
+			, database: getDirectoryFromPath( getCurrentTemplatePath() ) & '../db/rbstesting'
+			, isnewdb=true
 		};
+
   	}
 
-  	 public function getRootDirectory() {
-        var thisDir = getDirectoryFromPath(getCurrentTemplatePath());
-        return reReplace(thisDir, "[^\\/]+[\\/]$", "");
-    }
+
 </cfscript>

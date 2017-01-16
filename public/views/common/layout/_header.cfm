@@ -2,20 +2,35 @@
 <!-- Main Header -->
   <header class="main-header">
 
-    <!-- Logo -->
-    <a href="/" class="logo">
-      <!-- mini logo for sidebar mini 50x50 pixels -->
-      <span class="logo-mini"><b>RBS</b></span>
-      <!-- logo for regular state and mobile devices -->
-      <span class="logo-lg"><b>OxAlto</b>RBS</span>
-    </a>
+<cfif application.rbs.settings.theme_layout NEQ "layout-top-nav">
+  <!-- Logo -->
+  <a href="/" class="logo">
+    <!-- mini logo for sidebar mini 50x50 pixels -->
+    <span class="logo-mini"><b>RBS</b></span>
+    <!-- logo for regular state and mobile devices -->
+    <span class="logo-lg"><b>OxAlto</b>RBS</span>
+  </a>
+</cfif>
 
-    <!-- Header Navbar -->
-    <nav class="navbar navbar-static-top" role="navigation">
-      <!-- Sidebar toggle button-->
-      <a href="##" class="sidebar-toggle" data-toggle="offcanvas" role="button">
-        <span class="sr-only">#l("Toggle navigation")#</span>
-      </a>
+<!-- Header Navbar -->
+<nav class="navbar navbar-static-top" role="navigation">
+
+      <cfif application.rbs.settings.theme_layout NEQ "layout-top-nav">
+
+        <!-- Sidebar toggle button-->
+        <a href="##" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+          <span class="sr-only">#l("Toggle navigation")#</span>
+        </a>
+
+    <cfelse>
+        <a href="/" class="navbar-brand"><b>OxAlto</b>RBS</a>
+        <ul class="nav navbar-nav">
+          <cfloop query="request.allcalendars">
+            #sidebarlink(controller="calendar", route="calendarShow", key=id, icon=icon, text=title)#
+          </cfloop>
+        </ul>
+    </cfif>
+
       <!-- Navbar Right Menu -->
       <div class="navbar-custom-menu">
         <ul class="nav navbar-nav">
@@ -82,8 +97,11 @@
 
             #includePartial("/common/layout/lang")#
          <cfif isAuthenticated()>
+            #sidebarlink(controller="admin.admin", route="adminIndex", icon="fa-cog", text="Administration")#
             <!---#includePartial("/common/layout/tasks")#--->
             #includePartial("/common/layout/account")#
+          <cfelse>
+            <li>#linkTo(controller="authentication", route="authenticationLogin",  text="<i class='fa fa-lock'></i><span> " & l("Login") & "</span>")#</li>
           </cfif>
           <!-- Control Sidebar Toggle Button
           <li>

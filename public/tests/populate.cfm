@@ -1,4 +1,7 @@
 <cfscript>
+// NB, when moving to wheels 2.x, all instances
+// of application.wheels.plugins.dbmigrate will need to change
+// to wheels.dbmigrate
 
 // Use DB migrate to populate the test DB Structure
 include "../plugins/dbmigrate/basefunctions.cfm";
@@ -28,7 +31,7 @@ testUser = queryExecute("
 	VALUES (?,?,?,?,?,?,?);",
     ["Joe","Bloggs",application.bCrypt.hashpw("validPassword", application.bCrypt.gensalt()),"test@test.com","Europe/London","UTC",1],
     {
-        datasource    = "rbs_test"
+        datasource    = "rbstesting"
     }
 );
 
@@ -38,7 +41,7 @@ testUserPermission = queryExecute("
 	VALUES (?,?);",
     [1,1],
     {
-        datasource    = "rbs_test"
+        datasource    = "rbstesting"
     }
 );
 

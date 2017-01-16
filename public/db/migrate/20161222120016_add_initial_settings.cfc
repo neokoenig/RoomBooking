@@ -54,11 +54,11 @@
 
 	       // Calendar
 	       addRecord(table='settings', name="calendar_headerLeft", description="Calendar Header Top Left Buttons",
-            type="textfield", value=" prevYear,prev,today,next,nextYear", docs="https://fullcalendar.io/docs/display/header/");
+            type="textfield", value=" cPrev,today,cNext title", docs="https://fullcalendar.io/docs/display/header/");
 	       addRecord(table='settings', name="calendar_headerCenter", description="Calendar Header Center",
-            type="textfield", value="title", docs="https://fullcalendar.io/docs/display/header/");
-	       addRecord(table='settings', name="calendar_headerRight", description="Calendar Header Right",
-            type="textfield", value="month,agendaWeek,agendaDay,listMonth", docs="https://fullcalendar.io/docs/display/header/");
+            type="textfield", value="", docs="https://fullcalendar.io/docs/display/header/");
+	       addRecord(table='settings', name="calendar_headerRight", description="Calendar Header Right (note, custom buttons)",
+            type="textfield", value="cMonth cAgendaWeek,cAgendaDay cListYear,cListMonth,cListWeek,cListDay cTimelineDay,cTimelineWeek,cTimelineMonth", docs="https://fullcalendar.io/docs/display/header/");
 	       addRecord(table='settings', name="calendar_eventLimit", description="Allow 'more' link when too many events",
             type="select", options="0,1,2,3,4,5,6,7,8,9", value="6", docs="https://fullcalendar.io/docs/display/eventLimit/");
 	       addRecord(table='settings', name="calendar_firstDay", description="The day that each week begins",

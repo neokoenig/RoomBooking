@@ -6,6 +6,7 @@ component extends="Model"
 		hasMany(name="bookings");
 		hasMany(name="calendarbuildings");
 		hasMany(name="calendarrooms");
+		hasMany(name="calendarsettings");
 		nestedProperties(associations="calendarrooms,calendarbuildings", allowDelete=true);
 
 		property(name="icon", defaultValue="fa-calendar");

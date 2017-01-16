@@ -98,7 +98,6 @@
         }
         return r;
     }
-
     // Massage array/struct for return to fullcalendar
     // This is the only cross platform consistent way of preserving case
     public array function formatDataForCalendar(required array bookings){
@@ -118,6 +117,8 @@
         t["hexcolour"]      =b.hexcolour;
         t["roomhexcolour"]  =b.roomhexcolour;
         t["roomid"]         =b.roomid;
+        // resourceid for scheduler as quasi-composite key
+        t["resourceId"]     ="r#b.buildingid#-#b.roomid#";
         // calculate colours
         if(len(b.buildingid) && isNumeric(b.buildingid))
           t["color"]        =   "###b.hexcolour#";
@@ -128,6 +129,40 @@
             t["borderColor"]        =   "###b.roomhexcolour#";
           } else {
             t["borderColor"]        =   "white";
+          }
+        }
+        // Append the final struct
+        arrayAppend(local.rv, t);
+        t={};
+      }
+      return local.rv;
+    }
+    // Massage array/struct for return to fullcalendar
+    // Now done in JS, so this is obselete probably
+    public array function formatResourcesForCalendar(required array locations){
+      local.rv=[];
+      for(b in arguments.locations){
+        t["id"]             ="r#b.fc_resourceid#";
+        //t["building"]       =b.title;
+        t["title"]          =b.title;
+        t["type"]           =b.type;
+        t["hexcolour"]      =b.hexcolour;
+        t["description"]    =b.description;
+        if(structKeyExists(b, "groupby")){
+        t["children"]    =[];
+          for(group in b.groupby){
+            for(child in b.groupby[group]){
+              //writeDump(group);
+              //writeDump(child);
+              //abort;
+              arrayAppend(t.children, {
+                "id"             ="r#child['fc_resourceid']#",
+                "title"          =child['title'],
+                "type"           =child['type'],
+                "hexcolour"      =child['hexcolour'],
+                "description"    =child['description']
+              });
+            }
           }
         }
         // Append the final struct
@@ -139,46 +174,17 @@
 
     // Massage array/struct for return to yearcalendar
     // We don't need quite as much data as fullcalendar!
-    public array function formatDataForYearCalendar(required array bookings){
+    /*public array function formatDataForYearCalendar(required array bookings){
       local.rv=[];
       for(b in arguments.bookings){
         //t["startDate"]= jsDateFormat(b.startUTC);
         //t["endDate"]  = jsDateFormat(b.endUTC);
         t["startDate"]=dateFormat(b.startUTC, "YYYY-MM-DD");
         t["endDate"]  =dateFormat(dateAdd("d", ceiling(b.duration / 1440), b.startUTC), "YYYY-MM-DD");
-
-        /*
-        t["id"]             =b.id;
-        t["title"]          =b.title;
-        t["start"]          =ISODateFormat(b.startUTC);
-        t["end"]            =ISODateFormat(dateAdd("n", b.duration, b.startUTC));
-        t["detailurl"]      =urlFor(route='calendarDetail', key=b.id);
-        t["isPast"]         =b.startUTC < now() ? true:false;
-        t["isApproved"]     =b.isapproved;
-        t["isRepeat"]       =b.isrepeat;
-        t["duration"]       =b.duration;
-        t["allDay"]         =b.isallday;
-        t["buildingid"]     =b.buildingid;
-        t["hexcolour"]      =b.hexcolour;
-        t["roomhexcolour"]  =b.roomhexcolour;
-        t["roomid"]         =b.roomid;
-        // calculate colours
-        if(len(b.buildingid) && isNumeric(b.buildingid))
-          t["color"]        =   "###b.hexcolour#";
-        if(len(b.roomid) && isNumeric(b.roomid)){
-          t["backgroundColor"]    =   "white";
-          t["textColor"]          =   "###b.roomhexcolour#";
-          if(len(b.roomhexcolour)){
-            t["borderColor"]        =   "###b.roomhexcolour#";
-          } else {
-            t["borderColor"]        =   "white";
-          }
-        }
-        */
         // Append the final struct
         arrayAppend(local.rv, t);
         t={};
       }
       return local.rv;
-    }
+    }*/
     </cfscript>

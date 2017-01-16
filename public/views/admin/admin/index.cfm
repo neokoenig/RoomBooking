@@ -21,7 +21,17 @@
 			<td>#ID#</td>
 			<td>#title# <cfif isRepeat && len(repeatpattern)><i class="fa fa-refresh pull-right"></i></cfif></td>
 			<td>#username#</td>
-			<td><cfif len(buildingtitle)>#buildingtitle#</cfif><cfif len(roomtitle)><br /><small>#RoomTitle#</small></cfif></td>
+			<td>
+				<cfif len(buildingtitle) AND len(roomtitle)>
+					#buildingtitle#<br /><small>#RoomTitle#</small>
+				<cfelseif len(buildingtitle)>
+					#buildingtitle#
+				<cfelseif len(roomtitle)>
+					#RoomTitle#
+				<cfelse>
+					<i class="fa fa-question-circle text-danger"></i>
+				</cfif>
+			</td>
 			<th>#LSDateFormat(startUTC)#
 			<cfif isallDay>(#l("All Day")#)<Cfelse>#LSTimeFormat(startUTC)#</cfif></th>
 			<td>

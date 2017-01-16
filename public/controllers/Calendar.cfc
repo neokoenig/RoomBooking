@@ -2,15 +2,17 @@ component extends="Controller"
 {
   function init() {
     super.init();
-    filters(through="f_getCalendarLocations", only="show");
+    filters(through="f_getCalendarLocations", only="show,fullcalendarresources");
     verifies(only="show", params="key", paramsTypes="integer", handler="objectNotFound");
     provides("html,json");
-    usesLayout(template=false, only="detail");
+    usesLayout(template=false, only="detail,fullcalendarfilters");
   }
 
   // Index defaults to first available calendar
   function index(){
-    redirectTo(route="calendarShow", key=request.allcalendars.id);
+    param name="params.key" default=request.allcalendars.id;
+    f_getCalendarLocations();
+    calendar=model("calendar").findByKey(params.key);
   }
 
   // Show a specific calendar
@@ -35,8 +37,30 @@ component extends="Controller"
     }
   }
 
+  // Get Resource(Locations) JSON specifically for full calendar
+  function fullcalendarresources(){
+    params.format="json";
+    if(structKeyExists(params, "key") && isNumeric(params.key)){
+      // Return Array of Structs including repeats
+      renderWith( formatResourcesForCalendar(locations));
+    } else {
+      renderWith(data="{'error': 'No Calendar ID Specified'}", status=500);
+    }
+  }
+
+  // Get filters HTML specifically for full calendar
+  function fullcalendarfilters(){
+    params.format="json";
+    if(structKeyExists(params, "key") && isNumeric(params.key)){
+      f_getCalendarLocations();
+      renderWith(locations);
+      //renderPartial(partial="/calendar/filters/");
+    } else {
+      renderWith(data={'error': 'No Calendar ID Specified'}, status=500);
+    }
+  }
   // Render data specifically for year calendar
-  function yearcalendardata(){
+  /*function yearcalendardata(){
     param name="params.year" default=year(now());
     params.format="json";
     local.start="2017-01-01";
@@ -48,7 +72,7 @@ component extends="Controller"
     } else {
       renderWith(data="{'error': 'No Calendar ID Specified'}", status=500);
     }
-  }
+  }*/
 
 
   function detail(){
@@ -76,6 +100,7 @@ component extends="Controller"
     for(local.b in calendarbuildings){
       arrayAppend(local.rv, {
         "id": local.b.id,
+        "fc_resourceid": "#local.b.id#",
         "title": local.b.title,
         "hexcolour": local.b.hexcolour,
         "icon": local.b.icon,
@@ -93,6 +118,7 @@ component extends="Controller"
             }
             arrayAppend(local.rv[local.cb]["groupby"][local.r.groupby], {
               "id": local.r.id,
+              "fc_resourceid": "#local.b.id#-#local.r.id#",
               "title": local.r.title,
               "hexcolour": local.r.hexcolour,
               "icon": local.r.icon,
@@ -110,6 +136,7 @@ component extends="Controller"
         // Orphaned Rooms
         arrayAppend(local.rv, {
           "id": local.r.id,
+          "fc_resourceid": "0-#local.r.id#",
           "title": local.r.title,
           "hexcolour": local.r.hexcolour,
           "icon": local.r.icon,

@@ -18,6 +18,10 @@ component extends="Controller"
 		3) Create an initial sysadmin user
 		4) Test for SMTP?
 
+		NB, when moving to wheels 2.x, all instances
+		of application.wheels.plugins.dbmigrate will need to change
+		to wheels.dbmigrate
+
 	*/
 	function init() {
 		// Shouldn't go via central permissions, so we don't call super.init

@@ -22,10 +22,12 @@ component extends="Admin"
 
 	function new() {
 		request.pagetitle="Create New Calendar";
+		settings=model("setting").findAll(where="name LIKE 'Calendar_%'");
 		calendar=model("calendar").new();
 	}
 
 	function create() {
+		settings=model("setting").findAll(where="name LIKE 'Calendar_%'");
 		calendar=model("calendar").create(params.calendar);
 		if(calendar.hasErrors()){
 			renderPage(action="new");
@@ -36,10 +38,12 @@ component extends="Admin"
 
 	function edit() {
 		request.pagetitle="Update Calendar";
+		settings=model("setting").findAll(where="name LIKE 'Calendar_%'");
 		calendar=model("calendar").findByKey(key=params.key, include="calendarbuildings,calendarrooms");
 	}
 
 	function update() {
+		settings=model("setting").findAll(where="name LIKE 'Calendar_%'");
 		calendar=model("calendar").findByKey(key=params.key, include="calendarbuildings,calendarrooms");
 		if(calendar.update(params.calendar)){
 			return redirectTo(action="index", success="calendar #calendar.title# successfully updated");

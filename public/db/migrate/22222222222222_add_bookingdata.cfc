@@ -36,18 +36,18 @@
 
 				}
 
-				for (i=1;i LTE 5;i=i+1) {
-		    		addRecord(table='bookings', title="Joe Bloggs", startUTC=dateAdd('d', i, now()), endUTC=dateAdd('d', i, now()), isallday=1, userid=1, duration=600,
-		    			buildingid=3, roomid=29, isapproved=1, approvedby=1, isrepeat=0, adminnotes="Added via DB Migration", createdAt=now());
-				}
+				addRecord(table='bookings', title="Joe Bloggs", startUTC=dateAdd('ww', 1, now()), endUTC=dateAdd('ww', 2, now()), isallday=1, userid=1, duration=(7 * 1440),
+		    			buildingid=3, roomid=26, isapproved=1, approvedby=1, isrepeat=0, adminnotes="Added via DB Migration", createdAt=now());
+				addRecord(table='bookings', title="Joe Bloggs", startUTC=dateAdd('ww', 1, now()), endUTC=dateAdd('ww', 2, now()), isallday=1, userid=1, duration=(7 * 1440),
+		    			buildingid=3, roomid=27, isapproved=1, approvedby=1, isrepeat=0, adminnotes="Added via DB Migration", createdAt=now());
+				addRecord(table='bookings', title="Joe Bloggs", startUTC=dateAdd('ww', 2, now()), endUTC=dateAdd('ww', 3, now()), isallday=1, userid=1, duration=(7 * 1440),
+		    			buildingid=3, roomid=45, isapproved=1, approvedby=1, isrepeat=0, adminnotes="Added via DB Migration", createdAt=now());
+				addRecord(table='bookings', title="Joe Bloggs", startUTC=dateAdd('ww', 6, now()), endUTC=dateAdd('ww', 8, now()), isallday=1, userid=1, duration=(14 * 1440),
+		    			buildingid=3, roomid=46, isapproved=1, approvedby=1, isrepeat=0, adminnotes="Added via DB Migration", createdAt=now());
 
 		    	for (p=1;p LTE 10;p=p+1) {
 		    		addRecord(table='bookings', title="Test Booking 1_#p#", startUTC=dateAdd('d', p, now()), endUTC=dateAdd('n', 90, dateAdd('d', p, now())), userid=1, duration=90,
 		    			buildingid=0, roomid=2, isapproved=1, approvedby=1, isrepeat=0, adminnotes="Added via DB Migration", createdAt=now());
-				}
-		    	for (i=1;i LTE 8;i=i+1) {
-		    		addRecord(table='bookings', title="Test Booking 2_#i#", startUTC=dateAdd('d', 10, now()), endUTC=dateAdd('n', 30, dateAdd('d', 30, now())), userid=1, duration=30,
-		    			buildingid=1, roomid=2, isapproved=1, approvedby=1, isrepeat=0, adminnotes="Added via DB Migration", createdAt=now());
 				}
 				addRecord(table='bookings', title="MultiDay Event", startUTC=now(), endUTC=dateAdd('n', 2880, now()), userid=1, duration=2880,
 		    			buildingid=2, roomid=4, isallday=1, isapproved=1, approvedby=1, isrepeat=0,  adminnotes="Added via DB Migration", createdAt=now());
@@ -64,6 +64,10 @@
 		    			buildingid=2, roomid=3, isapproved=1, approvedby=1, isrepeat=1, repeatpattern="RRULE:FREQ=MONTHLY;INTERVAL=2;BYMONTHDAY=2", adminnotes="Added via DB Migration", createdAt=now());
 				addRecord(table='bookings', title="Pending Approval", startUTC=dateAdd('d', 12, now()), endUTC=dateAdd('n', 120, dateAdd('d', 12, now())), userid=1, duration=120,
 		    			buildingid=2, roomid=3, isapproved=0, isrepeat=0, adminnotes="Added via DB Migration", createdAt=now());
+				addRecord(table='bookings', title="GnR", startUTC=dateAdd('d', 12, now()), endUTC=dateAdd('d', 42, dateAdd('d', 12, now())), userid=1, duration=(30*1440),
+		    			buildingid=0, roomid=61, isapproved=0, isAllDay=1, isrepeat=0, adminnotes="Added via DB Migration", createdAt=now());		addRecord(table='bookings', title="GnR", startUTC=dateAdd('d', 24, now()), endUTC=dateAdd('d', 42, dateAdd('d', 24, now())), userid=1, duration=(30*1440),
+		    			buildingid=0, roomid=62, isapproved=0, isAllDay=1, isrepeat=0, adminnotes="Added via DB Migration", createdAt=now());		addRecord(table='bookings', title="GnR", startUTC=dateAdd('d', 12, now()), endUTC=dateAdd('d', 42, dateAdd('d', 12, now())), userid=1, duration=(30*1440),
+		    			buildingid=0, roomid=63, isapproved=0, isAllDay=1, isrepeat=0, adminnotes="Added via DB Migration", createdAt=now());
 	    	}
 	    	catch (any ex){
 	    		hasError = true;

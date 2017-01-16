@@ -336,7 +336,6 @@
 				addRecord(table='rolepermissions', roleid=3, permissionid=c);
 				addRecord(table='rolepermissions', roleid=4, permissionid=c);
 				addRecord(table='rolepermissions', roleid=5, permissionid=c);
-				addRecord(table='rolepermissions', roleid=6, permissionid=c);
 					c++;
 					addRecord(table='permissions', name='my.account', description='View Own Account');
 					addRecord(table='rolepermissions', roleid=1, permissionid=c);
@@ -344,7 +343,6 @@
 					addRecord(table='rolepermissions', roleid=3, permissionid=c);
 					addRecord(table='rolepermissions', roleid=4, permissionid=c);
 					addRecord(table='rolepermissions', roleid=5, permissionid=c);
-					addRecord(table='rolepermissions', roleid=6, permissionid=c);
 				c++;
 				addRecord(table='permissions', name='calendar', description='Allow General Calendar Access');
 				addRecord(table='rolepermissions', roleid=1, permissionid=c);
@@ -378,6 +376,22 @@
 					addRecord(table='rolepermissions', roleid=5, permissionid=c);
 					addRecord(table='rolepermissions', roleid=6, permissionid=c);
 					c++;
+					addRecord(table='permissions', name='calendar.fullcalendarfilters', description='Required for Full Calendar to get remote filters');
+					addRecord(table='rolepermissions', roleid=1, permissionid=c);
+					addRecord(table='rolepermissions', roleid=2, permissionid=c);
+					addRecord(table='rolepermissions', roleid=3, permissionid=c);
+					addRecord(table='rolepermissions', roleid=4, permissionid=c);
+					addRecord(table='rolepermissions', roleid=5, permissionid=c);
+					addRecord(table='rolepermissions', roleid=6, permissionid=c);
+					c++;
+					addRecord(table='permissions', name='calendar.fullcalendarresources', description='Required for Full Calendar to get remote locations');
+					addRecord(table='rolepermissions', roleid=1, permissionid=c);
+					addRecord(table='rolepermissions', roleid=2, permissionid=c);
+					addRecord(table='rolepermissions', roleid=3, permissionid=c);
+					addRecord(table='rolepermissions', roleid=4, permissionid=c);
+					addRecord(table='rolepermissions', roleid=5, permissionid=c);
+					addRecord(table='rolepermissions', roleid=6, permissionid=c);
+					c++;
 					addRecord(table='permissions', name='calendar.yearcalendardata', description='Required for Year Calendar to get remote data');
 					addRecord(table='rolepermissions', roleid=1, permissionid=c);
 					addRecord(table='rolepermissions', roleid=2, permissionid=c);
@@ -385,6 +399,7 @@
 					addRecord(table='rolepermissions', roleid=4, permissionid=c);
 					addRecord(table='rolepermissions', roleid=5, permissionid=c);
 					addRecord(table='rolepermissions', roleid=6, permissionid=c);
+
 					c++;
 					addRecord(table='permissions', name='calendar.detail', description='View Booking Details in Calendar Sidepanel');
 					addRecord(table='rolepermissions', roleid=1, permissionid=c);

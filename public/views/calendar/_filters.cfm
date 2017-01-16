@@ -1,8 +1,17 @@
+<cfprocessingdirective suppressWhitespace="true">
 <cfparam name="locations">
 <cfoutput>
-<div class="box box-default">
+<div id="filterbar">
+<div id="filters" class="box box-default">
+<div class="box-body ">
+<button type="button" class="btn btn-xs btn-default locationfilter btn-flat" title="All" data-filtertype="none" data-id="0">
+All</button>
+<div class="btn-group"></div>
+</div><!--/box-body-->
+</div><!--/filters-->
+</div><!--/filterbar-->
+<!---div id="filters" class="box box-default">
 	<div class="box-body ">
-		<div id="filters">
         	<!--- All --->
         	<button type="button" class="btn btn-xs btn-default locationfilter btn-flat" title="All" data-filtertype="none" data-id=0>#l('All')#</button>
 		 	<!--- Buildings & Rooms--->
@@ -41,7 +50,7 @@
 					</cfif>
 				</cfloop>
 			</div>
-		</div>
 	</div><!-- /.box-body -->
-</div><!-- /. box -->
+</div---><!-- /. box -->
 </cfoutput>
+</cfprocessingdirective>

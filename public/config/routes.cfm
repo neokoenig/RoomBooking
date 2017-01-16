@@ -47,8 +47,10 @@
 	    .end()
 
  		.controller("calendar")
- 			.get(name="fullcalendardata", pattern="data/full/[key]")
- 			.get(name="yearcalendardata", pattern="data/year/[key]")
+ 			.get(name="fullcalendardata", pattern="data/full/")
+ 			.get(name="fullcalendarresources", pattern="resources/full/")
+ 			.get(name="fullcalendarfilters", pattern="filters/full/")
+ 			//.get(name="yearcalendardata", pattern="data/year/")
  			.get(name="show", pattern="show/[key]")
  			.get(name="detail", pattern="detail/[key]")
  			.get("index")

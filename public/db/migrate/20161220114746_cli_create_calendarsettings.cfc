@@ -18,16 +18,19 @@
       t.decimal(columnNames='hourlyWage', default='', null=true, precision='1', scale='2');
       t.date(columnNames='dateOfBirth', default='', null=true);
 --->
-<cfcomponent extends="plugins.dbmigrate.Migration" hint="Add Default Roles">
+<cfcomponent extends="plugins.dbmigrate.Migration" hint="Create UserPermission Table">
   <cffunction name="up">
   	<cfset hasError = false />
   	<cftransaction>
 	    <cfscript>
 	    	try{
-				addRecord(table='calendars', template="fullcalendar", userid=1, description="Example Calendar using Buildings and Rooms", icon="fa-calendar", title='Meeting Rooms');
-				addRecord(table='calendars', template="fullcalendar", userid=1, description="Example Calendar using Day based booking", icon="fa-bed", title='My B&B');
-				addRecord(table='calendars', template="fullcalendar", userid=1, description="Example Calendar using Buildings,Rooms,Resources", icon="fa-flask", title='Science Labs');
-				addRecord(table='calendars', template="fullcalendar", userid=1, description="Example Calendar using Slot based Booking and Resources", icon="fa-microphone", title='Recording Studio');
+
+				t = createTable(name='calendarsettings', force='true', id='false');
+				t.primaryKey(name="calendarid",limit=11);
+				t.primaryKey(name="settingid",limit=11);
+				t.string(columnNames="value", limit=500);
+				t.create();
+
 	    	}
 	    	catch (any ex){
 	    		hasError = true;
@@ -52,7 +55,7 @@
   	<cftransaction>
 	    <cfscript>
 	    	try{
-				removeRecord(table='calendars');
+	    		dropTable('calendarsettings');
 	    	}
 	    	catch (any ex){
 	    		hasError = true;
@@ -73,5 +76,3 @@
 	 </cftransaction>
   </cffunction>
 </cfcomponent>
-
-

@@ -23,6 +23,14 @@
 	</div>
 #boxend()#
 
+#box(title=l("Calendar Settings"))#
+<cfdump var="#settings#">
+<cfloop query="settings">
+	#hasManyCheckBox(objectName="calendar", association="calendarsettings", keys="#calendar.key()#,#id#", label=name)#
+</cfloop>
+Override default settings for Calendar_
+#boxend()#
+
 #box(title=l("Buildings & Rooms"))#
 <div class="row">
 
