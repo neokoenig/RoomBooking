@@ -8,6 +8,7 @@ component extends="Wheels" hint="Global Controller"
 		}
 		// Check Permission for any given controller + action
 		filters(through="checkPermissionAndRedirect");
+		filters(through="f_getCalendars");
 
 	}
 

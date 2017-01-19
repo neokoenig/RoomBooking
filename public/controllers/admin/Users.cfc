@@ -2,15 +2,39 @@ component extends="Admin" {
 
 	function init() {
 		super.init();
-		verifies(except="index,new,create,assume,show", params="key", paramsTypes="integer", handler="objectNotFound");
+		verifies(except="index,new,create,assume,show,recover", params="key", paramsTypes="integer", handler="objectNotFound");
 		verifies(post=true, only="create,update,delete");
 		filters(through="f_getRoles", only="index,new,create,edit,update");
 		filters(through="f_getCountries", only="index,new,create,edit,update");
 	}
 
 	function index() {
+		param name="params.roleid" default="";
+		param name="params.status" default="active";
+		param name="params.page" default=1;
+		param name="params.perpage" default=50;
 		request.pagetitle="All Users";
-		users=model("user").findAll(include="role");
+		local.includesoftdeletes=false;
+		local.where=[];
+		// By Role
+	    if(structKeyExists(params, "roleid") && isnumeric(params.roleid)){
+	      ArrayAppend(local.where, "roleid = #params.roleid#");
+	    }
+	    // By Status: deliberately not using includesoftdeletes here
+	    switch(params.status){
+	    	case "active":
+	    	local.includesoftdeletes=false;
+	    	break;
+	    	case "disabled":
+	    	ArrayAppend(local.where, "deletedAt IS NOT NULL");
+	    	local.includesoftdeletes=true;
+	    	break;
+	    	default:
+	    	local.includesoftdeletes=true;
+	    	//ArrayAppend(local.where, "status = #params.status#");
+	    }
+
+		users=model("user").findAll(where=whereify(local.where), include="role", includesoftdeletes=local.includesoftdeletes, page=params.page, perpage=params.perpage);
 	}
 
 	function show() {
@@ -55,12 +79,14 @@ component extends="Admin" {
 
 	function delete() {
 		user=model("user").deleteByKey(params.key);
-		return redirectTo(action="index", success="User successfully deleted");
+		return redirectTo(action="index", success="User successfully disabled");
 	}
 
 	function recover() {
-	//	user=model("user").deleteByKey(params.key);
-	//	return redirectTo(action="index", success="User successfully deleted");
+		user=model("user").findByKey(key=params.key, includesoftdeletes=true);
+		user.deletedAt="";
+		user.save();
+		return redirectTo(action="index", success="User successfully recovered");
 	}
 
 	function assume() {

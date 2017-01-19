@@ -18,8 +18,6 @@ form=trimScope(form);
 */
 if(application.rbs.installed){
 
-	request.allCalendars=model("calendar").findAll(order="title");
-
 	request.lang={};
 
 	// Languages with a translation file

@@ -1,11 +1,11 @@
 <cfparam name="allcalendars">
 <cfoutput>
-#linkTo(route="newAdminCalendar", class="btn btn-primary", text="<i class='fa fa-plus'></i> " & l("Create New Calendar") )#
+#linkTo(route="newAdminCalendar", class="btn btn-primary btn-flat", text="<i class='fa fa-plus'></i> " & l("Create New Calendar") )#
 <hr />
 
 <cfif allcalendars.recordcount>
 #box(title="Calendars")#
-<table id="calendartable" class="table table-bordered table-striped">
+<table id="calendartable" class="table table-bordered table-striped table-condensed">
 	<thead>
 	<tr>
 		<th>#l("Name")#</th>

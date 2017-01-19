@@ -1,8 +1,8 @@
 <cfoutput>
-
 <div class="login-box">
   <div class="login-logo">
-    <a href="/"><b>OxAlto</b>RBS</a>
+      <a href="/" style="display: block;"><img src="/images/logo_med.png" alt="logo" /></a>
+    <a href="/">#application.rbs.settings.general_sitename#</a>
   </div>
   <!-- /.login-logo -->
   <div class="login-box-body">

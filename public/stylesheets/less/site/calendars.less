@@ -1,8 +1,18 @@
 /* Full Calendar */
+
+// Events
 .fc-event, .fc-future, .fc-today:hover {cursor:pointer;}
 .fc-future:hover  {background:#E8E8E8; }
-.fc-today:hover {background:#D6CED1;}
 .fc-past {background:#D1D1D1;}
+.fc-event {border-radius: 0;}
+.fc-day-number {font-size: 13px;}
+
+// Today
+.fc-today:hover {background:#D6CED1;}
+.fc-today .fc-day-number {font-weight: 700;}
+
+// Title bar
+.fc-left h2 {font-size: 20px;}
 
 // Buttons
 .fc-state-default.fc-corner-left, .fc-state-default.fc-corner-right {border-radius: 0;}
@@ -10,4 +20,5 @@
 .fc-state-active, .fc-button:hover, .fc-button:active, .fc-button.hover {background-color: #3c8dbc; color:white; text-decoration: none; text-shadow:none;}
 .fc-state-down, .fc-state-active {box-shadow: none; text-shadow:none;}
 
+// Replace Custom Icons with FA
 .fc-icon {font-family: "FontAwesome";}

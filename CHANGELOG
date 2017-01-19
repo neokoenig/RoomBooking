@@ -66,6 +66,7 @@ Add FullCalendar Scheduler addon - double check licencing
 Add "Year" based calendar (think booking a rental cottage)
 Add Concurrency Checks / Event Overlap restrictions
 Add Search for "Next Available Slot / Find me a room with ...x "
+Add Restriction for "can't book before 'x' days" or something (so can't book for 2020)
 
 Add Custom Permissions which can be triggered anywhere
 Add Workflow/Notification System

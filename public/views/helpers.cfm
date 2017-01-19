@@ -101,19 +101,26 @@
     }
 
 
-    public string function LSDateFormatDuration(required date start, required date end){
+    public string function LSDateFormatDuration(required date start, required date end, boolean isallday=false){
             local.rv="";
             local.start=LSdateFormat(arguments.start);
             local.startTime=LStimeFormat(arguments.start);
             local.end=LSdateFormat(arguments.end);
             local.endTime=LStimeFormat(arguments.end);
-
+            local.isAllday=arguments.isallday;
             local.isForever= year(local.end) == 9999 ? true:false;
+            local.isMultiday=dateDiff("d", local.start, local.end) GT 0 ? true:false;
 
-            if(local.startTime EQ "00:00"){
+            if(local.isMultiday && local.isAllday){
+                return local.start & " - " & local.end;
+            }
+            if(local.isAllday){
+                return local.start;
+            }
+            if(local.startTime == "00:00"){
                 local.startTime="";
             }
-            if(local.endTime EQ "00:00"){
+            if(local.endTime == "00:00"){
                 local.endTime="";
             }
 
@@ -147,8 +154,18 @@
         if(m != 0){
             r=r & h  & " " & l("mins");
         }
-        if(len(r)){
-            return "(" & r & ")";
+        return r;
+        //if(len(r)){
+        //   return r;
+        //   // return "(" & r & ")";
+        //} else {
+        //    return "";
+        //}
+    }
+
+    string function treeIsActive(string list){
+        if(arrayFindNoCase( listToArray(arguments.list), listLast(params.controller, "."))){
+            return "active";
         } else {
             return "";
         }

@@ -9,12 +9,19 @@ component extends="Admin"
 	}
 
 	function index(){
-		param name="params.page" default="1";
-		param name="params.perpage" default="50";
 		param name="params.sort" default="startUTC";
 		param name="params.sortorder" default="ASC";
+		param name="params.key" default="1";
+		param name="params.from" default=dateFormat(now(), 'YYYY-MM-DD');
+		param name="params.to" default=dateFormat(dateAdd("m", 1, now()), 'YYYY-MM-DD');
+		param name="params.buildingid" default="";
+		param name="params.roomid" default="";
+		param name="params.includeRepeats" default=0;
+		param name="params.status" default="";
 		request.pagetitle="Bookings";
-		bookings=model("bookings").findAll(perpage=params.perpage, page=params.page, order="#params.sort# #params.sortorder#");
+		bookings=getEventsForRange(start=params.from, end=params.to, includeRepeats=params.includerepeats);
+
+		//bookings=model("bookings").findAll(perpage=params.perpage, page=params.page, order="#params.sort# #params.sortorder#");
 	}
 
 	function show() {

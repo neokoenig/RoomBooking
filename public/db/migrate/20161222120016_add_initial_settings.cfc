@@ -40,11 +40,11 @@
 
           // Misc
           addRecord(table='settings', name="general_sitename", description="General Site Name",
+            type="textfield", value="OxAlto RBS");
+	       addRecord(table='settings', name="general_shortname", description="Short Site Name (used in sidebar)",
+            type="textfield", value="RBS");
+	       addRecord(table='settings', name="general_copyright", description="Footer Notice",
             type="textfield", value="OxAlto RoomBooking System");
-	       addRecord(table='settings', name="general_shortname", description="General Site Name (used in sidebar)",
-            type="textfield", value="OxAltoRBS");
-	       addRecord(table='settings', name="general_copyright", description="Footer Copyright Notice",
-            type="textfield", value="OxAlto RoomBooking System.");
 
 	       // Theme
 	       addRecord(table='settings', name="theme_layout", description="Theme Layout",

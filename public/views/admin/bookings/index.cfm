@@ -1,15 +1,14 @@
 <cfparam name="bookings">
 <cfoutput>
 <cfif hasPermission("admin.bookings.new")>
-#linkTo(route="newAdminBooking", class="btn btn-primary", text="<i class='fa fa-plus'></i> " & l("Create New Booking") )#
+#linkTo(route="newAdminBooking", class="btn btn-primary btn-flat", text="<i class='fa fa-plus'></i> " & l("Create New Booking") )#
 </cfif>
 <hr />
+#includePartial("filter")#
+<cfif arrayLen(bookings)>
+	#box(title="Bookings (" & arrayLen(bookings) & ")")#
 
-<cfif bookings.recordcount>
-	#box(title="Bookings")#
-
-	#paginationLinks()#
-	<table id="bookingstable" class="table table-bordered table-striped">
+	<table id="bookingstable" class="table table-bordered table-striped table-condensed">
 	<thead>
 	<tr>
 		<th>#l("ID")#</th>
@@ -20,26 +19,11 @@
 	</tr>
 	</thead>
 	<tbody>
-	<cfloop query="bookings">
-		<tr>
-			<td>#ID#</td>
-			<td>#title# <cfif isRepeat && len(repeatpattern)><i class="fa fa-refresh pull-right"></i></cfif></td>
-			<th>#LSDateFormat(startUTC)#
-			<cfif isallDay>(#l("All Day")#)<Cfelse>#LSTimeFormat(startUTC)#</cfif></th>
-			<th>#tickorcross(isapproved)#</th>
-			<td><div class="btn-group">
-			<cfif hasPermission("admin.bookings.edit")>
-				#linkTo(route="editAdminBooking", key=id, title=l("Edit"), text="<i class='fa fa-edit'></i> " & l("Edit"), class="btn btn-xs btn-flat btn-primary")#
-			</cfif>
-			<cfif hasPermission("admin.bookings.delete")>
-				#linkTo(href=adminBookingPath(id), method="delete", title=l("Delete"), text="<i class='fa fa-trash-o'></i>", class="btn btn-xs btn-flat btn-danger", confirm=l("Delete This Booking?"))#
-			</cfif>
-			</div>
-		</tr>
+	<cfloop from="1" to="#arrayLen(bookings)#" index="i">
+		#includePartial(partial="row", booking=bookings[i])#
 	</cfloop>
 	</tbody>
 	</table>
-	#paginationLinks()#
 	#boxEnd()#
 <cfelse>
 	#alert(title="No Bookings Found", content="There aren't any bookings yet. Maybe create some?")#

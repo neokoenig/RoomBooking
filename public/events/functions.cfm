@@ -49,6 +49,8 @@
         if(arraylen(local.passes) == arraylen(local.permissions) && !arraylen(local.fails)){
             local.rv=true;
         }
+        //writeDump(local);
+        //abort;
         return local.rv;
     }
 

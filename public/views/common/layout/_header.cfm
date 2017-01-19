@@ -6,9 +6,9 @@
   <!-- Logo -->
   <a href="/" class="logo">
     <!-- mini logo for sidebar mini 50x50 pixels -->
-    <span class="logo-mini"><b>RBS</b></span>
+    <span class="logo-mini"><b><img src="/images/logo_mini.png" alt="Logo" /></b></span>
     <!-- logo for regular state and mobile devices -->
-    <span class="logo-lg"><b>OxAlto</b>RBS</span>
+    <span class="logo-lg"><img src="/images/logo_mini.png" alt="Logo" /> <b>#application.rbs.settings.general_shortname#</b></span>
   </a>
 </cfif>
 
@@ -23,7 +23,7 @@
         </a>
 
     <cfelse>
-        <a href="/" class="navbar-brand"><b>OxAlto</b>RBS</a>
+        <a href="/" class="navbar-brand"><b>#application.rbs.settings.general_shortname#</b><img src="/images/logo_mini.png" alt="Logo" /></a>
         <ul class="nav navbar-nav">
           <cfloop query="request.allcalendars">
             #sidebarlink(controller="calendar", route="calendarShow", key=id, icon=icon, text=title)#
@@ -97,8 +97,8 @@
 
             #includePartial("/common/layout/lang")#
          <cfif isAuthenticated()>
-            #sidebarlink(controller="admin.admin", route="adminIndex", icon="fa-cog", text="Administration")#
-            <!---#includePartial("/common/layout/tasks")#--->
+            <!---#sidebarlink(controller="admin.admin", route="adminIndex", icon="fa-cog", text="Administration")#
+            #includePartial("/common/layout/tasks")#--->
             #includePartial("/common/layout/account")#
           <cfelse>
             <li>#linkTo(controller="authentication", route="authenticationLogin",  text="<i class='fa fa-lock'></i><span> " & l("Login") & "</span>")#</li>

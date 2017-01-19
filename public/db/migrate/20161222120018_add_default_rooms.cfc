@@ -28,7 +28,7 @@
 				addRecord(table='rooms', userid=1, description="Large meeting room seating up to 25", icon="fa-square", hexcolour="0E1B9E", title='Large Meeting Room', groupby="Basement", buildingid=1);
 				addRecord(table='rooms', userid=1, description="Small meeting room seating up to 8", icon="fa-square", hexcolour="9E0E3C", title='Glass Meeting Room', groupby="0", buildingid=2);
 				addRecord(table='rooms', userid=1, description="Polycom Realsize VC unit available", icon="fa-video-camera", hexcolour="9E5F0E", title='Video Conference Suite', groupby="0", buildingid=2);
-				addRecord(table='rooms', userid=1, description="Available to both 58 & 60 Wall St", icon="fa-car", hexcolour="B513BD", title='Executive Parking Spot', groupby="0");
+				addRecord(table='rooms', userid=1, description="Available to multiple calendars!", icon="fa-car", hexcolour="B513BD", title='Executive Parking Spot', groupby="0");
 
 				addRecord(table='rooms', userid=1, description="DeLuxe Queen Double Room with Disabled Access", icon="fa-wheelchair", hexcolour="8C6201", title='101 Deluxe Queen', groupby="First", buildingid=3);
 				addRecord(table='rooms', userid=1, description="DeLuxe Queen Double Room with Disabled Access", icon="fa-wheelchair", hexcolour="8C6201", title='102 Deluxe Queen', groupby="First", buildingid=3);

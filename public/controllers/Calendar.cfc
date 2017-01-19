@@ -10,7 +10,7 @@ component extends="Controller"
 
   // Index defaults to first available calendar
   function index(){
-    param name="params.key" default=request.allcalendars.id;
+    param name="params.key" default=allcalendars.id;
     f_getCalendarLocations();
     calendar=model("calendar").findByKey(params.key);
   }
@@ -76,7 +76,7 @@ component extends="Controller"
 
 
   function detail(){
-    booking=model("booking").findByKey(params.key);
+    booking=model("booking").findByKey(key=params.key, include="building,room");
     if(!isObject(booking)){
       renderText("Booking Not Found");
     }

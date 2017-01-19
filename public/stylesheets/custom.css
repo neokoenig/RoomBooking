@@ -2,5 +2,5 @@
 	Custom CSS: Add your overrides here
 	Alternatively you can edit the less files, and recompile using grunt css
 */
-.fc-left h2 {font-size: 20px;}
-.sidebar-menu li:hover, .locationfilter:hover {cursor: pointer;}
+.fc-day-top:hover{background:lightblue !important;cursor: pointer;}
+.fc-day-top:hover:before {content: "\f055"; font-family: 'FontAwesome'; padding:3px;}

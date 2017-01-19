@@ -4,7 +4,7 @@
 #box(title=l("Pending Bookings"))#
 <cfif pendingbookings.recordcount>
 #paginationLinks()#
-	<table id="bookingstable" class="table table-bordered table-striped">
+	<table id="bookingstable" class="table table-bordered table-striped  table-condensed">
 	<thead>
 	<tr>
 		<th>#l("ID")#</th>

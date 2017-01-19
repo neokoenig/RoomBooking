@@ -24,7 +24,7 @@
       <div class="box-body ">
         <button type="button" class="btn btn-xs btn-default locationfilter btn-flat" title="All" data-filtertype="none" data-id="0">#l("All")#</button>
         <!--- JS Appends to this--->
-        <div class="btn-group"></div>
+        <div class="btn-group filterholder"></div>
       </div><!--/box-body-->
       </div><!--/filters-->
       </div><!--/filterbar-->
@@ -43,13 +43,14 @@ $(document).ready(function() {
   var settings =initSettings();
   var filters  =initFilterBar();
   var calendar =initCalendar();
-      getCalendar();
+                getCalendar();
 
   // Sidebar Links
   $(".calendarswitcher").on("click", function(e){
      setSetting("key", $(this).data("key"));
      $(".calendarswitcher").parent().removeClass("active");
      $(this).parent().addClass("active");
+     $('.popover').popover('destroy');
      getFilterBar();
      getCalendar();
      e.preventDefault();
@@ -58,7 +59,7 @@ $(document).ready(function() {
 //=   Settings
 //=====================================================================
   function initSettings(){
-    console.log("initSettings()");
+    //console.log("initSettings()");
     var settings=$("#settings").data();
     return settings;
   }
@@ -70,12 +71,12 @@ $(document).ready(function() {
 //=   Filter Bar + Filters
 //=====================================================================
   function initFilterBar(){
-    console.log("initFilterBar()");
+    //console.log("initFilterBar()");
     getFilterBar();
   }
 
   function getFilterBar(){
-    console.log("getFilterBar()");
+    //console.log("getFilterBar()");
     $.ajax({
         url: settings.filterdataurl,
         cache: false,
@@ -87,13 +88,16 @@ $(document).ready(function() {
           renderFilterBar(data);
           //console.log(data);
         },
-        error: fetchError
+        error: function(e){
+          console.log(e);
+          fetchError("Filter Bar");
+        }
     });
   }
 
   function renderFilterBar(data){
-    console.log("renderFilterBar()");
-    var e=$("#filters .box-body .btn-group");
+    //console.log("renderFilterBar()");
+    var e=$("#filters .box-body .filterholder");
         e.html("");
     var h="";
     for(i in data){
@@ -150,17 +154,21 @@ $(document).ready(function() {
   }
 
   function assignFilterClickHandlers(){
-    console.log("assignFilterClickHandlers()");
+    //console.log("assignFilterClickHandlers()");
       $("#filters .locationfilter").off("click").on("click", function(e){
         var data=$(this).data();
-        console.log(data);
+        //console.log(data);
         $("#notices").html("");
+        $('.popover').popover('destroy');
         setFilterData(settings.key, data.filtertype, data.id);
         calendar.fullCalendar( 'removeEventSources');
         calendar.fullCalendar( 'addEventSource', {
           url: settings.dataurl,
           data: getFilterData,
-          error: fetchError
+          error: function(e){
+            console.log(e);
+           fetchError("Filtered Events");
+          }
          });
         e.preventDefault();
       });
@@ -173,26 +181,38 @@ $(document).ready(function() {
 //=====================================================================
 
   function initCalendar(){
-    console.log("initCalendar()");
+    //console.log("initCalendar()");
      return $('#calendar').fullCalendar(getCalendarSettings());
   }
 
-  function fetchError(){
-    var h="<div class='alert alert-warning alert-dismissible '><button type='button' class='close' data-dismiss='alert' aria-hidden='true'><i class='fa fa-times'></i></button><h4><i class='icon fa fa-exclamation-triangle'></i>Error</h4>Error Fetching Bookings...</div>";
+  function fetchError(string){
+    var h="<div class='alert alert-warning alert-dismissible '><button type='button' class='close' data-dismiss='alert' aria-hidden='true'><i class='fa fa-times'></i></button><h4><i class='icon fa fa-exclamation-triangle'></i>Error</h4>Error Fetching " + string + "...</div>";
       $("#notices").html(h);
   }
 
   function getCalendar(){
-    console.log("getCalendar()");
     calendar.fullCalendar( 'removeEventSources');
     calendar.fullCalendar( 'addEventSource', {
       url: settings.dataurl,
       data: {
         key: getSetting("key")
       },
-      error: fetchError
+      error: function(e){
+        console.log(e);
+       fetchError("Bookings");
+      }
      });
   }
+  /*
+
+      resources: {
+          url: getSetting("resourcedataurl"),
+          data: {
+            key: getSetting("key")
+          },
+          error: fetchError
+      },
+      */
 
   function getCalendarSettings(){
     var settings={
@@ -236,13 +256,6 @@ $(document).ready(function() {
         cTimelineMonth: {
           icon: "fa fa-list-alt", click: function(){ calendar.fullCalendar('changeView', 'timelineMonth');}}
       },
-      resources: {
-          url: getSetting("resourcedataurl"),
-          data: {
-            key: getSetting("key")
-          },
-          error: fetchError
-      },
       eventRender: function(event, element) {
         if(!event.isApproved){
           $(element).find(".fc-content").prepend('<i class="fa fa-question-circle"></i> ');
@@ -255,11 +268,21 @@ $(document).ready(function() {
         }
       },
       eventClick: function( event, jsEvent, view ){
+        var t=this;
         $.ajax({
           url: event.detailurl,
           success: function(data){
-            //$("#sidebar-dynamic-content").html(data);
-            //$(".rightbar-toggle").trigger("click");
+            //console.log(event, data);
+            var title="";
+            if(!event.isApproved){
+              title+=('<i class="fa fa-question-circle"></i> ');
+            }
+            if(event.isRepeat){
+                title+=('<i class="fa fa-repeat"></i> ');
+            }
+            title+=event.title;
+            $('.popover').popover('hide');
+            $(t).popover({ title:title, content: data, html :true, placement: "auto top", container:'#calendar'}).popover("show");
           }
           });
         },
@@ -267,9 +290,13 @@ $(document).ready(function() {
           console.log('Clicked on: ' + date.format());
           console.log(jsEvent);
           console.log(view);
+          $('.popover').popover('hide');
+      },
+      viewRender: function(view, element){
+        $('.popover').popover('destroy');
+      }
     }
-    }
-    console.log(settings);
+    //console.log(settings);
     return settings;
   }
 
@@ -362,9 +389,9 @@ $(document).ready(function() {
         });
       },
     dayClick: function(date, jsEvent, view) {
-        console.log('Clicked on: ' + date.format());
-        console.log(jsEvent);
-        console.log(view);
+        //console.log('Clicked on: ' + date.format());
+        //console.log(jsEvent);
+        //console.log(view);
     }
   // end FC
   });

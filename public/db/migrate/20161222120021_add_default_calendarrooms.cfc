@@ -41,6 +41,7 @@
 				addRecord(table='calendarrooms', calendarid=2, roomid=13);
 				addRecord(table='calendarrooms', calendarid=2, roomid=14);
 				addRecord(table='calendarrooms', calendarid=2, roomid=15);
+				addRecord(table='calendarrooms', calendarid=2, roomid=5);
 
 				addRecord(table='calendarrooms', calendarid=2, roomid=16);
 				addRecord(table='calendarrooms', calendarid=2, roomid=17);
@@ -93,6 +94,7 @@
 				addRecord(table='calendarrooms', calendarid=4, roomid=60);
 				addRecord(table='calendarrooms', calendarid=4, roomid=61);
 				addRecord(table='calendarrooms', calendarid=4, roomid=62);
+				addRecord(table='calendarrooms', calendarid=4, roomid=5);
 
 
 	    	}

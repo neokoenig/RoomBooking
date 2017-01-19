@@ -9,7 +9,6 @@ component extends="Admin"
 	}
 	function index(){
 		request.pagetitle="Calendars";
-		allcalendars=request.allcalendars;
 	}
 
 	function show() {

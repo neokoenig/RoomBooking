@@ -1,11 +1,11 @@
 <cfparam name="allbuildings">
 <cfoutput>
-#linkTo(route="newAdminBuilding", class="btn btn-primary", text="<i class='fa fa-plus'></i> " & l("Create New Building") )#
+#linkTo(route="newAdminBuilding", class="btn btn-primary btn-flat", text="<i class='fa fa-plus'></i> " & l("Create New Building") )#
 <hr />
 
 <cfif allbuildings.recordcount>
 #box(title="Buildings")#
-<table id="buildingstable" class="table table-bordered table-striped">
+<table id="buildingstable" class="table table-bordered table-striped table-condensed">
 	<thead>
 	<tr>
 		<th>#l("Name")#</th>

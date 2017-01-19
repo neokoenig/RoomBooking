@@ -2,7 +2,7 @@
     //=====================================================================
     //=     Main Calendar Data & Event Repeat Functions
     //=====================================================================
-    public array function getEventsForRange(required start, required end){
+    public array function getEventsForRange(required start, required end, boolean includeRepeats=true){
 
       // Events Search Range
       local.start=createDateTime(year(arguments.start), month(arguments.start), day(arguments.start), hour(arguments.start),minute((arguments.start)),00);
@@ -11,6 +11,16 @@
       local.filters=[];
       local.wc="";
       local.events="";
+      local.includeRepeats=arguments.includeRepeats;
+
+      // A small sanity check: don't get booking for more than a year
+      // lots of repeating events could cause serious performance problems (think a 100 daily repeaters x 30 years)
+      // NB, iCal4J won't do more than 1000 generated repeats, but that's per date passed in: so we could easily accidentally
+      // generate 1+million records if we're not a little bit sensible. Most of the time this isn't an issue, but the back end admin
+      // could possibly cause problems.
+      if(local.includeRepeats && dateDiff("yyyy", local.start, local.end) > 1){
+        local.end=dateAdd("yyyy", 1, local.start);
+      }
 
       //=   Date Filters (OR)
       // Bookings which fall into viewPort range: remember endUTC is the end date including the repeats, and not necessarily the true duration
@@ -43,7 +53,9 @@
       // Can't do returnas structs here as we need the deeper associations
       local.bookings=model("booking").findAll(where=local.wc, order="startUTC ASC", include="building(calendarbuildings),room(calendarrooms)");
       local.bookings=queryToArray(local.bookings, false, false, false);
-      local.bookings=generateRepeatingDates(local.bookings, local.start, local.end);
+      if(local.includeRepeats){
+        local.bookings=generateRepeatingDates(local.bookings, local.start, local.end);
+      }
       return local.bookings;
     }
 
@@ -120,16 +132,26 @@
         // resourceid for scheduler as quasi-composite key
         t["resourceId"]     ="r#b.buildingid#-#b.roomid#";
         // calculate colours
-        if(len(b.buildingid) && isNumeric(b.buildingid))
-          t["color"]        =   "###b.hexcolour#";
-        if(len(b.roomid) && isNumeric(b.roomid)){
-          t["backgroundColor"]    =   "white";
-          t["textColor"]          =   "###b.roomhexcolour#";
-          if(len(b.roomhexcolour)){
-            t["borderColor"]        =   "###b.roomhexcolour#";
-          } else {
-            t["borderColor"]        =   "white";
+        if(!b.isapproved){
+          t["backgroundColor"]        =   "white";
+          if(len(b.buildingid) && isNumeric(b.buildingid))
+            t["textColor"]        =   "###b.hexcolour#";
+            t["borderColor"]        =   "###b.hexcolour#";
+          if(len(b.roomid) && isNumeric(b.roomid)){
+            if(len(b.roomhexcolour)){
+              t["textColor"]        =   "###b.roomhexcolour#";
+              t["borderColor"]        =   "###b.roomhexcolour#";
+            }
           }
+        } else {
+          if(len(b.buildingid) && isNumeric(b.buildingid))
+            t["color"]        =   "###b.hexcolour#";
+          if(len(b.roomid) && isNumeric(b.roomid)){
+            if(len(b.roomhexcolour)){
+              t["color"]        =   "###b.roomhexcolour#";
+            }
+          }
+
         }
         // Append the final struct
         arrayAppend(local.rv, t);
@@ -152,9 +174,6 @@
         t["children"]    =[];
           for(group in b.groupby){
             for(child in b.groupby[group]){
-              //writeDump(group);
-              //writeDump(child);
-              //abort;
               arrayAppend(t.children, {
                 "id"             ="r#child['fc_resourceid']#",
                 "title"          =child['title'],

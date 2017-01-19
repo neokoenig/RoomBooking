@@ -23,4 +23,7 @@
 	function f_getUsers(){
 		allusers=model("user").findAll(order="lastname");
 	}
+	function f_getCalendars(){
+		allcalendars=model("calendar").findAll(order="title");
+	}
 </cfscript>

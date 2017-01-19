@@ -42,6 +42,7 @@
 	 		.resources("settings")
 	 		.resources("users")
  				.get(name="assume", pattern="users/assume/[key]", controller="users", action="assume")
+ 				.get(name="recover", pattern="users/recover/[key]", controller="users", action="recover")
 	 		.resources("dump")
  			.get(name="index", controller="admin", action="index")
 	    .end()
@@ -54,6 +55,10 @@
  			.get(name="show", pattern="show/[key]")
  			.get(name="detail", pattern="detail/[key]")
  			.get("index")
+ 		.end()
+
+ 		.controller("bookings")
+ 			.get(name="wizard", pattern="wizard")
  		.end()
 
     	.controller("language")

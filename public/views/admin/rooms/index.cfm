@@ -1,11 +1,11 @@
 <cfparam name="rooms">
 <cfoutput>
-#linkTo(route="newAdminRoom", class="btn btn-primary", text="<i class='fa fa-plus'></i> " & l("Create New Room") )#
+#linkTo(route="newAdminRoom", class="btn btn-primary btn-flat", text="<i class='fa fa-plus'></i> " & l("Create New Room") )#
 <hr />
 
 <cfif rooms.recordcount>
 #box(title="Rooms")#
-<table id="roomstable" class="table table-bordered table-striped">
+<table id="roomstable" class="table table-bordered table-striped table-condensed">
 
 	<cfloop query="rooms" group="buildingid">
 		<thead>

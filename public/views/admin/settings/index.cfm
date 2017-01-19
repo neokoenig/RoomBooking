@@ -19,7 +19,7 @@
 #boxEnd()#
 <cfloop from="1" to="#arraylen(settingCategories)#" index="i">
 #box(title=titleize(settingCategories[i]))#
-<table id="settingstable#i#" class="table table-bordered table-striped">
+<table id="settingstable#i#" class="table table-bordered table-striped  table-condensed">
 	<thead>
 	<tr>
 		<th width=15%>#l("Setting")#</th>
@@ -35,7 +35,7 @@
 			<td>#titleize(listLast(name, "_"))#</td>
 			<td><cfif len(docs)>#linkTo(href=docs, text=description, target="_blank")#<cfelse>#description#</cfif></td>
 			<td><cfif type EQ 'boolean'>#tickorcross(value)#<cfelse><code>#value#</code></cfif></td>
-			<td>#linkTo(route="editAdminSetting", key=id, text="<i class='fa fa-edit'></i> " & l("Edit"), class="btn btn-xs btn-primary")#</td>
+			<td>#linkTo(route="editAdminSetting", key=id, text="<i class='fa fa-edit'></i> " & l("Edit"), class="btn btn-xs btn-flat btn-primary")#</td>
 		</tr>
 	</cfif>
 

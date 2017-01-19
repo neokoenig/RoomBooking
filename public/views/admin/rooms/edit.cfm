@@ -1,5 +1,5 @@
 <cfoutput>
-	#linkTo(route="adminRooms", text="<i class='fa fa-chevron-circle-left'></i> #l('Return to Listing')#", class='btn btn-primary')#
+	#linkTo(route="adminRooms", text="<i class='fa fa-chevron-circle-left'></i> #l('Return to Listing')#", class="btn btn-primary btn-flat")#
 	<hr />
 	#startFormTag(route="adminRoom", key=room.key())#
 		#hiddenFieldTag(name="_method", value="put")#
