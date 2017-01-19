@@ -191,6 +191,62 @@
       return local.rv;
     }
 
+
+
+    // Merge Buildings and Rooms, seperate by groupby etc
+  array function mergeLocations(calendarbuildings, calendarrooms){
+    local.rv=[];
+    local.cb=1;
+    for(local.b in calendarbuildings){
+      arrayAppend(local.rv, {
+        "id": local.b.id,
+        "fc_resourceid": "#local.b.id#",
+        "title": local.b.title,
+        "hexcolour": local.b.hexcolour,
+        "icon": local.b.icon,
+        "description": local.b.description,
+        "type": "building",
+        "groupby": {}
+      });
+
+      for(local.r in calendarrooms){
+        // Rooms attached to buildings
+        if(local.r.buildingid == local.b.id && local.b.id != 0 && local.b.id != ""){
+          if( structKeyExists(local.rv[local.cb], "groupby") ){
+            if( !structKeyExists(local.rv[local.cb]["groupby"], local.r.groupby) ){
+              local.rv[local.cb]["groupby"][local.r.groupby]=[];
+            }
+            arrayAppend(local.rv[local.cb]["groupby"][local.r.groupby], {
+              "id": local.r.id,
+              "fc_resourceid": "#local.b.id#-#local.r.id#",
+              "title": local.r.title,
+              "hexcolour": local.r.hexcolour,
+              "icon": local.r.icon,
+              "description": local.r.description,
+              "type": "room"
+            });
+          }
+        }
+      }
+      local.cb++;
+    }
+    // Check for orphaned rooms and append to end
+    for(local.r in calendarrooms){
+      if(local.r.buildingid == 0 || local.r.buildingid == ""){
+        // Orphaned Rooms
+        arrayAppend(local.rv, {
+          "id": local.r.id,
+          "fc_resourceid": "0-#local.r.id#",
+          "title": local.r.title,
+          "hexcolour": local.r.hexcolour,
+          "icon": local.r.icon,
+          "description": local.r.description,
+          "type": "room"
+        });
+      }
+    }
+    return local.rv;
+   }
     // Massage array/struct for return to yearcalendar
     // We don't need quite as much data as fullcalendar!
     /*public array function formatDataForYearCalendar(required array bookings){

@@ -2,7 +2,6 @@ component extends="Admin"
 {
 	function init() {
 		super.init();
-		//filters(through="checkPermissionAndRedirect", permission="accessBuildings");
 		filters(through="f_getBuildings", only="index");
 		filters(through="f_getCountries", only="index,new,create,edit,update");
 		filters(through="f_getUsers", only="new,create,edit,update");

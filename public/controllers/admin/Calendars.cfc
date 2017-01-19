@@ -2,7 +2,6 @@ component extends="Admin"
 {
 	function init() {
 		super.init();
-		//filters(through="checkPermissionAndRedirect", permission="accessSettings");
 		filters(through="f_getUsers,f_getBuildings,f_getRooms", only="new,create,edit,update");
 		verifies(except="index,new,create", params="key", paramsTypes="integer", handler="objectNotFound");
 		verifies(post=true, only="create,update,delete");

@@ -2,10 +2,11 @@ component extends="Admin"
 {
 	function init() {
 		super.init();
-		//filters(through="checkPermissionAndRedirect", permission="accessBookings");
 		verifies(except="index,new,create", params="key", paramsTypes="integer", handler="objectNotFound");
 		verifies(post=true, only="create,update,delete");
-		filters(through="f_getBuildings,f_getRooms,f_getUsers", only="index,new,edit,create,update");
+		filters(through="f_getBuildings", only="index");
+		filters(through="f_getRooms", only="index");
+		filters(through="f_getLocations,f_getUsers", only="index,new,edit,create,update");
 	}
 
 	function index(){

@@ -26,4 +26,11 @@
 	function f_getCalendars(){
 		allcalendars=model("calendar").findAll(order="title");
 	}
+	function f_getLocations(){
+		locations=mergeLocations(
+			model("calendarbuilding").findAll(include="building", order="title", group="id"),
+			model("calendarroom").findAll(include="room", order="title", group="id")
+		);
+	}
+
 </cfscript>

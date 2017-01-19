@@ -9,12 +9,25 @@
 
 #box(title=l("Location"))#
 	<div class="row">
-		<div class="col-md-4">
+	<cfloop from="1" to="#arraylen(locations)#" index="i">
+		<button class="btn btn-xs btn-flat">#locations[i]["id"]#: #locations[i]["type"]#: #locations[i]["title"]#</button>
+		<cfif structKeyExists(locations[i], "groupby")>
+			<cfloop collection="#locations[i]['groupby']#" item="g">
+					<strong>#g#</strong><br />
+					<cfif arrayLen(locations[i]['groupby'][g])>
+						<cfloop from="1" to="#arrayLen(locations[i]['groupby'][g])#" index="r">
+							#locations[i]['groupby'][g][r]["id"]#: #locations[i]['groupby'][g][r]["type"]#: #locations[i]['groupby'][g][r]["title"]#<br />
+						</cfloop>
+					</cfif>
+			</cfloop>
+		</cfif>
+	</cfloop>
+		<!---div class="col-md-4">
 			#select(objectname="booking", property="buildingid", options=allBuildings,  textField="title", valueField="id", label=l("Building"), includeBlank="Standalone Room")#
 		</div>
 		<div class="col-md-4">
 			#select(objectname="booking", property="roomid", options=allRooms, textField="title", valueField="id", label=l("Room"), includeBlank="No Specific Room")#
-		</div>
+		</div--->
 	</div>
 #boxEnd()#
 
@@ -78,6 +91,16 @@
 </cfoutput>
 <cfsavecontent variable="request.js.picker">
 <script>
+<cfoutput>
+
+</cfoutput>
+// Room Picker
+$("#booking-buildingid").change(function(e){
+	console.log($(this).val());
+});
+$("#booking-roomid").change(function(e){
+	console.log($(this).val());
+});
 // Date picker
 $("#booking-startUTCDate").datepicker({
 	language: $('html').attr('lang'),
