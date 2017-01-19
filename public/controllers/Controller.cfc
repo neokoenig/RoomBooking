@@ -15,6 +15,7 @@ component extends="Wheels" hint="Global Controller"
 	include "functions/auth.cfm";
 	include "functions/filters.cfm";
 	include "functions/dates.cfm";
+	include "functions/locations.cfm";
 	include "functions/utils.cfm";
 
 }

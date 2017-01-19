@@ -4,9 +4,9 @@ component extends="Admin"
 		super.init();
 		verifies(except="index,new,create", params="key", paramsTypes="integer", handler="objectNotFound");
 		verifies(post=true, only="create,update,delete");
-		filters(through="f_getBuildings", only="index");
-		filters(through="f_getRooms", only="index");
-		filters(through="f_getLocations,f_getUsers", only="index,new,edit,create,update");
+		//filters(through="f_getBuildings", only="index");
+		//filters(through="f_getRooms", only="index");
+		filters(through="f_getUsers", only="index,new,edit,create,update");
 	}
 
 	function index(){
@@ -51,7 +51,10 @@ component extends="Admin"
 
 	function edit() {
 		request.pagetitle="Update Booking";
-		booking=model("booking").findByKey(params.key);
+		booking=model("booking").findByKey(params.key);		
+		if(!isObject(booking)){
+			objectNotFound();
+		}
 	}
 
 	function update() {

@@ -64,8 +64,9 @@ module.exports = function(grunt) {
           '<%= bp %>/AdminLTE/plugins/fastclick/fastclick.js',
           '<%= bp %>/AdminLTE/plugins/slimScroll/jquery.slimscroll.js',
           '<%= bp %>/AdminLTE/plugins/timepicker/bootstrap-timepicker.js',
+          '<%= bp %>/AdminLTE/plugins/select2/select2.full.js',
           //RBS
-          '<%= js %>/main.js'
+          '<%= js %>/main.js' 
         ],
         dest: '<%= js %>/cms.js'
       }
