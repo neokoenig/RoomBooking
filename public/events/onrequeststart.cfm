@@ -8,6 +8,7 @@ request.bodyClass="hold-transition";
 // Trim Form and URL scopes
 url=trimScope(url);
 form=trimScope(form);
+
 //=====================================================================
 //= 	Languages
 //=====================================================================

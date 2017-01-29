@@ -45,6 +45,7 @@
     	LoadPaths = ["/miscellaneous"]
   	};
 
+
 //=====================================================================
 //= 	Test Databases
 //=====================================================================
@@ -58,11 +59,10 @@
 		};
   	} else {
 	// ACF11 Derby
-		this.datasources["rbstesting"] = {
-			  driver: 'Apache Derby Embedded'
-			, database: getDirectoryFromPath( getCurrentTemplatePath() ) & '../db/rbstesting'
-			, isnewdb=true
-		};
+		//this.datasources["rbstesting"] = {
+		//	  driver: 'Apache Derby Embedded'
+		//	, database: expandPath('.') &  '/db/derby/rbstesting/'
+		//};
 
   	}
 

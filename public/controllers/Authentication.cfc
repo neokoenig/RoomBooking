@@ -4,6 +4,7 @@ component extends="Controller"
 		// Shouldn't go via central permissions, so we don't call super.init
 		verifies(post=true, only="authenticate,resetaction");
 		usesLayout("/common/simple");
+		filters(through="logTrigger", name="Authentication.cfc");
 	}
 
 	function login(){

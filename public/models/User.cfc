@@ -1,6 +1,9 @@
 component extends="Model"
 {
 	function init() {
+		// Inherit Triggers
+		super.init();
+
 		// Associations
 		belongsTo(name="role", joinType="left");
 		hasMany(name="bookings");
@@ -15,7 +18,6 @@ component extends="Model"
 		beforeValidation(methods="validatePasswords", condition="structKeyExists(this,'passwordConfirmation')");
 		beforeCreate(methods="generateAPIKey");
 		beforeSave(methods="encryptPasswordCheck");
-
 		validatesPresenceOf(properties="firstname,lastname,email");
         validatesLengthOf(properties="firstName,lastName", maximum=50);
         validatesUniquenessOf(property="email");

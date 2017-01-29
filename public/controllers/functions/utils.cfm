@@ -1,4 +1,7 @@
 <cfscript>
+//=====================================================================
+//=    Controller Utils
+//=====================================================================
 
 	// surround each array element in brackets and return delimited by an operator
 	public string function whereify(required array array, string operator="AND") {

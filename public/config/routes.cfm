@@ -40,6 +40,15 @@
 	 		.resources("roles")
 	 		.resources("permissions")
 	 		.resources("settings")
+	 		.resources("workflows")
+	 		.controller("workflowtriggers")
+	 			.get(name="index", pattern="[key]", action="index")
+	 			.post(name="create",  action="create")
+	 			.delete(name="delete", action="delete")
+	 			.end()
+ 			.resources("triggers")
+ 			.resources("actions")
+ 				.get(name="properties", pattern="properties/", controller="actions", action="properties")
 	 		.resources("users")
  				.get(name="assume", pattern="users/assume/[key]", controller="users", action="assume")
  				.get(name="recover", pattern="users/recover/[key]", controller="users", action="recover")
@@ -65,7 +74,11 @@
         	.get(name="switch", pattern="[lang]", action="index")
     	.end()
 
- 		.get(name="account", pattern="my/account", controller="my", action="account")
+    	.controller("my")
+	 		.get(name="account", pattern="account", action="account")
+	 		.post(name="account", pattern="account", action="accountupdate")
+	 		.get(name="bookings", pattern="bookings", action="bookings")
+    	.end()
 
  		.root(to="calendar##index", method="get")
  	.end();

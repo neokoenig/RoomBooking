@@ -7,7 +7,6 @@
 #includePartial("filter")#
 <cfif arrayLen(bookings)>
 	#box(title="Bookings (" & arrayLen(bookings) & ")")#
-
 	<table id="bookingstable" class="table table-bordered table-striped table-condensed">
 	<thead>
 	<tr>

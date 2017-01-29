@@ -1,6 +1,8 @@
 component extends="Model"
 {
 	function init() {
+		// Inherit Triggers
+		super.init();
 		// Associations
 		belongsTo(name="building", joinType="left");
 		belongsTo(name="user");

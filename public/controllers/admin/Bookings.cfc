@@ -21,8 +21,6 @@ component extends="Admin"
 		param name="params.status" default="";
 		request.pagetitle="Bookings";
 		bookings=getEventsForRange(start=params.from, end=params.to, includeRepeats=params.includerepeats);
-
-		//bookings=model("bookings").findAll(perpage=params.perpage, page=params.page, order="#params.sort# #params.sortorder#");
 	}
 
 	function show() {

@@ -65,6 +65,19 @@
             #sidebarlink( controller="admin.dump", route="adminDumpIndex", icon="fa-list", text="Dump")#
           </ul>
           </li>
+           <li class="treeview #treeIsActive('workflows,triggers,actions')#">
+          <a href="">
+            <i class="fa fa-cubes"></i> <span>#l("Workflows")#</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+            #sidebarlink( controller="admin.workflows", route="adminWorkflows", icon="fa-cubes", text="Workflows")#
+            #sidebarlink( controller="admin.triggers", route="adminTriggers", icon="fa-cube", text="Triggers")#
+            #sidebarlink( controller="admin.actions", route="adminActions", icon="fa-flash", text="Actions")#
+          </ul>
+          </li>
         </cfif>
       </ul>
       <!-- /.sidebar-menu -->
@@ -73,8 +86,3 @@
   </aside>
   </cfif>
 </cfoutput>
-<cfsavecontent variable="request.js.cal">
-<script>
-
-</script>
-</cfsavecontent>

@@ -1,29 +1,38 @@
 <cfscript>
-    //=====================================================================
-    //=     Main Calendar Data & Event Repeat Functions
-    //=====================================================================
-    public array function getEventsForRange(required start, required end, boolean includeRepeats=true){
+//=====================================================================
+//=     Main Calendar Data & Event Repeat Functions
+//=====================================================================
+	public array function getEventsForRange(required start, required end, boolean includeRepeats=true){
 
       // Events Search Range
-      local.start=createDateTime(year(arguments.start), month(arguments.start), day(arguments.start), hour(arguments.start),minute((arguments.start)),00);
-      local.end=createDateTime(year(arguments.end), month(arguments.end), day(arguments.end), hour(arguments.end),minute((arguments.end)),59);
-      local.where=[];
-      local.filters=[];
-      local.wc="";
-      local.events="";
-      local.includeRepeats=arguments.includeRepeats;
+      local.start=createDateTime(
+      	year(arguments.start), month(arguments.start), day(arguments.start),
+      	hour(arguments.start),minute((arguments.start)),00);
 
-      // A small sanity check: don't get booking for more than a year
-      // lots of repeating events could cause serious performance problems (think a 100 daily repeaters x 30 years)
-      // NB, iCal4J won't do more than 1000 generated repeats, but that's per date passed in: so we could easily accidentally
-      // generate 1+million records if we're not a little bit sensible. Most of the time this isn't an issue, but the back end admin
-      // could possibly cause problems.
+      local.end=createDateTime(
+      	year(arguments.end), month(arguments.end), day(arguments.end),
+      	hour(arguments.end),minute((arguments.end)),59);
+
+		local.where=[];
+		local.filters=[];
+		local.wc="";
+		local.events="";
+		local.includeRepeats=arguments.includeRepeats;
+
+      /*
+        A small sanity check: don't get booking for more than a year
+        lots of repeating events could cause serious performance problems (think a 100 daily repeaters x 30 years)
+        NB, iCal4J won't do more than 1000 generated repeats, but that's per date passed in: so we could easily
+        accidentally generate 1+million records if we're not a little bit sensible. Most of the time this isn't an
+        issue, but the back end admin could possibly cause problems.
+      */
       if(local.includeRepeats && dateDiff("yyyy", local.start, local.end) > 1){
         local.end=dateAdd("yyyy", 1, local.start);
       }
 
       //=   Date Filters (OR)
-      // Bookings which fall into viewPort range: remember endUTC is the end date including the repeats, and not necessarily the true duration
+      // Bookings which fall into viewPort range: remember endUTC is the end date including the repeats,
+      // and not necessarily the true duration
       ArrayAppend(local.where, "(startUTC >= '#local.start#' AND startUTC <= '#local.end#')");
       ArrayAppend(local.where, "(startUTC <= '#local.start#' AND endUTC <= '#local.end#')");
       ArrayAppend(local.where, "(startUTC <  '#local.start#' AND endUTC > '#local.end#')");
@@ -51,7 +60,8 @@
           local.wc &= "AND " & whereify(local.filters, "AND");
       }
       // Can't do returnas structs here as we need the deeper associations
-      local.bookings=model("booking").findAll(where=local.wc, order="startUTC ASC", include="building(calendarbuildings),room(calendarrooms)");
+      local.bookings=model("booking").findAll(where=local.wc, order="startUTC ASC",
+      	include="building(calendarbuildings),room(calendarrooms)");
       local.bookings=queryToArray(local.bookings, false, false, false);
       if(local.includeRepeats){
         local.bookings=generateRepeatingDates(local.bookings, local.start, local.end);
@@ -247,19 +257,4 @@
     }
     return local.rv;
    }
-    // Massage array/struct for return to yearcalendar
-    // We don't need quite as much data as fullcalendar!
-    /*public array function formatDataForYearCalendar(required array bookings){
-      local.rv=[];
-      for(b in arguments.bookings){
-        //t["startDate"]= jsDateFormat(b.startUTC);
-        //t["endDate"]  = jsDateFormat(b.endUTC);
-        t["startDate"]=dateFormat(b.startUTC, "YYYY-MM-DD");
-        t["endDate"]  =dateFormat(dateAdd("d", ceiling(b.duration / 1440), b.startUTC), "YYYY-MM-DD");
-        // Append the final struct
-        arrayAppend(local.rv, t);
-        t={};
-      }
-      return local.rv;
-    }*/
-    </cfscript>
+</cfscript>

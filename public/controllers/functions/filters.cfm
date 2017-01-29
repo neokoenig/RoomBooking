@@ -1,7 +1,7 @@
 <cfscript>
-	//=====================================================================
-	//= 	Global Filters
-	//=====================================================================
+//=====================================================================
+//= 	Global Filters
+//=====================================================================
 	function f_getRoles(){
 		allroles=model("role").findAll();
 	}
@@ -25,6 +25,15 @@
 	}
 	function f_getCalendars(){
 		allcalendars=model("calendar").findAll(order="title");
+	}
+	function f_getWorkflows(){
+		allworkflows=model("workflow").findAll(order="title");
+	}
+	function f_getTriggers(){
+		alltriggers=model("trigger").findAll(order="title");
+	}
+	function f_getActions(){
+		allactions=model("action").findAll(order="title");
 	}
 	function f_getLocations(){
 		locations=mergeLocations(

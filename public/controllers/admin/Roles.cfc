@@ -19,7 +19,7 @@ component extends="Admin"
 	function create() {
 		role=model("role").create(params.role);
 		if(role.hasErrors()){
-			renderPage(route="newAdminRole");
+			renderPage(action="new");
 		} else {
 			return redirectTo(action="index", success="role #role.name# successfully created");
 		}

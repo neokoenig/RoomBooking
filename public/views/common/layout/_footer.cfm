@@ -16,7 +16,13 @@
 </cfif>
 
 <!--- Dynamic Javascript Set in Page --->
-<cfif structkeyexists(request, "js")><cfloop list="#structKeyList(request.js)#" index="key"><cfoutput>#request.js[key]#</cfoutput></cfloop></cfif>
+<cfif structkeyexists(request, "js")>
+<cfloop list="#structKeyList(request.js)#" index="key">
+<cfoutput>
+<!-- #key# -->
+#request.js[key]#
+</cfoutput>
+</cfloop></cfif>
 
 <!--- User JS Overrides --->
 #javascriptIncludeTag("custom")#

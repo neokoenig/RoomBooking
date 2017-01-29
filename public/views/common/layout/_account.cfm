@@ -28,7 +28,7 @@
               <li class="user-footer">
                 <div class="pull-left">
                 <cfif hasPermission("my.account")>
-                  #linkTo(route="account", text=l("Account"), class="btn btn-default btn-flat")#
+                  #linkTo(route="myAccount", text=l("Account"), class="btn btn-default btn-flat")#
                 </cfif>
                 </div>
                 <div class="pull-right">

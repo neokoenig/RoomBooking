@@ -16,22 +16,27 @@
 		"settings" = {},
 		"permissions" = {},
 		"setupchecks" = {},
+		"triggers"={},
 		"installed" = false,
 		"allowSysadminCreation"=false
 	};
 
-	// Before we load the application, we need to check some basic stuff.
-	// Basically, we're going to try and dquery a database, and see if what we get
+	/*
+		Before we load the application, we need to check some basic stuff.
+		Basically, we're going to try and dquery a database, and see if what we get
+	*/
 	application.rbs.setupchecks["errors"]=[];
 	application.rbs.setupchecks["passes"]=[];
 
 //=====================================================================
 //= 	Datasource checks
 //=====================================================================
-	// If this returns a query with a record, the datasource should at least be setup
-	// If this fails, it might be that the DB is not yet setup
-	// In production mode this will just give "Error! etc"
-	// So for the install script, we need to catch this gracefully
+	/*
+		If this returns a query with a record, the datasource should at least be setup
+		If this fails, it might be that the DB is not yet setup
+		In production mode this will just give "Error! etc"
+		So for the install script, we need to catch this gracefully
+	*/
 	try {
 		request.rbs.dbinfo=$dbinfo(
 			type="version",

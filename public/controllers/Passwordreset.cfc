@@ -17,7 +17,8 @@ component extends="Controller"
 		if(structKeyExists(params, "email")){
 			user=model("user").findOneByEmail(params.email);
 			if(!isObject(user)){
-				// This should probably return a more generic authentication message, as it basically reveals if the acc exists or not.
+				// This should probably return a more generic authentication message,
+				// as it basically reveals if the acc exists or not.
 				return redirectTo(route="passwordresetForgot", error="Sorry, account not found");
 			} else {
 				user.generatePasswordResetToken();
