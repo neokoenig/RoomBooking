@@ -17158,6 +17158,10 @@ fieldset[disabled] .datepicker table tr td span.active.disabled:hover.active {
 div.ridisplay label.ridisplay {
   font-weight: 500;
 }
+/* for horz filter bars */
+.pushdown {
+  margin-top: 25px;
+}
 /* Full Calendar */
 .fc-event,
 .fc-future,

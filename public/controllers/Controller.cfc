@@ -22,6 +22,7 @@ component extends="Wheels"
 	include "functions/auth.cfm";
 	include "functions/filters.cfm";
 	include "functions/dates.cfm";
+	include "functions/locations.cfm";
 	include "functions/utils.cfm";
 
 }

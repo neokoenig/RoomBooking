@@ -24,7 +24,8 @@
     "recurrenceinput": "https://github.com/collective/jquery.recurrenceinput.js.git",
     "bootstrapyearcalendar": "https://github.com/Paul-DS/bootstrap-year-calendar.git",
     "fullcalendar-scheduler": "^1.5.0",
-    "noty": "^2.4.0"
+    "noty": "^2.4.0",
+    "font-awesome": "^4.7.0"
   },
   "dependencies": {}
 }
