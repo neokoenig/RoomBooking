@@ -26,6 +26,4 @@ component extends="models.Model"
 			'#str#' = this.to;
 		return true;
 	}
-
-
 }
