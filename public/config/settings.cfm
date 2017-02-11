@@ -9,14 +9,6 @@ set(reloadPassword="roombooking");
 // Setting URL rewriting
 set(URLRewriting="on");
 
-// Commandbox/Tuckey URL rewrite override - most of the time this will be rewrite.cfm (the default) for apache etc.
-// We're looking for undertow as that's the CB servlet engine
-if(structKeyExists(server, "servlet")
-	&& structKeyExists(server.servlet, "name")
-	&& server.servlet.name CONTAINS "Undertow"){
-	set(rewriteFile="index.cfm");
-}
-
 // In this app, plugins are part of the source and not designed to be distributed in zip form
 set(overwritePlugins=false);
 set(deletePluginDirectories=false);

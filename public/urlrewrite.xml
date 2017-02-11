@@ -8,6 +8,6 @@
     <name>CFWheels pretty URLs</name>
     <condition type="request-uri" operator="notequal">^/(flex2gateway|jrunscripts|cfide|cfformgateway|cffileservlet|lucee|files|images|javascripts|miscellaneous|stylesheets|robots.txt|favicon.ico|sitemap.xml|rewrite.cfm|index.cfm)</condition>
     <from>^/(.*)$</from>
-    <to type="passthrough">/index.cfm/$1</to>
+    <to type="passthrough">/rewrite.cfm/$1</to>
   </rule>
 </urlrewrite>
