@@ -7,7 +7,7 @@
   </div>
   <!-- /.login-logo -->
   <div class="login-box-body">
-	#startFormTag(route="authenticationAuthenticate")#
+	#startFormTag(route="authenticate")#
 		#errorMessagesFor("auth")#
 		#textField(objectname="auth", property="email", label=l("Email or Username"))#
 		#passwordField(objectname="auth", property="password")#
@@ -16,9 +16,9 @@
   	</cfif>
 		#submitTag(value=l("Login"), class="btn btn-block btn-primary")#
 	#endFormTag()#
-	<cfif auth.allowPasswordReset>
+	<!---cfif auth.allowPasswordReset>
 		<p style="margin-top:10px;">#linkTo(route="passwordresetForgot", text=l("I forgot my password"))#</a></p>
-	</cfif>
+	</cfif--->
   </div>
   <!-- /.login-box-body -->
 </div>

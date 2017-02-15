@@ -4,11 +4,11 @@ component extends="Controller"
 		// Shouldn't go via central permissions, so we don't call super.init
 		usesLayout("/common/simple");
 		verifies(post=true, only="create,reset");
-		verifies(only="recover", params="token", paramsTypes="string", handler="objectNotFound");
+		verifies(only="edit", params="token", paramsTypes="string", handler="objectNotFound");
 	}
 
 	// Forgot password form
-	function forgot(){
+	function new(){
 		request.pagetitle="Reset Password";
 	}
 
@@ -29,18 +29,18 @@ component extends="Controller"
 	}
 
 	// Load user from password reset token
-	function recover(){
+	function edit(){
 		request.pagetitle="Use Password Reset Token";
 
 	}
 
 	// Finally, reset the password
-	function reset(){
+	function update(){
 
 	}
 
 	function objectNotFound() {
-		return redirectTo(route="passwordresetForgot", error="You have followed an outdated or incorrect reset code");
+		return redirectTo(route="passwordreset", error="You have followed an outdated or incorrect reset code");
 	}
 
 }

@@ -42,4 +42,9 @@
 		);
 	}
 
+	function abortifinstalled(){
+		if(application.rbs.installed){
+			abort;
+		}
+	}
 </cfscript>

@@ -61,6 +61,7 @@ module.exports = function(grunt) {
           //AdminLTE
           '<%= bp %>/AdminLTE/dist/js/app.js',
           '<%= bp %>/AdminLTE/plugins/datepicker/bootstrap-datepicker.js',
+          '<%= bp %>/AdminLTE/plugins/daterangepicker/daterangepicker.js',
           '<%= bp %>/AdminLTE/plugins/fastclick/fastclick.js',
           '<%= bp %>/AdminLTE/plugins/slimScroll/jquery.slimscroll.js',
           '<%= bp %>/AdminLTE/plugins/timepicker/bootstrap-timepicker.js',

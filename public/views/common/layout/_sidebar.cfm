@@ -8,7 +8,7 @@
       <ul class="sidebar-menu">
 
         <!-- Calendars -->
-        <cfif hasPermission("calendar")>
+        <cfif hasPermission("public.calendar")>
           <li class="header">#l("Calendars")#</li>
         <cfloop query="allcalendars">
           <li><a href="/" class="calendarswitcher" data-key=#id#><cfif len(icon)><i class='fa #icon#'></i> </cfif><span>#title#</span></a></li>
@@ -16,10 +16,9 @@
         </cfif>
 
         <!-- Bookings Wizard -->
-
-        <cfif hasPermission("bookings")>
+        <cfif hasPermission("public.bookings")>
           <li class="header">#l("Booking")#</li>
-            #sidebarlink( controller="bookings.wizard", route="bookingsWizard", icon="fa-search", text="Find a Room")#
+            #sidebarlink( controller="public.bookings.new", route="newBookings", icon="fa-search", text="Find a Room")#
         </cfif>
         <cfif hasPermission("admin")>
           <li class="header">#l("Administration")#</li>

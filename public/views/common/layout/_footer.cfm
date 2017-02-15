@@ -24,6 +24,31 @@
 </cfoutput>
 </cfloop></cfif>
 
+<!--- JS noty based flash messages --->
+<cfif structKeyExists(session, "flash")>
+<script>
+var flashMessages=<cfoutput>#serializeJSON(session.flash)#</cfoutput>
+if(!$.isEmptyObject(flashMessages)){
+  for(m in flashMessages){
+    noty({
+      layout: 'topCenter',
+      theme: 'metroui',
+      text: flashMessages[m],
+      type: m,
+       animation: {
+          open: {height: 'toggle'}, // or Animate.css class names like: 'animated bounceInLeft'
+          close: {height: 'toggle'}, // or Animate.css class names like: 'animated bounceOutLeft'
+          easing: 'swing',
+          speed: 500 // opening & closing animation speed
+        },
+      timeout: 4000, // [integer|boolean] delay for closing event in milliseconds. Set false for sticky notifications
+      progressBar: true, // [boolean] - displays a progress bar
+    });
+  }
+}
+</script>
+</cfif>
+
 <!--- User JS Overrides --->
 #javascriptIncludeTag("custom")#
 

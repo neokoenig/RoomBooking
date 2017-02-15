@@ -1,13 +1,13 @@
 <cfscript>
 
-	// Used as a filter, and will redirect awayfrom a denied URL
-	// If logged in, deny with 403; otherwise, redirect to login
+	// Used as a filter, and will redirect to login if not auth'd
+	// If logged in, deny with 403.
 	function checkPermissionAndRedirect(){
 		if(!hasPermission())
 			if(isAuthenticated()){
-				redirectTo(route="authenticationDenied", error="Access Denied");
+				useslayout("/common/denied");
 			} else {
-				redirectTo(route="authenticationLogin", error="Login Required");
+				redirectTo(route="login", error="Login Required");
 			}
 	}
 

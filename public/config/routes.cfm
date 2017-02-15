@@ -1,24 +1,54 @@
 <cfscript>
  	drawRoutes()
- 		.controller("install")
- 			.get("index")
- 			.get("rundbmigrate")
- 			.post("createsysadmin")
- 		.end()
+ 	/*
+ 	drawRoutes()
+  .namespace("install")
+    .post(name="migrate", controller="migrations", action="create") // If you can, you'll want to
+                                                                    // post to this because it
+                                                                    // changes app state
+    .post(name="systemAdmin", controller="systemAdmins", action="create")
+  .end()
 
- 		.controller(controller="authentication", path="auth")
-		    .get(name="login",   action="login")
-		    .get(name="logout",  action="logout")
-		    .get(name="denied", action="denied")
-		    .post(name="authenticate",  action="authenticate")
- 		.end()
+  .get(name="install", controller="installations", action="new")
 
- 		.controller(controller="passwordreset", path="auth")
-		    .get(name="forgot",  action="forgot")
-		    .post(name="create",  action="create")
-		    .get(name="recover", pattern="recover/[token]",  action="recover")
-		    .post(name="reset",  action="reset")
+  .get(name="login", controller="sessions", action="new")
+  .get(name="logout", controller="sessions", action="delete")
+  .post(name="authenticate", controller="sessions", action="create")
+  // Consider just rendering an "access denied" message when access is denied, rather than
+  // redirecting to this. A before filter should be able to do that.
+  .get(name="denied", controller="sessions", action="denied")
+
+  .resource(name="password", only="new,create,edit,update") // These could be pathed differently,
+                                                            // I suppose, but it goes like this:
+                                                            // new/create = Forgot password
+                                                            // edit/update = Reset password
+.end()*/
+ 		//.controller("install")
+ 		//	.get("index")
+ 		//	.get("rundbmigrate")
+ 		//	.post("createsysadmin")
+ 		//.end()
+
+ 		// Installer
+ 		.namespace("install")
+ 			.post(name="migrate", controller="migrations", action="create")
+ 			.post(name="systemAdmin", controller="systemAdmins", action="create")
  		.end()
+ 		.get(name="install", controller="installations", action="new")
+
+ 		// Authentication
+	  	.get(name="login", controller="sessions", action="new")
+	  	.get(name="logout", controller="sessions", action="delete")
+  		.post(name="authenticate", controller="sessions", action="create")
+
+  		// Password Resets
+  		.resource(name="passwordReset", only="new,create,edit,update")
+ 		//.controller(controller="passwordreset", path="auth")
+		//    .get(name="forgot",  action="forgot")
+		//    .post(name="create",  action="create")
+		//    .get(name="recover", pattern="recover/[token]",  action="recover")
+		//    .post(name="reset",  action="reset")
+ 		//.end()
 
 	 	//.namespace("api")
 	    //    .controller("v1")
@@ -56,30 +86,32 @@
  			.get(name="index", controller="admin", action="index")
 	    .end()
 
- 		.controller("calendar")
- 			.get(name="fullcalendardata", pattern="data/full/")
- 			.get(name="fullcalendarresources", pattern="resources/full/")
- 			.get(name="fullcalendarfilters", pattern="filters/full/")
- 			//.get(name="yearcalendardata", pattern="data/year/")
- 			.get(name="show", pattern="show/[key]")
- 			.get(name="detail", pattern="detail/[key]")
- 			.get("index")
- 		.end()
+		.scope(module="public")
+			.resource(name="bookings", only="new,create")
 
- 		.controller("bookings")
- 			.get(name="wizard", pattern="wizard")
- 		.end()
+			.controller("calendar")
+				.get(name="fullcalendardata",  pattern="data/full/")
+				.get(name="fullcalendarresources", pattern="resources/full/")
+				.get(name="fullcalendarfilters", pattern="filters/full/")
+				//.get(name="yearcalendardata", pattern="data/year/")
+				.get(name="show", pattern="show/[key]")
+				.get(name="detail", pattern="detail/[key]")
+				.get("index")
+			.end()
 
-    	.controller("language")
-        	.get(name="switch", pattern="[lang]", action="index")
-    	.end()
 
-    	.controller("my")
-	 		.get(name="account", pattern="account", action="account")
-	 		.post(name="account", pattern="account", action="accountupdate")
-	 		.get(name="bookings", pattern="bookings", action="bookings")
-    	.end()
 
- 		.root(to="calendar##index", method="get")
+			.controller("language")
+				.get(name="switch", pattern="[lang]", action="index")
+			.end()
+
+			.controller("my")
+				.get(name="account", pattern="account", action="account")
+				.post(name="account", pattern="account", action="accountupdate")
+				.get(name="bookings", pattern="bookings", action="bookings")
+			.end()
+			.root(to="calendar##index", method="get")
+		.end()
+
  	.end();
  </cfscript>

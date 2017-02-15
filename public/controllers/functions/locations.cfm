@@ -5,8 +5,8 @@
     local.rv=[];
     local.buildings=model("building").findall(order="title");
     // "Standalone" Rooms container
-    arrayAppend(local.rv, { 
-        "id": 0, 
+    arrayAppend(local.rv, {
+        "id": 0,
         "title": "Standalone Rooms",
         "icon": "",
         "hexcolour": "b.hexcolour",
@@ -15,7 +15,8 @@
 
     for(b in local.buildings){
       arrayAppend(local.rv, {
-        "id": b.id, 
+        "id": b.id,
+        "calendarid": b.calendarid,
         "title": b.title,
         "icon": b.icon,
         "hexcolour": b.hexcolour,
@@ -30,7 +31,8 @@
     local.rooms=model("room").findall(order="title");
     for(b in local.rooms){
       arrayAppend(local.rv, {
-        "id": b.id, 
+        "id": b.id,
+        "calendarid": b.calendarid,
         "title": b.title,
         "icon": b.icon,
         "hexcolour": b.hexcolour,
@@ -45,12 +47,12 @@
     local.buildings=arguments.buildings;
     local.rooms=arguments.rooms;
     local.c=1;
-    for(b in local.buildings){  
+    for(b in local.buildings){
       arrayAppend(local.rv, b);
-        for(r in local.rooms){          
+        for(r in local.rooms){
           if(r.buildingid == b.id){
             arrayAppend(local.rv[c]["children"], r);
-          } 
+          }
         }
       c++;
     }
@@ -64,6 +66,7 @@
     for(local.b in calendarbuildings){
       arrayAppend(local.rv, {
         "id": local.b.id,
+        "calendarid": local.b.calendarid,
         "fc_resourceid": "#local.b.id#",
         "title": local.b.title,
         "hexcolour": local.b.hexcolour,
@@ -82,6 +85,7 @@
             }
             arrayAppend(local.rv[local.cb]["groupby"][local.r.groupby], {
               "id": local.r.id,
+              "calendarid": local.r.calendarid,
               "fc_resourceid": "#local.b.id#-#local.r.id#",
               "title": local.r.title,
               "hexcolour": local.r.hexcolour,
@@ -100,6 +104,7 @@
         // Orphaned Rooms
         arrayAppend(local.rv, {
           "id": local.r.id,
+          "calendarid": local.r.calendarid,
           "fc_resourceid": "0-#local.r.id#",
           "title": local.r.title,
           "hexcolour": local.r.hexcolour,

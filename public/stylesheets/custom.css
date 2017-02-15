@@ -4,3 +4,6 @@
 */
 .fc-day-top:hover{background:lightblue !important;cursor: pointer;}
 .fc-day-top:hover:before {content: "\f055"; font-family: 'FontAwesome'; padding:3px;}
+
+.locationpicker-building button, .locationpicker-room button {text-align:left; padding-left:6px}
+.locationpicker-room button.grp {text-align:center;}

@@ -9,7 +9,6 @@ if(structKeyExists(application.rbs.settings, "theme_skin")){
 </cfscript>
 <cfoutput>
 #includePartial("/common/layout/head")#
-	#flashMessages()#
 	#includeContent()#
 #includePartial("/common/layout/footer")#
 </cfoutput>

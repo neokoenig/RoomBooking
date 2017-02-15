@@ -1,4 +1,5 @@
 <cfoutput>
+#includePartial("/common/layout/static_header")#
 <div class="login-box">
   <div class="login-logo">
       <a href="/" style="display: block;"><img src="/images/logo_med.png" alt="logo" /></a>
@@ -12,4 +13,5 @@
   <!-- /.login-box-body -->
 </div>
 <!-- /.login-box -->
+#includePartial("/common/layout/static_footer")#
 </cfoutput>

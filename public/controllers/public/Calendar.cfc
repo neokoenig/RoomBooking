@@ -1,4 +1,4 @@
-component extends="Controller"
+component extends="controllers.Controller"
 {
   function init() {
     super.init();
@@ -40,12 +40,13 @@ component extends="Controller"
   // Get Resource(Locations) JSON specifically for full calendar
   function fullcalendarresources(){
     params.format="json";
-    if(structKeyExists(params, "key") && isNumeric(params.key)){
-      // Return Array of Structs including repeats
-      renderWith( formatResourcesForCalendar(locations));
-    } else {
-      renderWith(data="{'error': 'No Calendar ID Specified'}", status=500);
-    }
+    renderWith( formatResourcesForCalendar(locations));
+    //if(structKeyExists(params, "key") && isNumeric(params.key)){
+    //  // Return Array of Structs including repeats
+    //  renderWith( formatResourcesForCalendar(locations));
+    //} else {
+    //  renderWith(data="{'error': 'No Calendar ID Specified'}", status=500);
+    //}
   }
 
   // Get filters HTML specifically for full calendar
@@ -88,8 +89,8 @@ component extends="Controller"
 
 
   private function f_getCalendarLocations(){
-    calendarbuildings=model("calendarbuilding").findAll(where="calendarid = #params.key#", include="building", order="title");
-    calendarrooms=model("calendarroom").findAll(where="calendarid = #params.key#", include="room", order="title");
+    calendarbuildings=model("calendarbuilding").findAll(include="building", order="title");
+    calendarrooms=model("calendarroom").findAll(include="room", order="title");
     locations=mergeLocations(calendarbuildings, calendarrooms);
   }
 

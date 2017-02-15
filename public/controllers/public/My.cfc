@@ -1,4 +1,4 @@
-component extends="Controller"
+component extends="controllers.Controller"
 {
   function init() {
     super.init();

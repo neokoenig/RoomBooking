@@ -27,12 +27,12 @@
               <!-- Menu Footer-->
               <li class="user-footer">
                 <div class="pull-left">
-                <cfif hasPermission("my.account")>
+                <cfif hasPermission("public.my.account")>
                   #linkTo(route="myAccount", text=l("Account"), class="btn btn-default btn-flat")#
                 </cfif>
                 </div>
                 <div class="pull-right">
-                  #linkTo(route="authenticationLogout", text=l("Logout"), class="btn btn-default btn-flat")#
+                  #linkTo(route="logout", text=l("Logout"), class="btn btn-default btn-flat")#
                 </div>
               </li>
             </ul>

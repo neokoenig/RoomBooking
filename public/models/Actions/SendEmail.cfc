@@ -4,7 +4,7 @@ component extends="models.Model"
 		table(false);
 		property(name="email", defaultValue="");
 		property(name="subject", defaultValue="");
-		property(name="template", defaultValue="");
+		property(name="template", defaultValue="default");
 		property(name="message", defaultValue="");
 
 		validatesFormatOf(property="email", format="email");
@@ -20,6 +20,13 @@ component extends="models.Model"
 				"required": true
 			},
 			{
+				"name": "emailfrom",
+				"type": "text",
+				"validate": "email",
+				"description": "Email Address to Send From",
+				"required": true
+			},
+			{
 				"name": "subject",
 				"type": "text",
 				"description": "Subject Line",
@@ -28,7 +35,7 @@ component extends="models.Model"
 			{
 				"name": "template",
 				"type": "select",
-				"options": ["one","two","three"],
+				"options": ["default"],
 				"description": "Email Template to Use",
 				"required": true
 			},
@@ -41,6 +48,6 @@ component extends="models.Model"
 		];
 	}
 	function save(){
-
+		//cfmail( to = this.email, from = this.emailfrom, subject = this.subject ) { WriteOutput( this.message ); }
 	}
 }
