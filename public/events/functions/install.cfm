@@ -11,24 +11,24 @@
         for(var permission in local.permissions){
             application.rbs.permissions[permission.name]=true;
         }
-        local.workflow=model("workflow").findAll(
-            where="workflows.isactive=1", include="workflowtriggers(trigger,action)");
-        local.triggers={};
-        for(var trigger in local.workflow){
-            if(len(trigger.componentcfc)){
-                if(!structKeyExists(local.triggers, trigger.triggeron))
-                    local.triggers[trigger.triggeron]={};
-                if(!structKeyExists(local.triggers[trigger.triggeron], trigger.triggerwhen))
-                    local.triggers[trigger.triggeron][trigger.triggerwhen]=[];
-                arrayAppend(local.triggers[trigger.triggeron][trigger.triggerwhen], {
-                    "title" = trigger.actiontitle,
-                    "description" = trigger.description,
-                    "componentcfc"= trigger.componentcfc,
-                    "properties" = trigger.propertiesjson
-                });
-            }
-        }
-        application.rbs.triggers=local.triggers;
+       // local.workflow=model("workflow").findAll(
+       //     where="workflows.isactive=1", include="workflowtriggers(trigger,action)");
+       // local.triggers={};
+       // for(var trigger in local.workflow){
+       //     if(len(trigger.componentcfc)){
+       //         if(!structKeyExists(local.triggers, trigger.triggeron))
+       //             local.triggers[trigger.triggeron]={};
+       //         if(!structKeyExists(local.triggers[trigger.triggeron], trigger.triggerwhen))
+       //             local.triggers[trigger.triggeron][trigger.triggerwhen]=[];
+       //         arrayAppend(local.triggers[trigger.triggeron][trigger.triggerwhen], {
+       //             "title" = trigger.actiontitle,
+       //             "description" = trigger.description,
+       //             "componentcfc"= trigger.componentcfc,
+       //             "properties" = trigger.propertiesjson
+       //         });
+       //     }
+       // }
+       // application.rbs.triggers=local.triggers;
     }
 
     // Install check for sysadmin

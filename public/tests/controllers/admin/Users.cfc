@@ -4,42 +4,35 @@ component extends="tests.Test" {
 	function teardown() {}
 
 	function test_users_index(){
-	  _params = {
+	  r=processRequest({
 	    route="adminUsers",
 	    controller="admin.users",
-	    action="index"
-	  };
-	  _controller = controller(name="admin.users", params=_params);
-	  _controller.$processAction();
+	    action="index"});
+	  //debug("r");
 	}
 
-	function test_users_show_should_redirect_to_index_if_no_key(){
-	  _params = {
+	function test_users_edit_should_redirect_to_index_if_no_key(){
+	   r=processRequest({
 	    route="adminUsers",
 	    controller="admin.users",
-	    action="show"
-	  };
-	  _controller = controller(name="admin.users", params=_params);
-	  //_controller.$runfilters(type="before", action="show", params=_params);
-	  //_controller.$runverifications(action="show", params=_params);
-	  //_controller.$callAction("show");
-	  //redirect = _controller.$getRedirect();
-	  //t=_controller.$performedRedirect();
-	  debug("_controller.init()");
-	  debug("_controller.$PERFORMEDRENDERORREDIRECT()");
-	  //debug("_controller.$LOCATION()");
-	  debug("_controller.$RUNFILTERS(type='before', action='show')");
-	  //debug("t");
+	    action="edit"});
+	    debug("r");
+	}
+
+	function test_users_edit(){
+	   r=processRequest({
+	    route="adminUsers",
+	    controller="admin.users",
+	    action="edit",
+	    key=1});
+	    //debug("r");
 	}
 
 	function test_users_new(){
-	  _params = {
+	  processRequest({
 	    route="adminUsers",
 	    controller="admin.users",
-	    action="new"
-	  };
-	  _controller = controller(name="admin.users", params=_params);
-	  _controller.$processAction();
+	    action="new"});
 	}
 
 	//function test_users_show_should_redirect_If_user_not_found(){
@@ -50,7 +43,7 @@ component extends="tests.Test" {
 	//    key=9999999999999999999
 	//  };
 	//  _controller = controller(name="admin.users", params=_params);
-	//  _controller.$processAction();
+	//  _controller.processAction();
 	//  redirect = _controller.$getRedirect();
 	//  debug("redirect");
 	//}
@@ -77,7 +70,7 @@ component extends="tests.Test" {
 	  _controller = controller(name="admin.users", params=_params);
 
 	  // process the create action of the controller
-	  _controller.$processAction();
+	  _controller.processAction();
 
 	  // get the information about the redirect that should have happened
 	  redirect = _controller.$getRedirect();

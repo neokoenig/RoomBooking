@@ -2,7 +2,7 @@ component extends="Admin" {
 
 	function init() {
 		super.init();
-		verifies(except="index,new,create,assume,show,recover", params="key", paramsTypes="integer", handler="objectNotFound");
+		verifies(except="index,new,create,assume,recover", params="key", paramsTypes="integer", handler="objectNotFound");
 		verifies(post=true, only="create,update,delete");
 		filters(through="f_getRoles", only="index,new,create,edit,update");
 		filters(through="f_getCountries", only="index,new,create,edit,update");

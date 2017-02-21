@@ -1,26 +1,48 @@
-<cfparam name="params.type" default="core">
-<cfset packages = $createObjectFromRoot(path=application.wheels.wheelsComponentPath, fileName="Test", method="$listTestPackages", options=params)>
-<cfset linkParams = "?controller=wheels&action=wheels&view=tests&type=#params.type#">
+<cfscript>
+param name="params.type" default="core";
+packages = $createObjectFromRoot(path=application.wheels.wheelsComponentPath, fileName="Test", method="$listTestPackages", options=params);
+linkParams = "?controller=wheels&action=wheels&view=tests&type=#params.type#";
+// ignore packages before the "tests directory"
+if (packages.recordCount) {
+	allPackages = ListToArray(packages.package, ".");
+	preTest = "";
+	for (i in allPackages) {
+		preTest = ListAppend(preTest, i, ".");
+		if (i eq "tests") {
+			break;
+		}
+	}
+}
+</cfscript>
 <cfoutput>
-<p><a href="#linkParams#" target="_blank">Run All Tests</a> | <a href="#linkParams#&reload=true" target="_blank">Reload Test Data</a></p>
-<h1>#titleize(params.type)# Test Packages</h1>
+    <div class="row">
+
+      <div class="column">
+        <h1>#titleize(params.type)# Test Packages</h1>
+
 <p>Below is listing of all the #params.type# test packages. Click the part of the package to run it individually.</p>
-<cfif params.type is "core">
-	<cfset strip = "wheels.tests">
-<cfelseif params.type is "app">
-	<cfset strip = "tests.">
-<cfelse><!--- assumed to be a plugin --->
-	<cfset strip = "plugins.#params.type#.tests.">
-</cfif>
-<cfloop query="packages">
+      </div>
+
+      <div class="column">
+        <p class="float-right">
+         <a class="button button-outline" href="#linkParams#" target="_blank">Run All Tests</a> <a  class="button button-outline" href="#linkParams#&reload=true" target="_blank">Reload Test Data</a>
+        <p>
+      </div>
+
+    </div>
+
 	<p>
-		<cfset a = ListToArray(ReplaceNoCase(package, strip, "", "one"), ".")>
-		<cfset b = createObject("java", "java.util.ArrayList").Init(a)>
-		<cfset c = arraylen(a)>
-		<cfloop from="1" to="#c#" index="i">
-			<cfset href = "#linkParams#&package=#ArrayToList(b.subList(JavaCast('int', 0), JavaCast('int', i)), '.')#">
-			<a href="#href#" target="_blank">#a[i]#</a><cfif i neq c> .</cfif>
+	<cfif packages.recordcount>
+		<cfloop query="packages">
+				<cfset testablePackages = ListToArray(ReplaceNoCase(package, "#preTest#.", "", "one"), ".")>
+				<cfset packagesLen = arrayLen(testablePackages)>
+				<cfloop from="1" to="#packagesLen#" index="i">
+					<cfset href = "#linkParams#&package=#ArrayToList(testablePackages.subList(JavaCast('int', 0), JavaCast('int', i)), '.')#">
+					<a href="#href#" target="_blank">#testablePackages[i]#</a><cfif i neq packagesLen> .</cfif>
+				</cfloop><br />
 		</cfloop>
+	<cfelse>
+		<span class="failure-message-item">No Test Packages Found</span>
+	</cfif>
 	</p>
-</cfloop>
 </cfoutput>

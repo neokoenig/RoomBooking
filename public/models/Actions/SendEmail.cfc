@@ -1,4 +1,4 @@
-component extends="models.Model"
+component extends="app.models.Model"
 {
 	function init() {
 		table(false);

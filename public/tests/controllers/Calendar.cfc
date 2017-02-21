@@ -19,26 +19,26 @@ component extends="tests.Test" {
 	}*/
 
 	// Clicked Event Detail
-	function Test_display_booking_detail_not_found(){
-		_params = {route="calendarDetail", controller="calendar", action="detail", key=987987};
-		_controller = controller("calendar", _params);
-		_controller.$processAction('detail', _params);
-		r=_controller.response();
-		assert('r EQ "Booking Not Found"');
-	}
-	function Test_display_booking_detail_renders(){
-		_params = {route="calendarDetail", controller="calendar", action="detail", key=1};
-		_controller = controller("calendar", _params);
-		_controller.$processAction('detail', _params);
-		r=_controller.response();
-		//assert('r EQ "Booking Not Found"');
-	}
+	//function Test_display_booking_detail_not_found(){
+	//	_params = {route="calendarDetail", controller="calendar", action="detail", key=987987};
+	//	_controller = controller("calendar", _params);
+	//	_controller.processAction('detail', _params);
+	//	r=_controller.response();
+	//	assert('r EQ "Booking Not Found"');
+	//}
+	//function Test_display_booking_detail_renders(){
+	//	_params = {route="calendarDetail", controller="calendar", action="detail", key=1};
+	//	_controller = controller("calendar", _params);
+	//	_controller.processAction('detail', _params);
+	//	r=_controller.response();
+	//	//assert('r EQ "Booking Not Found"');
+	//}
 
 	// Full Calendar Data
-	function Test_fullcalendar_data_returns_valid_json(){
+	/*function Test_fullcalendar_data_returns_valid_json(){
 		_params = {route="fullcalendardata", controller="calendar", action="fullcalendardata", key=1};
 		_controller = controller("calendar", _params);
-		_controller.$processAction('fullcalendardata', _params);
+		_controller.processAction('fullcalendardata', _params);
 		r=_controller.response();
 		shouldfail=Find("ALLDAY", r);
 		shouldfail2=Find("allday", r);
@@ -48,6 +48,6 @@ component extends="tests.Test" {
 		assert('shouldfail2 EQ 0');
 		assert('shouldpass GT 0');
 		assert('isJSON(r)');
-	}
+	}*/
 
 }

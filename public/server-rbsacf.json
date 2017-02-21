@@ -1,17 +1,18 @@
 {
+    "name":"rbsacf",
     "force":true,
     "web":{
         "http":{
-            "host":"localhost",
-            "port":60016
+            "host":"roombooking-acf.local",
+            "port":"80"
         },
         "rewrites":{
             "enable":true,
             "config":"urlrewrite.xml"
-        }
+        },
+        "host":"roombooking-acf.local"
     },
     "app":{
         "cfengine":"adobe@11"
-    },
-    "name":"rbsacf"
+    }
 }

@@ -10,11 +10,20 @@
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
   <!--- If not in production mode, load non min sources --->
   <cfif get("environment") EQ "production">
-    #stylesheetlinkTag("cms.min")#
+    <!---#stylesheetlinkTag("cms.min")#--->
+
+  <link href="#application.wheels.webpath#stylesheets/cms.min.css" media="all" rel="stylesheet" type="text/css" />
+
+
   <cfelse>
-    #stylesheetlinkTag("cms")#
+    <!---#stylesheetlinkTag("cms")#--->
+  <link href="#application.wheels.webpath#stylesheets/cms.css" media="all" rel="stylesheet" type="text/css" />
+
   </cfif>
-    #stylesheetlinkTag("skins/#application.rbs.settings.theme_skin#.min,custom")#
+  <link href="#application.wheels.webpath#stylesheets/skins/#application.rbs.settings.theme_skin#.min.css" media="all" rel="stylesheet" type="text/css" />
+  <link href="#application.wheels.webpath#stylesheets/custom.css" media="all" rel="stylesheet" type="text/css" />
+    <!---#stylesheetlinkTag("skins/#application.rbs.settings.theme_skin#.min,custom")#--->
+
   <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
   <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
   <!--[if lt IE 9]>

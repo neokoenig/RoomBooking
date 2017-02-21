@@ -1,16 +1,91 @@
 {
-    "name":"Oxalto Room Booking System",
+    "name":"CFWHEELS",
     "version":"2.0.0-alpha",
-    "author":"Tom King",
+    "author":"",
+    "location":"",
+    "directory":"",
     "createPackageDirectory":true,
-    "slug":"oxalto-rbs",
-    "shortDescription":"Oxalto Room Booking System",
-    "description":"Room Booking System built on CFWheels and Fullcalendar",
+    "packageDirectory":"",
+    "homepage":"",
+    "documentation":"",
+    "repository":{
+        "type":"",
+        "URL":""
+    },
+    "bugs":"",
+    "slug":"my-package",
+    "shortDescription":"A sweet package",
+    "description":"",
+    "instructions":"",
+    "changelog":"",
+    "type":"",
+    "keywords":[
+        
+    ],
     "private":false,
-    "defaultEngine":"lucee",
+    "engines":[
+        {
+            "type":"",
+            "version":""
+        }
+    ],
+    "defaultEngine":"",
+    "defaultPort":0,
+    "projectURL":"",
+    "license":[
+        {
+            "type":"",
+            "URL":""
+        }
+    ],
+    "contributors":[
+        
+    ],
+    "dependencies":{
+        
+    },
+    "devDependencies":{
+        
+    },
+    "installPaths":{
+        
+    },
+    "scripts":{
+        
+    },
     "ignore":[
         "**/.*",
         "test",
         "tests"
-    ]
+    ],
+    "testbox":{
+        "runner":[
+            {
+                "default":""
+            }
+        ],
+        "labels":[
+            
+        ],
+        "reporter":"",
+        "reporterResults":"",
+        "bundles":[
+            ""
+        ],
+        "directory":{
+            "mapping":"",
+            "recurse":true
+        },
+        "watchers":[
+            
+        ],
+        "notify":{
+            "emails":[
+                
+            ],
+            "growl":"",
+            "URL":""
+        }
+    },
+    "SLUGNAME":"cfwheels"
 }

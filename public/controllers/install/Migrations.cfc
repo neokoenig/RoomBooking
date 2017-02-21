@@ -1,4 +1,4 @@
-component extends="controllers.Controller"
+component extends="app.controllers.Controller"
 {
 	function init() {
 		// Shouldn't go via central permissions, so we don't call super.init
@@ -7,7 +7,7 @@ component extends="controllers.Controller"
 	}
 
 	function create(){
-		application.wheels.plugins.dbmigrate.migrateTo(application.rbs.dbmigrate.latest);
+		application.wheels.dbmigrate.migrateTo(application.rbs.dbmigrate.latest);
 		redirectTo(route="install", params="reload=true&password=#get('reloadpassword')#");
 	}
 

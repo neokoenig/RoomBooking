@@ -1,11 +1,11 @@
 <cfscript>
 // NB, when moving to wheels 2.x, all instances
-// of application.wheels.plugins.dbmigrate will need to change
+// of application.wheels.dbmigrate will need to change
 // to wheels.dbmigrate
 
 // Use DB migrate to populate the test DB Structure
-include "../plugins/dbmigrate/basefunctions.cfm";
-dbmigrate = application.wheels.plugins.dbmigrate;
+include "../wheels/dbmigrate/basefunctions.cfm";
+dbmigrate = application.wheels.dbmigrate;
 
 "data"={
 	"currentVersion" 	= dbmigrate.getCurrentMigrationVersion(),
@@ -21,9 +21,9 @@ if (DirectoryExists(expandPath("/db/sql/"))) {
 	DirectoryDelete(expandPath("/db/sql/"), true);
 }
 // Reset
-writeDump(dbmigrate.migrateTo(0));
+dbmigrate.migrateTo(0);
 // Repopulate
-writeDump(dbmigrate.migrateTo(data.lastVersion));
+dbmigrate.migrateTo(data.lastVersion);
 
 // Test Data
 testUser = queryExecute("
@@ -49,4 +49,5 @@ auth=model("auth.Local").new();
 auth.setProperties({"email": "test@test.com",
 	"password": "validPassword"});
 assert("auth.login()");
+
 </cfscript>

@@ -1,4 +1,4 @@
-component extends="controllers.Controller"
+component extends="app.controllers.Controller"
 {
 	function init() {
 		// Shouldn't go via central permissions, so we don't call super.init

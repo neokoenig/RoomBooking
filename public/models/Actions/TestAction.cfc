@@ -1,4 +1,4 @@
-component extends="models.Model"
+component extends="app.models.Model"
 {
 	// Tableless model as template for an action
 	// All ACTIONS must have init() to declare their properties (if any)

@@ -16,9 +16,9 @@
   	</cfif>
 		#submitTag(value=l("Login"), class="btn btn-block btn-primary")#
 	#endFormTag()#
-	<!---cfif auth.allowPasswordReset>
-		<p style="margin-top:10px;">#linkTo(route="passwordresetForgot", text=l("I forgot my password"))#</a></p>
-	</cfif--->
+	<cfif auth.allowPasswordReset>
+		<p style="margin-top:10px;">#linkTo(route="newPasswordreset", text=l("I forgot my password"))#</a></p>
+	</cfif>
   </div>
   <!-- /.login-box-body -->
 </div>

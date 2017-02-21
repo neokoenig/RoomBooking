@@ -1,4 +1,4 @@
-component extends="controllers.Controller"
+component extends="app.controllers.Controller"
 /*
 	Main API Responses used application wide. Should conform to JSONApi Spec
 	http://jsonapi.org/format/

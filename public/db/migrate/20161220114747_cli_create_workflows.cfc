@@ -18,7 +18,7 @@
       t.decimal(columnNames='hourlyWage', default='', null=true, precision='1', scale='2');
       t.date(columnNames='dateOfBirth', default='', null=true);
 --->
-<cfcomponent extends="plugins.dbmigrate.Migration" hint="Create Workflow Table">
+<cfcomponent extends="wheels.dbmigrate.Migration" hint="Create Workflow Table">
   <cffunction name="up">
   	<cfset hasError = false />
   	<cftransaction>

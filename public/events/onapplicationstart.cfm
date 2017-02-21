@@ -65,9 +65,9 @@
 //=====================================================================
 if(arraylen(application.rbs.setupchecks.errors) == 0){
 	// Get Current Version
-	application.rbs.dbmigrate.current=application.wheels.plugins.dbmigrate.getCurrentMigrationVersion();
+	application.rbs.dbmigrate.current=application.wheels.dbmigrate.getCurrentMigrationVersion();
 	// Get Migration Array
-	application.rbs.dbmigrate.migrations=application.wheels.plugins.dbmigrate.getAvailableMigrations();
+	application.rbs.dbmigrate.migrations=application.wheels.dbmigrate.getAvailableMigrations();
 	// If there's migrations available, get the latest
 	if(arraylen(application.rbs.dbmigrate.migrations)){
 		application.rbs.dbmigrate.latest=application.rbs.dbmigrate.migrations[ArrayLen(application.rbs.dbmigrate.migrations)].version;
@@ -127,7 +127,7 @@ if(!arraylen(application.rbs.setupchecks.errors)){
 } else {
 	// redirect to the installer; url flag is to stop looping redirect
 	if(!isDefined("url.redirected")){
-		location("/install/?redirected", false);
+		location(application.wheels.webpath & "?controller=installations&action=new&redirected=true", false);
 	}
 	//abort;
 }

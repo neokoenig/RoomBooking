@@ -1,4 +1,4 @@
-component extends="models.Model"
+component extends="app.models.Model"
 /*  Authentication Tableless Model ?
 	All these actions need to operate outside the central permissions system
 */

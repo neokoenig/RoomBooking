@@ -42,8 +42,10 @@
 	this.serialization.preservecaseforstructkey=true;
 
 	this.javaSettings = {
-    	LoadPaths = ["/miscellaneous"]
+    	LoadPaths = ["miscellaneous"]
   	};
+
+  	this.mappings["app"] = expandPath(".");
 
 
 //=====================================================================

@@ -42,9 +42,9 @@
 			<cfif hasPermission("admin.bookings.approve")>
 			#linkTo(route="adminApprove", method="put", key=id, text="<i class='fa fa-check'></i> " & l("Approve"), class="btn btn-xs btn-flat btn-success")#
 			</cfif>
-			<cfif hasPermission("admin.bookings.delete")>
+			<!---cfif hasPermission("admin.bookings.delete")>
 			#linkTo(href=adminBookingPath(id), method="delete", text="<i class='fa fa-trash-o'></i> " & l("Delete"), class="btn btn-xs btn-flat btn-danger", confirm=l("Delete This Booking?"))#
-			</cfif>
+			</cfif--->
 			</div>
 		</tr>
 	</cfloop>

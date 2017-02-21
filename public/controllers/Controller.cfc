@@ -9,7 +9,7 @@ component extends="Wheels"
 		filters(through="checkPermissionAndRedirect");
 		// Should this be done in appl scope?
 		filters(through="f_getCalendars");
-		filters(through="controllerTrigger");
+		//filters(through="controllerTrigger");
 	}
 
 	function controllerTrigger(){

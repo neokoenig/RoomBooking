@@ -37,7 +37,6 @@ if(arraylen(application.rbs.setupchecks.passes)){
 	}
 }
 //writeDump(checks);
-//writeDump(application.rbs);
 
 </cfscript>
 <cfoutput>
@@ -85,7 +84,7 @@ if(arraylen(application.rbs.setupchecks.passes)){
 			<hr />
 	</cfloop>
 	<cfif arraylen(application.rbs.setupchecks.errors)>
-		<p><a class="btn btn-primary" href="/install/?reload=production&password=#get('reloadpassword')#"><i class="fa fa-refresh"></i> Reload Application and Re-test</a></p>
+		<p><a class="btn btn-primary" href="?reload=production&password=#get('reloadpassword')#"><i class="fa fa-refresh"></i> Reload Application and Re-test</a></p>
 	<cfelse>
 		<p><a class="btn btn-success" href="/?reload=production&password=#get('reloadpassword')#"><i class="fa fa-check"></i> Go to Application</a></p>
 

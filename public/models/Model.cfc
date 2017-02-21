@@ -1,22 +1,22 @@
 component extends="Wheels"
 {
 	function init() {
-		afterCreate("modelTriggerAfterCreate");
-		afterDelete("modelTriggerAfterDelete");
-		afterInitialization("modelTriggerAfterInitialization");
-		afterNew("modelTriggerAfterNew");
-		afterSave("modelTriggerAfterSave");
-		afterUpdate("modelTriggerAfterUpdate");
-		afterValidation("modelTriggerAfterValidation");
-		afterValidationOnCreate("modelTriggerAfterValidationOnCreate");
-		afterValidationOnUpdate("modelTriggerAfterValidationOnUpdate");
-		beforeCreate("modelTriggerBeforeCreate");
-		beforeDelete("modelTriggerBeforeDelete");
-		beforeSave("modelTriggerBeforeSave");
-		beforeUpdate("modelTriggerBeforeUpdate");
-		beforeValidation("modelTriggerBeforeValidation");
-		beforeValidationOnCreate("modelTriggerBeforeValidationOnCreate");
-		beforeValidationOnUpdate("modelTriggerBeforeValidationOnUpdate");
+		//afterCreate("modelTriggerAfterCreate");
+		//afterDelete("modelTriggerAfterDelete");
+		//afterInitialization("modelTriggerAfterInitialization");
+		//afterNew("modelTriggerAfterNew");
+		//afterSave("modelTriggerAfterSave");
+		//afterUpdate("modelTriggerAfterUpdate");
+		//afterValidation("modelTriggerAfterValidation");
+		//afterValidationOnCreate("modelTriggerAfterValidationOnCreate");
+		//afterValidationOnUpdate("modelTriggerAfterValidationOnUpdate");
+		//beforeCreate("modelTriggerBeforeCreate");
+		//beforeDelete("modelTriggerBeforeDelete");
+		//beforeSave("modelTriggerBeforeSave");
+		//beforeUpdate("modelTriggerBeforeUpdate");
+		//beforeValidation("modelTriggerBeforeValidation");
+		//beforeValidationOnCreate("modelTriggerBeforeValidationOnCreate");
+		//beforeValidationOnUpdate("modelTriggerBeforeValidationOnUpdate");
 	}
 
 	function getDefaultModelName(){

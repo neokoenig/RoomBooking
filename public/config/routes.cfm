@@ -41,8 +41,13 @@
 	  	.get(name="logout", controller="sessions", action="delete")
   		.post(name="authenticate", controller="sessions", action="create")
 
-  		// Password Resets
-  		.resource(name="passwordReset", only="new,create,edit,update")
+  		// New Password Reset Email
+		.get(name="newPasswordreset", pattern="password-reset/new", controller="passwordresets", action="new")
+		.post(name="Passwordresets", pattern="password-reset", controller="passwordresets", action="create")
+		// Reset Password from email
+		.get(name="editPasswordreset", pattern="password-reset/[token]/edit", controller="passwordresets", action="edit")
+		// Update Password
+		.put(name="Passwordreset", pattern="password-reset/[token]", controller="passwordresets", action="update")
  		//.controller(controller="passwordreset", path="auth")
 		//    .get(name="forgot",  action="forgot")
 		//    .post(name="create",  action="create")

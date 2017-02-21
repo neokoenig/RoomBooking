@@ -19,7 +19,7 @@ component extends="tests.Test" {
 		assert("!structKeyExists(r[3], 'groupby')");
 		//debug("r");
 	}
-
+/*
 	function Test_Buildings_As_Array_for_LocationPicker(){
 		r=_controller.getBuildingArray();
 		assert("arrayLen(r) GT 1");
@@ -43,5 +43,5 @@ component extends="tests.Test" {
 		assert("arrayLen(r) EQ 7");
 		assert("arrayLen(r[1]['children']) EQ 4");
 		//debug("r");
-	}
+	}*/
 }

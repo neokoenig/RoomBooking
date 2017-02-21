@@ -21,7 +21,7 @@
 				#linkTo(route="editAdminRole", key=id, text="<i class='fa fa-edit'></i> " & l("Edit"), class="btn btn-xs btn-flat btn-primary")#
 				<cfif id EQ 1 OR id EQ 6>
 				<cfelse>
-				#linkTo(href=adminRolePath(id), method="delete", title=l("Delete"), text="<i class='fa fa-trash-o'></i>", class="btn btn-xs btn-flat btn-danger", confirm=l("Delete This Role?"))#
+				<!---#linkTo(href=adminRolePath(id), method="delete", title=l("Delete"), text="<i class='fa fa-trash-o'></i>", class="btn btn-xs btn-flat btn-danger", confirm=l("Delete This Role?"))#--->
 				</cfif>
 			</div></td>
 		</tr>

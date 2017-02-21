@@ -19,11 +19,11 @@ component extends="Controller"
 			if(!isObject(user)){
 				// This should probably return a more generic authentication message,
 				// as it basically reveals if the acc exists or not.
-				return redirectTo(route="passwordresetForgot", error="Sorry, account not found");
+				return redirectTo(route="newPasswordReset", error="Sorry, account not found");
 			} else {
 				user.generatePasswordResetToken();
 				user.save();
-				return redirectTo(route="authenticationLogin", success="A password reset email has been sent to you!");
+				return redirectTo(route="login", success="A password reset email has been sent to you!");
 			}
 		}
 	}

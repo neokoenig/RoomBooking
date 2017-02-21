@@ -3,12 +3,13 @@
     "force":true,
     "web":{
         "http":{
-            "host":"localhost",
-            "port":60015
+            "host":"roombooking.local",
+            "port":"80"
         },
         "rewrites":{
             "enable":true,
             "config":"urlrewrite.xml"
-        }
+        },
+        "host":"roombooking.local"
     }
 }

@@ -19,7 +19,7 @@ component extends="Controller"
 		4) Test for SMTP?
 
 		NB, when moving to wheels 2.x, all instances
-		of application.wheels.plugins.dbmigrate will need to change
+		of application.wheels.dbmigrate will need to change
 		to wheels.dbmigrate
 
 	*/

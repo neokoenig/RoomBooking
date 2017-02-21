@@ -18,7 +18,7 @@
       t.decimal(columnNames='hourlyWage', default='', null=true, precision='1', scale='2');
       t.date(columnNames='dateOfBirth', default='', null=true);
 --->
-<cfcomponent extends="plugins.dbmigrate.Migration" hint="Add Default Roles">
+<cfcomponent extends="wheels.dbmigrate.Migration" hint="Add Default Roles">
   <cffunction name="up">
   	<cfset hasError = false />
   	<cftransaction>

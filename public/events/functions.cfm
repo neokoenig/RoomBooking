@@ -9,11 +9,10 @@ if(structKeyExists(server, "lucee")){
     include "functions/triggers.cfm";
     include "functions/actions.cfm";
 } else {
-	// FIX?
-    include "/events/functions/install.cfm";
-    include "/events/functions/auth.cfm";
-    include "/events/functions/utils.cfm";
-    include "/events/functions/triggers.cfm";
-    include "/events/functions/actions.cfm";
+    include "#application.wheels.webpath#events/functions/install.cfm";
+    include "#application.wheels.webpath#events/functions/auth.cfm";
+    include "#application.wheels.webpath#events/functions/utils.cfm";
+    include "#application.wheels.webpath#events/functions/triggers.cfm";
+    include "#application.wheels.webpath#events/functions/actions.cfm";
 }
 </cfscript>

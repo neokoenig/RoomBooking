@@ -29,7 +29,9 @@
 		variables.wheels.class.associations = {};
 		variables.wheels.class.callbacks = {};
 		variables.wheels.class.keys = "";
-		variables.wheels.class.connection = {datasource=application.wheels.dataSourceName, username=application.wheels.dataSourceUserName, password=application.wheels.dataSourcePassword};
+		variables.wheels.class.dataSource = application.wheels.dataSourceName;
+		variables.wheels.class.username = application.wheels.dataSourceUserName;
+		variables.wheels.class.password = application.wheels.dataSourcePassword;
 		variables.wheels.class.automaticValidations = application.wheels.automaticValidations;
 		setTableNamePrefix(get("tableNamePrefix"));
 		table(LCase(pluralize(variables.wheels.class.modelName)));
@@ -66,7 +68,7 @@
 		if (!IsBoolean(variables.wheels.class.tableName) || variables.wheels.class.tableName)
 		{
 			// load the database adapter
-			variables.wheels.class.adapter = $createObjectFromRoot(path="#application.wheels.wheelsComponentPath#", fileName="Connection", method="init", datasource="#variables.wheels.class.connection.datasource#", username="#variables.wheels.class.connection.username#", password="#variables.wheels.class.connection.password#");
+			variables.wheels.class.adapter = $assignAdapter();
 
 			// get columns for the table
 			loc.columns = variables.wheels.class.adapter.$getColumns(tableName());
@@ -97,6 +99,7 @@
 					variables.wheels.class.properties[loc.property].type = variables.wheels.class.adapter.$getType(loc.type, loc.columns["decimal_digits"][loc.i]);
 					variables.wheels.class.properties[loc.property].column = loc.columns["column_name"][loc.i];
 					variables.wheels.class.properties[loc.property].scale = loc.columns["decimal_digits"][loc.i];
+					variables.wheels.class.properties[loc.property].columndefault = loc.columns["column_default_value"][loc.i];
 
 					// get a boolean value for whether this column can be set to null or not
 					// if we don't get a boolean back we try to translate y/n to proper boolean values in cfml (yes/no)
@@ -107,7 +110,18 @@
 					}
 
 					variables.wheels.class.properties[loc.property].size = loc.columns["column_size"][loc.i];
-					variables.wheels.class.properties[loc.property].label = Humanize(loc.property);
+
+					// If property is id, then make it all-caps "ID."
+					if (loc.property == "id") {
+						variables.wheels.class.properties[loc.property].label = "ID";
+					// If property ends with id, then drop it off. (For example, "userid" becomes "User.")
+					} else if (Right(loc.property, 2) == "id") {
+						variables.wheels.class.properties[loc.property].label = humanize(Left(loc.property, Len(loc.property) - 2));
+					// Otherwise, humanize it.
+					} else {
+						variables.wheels.class.properties[loc.property].label = humanize(loc.property);
+					}
+
 					variables.wheels.class.properties[loc.property].validationtype = variables.wheels.class.adapter.$getValidationType(variables.wheels.class.properties[loc.property].type);
 					if (StructKeyExists(variables.wheels.class.mapping, loc.property))
 					{
@@ -133,12 +147,19 @@
 						{
 							loc.defaultValidationsAllowBlank = true;
 						}
-						if (!ListFindNoCase(primaryKeys(), loc.property) && !variables.wheels.class.properties[loc.property].nullable && !Len(loc.columns["column_default_value"][loc.i]) && !$validationExists(property=loc.property, validation="validatesPresenceOf"))
+						if (!ListFindNoCase(primaryKeys(), loc.property) && !variables.wheels.class.properties[loc.property].nullable && !$validationExists(property=loc.property, validation="validatesPresenceOf"))
 						{
-							validatesPresenceOf(properties=loc.property);
+							if (Len(loc.columns["column_default_value"][loc.i]))
+							{
+								validatesPresenceOf(properties=loc.property, when="onUpdate");
+							}
+							else
+							{
+								validatesPresenceOf(properties=loc.property);
+							}
 						}
 
-						// always allowblank if a database default or validatesPresenceOf() has been set
+						// always allow blank if a database default or validatesPresenceOf() has been set
 						if (Len(loc.columns["column_default_value"][loc.i]) || $validationExists(property=loc.property, validation="validatesPresenceOf"))
 						{
 							loc.defaultValidationsAllowBlank = true;
@@ -182,10 +203,13 @@
 				variables.wheels.class.calculatedPropertyList = ListAppend(variables.wheels.class.calculatedPropertyList, loc.key);
 				variables.wheels.class.calculatedProperties[loc.key] = {};
 				variables.wheels.class.calculatedProperties[loc.key][variables.wheels.class.mapping[loc.key].type] = variables.wheels.class.mapping[loc.key].value;
+				variables.wheels.class.calculatedProperties[loc.key].select = variables.wheels.class.mapping[loc.key].select;
+				variables.wheels.class.calculatedProperties[loc.key].dataType = variables.wheels.class.mapping[loc.key].dataType;
 			}
 		}
 
 		// set up soft deletion and time stamping if the necessary columns in the table exist
+		variables.wheels.class.timeStampMode = application.wheels.timeStampMode;
 		if (Len(application.wheels.softDeleteProperty) && StructKeyExists(variables.wheels.class.properties, application.wheels.softDeleteProperty))
 		{
 			variables.wheels.class.softDeletion = true;
@@ -216,6 +240,55 @@
 	</cfscript>
 	<cfreturn this>
 </cffunction>
+
+<cffunction name="$assignAdapter" returntype="any" access="public" output="false">
+	<cfscript>
+		var loc = {};
+		if (application.wheels.showErrorInformation)
+		{
+			try
+			{
+				loc.info = $dbinfo(dataSource=variables.wheels.class.dataSource, username=variables.wheels.class.username, password=variables.wheels.class.password, type="version");
+			}
+			catch (any e)
+			{
+				$throw(type="Wheels.DataSourceNotFound", message="The data source could not be reached.", extendedInfo="Make sure your database is reachable and that your data source settings are correct. You either need to setup a data source with the name `#variables.wheels.class.dataSource#` in the Administrator or tell CFWheels to use a different data source in `config/settings.cfm`.");
+			}
+		}
+		else
+		{
+			loc.info = $dbinfo(dataSource=variables.wheels.class.dataSource, username=variables.wheels.class.username, password=variables.wheels.class.password, type="version");
+		}
+		if (FindNoCase("SQLServer", loc.info.driver_name) || FindNoCase("SQL Server", loc.info.driver_name))
+		{
+			loc.adapterName = "SQLServer";
+		}
+		else if (FindNoCase("MySQL", loc.info.driver_name) || FindNoCase("MariaDB", loc.info.driver_name))
+		{
+			loc.adapterName = "MySQL";
+		}
+		else if (FindNoCase("Oracle", loc.info.driver_name))
+		{
+			loc.adapterName = "Oracle";
+		}
+		else if (FindNoCase("PostgreSQL", loc.info.driver_name))
+		{
+			loc.adapterName = "PostgreSQL";
+		}
+		else if (FindNoCase("H2", loc.info.driver_name))
+		{
+			loc.adapterName = "H2";
+		}
+		else
+		{
+			$throw(type="Wheels.DatabaseNotSupported", message="#loc.info.database_productname# is not supported by CFWheels.", extendedInfo="Use SQL Server, MySQL, MariaDB, Oracle, PostgreSQL or H2.");
+		}
+		loc.rv = CreateObject("component", "adapters.#loc.adapterName#").init(dataSource=variables.wheels.class.dataSource, username=variables.wheels.class.username, password=variables.wheels.class.password);
+		application.wheels.adapterName = loc.adapterName;
+	</cfscript>
+	<cfreturn loc.rv>
+</cffunction>
+
 
 <cffunction name="$initModelObject" returntype="any" access="public" output="false">
 	<cfargument name="name" type="string" required="true">

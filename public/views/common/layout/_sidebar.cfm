@@ -16,7 +16,7 @@
         </cfif>
 
         <!-- Bookings Wizard -->
-        <cfif hasPermission("public.bookings")>
+        <cfif hasPermission("public.bookings.new")>
           <li class="header">#l("Booking")#</li>
             #sidebarlink( controller="public.bookings.new", route="newBookings", icon="fa-search", text="Find a Room")#
         </cfif>

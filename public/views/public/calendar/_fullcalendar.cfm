@@ -204,8 +204,8 @@ $(document).ready(function() {
   function filterResources(){
     console.log(resourcesJSON);
     for(r in resourcesJSON){
-      console.log(r);
-      calendar.fullCalendar( 'addResource', resourcesJSON[r]);
+      //console.log(r);
+      //calendar.fullCalendar( 'addResource', resourcesJSON[r]);
     }
   }
 
