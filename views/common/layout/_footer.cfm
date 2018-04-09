@@ -5,10 +5,9 @@
 <cfelse>
   #javascriptIncludeTag("rbs")#
 </cfif>
-
-<cfset cal=application.rbs.setting>
+ 
 <script>
-  moment.localeData()._week.dow = #cal.calendarFirstday#;
+  moment.localeData()._week.dow = #application.rbs.setting.calendarFirstday#;
 </script>
 
 <!--- Dynamic Javascript Set in Page --->
