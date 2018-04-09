@@ -5,6 +5,10 @@
 <cfelse>
   #javascriptIncludeTag("rbs")#
 </cfif>
+ 
+<script>
+  moment.localeData()._week.dow = #application.rbs.setting.calendarFirstday#;
+</script>
 
 <!--- Dynamic Javascript Set in Page --->
 <cfif structkeyexists(request, "js")><cfloop list="#structKeyList(request.js)#" index="key"><cfoutput>#request.js[key]#</cfoutput></cfloop></cfif>
