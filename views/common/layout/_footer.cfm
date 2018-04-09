@@ -6,6 +6,11 @@
   #javascriptIncludeTag("rbs")#
 </cfif>
 
+<cfset cal=application.rbs.setting>
+<script>
+  moment.localeData()._week.dow = #cal.calendarFirstday#;
+</script>
+
 <!--- Dynamic Javascript Set in Page --->
 <cfif structkeyexists(request, "js")><cfloop list="#structKeyList(request.js)#" index="key"><cfoutput>#request.js[key]#</cfoutput></cfloop></cfif>
 <cfif application.rbs.setting.googleanalytics NEQ "UA-">
